@@ -12,12 +12,13 @@
 
 .gameScreen__boardAndRack {
   width: 100%;
+  margin: 0 auto;
 }
 
 /* tablet */
 @media (min-width: 500px) {
   .gameScreen__boardAndRack {
-    width: 80%;
+    width: 90%;
   }
 }
 
