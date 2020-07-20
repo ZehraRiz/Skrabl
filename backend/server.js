@@ -6,16 +6,13 @@ const app = express()
 const server = http.createServer(app)
 const io = socketIO(server)
 
-connections = [];
-players = [];
-games = [];
+const {userJoin, getCurrentUser, userLeave, getRoomUsers} = require("./utils/users.js")
+
 
 
 //when a client connects to the server
 io.on("connection", socket => {
   console.log("New connection")
-  socket.emit("message", "You are a new connection, from server")
-  connections.push(socket);
 
   //recieve username
   socket.on("username", username => {
@@ -23,18 +20,22 @@ io.on("connection", socket => {
       socket.emit("usernameError", "please enter a valid username")
     }
     else {
-      const id = Math.random().toString(36).substr(2, 7)
-      players.push({playerId: id, playerName: username}) //make this into a room
-      socket.emit("usernameRegistered", {msg: "you are a registered player now", players: players})
-      socket.broadcast.emit('welcomeNewUser', `${username} has joined`);
+      const user = userJoin(socket.id, username)
+      socket.join(user.room)
+      socket.emit("usernameRegistered", { msg: "you are a registered player now", user: getCurrentUser(user.id), allOnlineUsers: getRoomUsers()  })
+      socket.broadcast.to(user.room).emit('welcomeNewUser', `${username} has joined`);
     }
   })
 
  
    
   socket.on('disconnect', () => { //should also be removed from players[]
-    io.emit("message", "A connection has left")
-    connections.splice(connections.indexOf(socket), 1)
+    const user = userLeave(socket.id);
+    if (user) {
+      io.to(user.room).emit("message", `${user.name} has left`)
+    }
+    
+    console.log("A connection left")
   })
 })
 
