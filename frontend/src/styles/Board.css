@@ -1,35 +1,78 @@
-.board__board {
-  outline: 2px solid black;
-  display: flex;
-  flex-wrap: wrap;
-  width: 60%;
+/* mobile first */
+
+/* doing it this way to maintain proportion on screen resize */
+/* as shown here: http://wellcaffeinated.net/articles/2012/12/10/very-simple-css-only-proportional-resizing-of-elements*/
+.board__outer {
+  width: 100%;
   margin: 0 auto;
 }
-
+.board__board {
+  width: 100%;
+  padding-top: 75%;
+  position: relative;
+}
+.board__content {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  flex-wrap: wrap;
+}
 .board__square {
   flex-basis: calc(100% / 15);
   outline: 2px solid white;
-  padding: 0.7rem 0;
   font-size: 0.7rem;
   text-align: center;
+  padding: 0.75rem 0;
 }
-
+.board__bonus-text {
+  display: none;
+}
 .board__square {
   background: rgb(60, 134, 60);
 }
-
 .board__square.double-letter {
   background: lightblue;
 }
-
 .board__square.triple-letter {
   background: rgb(99, 99, 223);
 }
-
 .board__square.double-word {
   background: rgb(250, 180, 114);
 }
-
 .board__square.triple-word {
   background: red;
+}
+
+/* tablet */
+@media (min-width: 500px) {
+  .board__outer {
+    width: 80%;
+  }
+}
+
+/* large tablet */
+@media (min-width: 750px) {
+  .board__outer {
+    width: 70%;
+  }
+}
+
+/* laptop */
+@media (min-width: 1000px) {
+  .board__outer {
+    width: 70%;
+  }
+  .board__bonus-text {
+    display: block;
+  }
+}
+
+/* desktop */
+@media (min-width: 1250px) {
+  .board__outer {
+    width: 60%;
+  }
 }
