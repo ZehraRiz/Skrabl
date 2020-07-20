@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Header from "../components/Header";
 import Board from "../components/Board";
 import TileRack from "../components/TileRack";
 import { bonusSquareIds } from "../assets/bonusSquareIds";
@@ -7,17 +6,19 @@ import { generateBoardSquares } from "../utils/generateBoardSquares";
 import GameMenu from "./GameMenu";
 import "../styles/GameScreen.css";
 
-const Game = () => {
+const GameScreen = ({ setNotification }) => {
   const squares = generateBoardSquares(bonusSquareIds);
 
   const [selectedTile, setSelectedTile] = useState(null);
   const [selectedSquareId, setSelectedSquareId] = useState(null);
   const [tilesOnBoard, setTilesOnBoard] = useState([]);
   const [playerTiles, setPlayerTiles] = useState([]);
+  const [gameInProgress, setGameInProgress] = useState(true);
+
+  const scores = { player1: 20, player2: 30 };
 
   //DUMMY FUNCTION - will need to call backend
   const getTiles = () => {
-    debugger;
     const numTilesNeeded = 7 - playerTiles.length;
     const randomTiles = [];
     for (let i = 0; i < numTilesNeeded; i++) {
@@ -56,23 +57,29 @@ const Game = () => {
 
   return (
     <div className="gameScreen__wrapper">
-      <Header />
       <div className="gameScreen__content">
-        <GameMenu getTiles={getTiles} />
+        <GameMenu
+          getTiles={getTiles}
+          scores={scores}
+          gameInProgress={gameInProgress}
+          setNotification={setNotification}
+        />
         <div className="gameScreen__main">
-          <Board
-            squares={squares}
-            handleSelectSquare={handleSelectSquare}
-            tilesOnBoard={tilesOnBoard}
-          />
-          <TileRack
-            playerTiles={playerTiles}
-            handleSelectTile={handleSelectTile}
-          />
+          <div className="gameScreen__boardAndRack">
+            <Board
+              squares={squares}
+              handleSelectSquare={handleSelectSquare}
+              tilesOnBoard={tilesOnBoard}
+            />
+            <TileRack
+              playerTiles={playerTiles}
+              handleSelectTile={handleSelectTile}
+            />
+          </div>
         </div>
       </div>
     </div>
   );
 };
 
-export default Game;
+export default GameScreen;

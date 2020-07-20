@@ -1,6 +1,7 @@
 /* mobile */
 
 .board__wrapper {
+  margin: 0 auto;
 }
 .board__board {
   display: flex;
@@ -19,6 +20,7 @@
   justify-content: center;
   align-items: center;
   position: relative;
+  flex-grow: 1;
 }
 
 .board__tile {
@@ -69,10 +71,6 @@
 
 /* large tablet */
 @media (min-width: 750px) {
-  .board__bonus-text {
-    display: block;
-    font-size: 0.6rem;
-  }
 }
 
 /* laptop */
@@ -81,7 +79,11 @@
 
 /* desktop */
 @media (min-width: 1250px) {
+  .board__bonus-text {
+    display: block;
+    font-size: 0.6rem;
+  }
   .board__square {
-    padding: 0.5rem 0;
+    padding: 1rem 0;
   }
 }
