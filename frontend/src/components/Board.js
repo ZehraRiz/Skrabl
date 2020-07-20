@@ -1,13 +1,30 @@
 import React from "react";
+import { camelToSentence } from "../utils/camelToSentence";
+import "../styles/Board.css";
 
-const Board = ({ boardData }) => {
+const Board = ({ squares }) => {
   return (
     <div className="board__wrapper">
-      <h1>Board</h1>
-      {boardData &&
-        boardData.map((square, index) => (
-          <div className="board__square" key={index}></div>
-        ))}
+      <div className="board__board">
+        {squares &&
+          squares.map((square, index) => {
+            let bonusClassName = "";
+            if (square.letterMultiplier) {
+              square.letterMultiplier === 2
+                ? (bonusClassName = "double-letter")
+                : (bonusClassName = "triple-letter");
+            } else if (square.wordMultiplier) {
+              square.wordMultiplier === 2
+                ? (bonusClassName = "double-word")
+                : (bonusClassName = "triple-word");
+            }
+            return (
+              <div className={`board__square ${bonusClassName}`} key={index}>
+                {camelToSentence(bonusClassName).toUpperCase()}
+              </div>
+            );
+          })}
+      </div>
     </div>
   );
 };

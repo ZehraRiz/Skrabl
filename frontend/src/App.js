@@ -5,7 +5,9 @@ import Header from "./components/Header";
 import Players from "./components/Players";
 import Options from "./components/Options";
 import Board from "./components/Board";
-import { boardData } from "./assets/boardData";
+import { bonusSquareIds } from "./assets/bonusSquareIds";
+import { generateBoardSquares } from "./utils/generateBoardSquares";
+import "./styles/global.css";
 
 const App = () => {
   const socket = io("http://localhost:4001");
@@ -35,13 +37,15 @@ const App = () => {
 
   const players = [{ name: "Tom" }, { name: "Zehra" }, { name: "John" }];
 
+  const squares = generateBoardSquares(bonusSquareIds);
+
   return (
     <div>
-      <Header />
+      {/* <Header />
       <Login />
       <Players players={players} />
-      <Options />
-      <Board boardData={boardData} />
+      <Options /> */}
+      <Board squares={squares} />
     </div>
   );
 };
