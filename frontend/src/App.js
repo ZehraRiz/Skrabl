@@ -77,6 +77,7 @@ const App = () => {
     setNotification(null);
   };
 
+  const players =[{name: "Tom"}, {name: "Zehra"}, {name: "John"}]
   return (
     <div>
       <Header />
