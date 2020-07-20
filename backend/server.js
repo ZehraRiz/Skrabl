@@ -13,17 +13,26 @@ games = [];
 
 //when a client connects to the server
 io.on("connection", socket => {
-  console.log("A cliend connected")
-  socket.emit("You are a new connection")
-  connections.push(socket)
+  console.log("New connection")
+  socket.emit("message", "You are a new connection, from server")
+  connections.push(socket);
 
+  //recieve username
+  socket.on("username", username => {
+    if (username === "") { //validation needs to be improved
+      socket.emit("usernameError", "please enter a valid username")
+    }
+    else {
+      const id = Math.random().toString(36).substr(2, 7)
+      players.push({playerId: id, playerName: username}) //make this into a room
+      socket.emit("usernameRegistered", {msg: "you are a registered player now", players: players})
+      socket.broadcast.emit('welcomeNewUser', `${username} has joined`);
+    }
+  })
 
-  // const playerId = Math.floor(Math.random() * 100000 + 1);
-  // players.push(playerId)
-  //broadcast to other users
-   socket.broadcast.emit('message', 'hello friends!');
+ 
    
-  socket.on('disconnect', () => {
+  socket.on('disconnect', () => { //should also be removed from players[]
     io.emit("message", "A connection has left")
     connections.splice(connections.indexOf(socket), 1)
   })
