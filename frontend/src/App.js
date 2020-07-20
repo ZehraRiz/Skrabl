@@ -4,6 +4,8 @@ import Login from "./components/Login";
 import Header from "./components/Header";
 import Players from "./components/Players";
 import Options from "./components/Options";
+import Board from "./components/Board";
+import { boardData } from "./assets/boardData";
 
 const App = () => {
   const socket = io("http://localhost:4001");
@@ -39,6 +41,7 @@ const App = () => {
       <Login />
       <Players players={players} />
       <Options />
+      <Board boardData={boardData} />
     </div>
   );
 };
