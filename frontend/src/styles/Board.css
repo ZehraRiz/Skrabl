@@ -1,0 +1,35 @@
+.board__board {
+  outline: 2px solid black;
+  display: flex;
+  flex-wrap: wrap;
+  width: 60%;
+  margin: 0 auto;
+}
+
+.board__square {
+  flex-basis: calc(100% / 15);
+  outline: 2px solid white;
+  padding: 0.7rem 0;
+  font-size: 0.7rem;
+  text-align: center;
+}
+
+.board__square {
+  background: rgb(60, 134, 60);
+}
+
+.board__square.double-letter {
+  background: lightblue;
+}
+
+.board__square.triple-letter {
+  background: rgb(99, 99, 223);
+}
+
+.board__square.double-word {
+  background: rgb(250, 180, 114);
+}
+
+.board__square.triple-word {
+  background: red;
+}
