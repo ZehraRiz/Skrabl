@@ -1,10 +1,11 @@
 /* mobile */
 
+.board__wrapper {
+}
 .board__board {
   display: flex;
   flex-wrap: wrap;
   width: 100%;
-  margin: 0 auto;
 }
 
 .board__square {
@@ -61,9 +62,6 @@
 
 /* tablet */
 @media (min-width: 500px) {
-  .board__board {
-    width: 90%;
-  }
   .board__square {
     padding: 1rem 0;
   }
@@ -71,9 +69,6 @@
 
 /* large tablet */
 @media (min-width: 750px) {
-  .board__board {
-    width: 90%;
-  }
   .board__bonus-text {
     display: block;
     font-size: 0.6rem;
@@ -82,16 +77,10 @@
 
 /* laptop */
 @media (min-width: 1000px) {
-  .board__board {
-    width: 70%;
-  }
 }
 
 /* desktop */
 @media (min-width: 1250px) {
-  .board__board {
-    width: 50%;
-  }
   .board__square {
     padding: 0.5rem 0;
   }

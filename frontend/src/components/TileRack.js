@@ -5,7 +5,8 @@ import "../styles/TileRack.css";
 const TileRack = ({ playerTiles, handleSelectTile }) => {
   return (
     <div className="tileRack__wrapper">
-      {playerTiles.length > 0 &&
+      {playerTiles &&
+        playerTiles.length > 0 &&
         playerTiles.map((tile, index) => (
           <div className="tileRack__tile" key={index}>
             <Tile tile={tile} handleSelectTile={handleSelectTile} />

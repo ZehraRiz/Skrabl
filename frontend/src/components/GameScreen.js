@@ -4,6 +4,8 @@ import Board from "../components/Board";
 import TileRack from "../components/TileRack";
 import { bonusSquareIds } from "../assets/bonusSquareIds";
 import { generateBoardSquares } from "../utils/generateBoardSquares";
+import GameMenu from "./GameMenu";
+import "../styles/GameScreen.css";
 
 const Game = () => {
   const squares = generateBoardSquares(bonusSquareIds);
@@ -13,18 +15,19 @@ const Game = () => {
   const [tilesOnBoard, setTilesOnBoard] = useState([]);
   const [playerTiles, setPlayerTiles] = useState([]);
 
+  //DUMMY FUNCTION - will need to call backend
+  const getTiles = () => {
+    debugger;
+    const numTilesNeeded = 7 - playerTiles.length;
+    const randomTiles = [];
+    for (let i = 0; i < numTilesNeeded; i++) {
+      randomTiles.push({ id: i, letter: "b", points: 3 });
+    }
+    setPlayerTiles([...playerTiles, ...randomTiles]);
+  };
+
   useEffect(() => {
-    //get tiles from pouch in backend here
-    const randomTiles = [
-      { id: 1, letter: "b", points: 3 },
-      { id: 2, letter: "a", points: 1 },
-      { id: 3, letter: "g", points: 3 },
-      { id: 4, letter: "t", points: 4 },
-      { id: 5, letter: "s", points: 1 },
-      { id: 6, letter: "o", points: 1 },
-      { id: 7, letter: "q", points: 5 },
-    ];
-    setPlayerTiles(randomTiles);
+    getTiles();
   }, []);
 
   const handleSelectTile = (tile) => {
@@ -52,14 +55,22 @@ const Game = () => {
   }, [selectedSquareId]);
 
   return (
-    <div>
+    <div className="gameScreen__wrapper">
       <Header />
-      <Board
-        squares={squares}
-        handleSelectSquare={handleSelectSquare}
-        tilesOnBoard={tilesOnBoard}
-      />
-      <TileRack playerTiles={playerTiles} handleSelectTile={handleSelectTile} />
+      <div className="gameScreen__content">
+        <GameMenu getTiles={getTiles} />
+        <div className="gameScreen__main">
+          <Board
+            squares={squares}
+            handleSelectSquare={handleSelectSquare}
+            tilesOnBoard={tilesOnBoard}
+          />
+          <TileRack
+            playerTiles={playerTiles}
+            handleSelectTile={handleSelectTile}
+          />
+        </div>
+      </div>
     </div>
   );
 };
