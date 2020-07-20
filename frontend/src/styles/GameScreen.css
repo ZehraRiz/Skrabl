@@ -1,0 +1,10 @@
+/* mobile */
+
+.gameScreen__content {
+  display: flex;
+  margin: 0 auto;
+}
+
+.gameScreen__main {
+  flex-basis: 50%;
+}

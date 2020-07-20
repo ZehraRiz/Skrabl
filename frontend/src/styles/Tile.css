@@ -1,0 +1,67 @@
+/* mobile */
+
+.tile__wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  position: relative;
+  background: #fffcb9;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.tile__wrapper:hover {
+  background: #fff652;
+}
+
+.tile__letter {
+  color: rgb(42, 102, 42);
+  font-size: 1.5rem;
+  padding: 0.5rem 1rem;
+}
+
+.tile__points {
+  color: rgb(42, 102, 42);
+  position: absolute;
+  bottom: 2px;
+  right: 5px;
+  font-size: 0.7rem;
+}
+
+/* tablet */
+@media (min-width: 500px) {
+  .tile__letter {
+    padding: 1rem 0;
+    font-size: 2rem;
+  }
+  .tile__points {
+    font-size: 1rem;
+  }
+}
+
+/* large tablet */
+@media (min-width: 750px) {
+  .tile__letter {
+    padding: 1rem 0;
+    font-size: 2.5rem;
+  }
+  .tile__points {
+    font-size: 1.2rem;
+  }
+}
+
+/* laptop */
+@media (min-width: 1000px) {
+  .tile__letter {
+    padding: 1.5rem 0;
+    font-size: 2rem;
+  }
+  .tile__points {
+    font-size: 1rem;
+  }
+}
+
+/* desktop */
+@media (min-width: 1250px) {
+}
