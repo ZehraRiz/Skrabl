@@ -1,6 +1,7 @@
 import React from "react";
 import io from "socket.io-client";
 import Login from "./components/Login";
+import Header from "./components/Header";
 
 const App = () => {
   const socket = io("http://localhost:4001");
@@ -29,6 +30,7 @@ const App = () => {
   });
   return (
     <div>
+      <Header />
       <Login />
     </div>
   );
