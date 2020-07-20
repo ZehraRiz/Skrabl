@@ -8,6 +8,11 @@
   position: relative;
   background: #fffcb9;
   border-radius: 4px;
+  cursor: pointer;
+}
+
+.tile__wrapper:hover {
+  background: #fff652;
 }
 
 .tile__letter {
