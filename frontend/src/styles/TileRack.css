@@ -2,6 +2,7 @@
 
 .tileRack__wrapper {
   width: 100%;
+  margin: 1rem auto 1rem auto;
   display: flex;
   background: rgb(42, 102, 42);
   padding: 0.2rem 0;
@@ -19,6 +20,9 @@
 
 /* large tablet */
 @media (min-width: 750px) {
+  .tileRack__wrapper {
+    width: 60%;
+  }
 }
 
 /* laptop */

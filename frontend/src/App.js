@@ -1,13 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import io from "socket.io-client";
 import Login from "./components/Login";
 import Header from "./components/Header";
 import Players from "./components/Players";
 import Options from "./components/Options";
 import GameScreen from "./components/GameScreen";
+import NotificationModal from "./components/NotificationModal";
 import "./styles/global.css";
 
 const App = () => {
+  const [currentComponent, setCurrentComponent] = useState("Login");
+  const [notification, setNotification] = useState(null);
   const socket = io("http://localhost:4001");
 
   //When a new client connects
@@ -35,13 +38,27 @@ const App = () => {
 
   const players = [{ name: "Tom" }, { name: "Zehra" }, { name: "John" }];
 
+  const handleCloseModal = () => {
+    setNotification(null);
+  };
+
   return (
     <div>
-      {/* <Header />
-      <Login />
-      <Players players={players} />
-      <Options /> */}
-      <GameScreen />
+      <Header />
+      {currentComponent === "Login" && (
+        <Login setCurrentComponent={setCurrentComponent} />
+      )}
+      {currentComponent === "Players" && <Players players={players} />}
+      {currentComponent === "Options" && <Options />}
+      {currentComponent === "GameScreen" && (
+        <GameScreen setNotification={setNotification} />
+      )}
+      {notification && (
+        <NotificationModal
+          notification={notification}
+          handleCloseModal={handleCloseModal}
+        />
+      )}
     </div>
   );
 };

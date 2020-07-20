@@ -1,5 +1,5 @@
 .scoreboard__wrapper {
   display: flex;
   flex-direction: column;
-  border: 2px solid red;
+  margin-top: 2rem;
 }

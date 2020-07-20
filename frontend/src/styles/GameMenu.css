@@ -9,11 +9,6 @@
   flex-basis: 20%;
 }
 
-.gameScreen__boardAndRack {
-  width: 95%;
-  margin: 0 auto;
-}
-
 .gameMenu__wrapper button {
   font-size: 1.3rem;
 }

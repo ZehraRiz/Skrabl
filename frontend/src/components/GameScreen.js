@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Header from "../components/Header";
 import Board from "../components/Board";
 import TileRack from "../components/TileRack";
 import { bonusSquareIds } from "../assets/bonusSquareIds";
@@ -7,13 +6,16 @@ import { generateBoardSquares } from "../utils/generateBoardSquares";
 import GameMenu from "./GameMenu";
 import "../styles/GameScreen.css";
 
-const Game = () => {
+const GameScreen = ({ setNotification }) => {
   const squares = generateBoardSquares(bonusSquareIds);
 
   const [selectedTile, setSelectedTile] = useState(null);
   const [selectedSquareId, setSelectedSquareId] = useState(null);
   const [tilesOnBoard, setTilesOnBoard] = useState([]);
   const [playerTiles, setPlayerTiles] = useState([]);
+  const [gameInProgress, setGameInProgress] = useState(true);
+
+  const scores = { player1: 20, player2: 30 };
 
   //DUMMY FUNCTION - will need to call backend
   const getTiles = () => {
@@ -55,9 +57,13 @@ const Game = () => {
 
   return (
     <div className="gameScreen__wrapper">
-      <Header />
       <div className="gameScreen__content">
-        <GameMenu getTiles={getTiles} />
+        <GameMenu
+          getTiles={getTiles}
+          scores={scores}
+          gameInProgress={gameInProgress}
+          setNotification={setNotification}
+        />
         <div className="gameScreen__main">
           <div className="gameScreen__boardAndRack">
             <Board
@@ -76,4 +82,4 @@ const Game = () => {
   );
 };
 
-export default Game;
+export default GameScreen;
