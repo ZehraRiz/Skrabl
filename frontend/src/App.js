@@ -4,9 +4,7 @@ import Login from "./components/Login";
 import Header from "./components/Header";
 import Players from "./components/Players";
 import Options from "./components/Options";
-import Board from "./components/Board";
-import { bonusSquareIds } from "./assets/bonusSquareIds";
-import { generateBoardSquares } from "./utils/generateBoardSquares";
+import GameScreen from "./components/GameScreen";
 import "./styles/global.css";
 
 const App = () => {
@@ -37,15 +35,13 @@ const App = () => {
 
   const players = [{ name: "Tom" }, { name: "Zehra" }, { name: "John" }];
 
-  const squares = generateBoardSquares(bonusSquareIds);
-
   return (
     <div>
       {/* <Header />
       <Login />
       <Players players={players} />
       <Options /> */}
-      <Board squares={squares} />
+      <GameScreen />
     </div>
   );
 };

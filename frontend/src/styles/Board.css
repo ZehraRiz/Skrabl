@@ -1,31 +1,18 @@
-/* mobile first */
+/* mobile */
 
-/* doing it this way to maintain proportion on screen resize */
-/* as shown here: http://wellcaffeinated.net/articles/2012/12/10/very-simple-css-only-proportional-resizing-of-elements*/
-.board__outer {
+.board__board {
+  display: flex;
+  flex-wrap: wrap;
   width: 100%;
   margin: 0 auto;
 }
-.board__board {
-  width: 100%;
-  padding-top: 75%;
-  position: relative;
-}
-.board__content {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  display: flex;
-  flex-wrap: wrap;
-}
+
 .board__square {
   flex-basis: calc(100% / 15);
   outline: 2px solid white;
-  font-size: 0.7rem;
+  font-size: 0.6rem;
   text-align: center;
-  padding: 0.75rem 0;
+  padding: 0.5rem 0;
 }
 .board__bonus-text {
   display: none;
@@ -48,31 +35,38 @@
 
 /* tablet */
 @media (min-width: 500px) {
-  .board__outer {
-    width: 80%;
+  .board__board {
+    width: 90%;
+  }
+  .board__square {
+    padding: 1rem 0;
   }
 }
 
 /* large tablet */
 @media (min-width: 750px) {
-  .board__outer {
-    width: 70%;
+  .board__board {
+    width: 90%;
+  }
+  .board__bonus-text {
+    display: block;
+    font-size: 0.6rem;
   }
 }
 
 /* laptop */
 @media (min-width: 1000px) {
-  .board__outer {
+  .board__board {
     width: 70%;
-  }
-  .board__bonus-text {
-    display: block;
   }
 }
 
 /* desktop */
 @media (min-width: 1250px) {
-  .board__outer {
-    width: 60%;
+  .board__board {
+    width: 50%;
+  }
+  .board__square {
+    padding: 0.5rem 0;
   }
 }
