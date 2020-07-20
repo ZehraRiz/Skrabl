@@ -1,3 +1,4 @@
+const initialPouch = require("../constants/pouch")
 let games = [];
 
 //Join connection to player
@@ -7,7 +8,11 @@ function gameJoin(gameId) {
         gameId: gameId,
         player1: { playerId: "", score: 0 },
         player2: { playerId: "", score: 0 },
-        gameState: []
+        gameState: {
+            pouch: initialPouch, 
+            player1Tiles: [],
+            player2Tiles: []
+        }
     }
     games.push(game);
     return game;
