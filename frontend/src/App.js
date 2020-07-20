@@ -2,6 +2,7 @@ import React from "react";
 import io from "socket.io-client";
 import Login from "./components/Login";
 import Header from "./components/Header";
+import Players from "./components/Players";
 
 const App = () => {
   const socket = io("http://localhost:4001");
@@ -28,10 +29,14 @@ const App = () => {
   socket.on("welcomeNewUser", (data) => {
     console.log(data);
   });
+
+  const players = [{ name: "Tom" }, { name: "Zehra" }, { name: "John" }];
+
   return (
     <div>
       <Header />
       <Login />
+      <Players players={players} />
     </div>
   );
 };
