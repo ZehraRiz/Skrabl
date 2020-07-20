@@ -3,6 +3,7 @@ import io from "socket.io-client";
 import Login from "./components/Login";
 import Header from "./components/Header";
 import Players from "./components/Players";
+import Options from "./components/Options";
 
 const App = () => {
   const socket = io("http://localhost:4001");
@@ -37,6 +38,7 @@ const App = () => {
       <Header />
       <Login />
       <Players players={players} />
+      <Options />
     </div>
   );
 };
