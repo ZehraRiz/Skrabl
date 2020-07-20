@@ -11,11 +11,10 @@ const App = () => {
 
   //SOCKET FUNCTIONS
   const socket = io("http://localhost:4001");
-
-  //When a new client connects
-  socket.on("message", (data) => {
-    console.log(data);
-  });
+  // //When a new client connects
+  // socket.on("message", (data) => {
+  //   console.log(data);
+  // });
 
   //enter a username from the client'side. Hardcoding for now
   socket.emit("username", "Zehra");
@@ -48,7 +47,7 @@ const App = () => {
    });
 
   //request to join game
-  socket.emit("joinGame", {userId: "userId", gameId: "1871"});
+  socket.emit("joinGame", {userId: "userId", gameId: "1304"});
   
   //error joining game due to invalid credentials
     socket.on("joinGameError", (data) => {
@@ -73,9 +72,9 @@ const App = () => {
   return (
     <div>
       {/* <Header />
-      <Login />
       <Players players={players} />
       <Options /> */}
+      <Login />
       <GameScreen />
     </div>
   );

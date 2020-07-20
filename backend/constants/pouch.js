@@ -29,4 +29,8 @@ for (i = 0; i <= 0; i++) initialPouch.push({ id: initialPouch.length + 1, letter
 for (i = 0; i <= 0; i++) initialPouch.push({ id: initialPouch.length + 1, letter: "Q", point: 10 });
 for (i = 0; i <= 0; i++) initialPouch.push({ id: initialPouch.length + 1, letter: "Z", point: 10 });
 
-module.exports = { initialPouch };
+function shuffle(array) {
+  array.sort(() => Math.random() - 0.5);
+}
+
+module.exports = { shuffle(initialPouch) };
