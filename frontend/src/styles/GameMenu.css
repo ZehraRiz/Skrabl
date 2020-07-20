@@ -1,9 +1,39 @@
+/* mobile */
+
 .gameMenu__wrapper {
   border: 1px solid black;
-  border-radius: 6px;
-  flex-basis: 30%;
-  margin: 0 2rem;
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 1rem;
+  flex-basis: 20%;
+}
+
+.gameScreen__boardAndRack {
+  width: 95%;
+  margin: 0 auto;
+}
+
+.gameMenu__wrapper button {
+  font-size: 1.3rem;
+}
+
+/* tablet */
+@media (min-width: 500px) {
+}
+
+/* large tablet */
+@media (min-width: 750px) {
+  .gameScreen__boardAndRack {
+    width: 80%;
+    margin: 0 auto;
+  }
+}
+
+/* laptop */
+@media (min-width: 1000px) {
+}
+
+/* desktop */
+@media (min-width: 1250px) {
 }

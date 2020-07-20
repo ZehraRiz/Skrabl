@@ -17,7 +17,6 @@ const Game = () => {
 
   //DUMMY FUNCTION - will need to call backend
   const getTiles = () => {
-    debugger;
     const numTilesNeeded = 7 - playerTiles.length;
     const randomTiles = [];
     for (let i = 0; i < numTilesNeeded; i++) {
@@ -60,15 +59,17 @@ const Game = () => {
       <div className="gameScreen__content">
         <GameMenu getTiles={getTiles} />
         <div className="gameScreen__main">
-          <Board
-            squares={squares}
-            handleSelectSquare={handleSelectSquare}
-            tilesOnBoard={tilesOnBoard}
-          />
-          <TileRack
-            playerTiles={playerTiles}
-            handleSelectTile={handleSelectTile}
-          />
+          <div className="gameScreen__boardAndRack">
+            <Board
+              squares={squares}
+              handleSelectSquare={handleSelectSquare}
+              tilesOnBoard={tilesOnBoard}
+            />
+            <TileRack
+              playerTiles={playerTiles}
+              handleSelectTile={handleSelectTile}
+            />
+          </div>
         </div>
       </div>
     </div>

@@ -3,8 +3,28 @@
 .gameScreen__content {
   display: flex;
   margin: 0 auto;
+  flex-direction: column-reverse;
 }
 
 .gameScreen__main {
-  flex-basis: 50%;
+  flex-basis: 80%;
+}
+
+/* tablet */
+@media (min-width: 500px) {
+}
+
+/* large tablet */
+@media (min-width: 750px) {
+  .gameScreen__content {
+    flex-direction: row;
+  }
+}
+
+/* laptop */
+@media (min-width: 1000px) {
+}
+
+/* desktop */
+@media (min-width: 1250px) {
 }
