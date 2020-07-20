@@ -1,13 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import io from "socket.io-client";
 import Login from "./components/Login";
 import Header from "./components/Header";
 import Players from "./components/Players";
 import Options from "./components/Options";
 import GameScreen from "./components/GameScreen";
+import NotificationModal from "./components/NotificationModal";
 import "./styles/global.css";
 
 const App = () => {
+  const [currentComponent, setCurrentComponent] = useState("Login");
+  const [notification, setNotification] = useState(null);
 
   //SOCKET FUNCTIONS
   const socket = io("http://localhost:4001");
@@ -33,49 +36,63 @@ const App = () => {
     console.log(data);
   });
 
-  //create a new game 
+  //create a new game
   socket.emit("createGame", "userId");
 
   //invalid userId on create game
-   socket.on("createGameError", (data) => {
+  socket.on("createGameError", (data) => {
     console.log(data);
-   });
-  
+  });
+
   //create game succesfull, a gameId is sent back that can be used by two players to play the game
   socket.on("gameCreateResponse", (data) => {
     console.log(data);
-   });
+  });
 
   //request to join game
-  socket.emit("joinGame", {userId: "userId", gameId: "1304"});
-  
+  socket.emit("joinGame", { userId: "userId", gameId: "1871" });
+
   //error joining game due to invalid credentials
-    socket.on("joinGameError", (data) => {
+  socket.on("joinGameError", (data) => {
     console.log(data);
-    });
-  
+  });
+
   //error joining game because game is full
-   socket.on("gameIsFull", (data) => {
+  socket.on("gameIsFull", (data) => {
     console.log(data);
-   });
-  
+  });
+
   //on succesful game join
-     socket.on("gameJoined", (data) => {
+  socket.on("gameJoined", (data) => {
     console.log(data);
-   });
+  });
 
   //if a player leaves
-  socket.on('playerLeft', (data) => {
+  socket.on("playerLeft", (data) => {
     console.log(data);
-   });
+  });
+
+  const handleCloseModal = () => {
+    setNotification(null);
+  };
 
   return (
     <div>
-      {/* <Header />
-      <Players players={players} />
-      <Options /> */}
-      <Login />
-      <GameScreen />
+      <Header />
+      {currentComponent === "Login" && (
+        <Login setCurrentComponent={setCurrentComponent} />
+      )}
+      {currentComponent === "Players" && <Players players={players} />}
+      {currentComponent === "Options" && <Options />}
+      {currentComponent === "GameScreen" && (
+        <GameScreen setNotification={setNotification} />
+      )}
+      {notification && (
+        <NotificationModal
+          notification={notification}
+          handleCloseModal={handleCloseModal}
+        />
+      )}
     </div>
   );
 };

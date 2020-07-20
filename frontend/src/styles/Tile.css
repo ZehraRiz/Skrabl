@@ -54,7 +54,7 @@
 /* laptop */
 @media (min-width: 1000px) {
   .tile__letter {
-    padding: 1.5rem 0;
+    padding: 1rem 0;
     font-size: 2rem;
   }
   .tile__points {
