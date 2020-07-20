@@ -1,0 +1,45 @@
+.chat__wrapper {
+  border: 1px solid black;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  /* same as status bar height - to align with board (mobile view) */
+  max-height: 50vh;
+  background: #333;
+  color: white;
+}
+
+.chat__list {
+  list-style: none;
+  overflow-y: auto;
+  padding: 0.5rem;
+}
+
+.chat__wrapper form {
+  display: flex;
+  justify-content: center;
+}
+
+.chat__message {
+  margin: 0.2rem 0;
+}
+
+/* tablet */
+@media (min-width: 500px) {
+}
+
+/* large tablet */
+@media (min-width: 750px) {
+  .chat__wrapper {
+    width: 25%;
+    margin-top: 4rem;
+  }
+}
+
+/* laptop */
+@media (min-width: 1000px) {
+}
+
+/* desktop */
+@media (min-width: 1250px) {
+}

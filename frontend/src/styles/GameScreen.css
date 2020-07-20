@@ -1,34 +1,33 @@
 /* mobile */
 
-.gameScreen__content {
+.gameScreen__wrapper {
   display: flex;
-  margin: 0 auto;
-  flex-direction: column-reverse;
+  flex-direction: column;
 }
 
-.gameScreen__main {
-  flex-basis: 80%;
-}
-
-.gameScreen__boardAndRack {
+.gameScreen__board {
   width: 100%;
   margin: 0 auto;
 }
 
 /* tablet */
 @media (min-width: 500px) {
-  .gameScreen__boardAndRack {
+  .gameScreen__board {
     width: 90%;
   }
 }
 
 /* large tablet */
 @media (min-width: 750px) {
-  .gameScreen__content {
+  .gameScreen__board {
+    width: 90%;
+  }
+  .gameScreen__wrapper {
     flex-direction: row;
   }
-  .gameScreen__boardAndRack {
-    width: 70%;
+  .gameScreen__main {
+    flex-direction: row;
+    width: 75%;
   }
 }
 
