@@ -2,12 +2,12 @@ import React from "react";
 import Tile from "../components/Tile";
 import "../styles/TileRack.css";
 
-const TileRack = ({ playerTiles, handleSelectTile }) => {
+const TileRack = ({ playerRackTiles, handleSelectTile }) => {
   return (
     <div className="tileRack__wrapper">
-      {playerTiles &&
-        playerTiles.length > 0 &&
-        playerTiles.map((tile, index) => (
+      {playerRackTiles &&
+        playerRackTiles.length > 0 &&
+        playerRackTiles.map((tile, index) => (
           <div className="tileRack__tile" key={index}>
             <Tile tile={tile} handleSelectTile={handleSelectTile} />
           </div>

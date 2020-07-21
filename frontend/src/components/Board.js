@@ -16,20 +16,19 @@ const getBonusClassName = (square) => {
   return bonusClassName;
 };
 
-const Board = ({ squares, handleSelectSquare, tilesOnBoard }) => {
-  const [occupiedSquaresIds, setOccupiedSquareIds] = useState([]);
+const Board = ({ squares, handleSelectSquare, allTilesOnBoard }) => {
+  const [occupiedSquaresIndices, setOccupiedSquareIndices] = useState([]);
 
   useEffect(() => {
-    if (tilesOnBoard.length > 0) {
-      const squareIds = tilesOnBoard.map((tile) => tile.square);
-      setOccupiedSquareIds(squareIds);
-    }
-  }, [tilesOnBoard]);
+    const squareIndices = allTilesOnBoard.map((tile) => tile.square);
+    setOccupiedSquareIndices(squareIndices);
+  }, [allTilesOnBoard]);
 
   const createPlacedTile = (index) => {
-    if (occupiedSquaresIds.includes(index)) {
+    if (occupiedSquaresIndices.includes(index) && allTilesOnBoard.length > 0) {
       let placedTile;
-      const tile = tilesOnBoard.filter((tile) => tile.square === index)[0];
+      const tile = allTilesOnBoard.filter((tile) => tile.square === index)[0];
+      //ideally would use same Tile component here as in rack but styling is a bit tricky
       placedTile = (
         <span className="board__tile">
           <span>{tile.letter}</span>
@@ -52,7 +51,7 @@ const Board = ({ squares, handleSelectSquare, tilesOnBoard }) => {
               <div
                 className={`board__square ${bonusClassName}`}
                 key={index}
-                onClick={(e) => handleSelectSquare(square.id)}
+                onClick={(e) => handleSelectSquare(square.index)}
               >
                 {!placedTile && (
                   <span className="board__bonus-text">

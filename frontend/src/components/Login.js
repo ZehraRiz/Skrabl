@@ -1,13 +1,26 @@
 import React from "react";
 import "../styles/Login.css";
 
-const Login = ({ setCurrentComponent }) => {
+const Login = ({ setCurrentComponent, setUser, socket, setPlayers }) => {
   const handleLogin = (e) => {
+    console.log("handle login");
     e.preventDefault();
     const name = e.target.name.value;
-    console.log(name);
-    //do backend stuff here
-    setCurrentComponent("GameScreen");
+    socket.emit("username", name);
+    socket.on("usernameError", (data) => {
+      console.log("invalid user name " + data);
+      return;
+    });
+    socket.on("usernameRegistered", (data) => {
+      const user = data.user;
+      console.log("username registered");
+      console.log(user);
+      //set in ls
+      setUser(user);
+      setPlayers(data.allOnlineUsers);
+      setCurrentComponent("Players");
+    });
+
     e.target.reset();
   };
 

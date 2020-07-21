@@ -21,7 +21,7 @@
 /* large tablet */
 @media (min-width: 750px) {
   .tileRack__wrapper {
-    width: 60%;
+    width: 100%;
   }
 }
 

@@ -1,0 +1,58 @@
+/* mobile */
+
+.players__wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.players__wrapper h3 {
+  margin: 2rem 0;
+}
+
+.players__list {
+  margin-top: 2rem;
+  list-style: none;
+  width: 100%;
+}
+
+.players__player {
+  padding: 1rem;
+  font-size: 1.2rem;
+  background: rgb(79, 79, 153);
+  color: white;
+  border: 1px solid white;
+  cursor: pointer;
+}
+
+.players__player:hover {
+  background: rgb(53, 53, 107);
+}
+
+/* tablet */
+@media (min-width: 500px) {
+  .players__list {
+    width: 70%;
+  }
+}
+
+/* large tablet */
+@media (min-width: 750px) {
+  .players__list {
+    width: 60%;
+  }
+}
+
+/* laptop */
+@media (min-width: 1000px) {
+  .players__list {
+    width: 50%;
+  }
+}
+
+/* desktop */
+@media (min-width: 1250px) {
+  .players__list {
+    width: 40%;
+  }
+}
