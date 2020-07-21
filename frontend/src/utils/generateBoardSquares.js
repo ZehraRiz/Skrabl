@@ -1,6 +1,6 @@
-export const generateBoardSquares = (bonusSquareIds) => {
+export const generateBoardSquares = (bonusSquareIndices) => {
   let bonusSquares = [];
-  Object.keys(bonusSquareIds).forEach((key) => {
+  Object.keys(bonusSquareIndices).forEach((key) => {
     let letterMultiplier = null;
     let wordMultiplier = null;
     if (key === "doubleLetter") {
@@ -12,25 +12,25 @@ export const generateBoardSquares = (bonusSquareIds) => {
     } else if (key === "tripleWord") {
       wordMultiplier = 3;
     }
-    const newArray = bonusSquareIds[key].map((index) => ({
-      id: index,
+    const newArray = bonusSquareIndices[key].map((index) => ({
+      index,
       letterMultiplier,
       wordMultiplier,
     }));
     bonusSquares = [...bonusSquares, ...newArray];
   });
-  const ordered = bonusSquares.sort((a, b) => (a.id > b.id ? 1 : -1));
-  const bonusIndices = ordered.map((obj) => obj.id);
+  const ordered = bonusSquares.sort((a, b) => (a.index > b.index ? 1 : -1));
+  const bonusIndices = ordered.map((obj) => obj.index);
   const allSquares = [];
   for (let i = 0; i < 225; i++) {
     const row = Math.floor(i / 15);
     const col = i % 15;
     if (bonusIndices.includes(i)) {
-      const bonusSquare = ordered.filter((obj) => obj.id === i)[0];
+      const bonusSquare = ordered.filter((obj) => obj.index === i)[0];
       allSquares.push({ ...bonusSquare, row, col });
     } else {
       allSquares.push({
-        id: i,
+        index: i,
         letterMultiplier: null,
         wordMultiplier: null,
         row,

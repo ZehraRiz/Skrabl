@@ -1,59 +1,89 @@
 import React, { useState, useEffect } from "react";
 import Board from "../components/Board";
 import TileRack from "../components/TileRack";
-import { bonusSquareIds } from "../assets/bonusSquareIds";
+import { bonusSquareIndices } from "../assets/bonusSquareIndices";
 import { generateBoardSquares } from "../utils/generateBoardSquares";
+import { shuffleArray } from "../utils/shuffleArray";
 import StatusBar from "./StatusBar";
 import Chat from "./Chat";
 import GameButtons from "./GameButtons";
+import axios from "axios";
 import "../styles/GameScreen.css";
 
 const GameScreen = ({ setNotification }) => {
-  const squares = generateBoardSquares(bonusSquareIds);
+  const squares = generateBoardSquares(bonusSquareIndices);
   const [selectedTile, setSelectedTile] = useState(null);
-  const [selectedSquareId, setSelectedSquareId] = useState(null);
-  const [tilesOnBoard, setTilesOnBoard] = useState([]);
-  const [playerTiles, setPlayerTiles] = useState([]);
+  const [selectedSquareIndex, setSelectedSquareIndex] = useState(null);
+  const [allTilesOnBoard, setAllTilesOnBoard] = useState([]);
+  const [playerRackTiles, setPlayerRackTiles] = useState([]);
   const [gameInProgress, setGameInProgress] = useState(true);
-
-  const scores = { player1: 20, player2: 30 };
-
-  //DUMMY FUNCTION - will need to call backend
-  const getTiles = () => {
-    const numTilesNeeded = 7 - playerTiles.length;
-    const randomTiles = [];
-    for (let i = 0; i < numTilesNeeded; i++) {
-      randomTiles.push({ id: i, letter: "b", points: 3 });
-    }
-    setPlayerTiles([...playerTiles, ...randomTiles]);
-  };
+  const [placedTiles, setPlacedTiles] = useState([]);
 
   useEffect(() => {
     getTiles();
   }, []);
 
+  const scores = { player1: 20, player2: 30 };
+
+  //DUMMY FUNCTION - will need to call backend
+  const getTiles = () => {
+    const numTilesNeeded = 7 - playerRackTiles.length;
+    const randomTiles = [];
+    for (let i = 0; i < numTilesNeeded; i++) {
+      randomTiles.push({ id: i, letter: "b", points: 3 });
+    }
+    setPlayerRackTiles([...playerRackTiles, ...randomTiles]);
+  };
+
+  const handleClearTiles = () => {
+    setPlayerRackTiles([...playerRackTiles, ...placedTiles]);
+    const placedTilesIds = placedTiles.map((tile) => tile.id);
+    const updatedTilesOnBoard = [
+      ...allTilesOnBoard.filter((tile) => !placedTilesIds.includes(tile.id)),
+    ];
+    setAllTilesOnBoard([...updatedTilesOnBoard]);
+    setPlacedTiles([]);
+  };
+
+  const handleShuffleRack = () => {
+    const shuffled = shuffleArray([...playerRackTiles]);
+    setPlayerRackTiles([...shuffled]);
+  };
+
   const handleSelectTile = (tile) => {
     setSelectedTile(tile);
   };
 
-  const handleSelectSquare = (squareId) => {
+  const handleSelectSquare = (squareIndex) => {
     if (selectedTile) {
-      setSelectedSquareId(squareId);
+      setSelectedSquareIndex(squareIndex);
     }
   };
 
+  const handleConfirmMove = () => {
+    //call backend for verification:
+    // axios.post("http://localhost:4001/verifyWord", {words: formedWords}).then(res => {
+    //   console.log(res.results)
+    // })
+  };
+
   useEffect(() => {
-    if (selectedSquareId !== null) {
-      setTilesOnBoard([
-        ...tilesOnBoard,
-        { ...selectedTile, square: selectedSquareId },
+    //if user has selected a tile and then a square, place the tile on the square
+    if (selectedSquareIndex !== null) {
+      setAllTilesOnBoard([
+        ...allTilesOnBoard,
+        { ...selectedTile, square: selectedSquareIndex },
       ]);
-      setPlayerTiles([
-        ...playerTiles.filter((tile) => tile.id !== selectedTile.id),
+      setPlacedTiles([
+        ...placedTiles,
+        { ...selectedTile, square: selectedSquareIndex },
+      ]);
+      setPlayerRackTiles([
+        ...playerRackTiles.filter((tile) => tile.id !== selectedTile.id),
       ]);
     }
     //update board state in backend here?
-  }, [selectedSquareId]);
+  }, [selectedSquareIndex]);
 
   const handleSendMessage = (e) => {
     e.preventDefault();
@@ -84,13 +114,18 @@ const GameScreen = ({ setNotification }) => {
           <Board
             squares={squares}
             handleSelectSquare={handleSelectSquare}
-            tilesOnBoard={tilesOnBoard}
+            allTilesOnBoard={allTilesOnBoard}
           />
           <TileRack
-            playerTiles={playerTiles}
+            playerRackTiles={playerRackTiles}
             handleSelectTile={handleSelectTile}
           />
-          <GameButtons getTiles={getTiles} />
+          <GameButtons
+            getTiles={getTiles}
+            handleClearTiles={handleClearTiles}
+            handleShuffleRack={handleShuffleRack}
+            handleConfirmMove={handleConfirmMove}
+          />
         </div>
       </div>
       <Chat chat={chat} handleSendMessage={handleSendMessage} />
