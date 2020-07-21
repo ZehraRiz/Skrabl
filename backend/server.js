@@ -126,22 +126,30 @@ io.on("connection", (socket) => {
 
 server.listen(port, () => console.log(`Listening on port ${port}`));
 
-app.post("/verifyWord", async (req, res) => {
-  const { word } = req.body;
-  const uri =
-    "https://dictionaryapi.com/api/v3/references/collegiate/json/" +
-    word +
-    "?key=" +
-    process.env.DICTIONARY_KEY;
-  try {
-    const response = await axios.get(uri);
-    if (response.data[0] && response.data[0].meta) {
-      res.status(200).send({ exists: "true" });
-    } else {
-      res.status(200).send({ exists: "false" });
+app.get("/verifyWord", async (req, res) => {
+  const { words } = req.body;
+  const results = {};
+  for (const word of words) {
+    const uri =
+      "https://dictionaryapi.com/api/v3/references/collegiate/json/" +
+      word +
+      "?key=" +
+      process.env.DICTIONARY_KEY;
+    try {
+      const response = await axios.get(uri);
+      if (response.data[0] && response.data[0].meta) {
+        console.log(word);
+        console.log("is true");
+        results[word] = "true";
+      } else {
+        results[word] = "false";
+        console.log(word);
+        console.log("is false");
+      }
+    } catch (err) {
+      console.log(err);
+      res.status(400).send({ err });
     }
-  } catch (err) {
-    console.log(err);
-    res.status(400).send({ err });
   }
+  res.status(200).send(results);
 });

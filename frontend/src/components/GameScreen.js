@@ -1,22 +1,27 @@
 import React, { useState, useEffect } from "react";
 import Board from "../components/Board";
 import TileRack from "../components/TileRack";
-import { bonusSquareIds } from "../assets/bonusSquareIds";
+import { bonusSquareIndices } from "../assets/bonusSquareIndices";
 import { generateBoardSquares } from "../utils/generateBoardSquares";
 import { shuffleArray } from "../utils/shuffleArray";
 import StatusBar from "./StatusBar";
 import Chat from "./Chat";
 import GameButtons from "./GameButtons";
+import axios from "axios";
 import "../styles/GameScreen.css";
 
 const GameScreen = ({ setNotification }) => {
-  const squares = generateBoardSquares(bonusSquareIds);
+  const squares = generateBoardSquares(bonusSquareIndices);
   const [selectedTile, setSelectedTile] = useState(null);
-  const [selectedSquareId, setSelectedSquareId] = useState(null);
+  const [selectedSquareIndex, setSelectedSquareIndex] = useState(null);
   const [allTilesOnBoard, setAllTilesOnBoard] = useState([]);
   const [playerRackTiles, setPlayerRackTiles] = useState([]);
   const [gameInProgress, setGameInProgress] = useState(true);
   const [placedTiles, setPlacedTiles] = useState([]);
+
+  useEffect(() => {
+    getTiles();
+  }, []);
 
   const scores = { player1: 20, player2: 30 };
 
@@ -37,7 +42,7 @@ const GameScreen = ({ setNotification }) => {
       ...allTilesOnBoard.filter((tile) => !placedTilesIds.includes(tile.id)),
     ];
     setAllTilesOnBoard([...updatedTilesOnBoard]);
-    // setPlacedTiles([]);
+    setPlacedTiles([]);
   };
 
   const handleShuffleRack = () => {
@@ -45,36 +50,40 @@ const GameScreen = ({ setNotification }) => {
     setPlayerRackTiles([...shuffled]);
   };
 
-  useEffect(() => {
-    getTiles();
-  }, []);
-
   const handleSelectTile = (tile) => {
     setSelectedTile(tile);
   };
 
-  const handleSelectSquare = (squareId) => {
+  const handleSelectSquare = (squareIndex) => {
     if (selectedTile) {
-      setSelectedSquareId(squareId);
+      setSelectedSquareIndex(squareIndex);
     }
   };
 
+  const handleConfirmMove = () => {
+    //call backend for verification:
+    // axios.post("http://localhost:4001/verifyWord", {words: formedWords}).then(res => {
+    //   console.log(res.results)
+    // })
+  };
+
   useEffect(() => {
-    if (selectedSquareId !== null) {
+    //if user has selected a tile and then a square, place the tile on the square
+    if (selectedSquareIndex !== null) {
       setAllTilesOnBoard([
         ...allTilesOnBoard,
-        { ...selectedTile, square: selectedSquareId },
+        { ...selectedTile, square: selectedSquareIndex },
       ]);
       setPlacedTiles([
         ...placedTiles,
-        { ...selectedTile, square: selectedSquareId },
+        { ...selectedTile, square: selectedSquareIndex },
       ]);
       setPlayerRackTiles([
         ...playerRackTiles.filter((tile) => tile.id !== selectedTile.id),
       ]);
     }
     //update board state in backend here?
-  }, [selectedSquareId]);
+  }, [selectedSquareIndex]);
 
   const handleSendMessage = (e) => {
     e.preventDefault();
@@ -115,6 +124,7 @@ const GameScreen = ({ setNotification }) => {
             getTiles={getTiles}
             handleClearTiles={handleClearTiles}
             handleShuffleRack={handleShuffleRack}
+            handleConfirmMove={handleConfirmMove}
           />
         </div>
       </div>

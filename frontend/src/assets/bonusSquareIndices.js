@@ -1,4 +1,4 @@
-export const bonusSquareIds = {
+export const bonusSquareIndices = {
   doubleLetter: [
     3,
     11,
