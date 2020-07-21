@@ -4,7 +4,6 @@ let games = [];
 //Join connection to player
 
 function gameJoin(gameId) {
-    console.log(initialPouch)
     const game = {
         gameId: gameId,
         player1: { playerId: "" },
