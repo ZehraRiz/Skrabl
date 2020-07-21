@@ -1,15 +1,9 @@
 import React, { useState } from "react";
 
-const Options = ({ user, invitedPlayer }) => {
-  
+const Options = ({ user, invitedPlayer, handleSendInvite }) => {
   const [timeInput, setTimeInput] = useState(20);
   const handleTimeChange = (e) => {
     setTimeInput(e.target.value);
-  };
-
-  const handleApplyOptions = () => {
-    console.log("applying options");
-    console.log("time: " + timeInput);
   };
 
   const handleClose = () => {
@@ -31,8 +25,8 @@ const Options = ({ user, invitedPlayer }) => {
       <button type="button" onClick={handleClose}>
         Cancel
       </button>
-      <button type="button" onClick={handleApplyOptions}>
-        Done
+      <button type="button" onClick={handleSendInvite}>
+        Send Invite
       </button>
     </div>
   );
