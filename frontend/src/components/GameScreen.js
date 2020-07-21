@@ -9,15 +9,17 @@ import Chat from "./Chat";
 import GameButtons from "./GameButtons";
 import axios from "axios";
 import "../styles/GameScreen.css";
+import ConfirmModal from "./ConfirmModal";
+import GameOverModal from "./GameOverModal";
 
 const GameScreen = ({
   setNotification,
   chat,
   handleSendMessage,
   currentPlayer,
-  setCurrentPlayer,
   nextPlayer,
   playerIndex,
+  setCurrentComponent,
 }) => {
   const squares = generateBoardSquares(bonusSquareIndices);
   const [selectedTile, setSelectedTile] = useState(null);
@@ -26,12 +28,15 @@ const GameScreen = ({
   const [playerRackTiles, setPlayerRackTiles] = useState([]);
   const [gameInProgress, setGameInProgress] = useState(true);
   const [placedTiles, setPlacedTiles] = useState([]);
+  const [gameIsOver, setGameIsOver] = useState(false);
+  const [confirmMessage, setConfirmMessage] = useState(null);
 
   useEffect(() => {
     getTiles();
   }, []);
 
-  const scores = { player1: 20, player2: 30 };
+  //DUMMY DATA
+  const scores = { 0: 20, 1: 30 };
 
   //DUMMY FUNCTION - will need to call backend
   const getTiles = () => {
@@ -83,6 +88,11 @@ const GameScreen = ({
     nextPlayer();
   };
 
+  const gameOver = () => {
+    //setting gameIsOver to true
+    setGameIsOver(true);
+  };
+
   useEffect(() => {
     //if user has selected a tile and then a square, place the tile on the square
     if (selectedSquareIndex !== null) {
@@ -101,6 +111,23 @@ const GameScreen = ({
     }
     //update board state in backend here?
   }, [selectedSquareIndex]);
+
+  const handleCloseModal = () => {
+    setCurrentComponent("Players");
+  };
+
+  const confirmResign = () => {
+    setConfirmMessage("Are you sure you want to resign?");
+  };
+
+  const closeConfirmModal = () => {
+    setConfirmMessage(null);
+  };
+
+  const handleResign = () => {
+    closeConfirmModal();
+    gameOver();
+  };
 
   return (
     <div className="gameScreen__wrapper">
@@ -125,10 +152,25 @@ const GameScreen = ({
             handleClearTiles={handleClearTiles}
             handleShuffleRack={handleShuffleRack}
             handleConfirmMove={handleConfirmMove}
+            confirmResign={confirmResign}
           />
         </div>
       </div>
       <Chat chat={chat} handleSendMessage={handleSendMessage} />
+      {gameIsOver && (
+        <GameOverModal
+          winner="Tom"
+          scores={scores}
+          handleCloseModal={handleCloseModal}
+        />
+      )}
+      {confirmMessage && (
+        <ConfirmModal
+          message={confirmMessage}
+          handleConfirm={handleResign}
+          handleCancel={closeConfirmModal}
+        />
+      )}
     </div>
   );
 };

@@ -136,9 +136,9 @@ const App = () => {
           handleSendMessage={handleSendMessage}
           chat={chat}
           currentPlayer={currentPlayer}
-          setCurrentPlayer={setCurrentPlayer}
           nextPlayer={nextPlayer}
           playerIndex={playerIndex}
+          setCurrentComponent={setCurrentComponent}
         />
       )}
       {notification && (
