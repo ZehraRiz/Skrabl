@@ -3,14 +3,14 @@ import io from "socket.io-client";
 import Login from "./components/Login";
 import Header from "./components/Header";
 import Players from "./components/Players";
-import Options from "./components/Options";
+import InviteScreen from "./components/InviteScreen";
 import GameScreen from "./components/GameScreen";
 import NotificationModal from "./components/NotificationModal";
 import "./styles/global.css";
 const socket = io("http://localhost:4001");
 
 const App = () => {
-  const [currentComponent, setCurrentComponent] = useState("GameScreen");
+  const [currentComponent, setCurrentComponent] = useState("Players");
   const [notification, setNotification] = useState(null);
   const [user, setUser] = useState("");
   const [players, setPlayers] = useState([]);
@@ -46,7 +46,7 @@ const App = () => {
     console.log("setting invited player to");
     console.log(player);
     setInvitedPlayer(player);
-    setCurrentComponent("Options");
+    setCurrentComponent("InviteScreen");
   };
 
   const handleSendInvite = () => {
@@ -123,9 +123,10 @@ const App = () => {
           handleRequestGame={handleRequestGame}
         />
       )}
-      {currentComponent === "Options" && (
-        <Options
+      {currentComponent === "InviteScreen" && (
+        <InviteScreen
           handleSendInvite={handleSendInvite}
+          invitedPlayer={invitedPlayer}
           setInvitedPlayer={setInvitedPlayer}
           setCurrentComponent={setCurrentComponent}
         />
