@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { removeDashes } from "../utils/removeDashes";
 import "../styles/Board.css";
 
@@ -16,42 +16,31 @@ const getBonusClassName = (square) => {
   return bonusClassName;
 };
 
-const Board = ({ squares, handleSelectSquare, allTilesOnBoard }) => {
-  const [occupiedSquaresIndices, setOccupiedSquareIndices] = useState([]);
-
-  useEffect(() => {
-    const squareIndices = allTilesOnBoard.map((tile) => tile.square);
-    setOccupiedSquareIndices(squareIndices);
-  }, [allTilesOnBoard]);
-
-  const createPlacedTile = (index) => {
-    if (occupiedSquaresIndices.includes(index) && allTilesOnBoard.length > 0) {
-      let placedTile;
-      const tile = allTilesOnBoard.filter((tile) => tile.square === index)[0];
-      //ideally would use same Tile component here as in rack but styling is a bit tricky
-      placedTile = (
-        <span className="board__tile">
-          <span>{tile.letter}</span>
-        </span>
-      );
-      return placedTile;
-    } else {
-      return null;
-    }
-  };
-
+const Board = ({ handleClickSquare, handleClickPlacedTile, boardState }) => {
   return (
     <div className="board__wrapper">
       <div className="board__board">
-        {squares &&
-          squares.map((square, index) => {
+        {boardState &&
+          boardState.length > 0 &&
+          boardState.map((square, index) => {
             const bonusClassName = getBonusClassName(square);
-            const placedTile = createPlacedTile(index);
+            let placedTile;
+            if (square.tile) {
+              placedTile = (
+                <span
+                  className="board__tile"
+                  onClick={() => handleClickPlacedTile(square.tile)}
+                >
+                  <span>{square.tile.letter}</span>
+                  <span>{square.tile.points}</span>
+                </span>
+              );
+            }
             return (
               <div
                 className={`board__square ${bonusClassName}`}
                 key={index}
-                onClick={(e) => handleSelectSquare(square.index)}
+                onClick={(e) => handleClickSquare(square)}
               >
                 {!placedTile && (
                   <span className="board__bonus-text">

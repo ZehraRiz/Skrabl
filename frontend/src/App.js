@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import io from "socket.io-client";
 import Login from "./components/Login";
 import Header from "./components/Header";
@@ -18,58 +18,33 @@ const App = () => {
   const [gameId, setGameId] = useState("");
   const [gameData, setGameData] = useState(null);
   const [allPlayers, setAllPlayers] = useState(players);
-  //presumably the player who sends the invite will be 0 and the intvitee will be 1?
-  const [playerIndex, setPlayerIndex] = useState(0);
   const [currentPlayer, setCurrentPlayer] = useState(null);
-
-  const nextPlayer = () => {
-    setCurrentPlayer(currentPlayer === 0 ? 1 : 0);
-  };
-
-  useEffect(() => {
-    console.log("current player is now " + currentPlayer);
-  }, [currentPlayer]);
+  const [chat, setChat] = useState([]);
 
   const handleCloseNotificationModal = () => {
-    console.log("closing notification modal");
     setNotification(null);
   };
 
   socket.on("welcomeNewUser", ({ user }) => {
-    console.log("adding new player to list");
-    console.log(user);
     setAllPlayers([...allPlayers, user]);
   });
 
   const handleRequestGame = (player) => {
-    console.log("handle request game");
-    console.log("setting invited player to");
-    console.log(player);
     setInvitedPlayer(player);
     setCurrentComponent("InviteScreen");
   };
 
   const handleSendInvite = () => {
-    console.log("handleSendInvite");
-    console.log("inviting:");
-    console.log(invitedPlayer);
-
     //create a new game
-    console.log("emitting create game");
-    console.log("user id: " + user.id);
     //send selected time limit here?
     socket.emit("createGame", user.id);
-
     //invalid userId on create game
     socket.on("createGameError", (data) => {
       console.log(data);
       return;
     });
-
     //create game succesful, a gameId is sent back that can be used by two players to play the game
     socket.on("gameCreateResponse", (data) => {
-      console.log("game created successfully");
-      console.log("game id: " + data);
       //get randomly selected starting player here?
       setCurrentPlayer(0);
       setGameId(data);
@@ -79,27 +54,15 @@ const App = () => {
 
   const acceptInvite = (e) => {
     e.preventDefault();
-    console.log("accept invite");
-    console.log(e.target.invite.value);
   };
 
   const handleSendMessage = (e) => {
     e.preventDefault();
-    console.log(e.target.message.value);
+    const newMessage = e.target.message.value;
+    setChat([...chat, newMessage]);
     //emit message to backend here
     e.target.reset();
   };
-
-  //DUMMY DATA
-  const chat = [
-    "Hi",
-    "Hello",
-    "How are you?",
-    "Fine, thanks.",
-    "What are you doing?",
-    "Playing Scrabble. How about you?",
-    "The same",
-  ];
 
   return (
     <div>
@@ -137,8 +100,7 @@ const App = () => {
           setNotification={setNotification}
           handleSendMessage={handleSendMessage}
           chat={chat}
-          nextPlayer={nextPlayer}
-          playerIndex={playerIndex}
+          setCurrentPlayer={setCurrentPlayer}
           setCurrentComponent={setCurrentComponent}
           currentPlayer={currentPlayer}
         />
