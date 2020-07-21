@@ -25,21 +25,21 @@ io.on("connection", (socket) => {
 			socket.join(user.room);
 			socket.emit("usernameRegistered", {
 				msg: "you are a registered player now",
-				user: getCurrentUser(user.id),
+				user: getCurrentUser(socket.id),
 				allOnlineUsers: getRoomUsers()
 			});
-			socket.broadcast.to(user.room).emit("welcomeNewUser", `${username} has joined`);
+			socket.broadcast.to(user.room).emit("welcomeNewUser", {user:user});
 		}
 	});
 
 	socket.on("createGame", (userId) => {
-		// if (getCurrentUser(userId)) {
+		if (getCurrentUser(userId)) {
 		const gameId = Math.floor(Math.random() * 10000).toString();
 		const game = gameJoin(gameId);
 		socket.join(game.gameId);
-		socket.emit("gameCreateResponse", game);
-		//}
-		// else socket.emit("createGameError", "please register before creating a game")
+		socket.emit("gameCreateResponse", gameId);
+		}
+		else socket.emit("createGameError", "please register before creating a game")
 	});
 
 	socket.on("joinGame", ({ gameId, userId }) => {

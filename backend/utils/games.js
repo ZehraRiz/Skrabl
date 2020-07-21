@@ -6,12 +6,14 @@ let games = [];
 function gameJoin(gameId) {
     const game = {
         gameId: gameId,
-        player1: { playerId: "", score: 0 },
-        player2: { playerId: "", score: 0 },
+        player1: { playerId: "" },
+        player2: { playerId: "" },
         gameState: {
             pouch: initialPouch, 
             player1Tiles: [],
-            player2Tiles: []
+            player1Score: [],
+            player2Tiles: [],
+            player2Score: []
         }
     }
     games.push(game);

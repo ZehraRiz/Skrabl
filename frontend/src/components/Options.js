@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 
-const Options = () => {
+const Options = ({ user, invitedPlayer }) => {
+  
   const [timeInput, setTimeInput] = useState(20);
-
   const handleTimeChange = (e) => {
     setTimeInput(e.target.value);
   };

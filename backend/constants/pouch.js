@@ -29,4 +29,13 @@ for (i = 0; i <= 0; i++) initialPouch.push({ id: initialPouch.length + 1, letter
 for (i = 0; i <= 0; i++) initialPouch.push({ id: initialPouch.length + 1, letter: "Q", point: 10 });
 for (i = 0; i <= 0; i++) initialPouch.push({ id: initialPouch.length + 1, letter: "Z", point: 10 });
 
+function shuffle(a) {
+    for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+}
+
+initialPouch =  shuffle(initialPouch)
 module.exports = { initialPouch };
