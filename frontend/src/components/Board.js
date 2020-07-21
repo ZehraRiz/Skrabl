@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { removeDashes } from "../utils/removeDashes";
+import Tile from "./Tile";
 import "../styles/Board.css";
 
 const getBonusClassName = (square) => {
@@ -16,20 +17,18 @@ const getBonusClassName = (square) => {
   return bonusClassName;
 };
 
-const Board = ({ squares, handleSelectSquare, tilesOnBoard }) => {
+const Board = ({ squares, handleSelectSquare, allTilesOnBoard }) => {
   const [occupiedSquaresIds, setOccupiedSquareIds] = useState([]);
 
   useEffect(() => {
-    if (tilesOnBoard.length > 0) {
-      const squareIds = tilesOnBoard.map((tile) => tile.square);
-      setOccupiedSquareIds(squareIds);
-    }
-  }, [tilesOnBoard]);
+    const squareIds = allTilesOnBoard.map((tile) => tile.square);
+    setOccupiedSquareIds(squareIds);
+  }, [allTilesOnBoard]);
 
   const createPlacedTile = (index) => {
-    if (occupiedSquaresIds.includes(index)) {
+    if (occupiedSquaresIds.includes(index) && allTilesOnBoard.length > 0) {
       let placedTile;
-      const tile = tilesOnBoard.filter((tile) => tile.square === index)[0];
+      const tile = allTilesOnBoard.filter((tile) => tile.square === index)[0];
       placedTile = (
         <span className="board__tile">
           <span>{tile.letter}</span>

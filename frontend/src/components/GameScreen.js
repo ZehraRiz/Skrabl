@@ -12,20 +12,31 @@ const GameScreen = ({ setNotification }) => {
   const squares = generateBoardSquares(bonusSquareIds);
   const [selectedTile, setSelectedTile] = useState(null);
   const [selectedSquareId, setSelectedSquareId] = useState(null);
-  const [tilesOnBoard, setTilesOnBoard] = useState([]);
-  const [playerTiles, setPlayerTiles] = useState([]);
+  const [allTilesOnBoard, setAllTilesOnBoard] = useState([]);
+  const [playerRackTiles, setPlayerRackTiles] = useState([]);
   const [gameInProgress, setGameInProgress] = useState(true);
+  const [placedTiles, setPlacedTiles] = useState([]);
 
   const scores = { player1: 20, player2: 30 };
 
   //DUMMY FUNCTION - will need to call backend
   const getTiles = () => {
-    const numTilesNeeded = 7 - playerTiles.length;
+    const numTilesNeeded = 7 - playerRackTiles.length;
     const randomTiles = [];
     for (let i = 0; i < numTilesNeeded; i++) {
       randomTiles.push({ id: i, letter: "b", points: 3 });
     }
-    setPlayerTiles([...playerTiles, ...randomTiles]);
+    setPlayerRackTiles([...playerRackTiles, ...randomTiles]);
+  };
+
+  const handleClearTiles = () => {
+    setPlayerRackTiles([...playerRackTiles, ...placedTiles]);
+    const placedTilesIds = placedTiles.map((tile) => tile.id);
+    const updatedTilesOnBoard = [
+      ...allTilesOnBoard.filter((tile) => !placedTilesIds.includes(tile.id)),
+    ];
+    setAllTilesOnBoard([...updatedTilesOnBoard]);
+    // setPlacedTiles([]);
   };
 
   useEffect(() => {
@@ -44,12 +55,16 @@ const GameScreen = ({ setNotification }) => {
 
   useEffect(() => {
     if (selectedSquareId !== null) {
-      setTilesOnBoard([
-        ...tilesOnBoard,
+      setAllTilesOnBoard([
+        ...allTilesOnBoard,
         { ...selectedTile, square: selectedSquareId },
       ]);
-      setPlayerTiles([
-        ...playerTiles.filter((tile) => tile.id !== selectedTile.id),
+      setPlacedTiles([
+        ...placedTiles,
+        { ...selectedTile, square: selectedSquareId },
+      ]);
+      setPlayerRackTiles([
+        ...playerRackTiles.filter((tile) => tile.id !== selectedTile.id),
       ]);
     }
     //update board state in backend here?
@@ -84,13 +99,16 @@ const GameScreen = ({ setNotification }) => {
           <Board
             squares={squares}
             handleSelectSquare={handleSelectSquare}
-            tilesOnBoard={tilesOnBoard}
+            allTilesOnBoard={allTilesOnBoard}
           />
           <TileRack
-            playerTiles={playerTiles}
+            playerRackTiles={playerRackTiles}
             handleSelectTile={handleSelectTile}
           />
-          <GameButtons getTiles={getTiles} />
+          <GameButtons
+            getTiles={getTiles}
+            handleClearTiles={handleClearTiles}
+          />
         </div>
       </div>
       <Chat chat={chat} handleSendMessage={handleSendMessage} />

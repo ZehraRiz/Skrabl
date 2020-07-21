@@ -10,7 +10,7 @@ import "./styles/global.css";
 const socket = io("http://localhost:4001");
 
 const App = () => {
-  const [currentComponent, setCurrentComponent] = useState("Login");
+  const [currentComponent, setCurrentComponent] = useState("GameScreen");
   const [notification, setNotification] = useState(null);
   const [user, setUser] = useState("");
   const [players, setPlayers] = useState([]);
