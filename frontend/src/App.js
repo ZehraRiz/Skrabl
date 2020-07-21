@@ -10,7 +10,7 @@ import "./styles/global.css";
 const socket = io("http://localhost:4001");
 
 const App = () => {
-  const [currentComponent, setCurrentComponent] = useState("GameScreen");
+  const [currentComponent, setCurrentComponent] = useState("Login");
   const [notification, setNotification] = useState(null);
   const [user, setUser] = useState("");
   const [players, setPlayers] = useState([]);
@@ -18,6 +18,7 @@ const App = () => {
   const [gameId, setGameId] = useState("");
   const [gameData, setGameData] = useState(null);
   const [allPlayers, setAllPlayers] = useState(players);
+  const [currentPlayer, setCurrentPlayer] = [null];
 
   const handleCloseNotificationModal = () => {
     console.log("closing notification modal");
@@ -69,6 +70,24 @@ const App = () => {
     console.log(e.target.invite.value);
   };
 
+  const handleSendMessage = (e) => {
+    e.preventDefault();
+    console.log(e.target.message.value);
+    //emit message to backend here
+    e.target.reset();
+  };
+
+  //DUMMY DATA
+  const chat = [
+    "Hi",
+    "Hello",
+    "How are you?",
+    "Fine, thanks.",
+    "What are you doing?",
+    "Playing Scrabble. How about you?",
+    "The same",
+  ];
+
   return (
     <div>
       <Header />
@@ -94,15 +113,19 @@ const App = () => {
       )}
       {currentComponent === "Options" && (
         <Options
-          user={user}
-          invitedPlayer={invitedPlayer}
-          gameId={gameId}
-          setGameData={setGameData}
           handleSendInvite={handleSendInvite}
+          setInvitedPlayer={setInvitedPlayer}
+          setCurrentComponent={setCurrentComponent}
         />
       )}
       {currentComponent === "GameScreen" && (
-        <GameScreen setNotification={setNotification} />
+        <GameScreen
+          setNotification={setNotification}
+          handleSendMessage={handleSendMessage}
+          chat={chat}
+          currentPlayer={currentPlayer}
+          setCurrentPlayer={setCurrentPlayer}
+        />
       )}
       {notification && (
         <NotificationModal

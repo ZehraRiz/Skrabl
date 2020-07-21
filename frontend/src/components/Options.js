@@ -1,13 +1,18 @@
 import React, { useState } from "react";
 
-const Options = ({ handleSendInvite }) => {
+const Options = ({
+  handleSendInvite,
+  setInvitedPlayer,
+  setCurrentComponent,
+}) => {
   const [timeInput, setTimeInput] = useState(20);
   const handleTimeChange = (e) => {
     setTimeInput(e.target.value);
   };
 
   const handleClose = () => {
-    console.log("closing options");
+    setInvitedPlayer(null);
+    setCurrentComponent("Players");
   };
 
   return (

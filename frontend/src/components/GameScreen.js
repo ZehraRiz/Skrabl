@@ -10,7 +10,13 @@ import GameButtons from "./GameButtons";
 import axios from "axios";
 import "../styles/GameScreen.css";
 
-const GameScreen = ({ setNotification }) => {
+const GameScreen = ({
+  setNotification,
+  chat,
+  handleSendMessage,
+  currentPlayer,
+  setCurrentPlayer,
+}) => {
   const squares = generateBoardSquares(bonusSquareIndices);
   const [selectedTile, setSelectedTile] = useState(null);
   const [selectedSquareIndex, setSelectedSquareIndex] = useState(null);
@@ -84,23 +90,6 @@ const GameScreen = ({ setNotification }) => {
     }
     //update board state in backend here?
   }, [selectedSquareIndex]);
-
-  const handleSendMessage = (e) => {
-    e.preventDefault();
-    console.log(e.target.message.value);
-    //emit message to backend here
-    e.target.reset();
-  };
-
-  const chat = [
-    "Hi",
-    "Hello",
-    "How are you?",
-    "Fine, thanks.",
-    "What are you doing?",
-    "Playing Scrabble. How about you?",
-    "The same",
-  ];
 
   return (
     <div className="gameScreen__wrapper">
