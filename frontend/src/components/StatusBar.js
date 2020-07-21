@@ -2,21 +2,35 @@ import React from "react";
 import Timer from "./Timer";
 import "../styles/StatusBar.css";
 
-const StatusBar = ({ scores, gameInProgress, setNotification }) => {
+const StatusBar = ({
+  scores,
+  setNotification,
+  timeLeftPlayer,
+  timeLeftOpponent,
+  setTimeLeftPlayer,
+  setTimeLeftOpponent,
+  currentPlayer,
+}) => {
   return (
     <div className="statusBar__wrapper">
       <div className="statusBar__player">
         Player 1: {scores.player1}
         <Timer
-          gameInProgress={gameInProgress}
           setNotification={setNotification}
+          timeLeft={timeLeftPlayer}
+          setTimeLeft={setTimeLeftPlayer}
+          currentPlayer={currentPlayer}
+          playerIndex={0}
         />
       </div>
       <div className="statusBar__player">
         Player 2: {scores.player2}
         <Timer
-          gameInProgress={gameInProgress}
           setNotification={setNotification}
+          timeLeft={timeLeftOpponent}
+          setTimeLeft={setTimeLeftOpponent}
+          currentPlayer={currentPlayer}
+          playerIndex={1}
         />
       </div>
     </div>

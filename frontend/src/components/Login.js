@@ -3,7 +3,6 @@ import "../styles/Login.css";
 
 const Login = ({ setCurrentComponent, setUser, socket, setPlayers }) => {
   const handleLogin = (e) => {
-    console.log("handle login");
     e.preventDefault();
     const name = e.target.name.value;
     socket.emit("username", name);
@@ -13,8 +12,6 @@ const Login = ({ setCurrentComponent, setUser, socket, setPlayers }) => {
     });
     socket.on("usernameRegistered", (data) => {
       const user = data.user;
-      console.log("username registered");
-      console.log(user);
       //set in ls
       setUser(user);
       setPlayers(data.allOnlineUsers);
