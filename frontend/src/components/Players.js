@@ -1,13 +1,7 @@
 import React from "react";
 import "../styles/Players.css";
 
-const allPlayers = [
-  { name: "Tom", id: 1 },
-  { name: "Zehra", id: 2 },
-  { name: "John", id: 3 },
-];
-
-const Players = ({ user, acceptInvite, handleRequestGame }) => {
+const Players = ({ allPlayers, user, acceptInvite, handleRequestGame }) => {
   return (
     <div className="players__wrapper">
       <h3>Players Online</h3>

@@ -6,7 +6,8 @@ const GameButtons = ({
   handleClearTiles,
   handleShuffleRack,
   handleConfirmMove,
-  confirmResign,
+  handleClickResign,
+  handleClickPass,
 }) => {
   return (
     <div className="gameButtons__wrapper">
@@ -14,7 +15,8 @@ const GameButtons = ({
       <button onClick={handleClearTiles}>Clear tiles</button>
       <button onClick={handleShuffleRack}>Shuffle tiles</button>
       <button onClick={handleConfirmMove}>Confirm move</button>
-      <button onClick={confirmResign}>Resign</button>
+      <button onClick={handleClickResign}>Resign</button>
+      <button onClick={handleClickPass}>Pass</button>
     </div>
   );
 };

@@ -10,7 +10,7 @@ import "./styles/global.css";
 const socket = io("http://localhost:4001");
 
 const App = () => {
-  const [currentComponent, setCurrentComponent] = useState("Players");
+  const [currentComponent, setCurrentComponent] = useState("Login");
   const [notification, setNotification] = useState(null);
   const [user, setUser] = useState("");
   const [players, setPlayers] = useState([]);
@@ -18,9 +18,9 @@ const App = () => {
   const [gameId, setGameId] = useState("");
   const [gameData, setGameData] = useState(null);
   const [allPlayers, setAllPlayers] = useState(players);
-  const [currentPlayer, setCurrentPlayer] = useState(null);
   //presumably the player who sends the invite will be 0 and the intvitee will be 1?
   const [playerIndex, setPlayerIndex] = useState(0);
+  const [currentPlayer, setCurrentPlayer] = useState(null);
 
   const nextPlayer = () => {
     setCurrentPlayer(currentPlayer === 0 ? 1 : 0);
@@ -57,6 +57,7 @@ const App = () => {
     //create a new game
     console.log("emitting create game");
     console.log("user id: " + user.id);
+    //send selected time limit here?
     socket.emit("createGame", user.id);
 
     //invalid userId on create game
@@ -136,10 +137,10 @@ const App = () => {
           setNotification={setNotification}
           handleSendMessage={handleSendMessage}
           chat={chat}
-          currentPlayer={currentPlayer}
           nextPlayer={nextPlayer}
           playerIndex={playerIndex}
           setCurrentComponent={setCurrentComponent}
+          currentPlayer={currentPlayer}
         />
       )}
       {notification && (

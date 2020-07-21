@@ -16,10 +16,10 @@ const GameScreen = ({
   setNotification,
   chat,
   handleSendMessage,
-  currentPlayer,
   nextPlayer,
   playerIndex,
   setCurrentComponent,
+  currentPlayer,
 }) => {
   const squares = generateBoardSquares(bonusSquareIndices);
   const [selectedTile, setSelectedTile] = useState(null);
@@ -34,6 +34,19 @@ const GameScreen = ({
   useEffect(() => {
     getTiles();
   }, []);
+
+  useEffect(() => {
+    updateBackend();
+  }, [currentPlayer]);
+
+  const updateBackend = () => {
+    console.log("updating backend");
+    const currentGameState = {
+      allTilesOnBoard,
+      playerRackTiles,
+    };
+    //send to backend here
+  };
 
   //DUMMY DATA
   const scores = { 0: 20, 1: 30 };
@@ -116,17 +129,30 @@ const GameScreen = ({
     setCurrentComponent("Players");
   };
 
-  const confirmResign = () => {
-    setConfirmMessage("Are you sure you want to resign?");
-  };
-
   const closeConfirmModal = () => {
     setConfirmMessage(null);
   };
 
+  const handleClickResign = () => {
+    setConfirmMessage({
+      type: "resign",
+      message: "Are you sure you want to resign?",
+    });
+  };
   const handleResign = () => {
     closeConfirmModal();
     gameOver();
+  };
+
+  const handleClickPass = () => {
+    setConfirmMessage({
+      type: "pass",
+      message: "Are you sure you want to pass?",
+    });
+  };
+  const handlePass = () => {
+    closeConfirmModal();
+    nextPlayer();
   };
 
   return (
@@ -152,7 +178,8 @@ const GameScreen = ({
             handleClearTiles={handleClearTiles}
             handleShuffleRack={handleShuffleRack}
             handleConfirmMove={handleConfirmMove}
-            confirmResign={confirmResign}
+            handleClickResign={handleClickResign}
+            handleClickPass={handleClickPass}
           />
         </div>
       </div>
@@ -167,7 +194,8 @@ const GameScreen = ({
       {confirmMessage && (
         <ConfirmModal
           message={confirmMessage}
-          handleConfirm={handleResign}
+          handleResign={handleResign}
+          handlePass={handlePass}
           handleCancel={closeConfirmModal}
         />
       )}
