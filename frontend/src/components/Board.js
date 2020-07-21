@@ -32,6 +32,7 @@ const Board = ({ handleClickSquare, handleClickPlacedTile, boardState }) => {
                   onClick={() => handleClickPlacedTile(square.tile)}
                 >
                   <span>{square.tile.letter}</span>
+                  <span>{square.tile.points}</span>
                 </span>
               );
             }

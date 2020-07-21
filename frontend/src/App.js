@@ -18,12 +18,8 @@ const App = () => {
   const [gameId, setGameId] = useState("");
   const [gameData, setGameData] = useState(null);
   const [allPlayers, setAllPlayers] = useState(players);
-  const [playerIndex, setPlayerIndex] = useState(0);
   const [currentPlayer, setCurrentPlayer] = useState(null);
-
-  const nextPlayer = () => {
-    setCurrentPlayer(currentPlayer === 0 ? 1 : 0);
-  };
+  const [chat, setChat] = useState([]);
 
   const handleCloseNotificationModal = () => {
     setNotification(null);
@@ -62,21 +58,11 @@ const App = () => {
 
   const handleSendMessage = (e) => {
     e.preventDefault();
-    console.log(e.target.message.value);
+    const newMessage = e.target.message.value;
+    setChat([...chat, newMessage]);
     //emit message to backend here
     e.target.reset();
   };
-
-  //DUMMY DATA
-  const chat = [
-    "Hi",
-    "Hello",
-    "How are you?",
-    "Fine, thanks.",
-    "What are you doing?",
-    "Playing Scrabble. How about you?",
-    "The same",
-  ];
 
   return (
     <div>
@@ -114,8 +100,7 @@ const App = () => {
           setNotification={setNotification}
           handleSendMessage={handleSendMessage}
           chat={chat}
-          nextPlayer={nextPlayer}
-          playerIndex={playerIndex}
+          setCurrentPlayer={setCurrentPlayer}
           setCurrentComponent={setCurrentComponent}
           currentPlayer={currentPlayer}
         />

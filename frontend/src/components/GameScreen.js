@@ -17,8 +17,7 @@ const GameScreen = ({
   setNotification,
   chat,
   handleSendMessage,
-  nextPlayer,
-  playerIndex,
+  setCurrentPlayer,
   setCurrentComponent,
   currentPlayer,
 }) => {
@@ -29,6 +28,8 @@ const GameScreen = ({
   const [gameIsOver, setGameIsOver] = useState(false);
   const [confirmMessage, setConfirmMessage] = useState(null);
   const [boardState, setBoardState] = useState();
+  const [timeLeftPlayer, setTimeLeftPlayer] = useState(1200000);
+  const [timeLeftOpponent, setTimeLeftOpponent] = useState(1200000);
 
   useEffect(() => {
     getTiles();
@@ -91,7 +92,7 @@ const GameScreen = ({
   };
 
   const handleSelectTile = (tile) => {
-    if (playerIndex !== currentPlayer) {
+    if (currentPlayer !== 0) {
       return;
     }
     setSelectedTile(tile);
@@ -99,7 +100,7 @@ const GameScreen = ({
 
   const handleClickPlacedTile = (tileToRemove) => {
     //remove tile from board when clicked
-    if (tileToRemove.player === playerIndex) {
+    if (tileToRemove.player === 0) {
       const updatedBoardState = boardState.map((square) => {
         if (square.tile && square.tile.square === tileToRemove.square) {
           return { ...square, tile: null };
@@ -143,13 +144,17 @@ const GameScreen = ({
     setGameIsOver(true);
   };
 
+  const nextPlayer = () => {
+    setCurrentPlayer(currentPlayer === 0 ? 1 : 0);
+  };
+
   useEffect(() => {
     //if user has selected a tile and then a square, place the tile on the square
     if (selectedSquareIndex !== null) {
       const tileToAdd = {
         ...selectedTile,
         square: selectedSquareIndex,
-        player: playerIndex,
+        player: 0,
       };
       const updatedBoardState = boardState.map((square) => {
         if (square.index === selectedSquareIndex) {
@@ -206,7 +211,15 @@ const GameScreen = ({
     <div className="gameScreen__wrapper">
       <div className="gameScreen__main">
         <div className="gameScreen__board">
-          <StatusBar scores={scores} setNotification={setNotification} />
+          <StatusBar
+            scores={scores}
+            setNotification={setNotification}
+            timeLeftPlayer={timeLeftPlayer}
+            timeLeftOpponent={timeLeftOpponent}
+            setTimeLeftPlayer={setTimeLeftPlayer}
+            setTimeLeftOpponent={setTimeLeftOpponent}
+            currentPlayer={currentPlayer}
+          />
           <Board
             handleClickSquare={handleClickSquare}
             handleClickPlacedTile={handleClickPlacedTile}

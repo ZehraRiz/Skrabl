@@ -1,27 +1,38 @@
 import React, { useEffect, useState } from "react";
+import { formatMilliseconds } from "../utils/formatMilliseconds";
 import "../styles/Timer.css";
 
-const Timer = ({ setNotification }) => {
-  const [timeLeft, setTimeLeft] = useState(20);
+const Timer = ({
+  setNotification,
+  timeLeft,
+  setTimeLeft,
+  currentPlayer,
+  playerIndex,
+}) => {
   let interval;
 
-  // useEffect(() => {
-  //   if (gameInProgress) {
-  //     interval = setInterval(() => {
-  //       setTimeLeft(timeLeft - 1);
-  //     }, 1000);
-  //   }
-  //   return () => clearInterval(interval);
-  // }, [timeLeft]);
+  useEffect(() => {
+    if (currentPlayer === playerIndex) {
+      interval = setInterval(() => {
+        setTimeLeft(timeLeft - 1000);
+      }, 1000);
 
-  // useEffect(() => {
-  //   if (timeLeft === 0) {
-  //     clearInterval(interval);
-  //     setNotification("Time's up");
-  //   }
-  // }, [timeLeft]);
+      return () => clearInterval(interval);
+    }
+  }, [timeLeft, currentPlayer]);
 
-  return <div className="timer__wrapper">Time left: {timeLeft}</div>;
+  useEffect(() => {
+    if (timeLeft === 0) {
+      clearInterval(interval);
+      setNotification("Time's up");
+    }
+  }, [timeLeft]);
+
+  return (
+    <div className="timer__wrapper">
+      Time left: {formatMilliseconds(timeLeft)}
+    </div>
+  );
 };
 
 export default Timer;
