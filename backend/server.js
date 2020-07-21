@@ -7,8 +7,10 @@ const server = http.createServer(app);
 const io = socketIO(server);
 require("dotenv").config();
 const axios = require("axios");
+const cors = require("cors");
 
 app.use(express.json());
+app.use(cors());
 
 const {
   userJoin,
@@ -126,8 +128,8 @@ io.on("connection", (socket) => {
 
 server.listen(port, () => console.log(`Listening on port ${port}`));
 
-app.get("/verifyWord", async (req, res) => {
-  const { words } = req.body;
+app.post("/verifyWord", async (req, res) => {
+  const words = req.body.words;
   const results = {};
   for (const word of words) {
     const uri =

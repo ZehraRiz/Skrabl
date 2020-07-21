@@ -7,11 +7,11 @@ import { shuffleArray } from "../utils/shuffleArray";
 import StatusBar from "./StatusBar";
 import Chat from "./Chat";
 import GameButtons from "./GameButtons";
-// import axios from "axios";
-import "../styles/GameScreen.css";
+import axios from "axios";
 import ConfirmModal from "./ConfirmModal";
 import GameOverModal from "./GameOverModal";
 import { moveIsValid } from "../utils/moveIsValid";
+import "../styles/GameScreen.css";
 
 const GameScreen = ({
   setNotification,
@@ -125,14 +125,22 @@ const GameScreen = ({
   const handleConfirmMove = () => {
     if (moveIsValid(placedTiles, boardState)) {
       console.log("move is valid");
-      //get array of words formed in turn
-      //then call backend for verification (sending array of strings):
-      // axios.post("http://localhost:4001/verifyWord", {words: formedWords}).then(res => {
-      //   console.log(res.results)
-      // })
-      //if all true, get points for turn, update score object and call nextPlayer()
-      //if not all words are valid, set notification and return
-      //get points here
+      //get array of words formed in turn e.g.
+      const formedWords = ["house", "cat", "tea"];
+      axios
+        .post("http://localhost:4001/verifyWord", { words: formedWords })
+        .then((res) => {
+          const results = res.data;
+          if (Object.values(results).every((val) => val === "true")) {
+            console.log("words are verified");
+            //update score object here
+            nextPlayer();
+            return;
+          } else {
+            setNotification("Don't make up words!");
+            return;
+          }
+        });
       return;
     } else {
       setNotification("move is not valid");
