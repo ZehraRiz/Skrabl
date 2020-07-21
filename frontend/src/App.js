@@ -9,7 +9,7 @@ import NotificationModal from "./components/NotificationModal";
 import "./styles/global.css";
 
 const App = () => {
-  const [currentComponent, setCurrentComponent] = useState("Login");
+  const [currentComponent, setCurrentComponent] = useState("GameScreen");
   const [notification, setNotification] = useState(null);
 
   //SOCKET FUNCTIONS
@@ -76,6 +76,8 @@ const App = () => {
   const handleCloseModal = () => {
     setNotification(null);
   };
+
+  const players = [{ name: "Tom" }, { name: "Zehra" }, { name: "John" }];
 
   return (
     <div>
