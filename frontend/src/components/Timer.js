@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "../styles/Timer.css";
 
-const Timer = ({ gameInProgress, setNotification }) => {
-  const [timeLeft, setTimeLeft] = useState(10);
+const Timer = ({ setNotification }) => {
+  const [timeLeft, setTimeLeft] = useState(20);
   let interval;
 
   // useEffect(() => {

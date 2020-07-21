@@ -13,7 +13,7 @@ const Players = ({ allPlayers, user, acceptInvite, handleRequestGame }) => {
       <ul className="players__list">
         {allPlayers.length > 0 &&
           allPlayers.map((player, index) => {
-            if (player.id !== user.id)
+            if (player.id !== user.id) {
               return (
                 <li
                   key={index}
@@ -26,7 +26,9 @@ const Players = ({ allPlayers, user, acceptInvite, handleRequestGame }) => {
                   {player.name}
                 </li>
               );
-            else return;
+            } else {
+              return <p>No one's online at the moment.</p>;
+            }
           })}
       </ul>
     </div>

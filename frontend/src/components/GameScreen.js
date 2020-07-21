@@ -7,10 +7,11 @@ import { shuffleArray } from "../utils/shuffleArray";
 import StatusBar from "./StatusBar";
 import Chat from "./Chat";
 import GameButtons from "./GameButtons";
-import axios from "axios";
+// import axios from "axios";
 import "../styles/GameScreen.css";
 import ConfirmModal from "./ConfirmModal";
 import GameOverModal from "./GameOverModal";
+import { moveIsValid } from "../utils/moveIsValid";
 
 const GameScreen = ({
   setNotification,
@@ -21,28 +22,34 @@ const GameScreen = ({
   setCurrentComponent,
   currentPlayer,
 }) => {
-  const squares = generateBoardSquares(bonusSquareIndices);
   const [selectedTile, setSelectedTile] = useState(null);
   const [selectedSquareIndex, setSelectedSquareIndex] = useState(null);
-  const [allTilesOnBoard, setAllTilesOnBoard] = useState([]);
   const [playerRackTiles, setPlayerRackTiles] = useState([]);
-  const [gameInProgress, setGameInProgress] = useState(true);
   const [placedTiles, setPlacedTiles] = useState([]);
   const [gameIsOver, setGameIsOver] = useState(false);
   const [confirmMessage, setConfirmMessage] = useState(null);
+  const [boardState, setBoardState] = useState();
 
   useEffect(() => {
     getTiles();
+    //eslint-disable-next-line
   }, []);
 
   useEffect(() => {
     updateBackend();
+    //eslint-disable-next-line
   }, [currentPlayer]);
 
+  useEffect(() => {
+    const squares = generateBoardSquares(bonusSquareIndices);
+    setBoardState([...squares]);
+    //eslint-disable-next-line
+  }, []);
+
   const updateBackend = () => {
-    console.log("updating backend");
     const currentGameState = {
-      allTilesOnBoard,
+      // allTilesOnBoard,
+      boardState,
       playerRackTiles,
     };
     //send to backend here
@@ -63,11 +70,18 @@ const GameScreen = ({
 
   const handleClearTiles = () => {
     setPlayerRackTiles([...playerRackTiles, ...placedTiles]);
-    const placedTilesIds = placedTiles.map((tile) => tile.id);
-    const updatedTilesOnBoard = [
-      ...allTilesOnBoard.filter((tile) => !placedTilesIds.includes(tile.id)),
+    const placedTilesSquares = placedTiles.map((tile) => tile.square);
+
+    const updatedBoardState = [
+      ...boardState.map((square) => {
+        if (placedTilesSquares.includes(square.index)) {
+          return { ...square, tile: null };
+        } else {
+          return square;
+        }
+      }),
     ];
-    setAllTilesOnBoard([...updatedTilesOnBoard]);
+    setBoardState([...updatedBoardState]);
     setPlacedTiles([]);
   };
 
@@ -83,36 +97,68 @@ const GameScreen = ({
     setSelectedTile(tile);
   };
 
-  const handleSelectSquare = (squareIndex) => {
+  const handleClickPlacedTile = (tileToRemove) => {
+    //remove tile from board when clicked
+    if (tileToRemove.player === playerIndex) {
+      const updatedBoardState = boardState.map((square) => {
+        if (square.tile && square.tile.square === tileToRemove.square) {
+          return { ...square, tile: null };
+        } else {
+          return square;
+        }
+      });
+      setBoardState(updatedBoardState);
+      setPlacedTiles(
+        placedTiles.filter((tile) => tile.square !== tileToRemove.square)
+      );
+      setPlayerRackTiles([...playerRackTiles, tileToRemove]);
+    }
+  };
+
+  const handleClickSquare = (square) => {
     if (selectedTile) {
-      setSelectedSquareIndex(squareIndex);
+      setSelectedSquareIndex(square.index);
     }
   };
 
   const handleConfirmMove = () => {
-    //get array of words formed in turn
-    //then call backend for verification (sending array of strings):
-    // axios.post("http://localhost:4001/verifyWord", {words: formedWords}).then(res => {
-    //   console.log(res.results)
-    // })
-    //if all true, get points for turn, update score object and call nextPlayer()
-    //if not all words are valid, update notifications in App.js and return
-    console.log("move confirmed - calling nextPlayer()");
-    nextPlayer();
+    if (moveIsValid(placedTiles, boardState)) {
+      console.log("move is valid");
+      //get array of words formed in turn
+      //then call backend for verification (sending array of strings):
+      // axios.post("http://localhost:4001/verifyWord", {words: formedWords}).then(res => {
+      //   console.log(res.results)
+      // })
+      //if all true, get points for turn, update score object and call nextPlayer()
+      //if not all words are valid, set notification and return
+      //get points here
+      return;
+    } else {
+      setNotification("move is not valid");
+      return;
+    }
   };
 
   const gameOver = () => {
-    //setting gameIsOver to true
     setGameIsOver(true);
   };
 
   useEffect(() => {
     //if user has selected a tile and then a square, place the tile on the square
     if (selectedSquareIndex !== null) {
-      setAllTilesOnBoard([
-        ...allTilesOnBoard,
-        { ...selectedTile, square: selectedSquareIndex },
-      ]);
+      const tileToAdd = {
+        ...selectedTile,
+        square: selectedSquareIndex,
+        player: playerIndex,
+      };
+      const updatedBoardState = boardState.map((square) => {
+        if (square.index === selectedSquareIndex) {
+          return { ...square, tile: tileToAdd };
+        } else {
+          return square;
+        }
+      });
+      setBoardState(updatedBoardState);
       setPlacedTiles([
         ...placedTiles,
         { ...selectedTile, square: selectedSquareIndex },
@@ -121,8 +167,9 @@ const GameScreen = ({
         ...playerRackTiles.filter((tile) => tile.id !== selectedTile.id),
       ]);
       setSelectedTile(null);
+      setSelectedSquareIndex(null);
     }
-    //update board state in backend here?
+    //eslint-disable-next-line
   }, [selectedSquareIndex]);
 
   const handleCloseModal = () => {
@@ -159,15 +206,11 @@ const GameScreen = ({
     <div className="gameScreen__wrapper">
       <div className="gameScreen__main">
         <div className="gameScreen__board">
-          <StatusBar
-            scores={scores}
-            gameInProgress={gameInProgress}
-            setNotification={setNotification}
-          />
+          <StatusBar scores={scores} setNotification={setNotification} />
           <Board
-            squares={squares}
-            handleSelectSquare={handleSelectSquare}
-            allTilesOnBoard={allTilesOnBoard}
+            handleClickSquare={handleClickSquare}
+            handleClickPlacedTile={handleClickPlacedTile}
+            boardState={boardState}
           />
           <TileRack
             playerRackTiles={playerRackTiles}
