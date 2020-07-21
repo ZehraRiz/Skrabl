@@ -1,11 +1,11 @@
 import React from "react";
 
-const Players = ({ allPlayers, user, acceptInvite, handleSendInvite }) => {
+const Players = ({ allPlayers, user, acceptInvite, handleRequestGame }) => {
   return (
     <div>
       <h1>Players Online</h1>
       <form onSubmit={acceptInvite}>
-        <input type="text" id="invite" placeholder="enter invite code" />
+        <input type="text" id="invite" placeholder="Enter invite code" />
         <button type="submit">Accept Invite</button>
       </form>
       Clink on a player to invite them for a game
@@ -18,7 +18,7 @@ const Players = ({ allPlayers, user, acceptInvite, handleSendInvite }) => {
                   key={index}
                   value={player}
                   onClick={() => {
-                    handleSendInvite(player);
+                    handleRequestGame(player);
                   }}
                 >
                   {player.name}

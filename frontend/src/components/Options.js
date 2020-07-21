@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const Options = ({ user, invitedPlayer, handleSendInvite }) => {
+const Options = ({ handleSendInvite }) => {
   const [timeInput, setTimeInput] = useState(20);
   const handleTimeChange = (e) => {
     setTimeInput(e.target.value);

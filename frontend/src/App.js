@@ -30,13 +30,22 @@ const App = () => {
     setAllPlayers([...allPlayers, user]);
   });
 
-  const handleSendInvite = (player) => {
-    console.log("handleSendInvite");
-    console.log("inviting:");
+  const handleRequestGame = (player) => {
+    console.log("handle request game");
+    console.log("setting invited player to");
     console.log(player);
     setInvitedPlayer(player);
+    setCurrentComponent("Options");
+  };
+
+  const handleSendInvite = () => {
+    console.log("handleSendInvite");
+    console.log("inviting:");
+    console.log(invitedPlayer);
 
     //create a new game
+    console.log("emitting create game");
+    console.log("user id: " + user.id);
     socket.emit("createGame", user.id);
 
     //invalid userId on create game
@@ -48,15 +57,15 @@ const App = () => {
     //create game succesfull, a gameId is sent back that can be used by two players to play the game
     socket.on("gameCreateResponse", (data) => {
       console.log("game created successfully");
-      console.log("game id: " + gameId);
+      console.log("game id: " + data);
       setGameId(data);
-      setCurrentComponent("Options");
+      setCurrentComponent("GameScreen");
     });
   };
 
   const acceptInvite = (e) => {
     e.preventDefault();
-    console.log("accept innvite");
+    console.log("accept invite");
     console.log(e.target.invite.value);
   };
 
@@ -80,7 +89,7 @@ const App = () => {
           setInvitedPlayer={setInvitedPlayer}
           setGameId={setGameId}
           acceptInvite={acceptInvite}
-          handleSendInvite={handleSendInvite}
+          handleRequestGame={handleRequestGame}
         />
       )}
       {currentComponent === "Options" && (
