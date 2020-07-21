@@ -16,6 +16,8 @@ const GameScreen = ({
   handleSendMessage,
   currentPlayer,
   setCurrentPlayer,
+  nextPlayer,
+  playerIndex,
 }) => {
   const squares = generateBoardSquares(bonusSquareIndices);
   const [selectedTile, setSelectedTile] = useState(null);
@@ -36,7 +38,7 @@ const GameScreen = ({
     const numTilesNeeded = 7 - playerRackTiles.length;
     const randomTiles = [];
     for (let i = 0; i < numTilesNeeded; i++) {
-      randomTiles.push({ id: i, letter: "b", points: 3 });
+      randomTiles.push({ id: i, letter: "b", points: i });
     }
     setPlayerRackTiles([...playerRackTiles, ...randomTiles]);
   };
@@ -57,6 +59,9 @@ const GameScreen = ({
   };
 
   const handleSelectTile = (tile) => {
+    if (playerIndex !== currentPlayer) {
+      return;
+    }
     setSelectedTile(tile);
   };
 
@@ -67,10 +72,15 @@ const GameScreen = ({
   };
 
   const handleConfirmMove = () => {
-    //call backend for verification:
+    //get array of words formed in turn
+    //then call backend for verification (sending array of strings):
     // axios.post("http://localhost:4001/verifyWord", {words: formedWords}).then(res => {
     //   console.log(res.results)
     // })
+    //if all true, get points for turn, update score object and call nextPlayer()
+    //if not all words are valid, update notifications in App.js and return
+    console.log("move confirmed - calling nextPlayer()");
+    nextPlayer();
   };
 
   useEffect(() => {
@@ -87,6 +97,7 @@ const GameScreen = ({
       setPlayerRackTiles([
         ...playerRackTiles.filter((tile) => tile.id !== selectedTile.id),
       ]);
+      setSelectedTile(null);
     }
     //update board state in backend here?
   }, [selectedSquareIndex]);

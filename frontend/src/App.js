@@ -10,7 +10,7 @@ import "./styles/global.css";
 const socket = io("http://localhost:4001");
 
 const App = () => {
-  const [currentComponent, setCurrentComponent] = useState("Login");
+  const [currentComponent, setCurrentComponent] = useState("GameScreen");
   const [notification, setNotification] = useState(null);
   const [user, setUser] = useState("");
   const [players, setPlayers] = useState([]);
@@ -18,7 +18,17 @@ const App = () => {
   const [gameId, setGameId] = useState("");
   const [gameData, setGameData] = useState(null);
   const [allPlayers, setAllPlayers] = useState(players);
-  const [currentPlayer, setCurrentPlayer] = [null];
+  const [currentPlayer, setCurrentPlayer] = useState(null);
+  //presumably the player who sends the invite will be 0 and the intvitee will be 1?
+  const [playerIndex, setPlayerIndex] = useState(0);
+
+  const nextPlayer = () => {
+    setCurrentPlayer(currentPlayer === 0 ? 1 : 0);
+  };
+
+  useEffect(() => {
+    console.log("current player is now " + currentPlayer);
+  }, [currentPlayer]);
 
   const handleCloseNotificationModal = () => {
     console.log("closing notification modal");
@@ -55,10 +65,12 @@ const App = () => {
       return;
     });
 
-    //create game succesfull, a gameId is sent back that can be used by two players to play the game
+    //create game succesful, a gameId is sent back that can be used by two players to play the game
     socket.on("gameCreateResponse", (data) => {
       console.log("game created successfully");
       console.log("game id: " + data);
+      //get randomly selected starting player here?
+      setCurrentPlayer(0);
       setGameId(data);
       setCurrentComponent("GameScreen");
     });
@@ -125,6 +137,8 @@ const App = () => {
           chat={chat}
           currentPlayer={currentPlayer}
           setCurrentPlayer={setCurrentPlayer}
+          nextPlayer={nextPlayer}
+          playerIndex={playerIndex}
         />
       )}
       {notification && (
