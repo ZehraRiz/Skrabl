@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { removeDashes } from "../utils/removeDashes";
-import Tile from "./Tile";
 import "../styles/Board.css";
 
 const getBonusClassName = (square) => {
@@ -29,6 +28,7 @@ const Board = ({ squares, handleSelectSquare, allTilesOnBoard }) => {
     if (occupiedSquaresIds.includes(index) && allTilesOnBoard.length > 0) {
       let placedTile;
       const tile = allTilesOnBoard.filter((tile) => tile.square === index)[0];
+      //ideally would use same Tile component here as in rack but styling is a bit tricky
       placedTile = (
         <span className="board__tile">
           <span>{tile.letter}</span>

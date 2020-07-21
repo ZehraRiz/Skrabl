@@ -3,6 +3,7 @@ import Board from "../components/Board";
 import TileRack from "../components/TileRack";
 import { bonusSquareIds } from "../assets/bonusSquareIds";
 import { generateBoardSquares } from "../utils/generateBoardSquares";
+import { shuffleArray } from "../utils/shuffleArray";
 import StatusBar from "./StatusBar";
 import Chat from "./Chat";
 import GameButtons from "./GameButtons";
@@ -37,6 +38,11 @@ const GameScreen = ({ setNotification }) => {
     ];
     setAllTilesOnBoard([...updatedTilesOnBoard]);
     // setPlacedTiles([]);
+  };
+
+  const handleShuffleRack = () => {
+    const shuffled = shuffleArray([...playerRackTiles]);
+    setPlayerRackTiles([...shuffled]);
   };
 
   useEffect(() => {
@@ -108,6 +114,7 @@ const GameScreen = ({ setNotification }) => {
           <GameButtons
             getTiles={getTiles}
             handleClearTiles={handleClearTiles}
+            handleShuffleRack={handleShuffleRack}
           />
         </div>
       </div>
