@@ -9,8 +9,18 @@ import Chat from "./Chat";
 import GameButtons from "./GameButtons";
 import axios from "axios";
 import "../styles/GameScreen.css";
+import ConfirmModal from "./ConfirmModal";
+import GameOverModal from "./GameOverModal";
 
-const GameScreen = ({ setNotification }) => {
+const GameScreen = ({
+  setNotification,
+  chat,
+  handleSendMessage,
+  nextPlayer,
+  playerIndex,
+  setCurrentComponent,
+  currentPlayer,
+}) => {
   const squares = generateBoardSquares(bonusSquareIndices);
   const [selectedTile, setSelectedTile] = useState(null);
   const [selectedSquareIndex, setSelectedSquareIndex] = useState(null);
@@ -18,19 +28,35 @@ const GameScreen = ({ setNotification }) => {
   const [playerRackTiles, setPlayerRackTiles] = useState([]);
   const [gameInProgress, setGameInProgress] = useState(true);
   const [placedTiles, setPlacedTiles] = useState([]);
+  const [gameIsOver, setGameIsOver] = useState(false);
+  const [confirmMessage, setConfirmMessage] = useState(null);
 
   useEffect(() => {
     getTiles();
   }, []);
 
-  const scores = { player1: 20, player2: 30 };
+  useEffect(() => {
+    updateBackend();
+  }, [currentPlayer]);
+
+  const updateBackend = () => {
+    console.log("updating backend");
+    const currentGameState = {
+      allTilesOnBoard,
+      playerRackTiles,
+    };
+    //send to backend here
+  };
+
+  //DUMMY DATA
+  const scores = { 0: 20, 1: 30 };
 
   //DUMMY FUNCTION - will need to call backend
   const getTiles = () => {
     const numTilesNeeded = 7 - playerRackTiles.length;
     const randomTiles = [];
     for (let i = 0; i < numTilesNeeded; i++) {
-      randomTiles.push({ id: i, letter: "b", points: 3 });
+      randomTiles.push({ id: i, letter: "b", points: i });
     }
     setPlayerRackTiles([...playerRackTiles, ...randomTiles]);
   };
@@ -51,6 +77,9 @@ const GameScreen = ({ setNotification }) => {
   };
 
   const handleSelectTile = (tile) => {
+    if (playerIndex !== currentPlayer) {
+      return;
+    }
     setSelectedTile(tile);
   };
 
@@ -61,10 +90,20 @@ const GameScreen = ({ setNotification }) => {
   };
 
   const handleConfirmMove = () => {
-    //call backend for verification:
+    //get array of words formed in turn
+    //then call backend for verification (sending array of strings):
     // axios.post("http://localhost:4001/verifyWord", {words: formedWords}).then(res => {
     //   console.log(res.results)
     // })
+    //if all true, get points for turn, update score object and call nextPlayer()
+    //if not all words are valid, update notifications in App.js and return
+    console.log("move confirmed - calling nextPlayer()");
+    nextPlayer();
+  };
+
+  const gameOver = () => {
+    //setting gameIsOver to true
+    setGameIsOver(true);
   };
 
   useEffect(() => {
@@ -81,26 +120,40 @@ const GameScreen = ({ setNotification }) => {
       setPlayerRackTiles([
         ...playerRackTiles.filter((tile) => tile.id !== selectedTile.id),
       ]);
+      setSelectedTile(null);
     }
     //update board state in backend here?
   }, [selectedSquareIndex]);
 
-  const handleSendMessage = (e) => {
-    e.preventDefault();
-    console.log(e.target.message.value);
-    //emit message to backend here
-    e.target.reset();
+  const handleCloseModal = () => {
+    setCurrentComponent("Players");
   };
 
-  const chat = [
-    "Hi",
-    "Hello",
-    "How are you?",
-    "Fine, thanks.",
-    "What are you doing?",
-    "Playing Scrabble. How about you?",
-    "The same",
-  ];
+  const closeConfirmModal = () => {
+    setConfirmMessage(null);
+  };
+
+  const handleClickResign = () => {
+    setConfirmMessage({
+      type: "resign",
+      message: "Are you sure you want to resign?",
+    });
+  };
+  const handleResign = () => {
+    closeConfirmModal();
+    gameOver();
+  };
+
+  const handleClickPass = () => {
+    setConfirmMessage({
+      type: "pass",
+      message: "Are you sure you want to pass?",
+    });
+  };
+  const handlePass = () => {
+    closeConfirmModal();
+    nextPlayer();
+  };
 
   return (
     <div className="gameScreen__wrapper">
@@ -125,10 +178,27 @@ const GameScreen = ({ setNotification }) => {
             handleClearTiles={handleClearTiles}
             handleShuffleRack={handleShuffleRack}
             handleConfirmMove={handleConfirmMove}
+            handleClickResign={handleClickResign}
+            handleClickPass={handleClickPass}
           />
         </div>
       </div>
       <Chat chat={chat} handleSendMessage={handleSendMessage} />
+      {gameIsOver && (
+        <GameOverModal
+          winner="Tom"
+          scores={scores}
+          handleCloseModal={handleCloseModal}
+        />
+      )}
+      {confirmMessage && (
+        <ConfirmModal
+          message={confirmMessage}
+          handleResign={handleResign}
+          handlePass={handlePass}
+          handleCancel={closeConfirmModal}
+        />
+      )}
     </div>
   );
 };
