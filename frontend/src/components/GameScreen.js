@@ -12,6 +12,7 @@ import ConfirmModal from "./ConfirmModal";
 import GameOverModal from "./GameOverModal";
 import { moveIsValid } from "../utils/moveIsValid";
 import { squaresAreOccupied } from "../utils/squaresAreOccupied";
+import { getScoresFromWords } from "../utils/getScoresFromWords";
 import "../styles/GameScreen.css";
 
 const GameScreen = ({
@@ -31,27 +32,37 @@ const GameScreen = ({
   const [boardState, setBoardState] = useState();
   const [timeLeftPlayer, setTimeLeftPlayer] = useState(1200000);
   const [timeLeftOpponent, setTimeLeftOpponent] = useState(1200000);
+  const [scoredWords, setScoredWords] = useState({ 0: [], 1: [] });
   const [scores, setScores] = useState({ 0: 0, 1: 0 });
 
   useEffect(() => {
     getTiles();
-    //eslint-disable-next-line
   }, []);
 
   useEffect(() => {
     updateBackend();
-    //eslint-disable-next-line
   }, [currentPlayer]);
 
   useEffect(() => {
+    getBoard();
+  }, []);
+
+  const getBoard = () => {
     const squares = generateBoardSquares(bonusSquareIndices);
     setBoardState([...squares]);
-    //eslint-disable-next-line
-  }, []);
+  };
+
+  useEffect(() => {
+    updateScores();
+  }, [scoredWords]);
+
+  const updateScores = () => {
+    const updatedScores = getScoresFromWords(scoredWords);
+    setScores(updatedScores);
+  };
 
   const updateBackend = () => {
     const currentGameState = {
-      // allTilesOnBoard,
       boardState,
       playerRackTiles,
     };
@@ -98,7 +109,6 @@ const GameScreen = ({
   };
 
   const handleClickPlacedTile = (tileToRemove) => {
-    //remove tile from board when clicked
     if (selectedTile) {
       return;
     }
@@ -127,15 +137,24 @@ const GameScreen = ({
   const handleConfirmMove = () => {
     if (moveIsValid(placedTiles, boardState)) {
       console.log("move is valid");
-      //get array of words formed in turn e.g.
-      const formedWords = ["house", "cat", "tea"];
+      //get array of words formed in turn (objects) e.g.
+      const formedWords = [
+        { word: "house", points: 7 },
+        { word: "cat", points: 4 },
+        { word: "tea", points: 3 },
+      ];
       axios
         .post("http://localhost:4001/verifyWord", { words: formedWords })
         .then((res) => {
           const results = res.data;
           if (Object.values(results).every((val) => val === "true")) {
             console.log("words are verified (using dummy words)");
-            //update score object here
+            const updatedScoredWords = {
+              ...scoredWords,
+              [currentPlayer]: [...scoredWords[currentPlayer], ...formedWords],
+            };
+            setScoredWords(updatedScoredWords);
+            //*scores are updated automatically
             nextPlayer();
             return;
           } else {
@@ -159,7 +178,11 @@ const GameScreen = ({
   };
 
   useEffect(() => {
-    //if user has selected a tile and then a square, place the tile on the square
+    placeTile();
+    //eslint-disable-next-line
+  }, [selectedSquareIndex]);
+
+  const placeTile = () => {
     if (selectedSquareIndex !== null) {
       const squareIsOccupied = squaresAreOccupied(
         [selectedSquareIndex],
@@ -191,8 +214,7 @@ const GameScreen = ({
       setSelectedTile(null);
       setSelectedSquareIndex(null);
     }
-    //eslint-disable-next-line
-  }, [selectedSquareIndex]);
+  };
 
   const handleCloseModal = () => {
     setCurrentComponent("Players");
@@ -261,6 +283,7 @@ const GameScreen = ({
         <GameOverModal
           winner="Tom"
           scores={scores}
+          scoredWords={scoredWords}
           handleCloseModal={handleCloseModal}
         />
       )}

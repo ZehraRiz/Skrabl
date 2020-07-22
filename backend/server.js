@@ -183,12 +183,13 @@ io.on("connection", (socket) => {
 server.listen(port, () => console.log(`Listening on port ${port}`));
 
 app.post("/verifyWord", async (req, res) => {
+  //*words are objects with word key
   const words = req.body.words;
   const results = {};
   for (const word of words) {
     const uri =
       "https://dictionaryapi.com/api/v3/references/collegiate/json/" +
-      word +
+      word.word +
       "?key=" +
       process.env.DICTIONARY_KEY;
     try {
@@ -198,9 +199,9 @@ app.post("/verifyWord", async (req, res) => {
         response.data[0].meta &&
         response.data[0].fl !== "abbreviation"
       ) {
-        results[word] = "true";
+        results[word.word] = "true";
       } else {
-        results[word] = "false";
+        results[word.word] = "false";
       }
     } catch (err) {
       console.log(err);
