@@ -10,6 +10,7 @@ const StatusBar = ({
   setTimeLeftPlayer,
   setTimeLeftOpponent,
   currentPlayer,
+  iam
 }) => {
   return (
     <div className="statusBar__wrapper">
@@ -20,7 +21,7 @@ const StatusBar = ({
           timeLeft={timeLeftPlayer}
           setTimeLeft={setTimeLeftPlayer}
           currentPlayer={currentPlayer}
-          playerIndex={0}
+          iam={iam}
         />
       </div>
       <div className="statusBar__player">
@@ -30,7 +31,7 @@ const StatusBar = ({
           timeLeft={timeLeftOpponent}
           setTimeLeft={setTimeLeftOpponent}
           currentPlayer={currentPlayer}
-          playerIndex={1}
+          iam={iam}
         />
       </div>
     </div>

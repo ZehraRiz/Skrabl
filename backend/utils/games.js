@@ -9,18 +9,19 @@ function gameJoin(gameId) {
         player1: { playerId: "", isConnected: false },
         player2: { playerId: "", isConnected: false },
         gameState: {
-            turn: Math.random(1-2),
-            pouch: initialPouch, 
-            player1Tiles: [],
+            turn: Math.floor(Math.random() * Math.floor(2)),
+            pouch: (initialPouch.splice(14, 100)), 
+            player1Tiles: initialPouch.slice(0,7),
             player1Score: 0,
-            player2Tiles: [],
+            player1TimeLeft: 20,
+            player2Tiles: initialPouch.slice(7,14),
             player2Score: 0,
-            board: [],
-            startTime: "",
-            timeLimit: 20,
+            boardState: [],
+            player2TimeLeft: 20,
         }
     }
     games.push(game);
+    console.log(game)
     return game;
 }
 
@@ -42,7 +43,8 @@ function isPlayerInGame(userId) {
 function setGamePlayer1(gameId, userId, time) {
     const game = games.map(game => {
         if (game.gameId === gameId) {
-            game.timeLimit = time
+            game.player1TimeLeft = time
+            game.player2TimeLeft = time
             if (game.player1.playerId === "") {
                 console.log("adding player 1")
                 game.player1.playerId = userId;

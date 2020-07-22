@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "../styles/InviteScreen.css";
 
-const InviteScreen = ({ user, setInvitedPlayer, setCurrentComponent, invitedPlayer, gameId, setGameData, socket }) => {
+const InviteScreen = ({ user, setInvitedPlayer, setCurrentComponent, invitedPlayer, gameId, setGameData, socket, setIam }) => {
   const [timeInput, setTimeInput] = useState(20);
   const [allPlayersReady, setAllPlayersReady] = useState(false);
   const [inviteSent, setInviteSent] = useState(false)
@@ -39,7 +39,8 @@ const InviteScreen = ({ user, setInvitedPlayer, setCurrentComponent, invitedPlay
       socket.emit("gameRequest", { userId: user.id, gameId: gameId, invitedPlayer: invitedPlayer });
       socket.on("player2present", (data) => { console.log(data); setInviteSent(false); setCurrentComponent="Players"});
       socket.on("gameJoined2", data => {
-        console.log(data)
+        setIam(0)
+        setGameData(data.game)
         setCurrentComponent("GameScreen");
       })
 			

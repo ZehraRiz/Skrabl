@@ -27,8 +27,8 @@ const games = getAllGames();
 
 //when a client connects to the server
 io.on("connection", (socket) => {
-	console.log("users: " + getRoomUsers());
-	console.log("games: " + games);
+	// console.log("users: " + getRoomUsers());
+	// console.log("games: " + games);
 	//recieve username
 	socket.on("username", (username) => {
 		if (username === "") {
@@ -143,7 +143,7 @@ io.on("connection", (socket) => {
 			socket.join(gameId, function () {
 				console.log("Socket now in rooms", socket.rooms);
 			});
-			io.in(gameId).emit("gameJoined2", "Player 2 has joined the game!")
+			io.in(gameId).emit("gameJoined2", {game: game})
 		} else {
 			socket.emit("user2Error", "Sorry, could not set you up for the game");
 		}

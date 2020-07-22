@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import "../styles/Players.css";
 
-const Players = ({ players, setPlayers, socket, user, setCurrentComponent, setInvitedPlayer, setGameId, setNotification }) => {
+const Players = ({ players, setPlayers, socket, user, setCurrentComponent, setInvitedPlayer, setGameId, setNotification, setGameData, setIam }) => {
 	let [isUnavailable, setIsUnvailable] = useState(false) //pretty useless 
 	let [invite, setInvite] = useState("")
 
@@ -16,6 +16,8 @@ const Players = ({ players, setPlayers, socket, user, setCurrentComponent, setIn
 		socket.on("user2Error", data => {console.log(data)})
 		socket.on("gameJoined2", data => {
 			console.log(data)
+			setIam(1)
+			setGameData(data.game)
 			setCurrentComponent("GameScreen")
 		});
 	}
