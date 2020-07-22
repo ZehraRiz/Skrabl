@@ -11,6 +11,7 @@ import axios from "axios";
 import ConfirmModal from "./ConfirmModal";
 import GameOverModal from "./GameOverModal";
 import { moveIsValid } from "../utils/moveIsValid";
+import { squaresAreOccupied } from "../utils/squaresAreOccupied";
 import "../styles/GameScreen.css";
 
 const GameScreen = ({
@@ -100,6 +101,9 @@ const GameScreen = ({
 
   const handleClickPlacedTile = (tileToRemove) => {
     //remove tile from board when clicked
+    if (selectedTile) {
+      return;
+    }
     if (tileToRemove.player === 0) {
       const updatedBoardState = boardState.map((square) => {
         if (square.tile && square.tile.square === tileToRemove.square) {
@@ -160,6 +164,13 @@ const GameScreen = ({
   useEffect(() => {
     //if user has selected a tile and then a square, place the tile on the square
     if (selectedSquareIndex !== null) {
+      const squareIsOccupied = squaresAreOccupied(
+        [selectedSquareIndex],
+        boardState
+      );
+      if (squareIsOccupied) {
+        return;
+      }
       const tileToAdd = {
         ...selectedTile,
         square: selectedSquareIndex,
