@@ -54,14 +54,15 @@ function setGamePlayer1(gameId, userId, time) {
 }
 
 function setGamePlayer2(gameId, userId) {
-    games.map(game => {
+    const game = games.map(game => {
         if (game.gameId === gameId) {
             if (game.player2.playerId === "") {
-                console.log("adding player 1")
+                console.log("adding player 2")
                 game.player2.playerId = userId;
-            }
+                return game;
+            }    
         }
-    })
+    }); return game
 }
 
 

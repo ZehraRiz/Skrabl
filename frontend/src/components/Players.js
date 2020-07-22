@@ -1,22 +1,27 @@
 import React, {useState} from "react";
+import "../styles/Players.css";
 
-const Players = ({ players, socket, user, setCurrentComponent, setInvitedPlayer, setGameId }) => {
-   
-	let [allPlayers, setAllPlayers] = useState(players)
-	let [isUnavailable, setIsUnvailable] = useState(false)
+const Players = ({ players, setPlayers, socket, user, setCurrentComponent, setInvitedPlayer, setGameId, setNotification }) => {
+	let [isUnavailable, setIsUnvailable] = useState(false) //pretty useless 
 	let [invite, setInvite] = useState("")
 
 	socket.on("invite", data => {
-	  console.log(data.gameId)
-     setInvite(data.gameId)
+     setInvite(data)
   });
 	
 	const acceptInvite = () => {
-		console.log(`trying to join game ${invite}`)
+		socket.emit("inviteAccepted", { userId: user.id, gameId: invite.game.gameId });
+		socket.on("invalidGame", data => {console.log(data)});
+		socket.on("player1left", data => {console.log(data)});
+		socket.on("user2Error", data => {console.log(data)})
+		socket.on("gameJoined2", data => {
+			console.log(data)
+			setCurrentComponent("GameScreen")
+		});
 	}
 	
 	 socket.on("welcomeNewUser", ({ user }) => {
-     setAllPlayers([...allPlayers, user])
+     setPlayers([...players, user])
     });
   
 	const sendInvite = (player) => {
@@ -25,8 +30,8 @@ const Players = ({ players, socket, user, setCurrentComponent, setInvitedPlayer,
 
 		socket.on("playerUnavailable", (data => {
 			if (data === true) {
-				console.log(data)
-			setIsUnvailable(true);
+				setIsUnvailable(true);
+				setNotification("Player is in another game")
 			return;
 			}
 			else {
@@ -49,35 +54,42 @@ const Players = ({ players, socket, user, setCurrentComponent, setInvitedPlayer,
 		
 	};
 
-	
 
-	return (
-		<div>
-			<h1>Players Online</h1>
-      Clink on a player to invite them for a game
-			<ul>
-				{allPlayers.map((player, index) => {
-					if (player.id !== user.id)
-						return (
-							<li
-								key={index}
-								value={player}
-								onClick={() => {
+	 return (
+    <div className="players__wrapper">
+      <h3>Players Online</h3>
+        Clink on a player to invite them for a game
+
+      <ul className="players__list">
+        {players.length > 1 &&
+          players.map((player, index) => {
+            if (player.id !== user.id) {
+              return (
+                <li
+                  key={index}
+                  value={player}
+                  onClick={() => {
 									sendInvite(player);
-								}}>
-								{player.name}
-							</li>
-						);
-					else return;
-				})}
-			</ul>
-			{isUnavailable && <p>player is in another game</p>}
+								}}
+                  className="players__player"
+                >
+                  {player.name}
+                </li>
+              );
+            } 
+			  
+            
+          })}
+			 </ul>
+			 {players.length===1 && <p>No one's online at the moment.</p>}
 			{invite!=="" && <div>
-				<p>You have an invite</p>
+				 <p>{invite.host.name} sent you a game request</p>
 				<button onClick={acceptInvite}>Click to accpet</button>
 			</div>}
-		</div>
-	);
+    </div>
+  );
 };
+
+	
 
 export default Players;

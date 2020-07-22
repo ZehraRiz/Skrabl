@@ -3,6 +3,8 @@ import "../styles/InviteScreen.css";
 
 const InviteScreen = ({ user, setInvitedPlayer, setCurrentComponent, invitedPlayer, gameId, setGameData, socket }) => {
   const [timeInput, setTimeInput] = useState(20);
+  const [allPlayersReady, setAllPlayersReady] = useState(false);
+  const [inviteSent, setInviteSent] = useState(false)
 
   const handleTimeChange = (e) => {
     setTimeInput(e.target.value);
@@ -19,22 +21,28 @@ const InviteScreen = ({ user, setInvitedPlayer, setCurrentComponent, invitedPlay
 
 
   const handleApplyOptions = () => {
+    setInviteSent(true)
 		//request to join game
 		socket.emit("joinGame", { userId: user.id, gameId: gameId, time: timeInput });
 
 
-		socket.on("joinGameError", (data) => {console.log(data); return});
-		socket.on("invalidGame", (data) => {console.log(data); return});
-    socket.on("player1present", (data) => { console.log(data); return });
-    socket.on("user1Error", (data) => {console.log(data); return});
+    //add notifications here and setDisplayedComponentBack
+		socket.on("joinGameError", (data) => {console.log(data); setInviteSent(false); setCurrentComponent="Players"});
+		socket.on("invalidGame", (data) => {console.log(data); setInviteSent(false); setCurrentComponent="Players"});
+    socket.on("player1present", (data) => { console.log(data); setInviteSent(false); setCurrentComponent="Players"});
+    socket.on("user1Error", (data) => {console.log(data); setInviteSent(false); setCurrentComponent="Players"});
 
 		//on succesful game join
     socket.on("gameJoined", (data) => {
-      console.log("you joined the game")
       console.log(data)
+      setInviteSent(true)
       socket.emit("gameRequest", { userId: user.id, gameId: gameId, invitedPlayer: invitedPlayer });
-      socket.on("player2present", (data) => { console.log(data); return });
-			setCurrentComponent("GameScreen");
+      socket.on("player2present", (data) => { console.log(data); setInviteSent(false); setCurrentComponent="Players"});
+      socket.on("gameJoined2", data => {
+        console.log(data)
+        setCurrentComponent("GameScreen");
+      })
+			
 		});
 	};
 
@@ -58,9 +66,15 @@ const InviteScreen = ({ user, setInvitedPlayer, setCurrentComponent, invitedPlay
         <button type="button" onClick={handleClose}>
           Cancel
         </button>
-        <button type="button" onClick={handleApplyOptions}>
-          Send Invite
-        </button>
+
+        {!inviteSent &&
+          <button type="button" onClick={handleApplyOptions}>
+            Send Invite
+        </button>}
+
+        {inviteSent && !allPlayersReady && <p>Waiting for player to accept invite</p>}
+        
+        
       </div>
     </div>
   );
