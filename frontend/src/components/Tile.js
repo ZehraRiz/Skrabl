@@ -1,9 +1,9 @@
 import React from "react";
 import "../styles/Tile.css";
 
-const Tile = ({ tile, handleSelectTile }) => {
+const Tile = ({ tile, handleClickTile }) => {
   return (
-    <div className="tile__wrapper" onClick={() => handleSelectTile(tile)}>
+    <div className="tile__wrapper" onClick={() => handleClickTile(tile)}>
       <span className="tile__letter">{tile.letter}</span>
       <span className="tile__points">{tile.points}</span>
     </div>

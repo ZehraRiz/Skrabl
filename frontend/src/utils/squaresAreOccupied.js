@@ -1,14 +1,9 @@
 export const squaresAreOccupied = (indices, boardState) => {
   for (const index of indices) {
-    if (
-      !boardState.filter((square) => {
-        if (square.tile && square.tile.square === index) {
-          return square;
-        } else {
-          return false;
-        }
-      })[0]
-    ) {
+    const isOccupied = boardState.filter(
+      (square) => square.tile && square.tile.square === index
+    )[0];
+    if (!isOccupied) {
       return false;
     }
   }
