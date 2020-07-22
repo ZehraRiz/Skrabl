@@ -125,25 +125,26 @@ const GameScreen = ({
   const handleConfirmMove = () => {
     if (moveIsValid(placedTiles, boardState)) {
       console.log("move is valid");
-      //get array of words formed in turn e.g.
-      const formedWords = ["house", "cat", "tea"];
-      axios
-        .post("http://localhost:4001/verifyWord", { words: formedWords })
-        .then((res) => {
-          const results = res.data;
-          if (Object.values(results).every((val) => val === "true")) {
-            console.log("words are verified");
-            //update score object here
-            nextPlayer();
-            return;
-          } else {
-            setNotification("Don't make up words!");
-            return;
-          }
-        });
+      // //get array of words formed in turn e.g.
+      // const formedWords = ["house", "cat", "tea"];
+      // axios
+      //   .post("http://localhost:4001/verifyWord", { words: formedWords })
+      //   .then((res) => {
+      //     const results = res.data;
+      //     if (Object.values(results).every((val) => val === "true")) {
+      //       console.log("words are verified");
+      //       //update score object here
+      //       nextPlayer();
+      //       return;
+      //     } else {
+      //       setNotification("Don't make up words!");
+      //       return;
+      //     }
+      //   });
       return;
     } else {
-      setNotification("move is not valid");
+      // setNotification("move is not valid");
+      console.log("move is not valid");
       return;
     }
   };
