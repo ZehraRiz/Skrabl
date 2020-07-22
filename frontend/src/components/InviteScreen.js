@@ -1,21 +1,44 @@
 import React, { useState } from "react";
 import "../styles/InviteScreen.css";
 
-const InviteScreen = ({
-  handleSendInvite,
-  invitedPlayer,
-  setInvitedPlayer,
-  setCurrentComponent,
-}) => {
+const InviteScreen = ({ user, setInvitedPlayer, setCurrentComponent, invitedPlayer, gameId, setGameData, socket }) => {
   const [timeInput, setTimeInput] = useState(20);
+
   const handleTimeChange = (e) => {
     setTimeInput(e.target.value);
   };
 
-  const handleClose = () => {
-    setInvitedPlayer(null);
-    setCurrentComponent("Players");
-  };
+ const handleClose = () => {
+		socket.emit("removeGame", gameId);
+
+		socket.on("removedGame", (data) => {
+			setInvitedPlayer("");
+			setCurrentComponent("Players");
+		});
+	};
+
+
+  const handleApplyOptions = () => {
+		//request to join game
+		socket.emit("joinGame", { userId: user.id, gameId: gameId, time: timeInput });
+
+
+		socket.on("joinGameError", (data) => {console.log(data); return});
+		socket.on("invalidGame", (data) => {console.log(data); return});
+    socket.on("player1present", (data) => { console.log(data); return });
+    socket.on("user1Error", (data) => {console.log(data); return});
+
+		//on succesful game join
+    socket.on("gameJoined", (data) => {
+      console.log("you joined the game")
+      console.log(data)
+      socket.emit("gameRequest", { userId: user.id, gameId: gameId, invitedPlayer: invitedPlayer });
+      socket.on("player2present", (data) => { console.log(data); return });
+			setCurrentComponent("GameScreen");
+		});
+	};
+
+
 
   return (
     <div className="inviteScreen__wrapper">
@@ -35,7 +58,7 @@ const InviteScreen = ({
         <button type="button" onClick={handleClose}>
           Cancel
         </button>
-        <button type="button" onClick={handleSendInvite}>
+        <button type="button" onClick={handleApplyOptions}>
           Send Invite
         </button>
       </div>

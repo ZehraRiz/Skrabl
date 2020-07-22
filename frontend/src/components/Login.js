@@ -13,11 +13,11 @@ const Login = ({ setCurrentComponent, setUser, socket, setPlayers }) => {
     socket.on("usernameRegistered", (data) => {
       const user = data.user;
       //set in ls
-      setUser(user);
-      setPlayers(data.allOnlineUsers);
+      setUser(user)
+      setPlayers(data.allOnlineUsers)
       setCurrentComponent("Players");
-    });
-
+  });
+    
     e.target.reset();
   };
 
