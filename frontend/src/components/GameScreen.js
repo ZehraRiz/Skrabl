@@ -3,7 +3,7 @@ import Board from "../components/Board";
 import TileRack from "../components/TileRack";
 import { bonusSquareIndices } from "../assets/bonusSquareIndices";
 import { generateBoardSquares } from "../utils/generateBoardSquares";
-import { shuffleArray } from "../utils/shuffleArray";
+import { shuffle } from "../utils/shuffle";
 import StatusBar from "./StatusBar";
 import Chat from "./Chat";
 import GameButtons from "./GameButtons";
@@ -31,6 +31,7 @@ const GameScreen = ({
   const [boardState, setBoardState] = useState();
   const [timeLeftPlayer, setTimeLeftPlayer] = useState(1200000);
   const [timeLeftOpponent, setTimeLeftOpponent] = useState(1200000);
+  const [scores, setScores] = useState({ 0: 0, 1: 0 });
 
   useEffect(() => {
     getTiles();
@@ -56,9 +57,6 @@ const GameScreen = ({
     };
     //send to backend here
   };
-
-  //DUMMY DATA
-  const scores = { 0: 20, 1: 30 };
 
   //DUMMY FUNCTION - will need to call backend
   const getTiles = () => {
@@ -88,7 +86,7 @@ const GameScreen = ({
   };
 
   const handleShuffleRack = () => {
-    const shuffled = shuffleArray([...playerRackTiles]);
+    const shuffled = shuffle([...playerRackTiles]);
     setPlayerRackTiles([...shuffled]);
   };
 
@@ -129,26 +127,25 @@ const GameScreen = ({
   const handleConfirmMove = () => {
     if (moveIsValid(placedTiles, boardState)) {
       console.log("move is valid");
-      // //get array of words formed in turn e.g.
-      // const formedWords = ["house", "cat", "tea"];
-      // axios
-      //   .post("http://localhost:4001/verifyWord", { words: formedWords })
-      //   .then((res) => {
-      //     const results = res.data;
-      //     if (Object.values(results).every((val) => val === "true")) {
-      //       console.log("words are verified");
-      //       //update score object here
-      //       nextPlayer();
-      //       return;
-      //     } else {
-      //       setNotification("Don't make up words!");
-      //       return;
-      //     }
-      //   });
+      //get array of words formed in turn e.g.
+      const formedWords = ["house", "cat", "tea"];
+      axios
+        .post("http://localhost:4001/verifyWord", { words: formedWords })
+        .then((res) => {
+          const results = res.data;
+          if (Object.values(results).every((val) => val === "true")) {
+            console.log("words are verified (using dummy words)");
+            //update score object here
+            nextPlayer();
+            return;
+          } else {
+            setNotification("Don't make up words!");
+            return;
+          }
+        });
       return;
     } else {
-      // setNotification("move is not valid");
-      console.log("move is not valid");
+      setNotification("move is not valid");
       return;
     }
   };

@@ -17,16 +17,19 @@ export const generateBoardSquares = (bonusSquareIndices) => {
       letterMultiplier,
       wordMultiplier,
     }));
-    bonusSquares = [...bonusSquares, ...newArray];
+    bonusSquares = [...bonusSquares, ...newArray].sort((a, b) =>
+      a.index > b.index ? 1 : -1
+    );
   });
-  const ordered = bonusSquares.sort((a, b) => (a.index > b.index ? 1 : -1));
-  const bonusIndices = ordered.map((obj) => obj.index);
+  const bonusIndices = bonusSquares.map((obj) => obj.index);
   const allSquares = [];
-  for (let i = 0; i < 225; i++) {
-    const row = Math.floor(i / 15);
-    const col = i % 15;
+  const totalSquares = 225;
+  const squaresPerRow = 15;
+  for (let i = 0; i < totalSquares; i++) {
+    const row = Math.floor(i / squaresPerRow);
+    const col = i % squaresPerRow;
     if (bonusIndices.includes(i)) {
-      const bonusSquare = ordered.filter((obj) => obj.index === i)[0];
+      const bonusSquare = bonusSquares.find((obj) => obj.index === i);
       allSquares.push({ ...bonusSquare, row, col });
     } else {
       allSquares.push({
