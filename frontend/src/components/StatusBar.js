@@ -10,28 +10,28 @@ const StatusBar = ({
   setTimeLeftPlayer,
   setTimeLeftOpponent,
   currentPlayer,
-  iam
+  currentPlayer
 }) => {
   return (
     <div className="statusBar__wrapper">
       <div className="statusBar__player">
-        Player 1: {scores.player1}
+        Player 1: {scores[0]}
         <Timer
           setNotification={setNotification}
           timeLeft={timeLeftPlayer}
           setTimeLeft={setTimeLeftPlayer}
           currentPlayer={currentPlayer}
-          iam={iam}
+          currentPlayer={currentPlayer}
         />
       </div>
       <div className="statusBar__player">
-        Player 2: {scores.player2}
+        Player 2: {scores[1]}
         <Timer
           setNotification={setNotification}
           timeLeft={timeLeftOpponent}
           setTimeLeft={setTimeLeftOpponent}
           currentPlayer={currentPlayer}
-          iam={iam}
+          currentPlayer={currentPlayer}
         />
       </div>
     </div>

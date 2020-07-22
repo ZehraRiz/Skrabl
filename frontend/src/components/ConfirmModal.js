@@ -1,7 +1,7 @@
 import React from "react";
 import "../styles/ConfirmModal.css";
 
-const ConfirmModal = ({ message, handleResign, handlePass, handleCancel }) => {
+const ConfirmModal = ({ message, handleResign, handlePass, closeModal }) => {
   let confirmFunction;
   message.type === "resign"
     ? (confirmFunction = handleResign)
@@ -11,7 +11,7 @@ const ConfirmModal = ({ message, handleResign, handlePass, handleCancel }) => {
       <div className="confirmModal__content">
         <p>{message.message}</p>
         <div className="confirmModal__buttons">
-          <button onClick={handleCancel}>Cancel</button>
+          <button onClick={closeModal}>Cancel</button>
           <button onClick={confirmFunction}>Confirm</button>
         </div>
       </div>

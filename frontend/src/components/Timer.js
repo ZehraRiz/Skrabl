@@ -7,12 +7,12 @@ const Timer = ({
   timeLeft,
   setTimeLeft,
   currentPlayer,
-  iam,
+  currentPlayer,
 }) => {
   let interval;
 
   // useEffect(() => {
-  //   if (currentPlayer === iam) {
+  //   if (currentPlayer === currentPlayer) {
   //     interval = setInterval(() => {
   //       setTimeLeft(timeLeft - 1000);
   //     }, 1000);
