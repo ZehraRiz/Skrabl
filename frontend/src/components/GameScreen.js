@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from "react";
 import Board from "../components/Board";
-import TileRack from "../components/TileRack";
-import { bonusSquareIndices } from "../assets/bonusSquareIndices";
-import { generateBoardSquares } from "../utils/generateBoardSquares";
-import { shuffle } from "../utils/shuffle";
+import TileRack from "./TileRack";
 import StatusBar from "./StatusBar";
 import Chat from "./Chat";
 import GameButtons from "./GameButtons";
-import axios from "axios";
 import ConfirmModal from "./ConfirmModal";
 import GameOverModal from "./GameOverModal";
+import { generateBoardSquares } from "../utils/generateBoardSquares";
+import { shuffle } from "../utils/shuffle";
 import { moveIsValid } from "../utils/moveIsValid";
 import { squaresAreOccupied } from "../utils/squaresAreOccupied";
 import { getScoresFromWords } from "../utils/getScoresFromWords";
+import { bonusSquareIndices } from "../assets/bonusSquareIndices";
+import axios from "axios";
 import "../styles/GameScreen.css";
 
 const GameScreen = ({
@@ -35,6 +35,12 @@ const GameScreen = ({
   const [scoredWords, setScoredWords] = useState({ 0: [], 1: [] });
   const [scores, setScores] = useState({ 0: 0, 1: 0 });
 
+  //EFFECTS
+
+  useEffect(() => {
+    getBoard();
+  }, []);
+
   useEffect(() => {
     getTiles();
   }, []);
@@ -44,21 +50,26 @@ const GameScreen = ({
   }, [currentPlayer]);
 
   useEffect(() => {
-    getBoard();
-  }, []);
+    updateScores();
+  }, [scoredWords]);
+
+  useEffect(() => {
+    placeTile();
+  }, [selectedSquareIndex]);
 
   const getBoard = () => {
     const squares = generateBoardSquares(bonusSquareIndices);
     setBoardState([...squares]);
   };
 
-  useEffect(() => {
-    updateScores();
-  }, [scoredWords]);
-
-  const updateScores = () => {
-    const updatedScores = getScoresFromWords(scoredWords);
-    setScores(updatedScores);
+  //*dummy function* - will get tiles from backend
+  const getTiles = () => {
+    const numTilesNeeded = 7 - playerRackTiles.length;
+    const randomTiles = [];
+    for (let i = 0; i < numTilesNeeded; i++) {
+      randomTiles.push({ id: i, letter: "b", points: i });
+    }
+    setPlayerRackTiles([...playerRackTiles, ...randomTiles]);
   };
 
   const updateBackend = () => {
@@ -69,118 +80,10 @@ const GameScreen = ({
     //send to backend here
   };
 
-  //DUMMY FUNCTION - will need to call backend
-  const getTiles = () => {
-    const numTilesNeeded = 7 - playerRackTiles.length;
-    const randomTiles = [];
-    for (let i = 0; i < numTilesNeeded; i++) {
-      randomTiles.push({ id: i, letter: "b", points: i });
-    }
-    setPlayerRackTiles([...playerRackTiles, ...randomTiles]);
+  const updateScores = () => {
+    const updatedScores = getScoresFromWords(scoredWords);
+    setScores(updatedScores);
   };
-
-  const handleClearTiles = () => {
-    setPlayerRackTiles([...playerRackTiles, ...placedTiles]);
-    const placedTilesSquares = placedTiles.map((tile) => tile.square);
-
-    const updatedBoardState = [
-      ...boardState.map((square) => {
-        if (placedTilesSquares.includes(square.index)) {
-          return { ...square, tile: null };
-        } else {
-          return square;
-        }
-      }),
-    ];
-    setBoardState([...updatedBoardState]);
-    setPlacedTiles([]);
-  };
-
-  const handleShuffleRack = () => {
-    const shuffled = shuffle([...playerRackTiles]);
-    setPlayerRackTiles([...shuffled]);
-  };
-
-  const handleSelectTile = (tile) => {
-    if (currentPlayer !== 0) {
-      return;
-    }
-    setSelectedTile(tile);
-  };
-
-  const handleClickPlacedTile = (tileToRemove) => {
-    if (selectedTile) {
-      return;
-    }
-    if (tileToRemove.player === 0) {
-      const updatedBoardState = boardState.map((square) => {
-        if (square.tile && square.tile.square === tileToRemove.square) {
-          return { ...square, tile: null };
-        } else {
-          return square;
-        }
-      });
-      setBoardState(updatedBoardState);
-      setPlacedTiles(
-        placedTiles.filter((tile) => tile.square !== tileToRemove.square)
-      );
-      setPlayerRackTiles([...playerRackTiles, tileToRemove]);
-    }
-  };
-
-  const handleClickSquare = (square) => {
-    if (selectedTile) {
-      setSelectedSquareIndex(square.index);
-    }
-  };
-
-  const handleConfirmMove = () => {
-    if (moveIsValid(placedTiles, boardState)) {
-      console.log("move is valid");
-      //get array of words formed in turn (objects) e.g.
-      const formedWords = [
-        { word: "house", points: 7 },
-        { word: "cat", points: 4 },
-        { word: "tea", points: 3 },
-      ];
-      axios
-        .post("http://localhost:4001/verifyWord", { words: formedWords })
-        .then((res) => {
-          const results = res.data;
-          if (Object.values(results).every((val) => val === "true")) {
-            console.log("words are verified (using dummy words)");
-            const updatedScoredWords = {
-              ...scoredWords,
-              [currentPlayer]: [...scoredWords[currentPlayer], ...formedWords],
-            };
-            setScoredWords(updatedScoredWords);
-            //*scores are updated automatically
-            nextPlayer();
-            return;
-          } else {
-            setNotification("Don't make up words!");
-            return;
-          }
-        });
-      return;
-    } else {
-      setNotification("move is not valid");
-      return;
-    }
-  };
-
-  const gameOver = () => {
-    setGameIsOver(true);
-  };
-
-  const nextPlayer = () => {
-    setCurrentPlayer(currentPlayer === 0 ? 1 : 0);
-  };
-
-  useEffect(() => {
-    placeTile();
-    //eslint-disable-next-line
-  }, [selectedSquareIndex]);
 
   const placeTile = () => {
     if (selectedSquareIndex !== null) {
@@ -216,12 +119,40 @@ const GameScreen = ({
     }
   };
 
-  const handleCloseModal = () => {
-    setCurrentComponent("Players");
+  //EVENT HANDLERS
+
+  const handleClickSquare = (square) => {
+    if (currentPlayer !== 0) return;
+    if (selectedTile) {
+      setSelectedSquareIndex(square.index);
+    }
   };
 
-  const closeConfirmModal = () => {
-    setConfirmMessage(null);
+  const handleClickPlacedTile = (tileToRemove) => {
+    if (selectedTile || currentPlayer !== 0) return;
+
+    if (tileToRemove.player === 0) {
+      const updatedBoardState = boardState.map((square) => {
+        if (square.tile && square.tile.square === tileToRemove.square) {
+          return { ...square, tile: null };
+        } else {
+          return square;
+        }
+      });
+      setBoardState(updatedBoardState);
+      setPlacedTiles(
+        placedTiles.filter((tile) => tile.square !== tileToRemove.square)
+      );
+      setPlayerRackTiles([...playerRackTiles, tileToRemove]);
+    }
+  };
+
+  const handleClickPass = () => {
+    if (currentPlayer !== 0) return;
+    setConfirmMessage({
+      type: "pass",
+      message: "Are you sure you want to pass?",
+    });
   };
 
   const handleClickResign = () => {
@@ -230,20 +161,103 @@ const GameScreen = ({
       message: "Are you sure you want to resign?",
     });
   };
+
+  const handleClickShuffle = () => {
+    const shuffled = shuffle([...playerRackTiles]);
+    setPlayerRackTiles([...shuffled]);
+  };
+
+  const handleClickTile = (tile) => {
+    if (currentPlayer !== 0) return;
+
+    setSelectedTile(tile);
+  };
+
   const handleResign = () => {
-    closeConfirmModal();
+    closeModal();
     gameOver();
   };
 
-  const handleClickPass = () => {
-    setConfirmMessage({
-      type: "pass",
-      message: "Are you sure you want to pass?",
-    });
-  };
   const handlePass = () => {
-    closeConfirmModal();
+    closeModal();
     nextPlayer();
+  };
+
+  const handleClickExchangeTiles = () => {
+    console.log("exhange tiles");
+  };
+
+  const handleClickClearTiles = () => {
+    if (currentPlayer !== 0) return;
+    setPlayerRackTiles([...playerRackTiles, ...placedTiles]);
+    const placedTilesSquares = placedTiles.map((tile) => tile.square);
+
+    const updatedBoardState = [
+      ...boardState.map((square) => {
+        if (placedTilesSquares.includes(square.index)) {
+          return { ...square, tile: null };
+        } else {
+          return square;
+        }
+      }),
+    ];
+    setBoardState([...updatedBoardState]);
+    setPlacedTiles([]);
+  };
+
+  const handleClickConfirmMove = () => {
+    if (currentPlayer !== 0) return;
+    if (moveIsValid(placedTiles, boardState)) {
+      console.log("move is valid");
+      //get array of words formed in turn (objects)
+      //EXAMPLE:
+      const formedWords = [
+        { word: "house", points: 7 },
+        { word: "cat", points: 4 },
+        { word: "tea", points: 3 },
+      ];
+      axios
+        .post("http://localhost:4001/verifyWord", { words: formedWords })
+        .then((res) => {
+          const results = res.data;
+          if (Object.values(results).every((val) => val === "true")) {
+            console.log("words are verified (using dummy words)");
+            const updatedScoredWords = {
+              ...scoredWords,
+              [currentPlayer]: [...scoredWords[currentPlayer], ...formedWords],
+            };
+            setScoredWords(updatedScoredWords);
+            //*scores are updated automatically
+            nextPlayer();
+            return;
+          } else {
+            setNotification("Don't make up words!");
+            return;
+          }
+        });
+      return;
+    } else {
+      setNotification("move is not valid");
+      return;
+    }
+  };
+
+  //OTHER
+
+  const gameOver = () => {
+    setGameIsOver(true);
+  };
+
+  const exitGame = () => {
+    setCurrentComponent("Players");
+  };
+
+  const nextPlayer = () => {
+    setCurrentPlayer(currentPlayer === 0 ? 1 : 0);
+  };
+
+  const closeModal = () => {
+    setConfirmMessage(null);
   };
 
   return (
@@ -266,25 +280,25 @@ const GameScreen = ({
           />
           <TileRack
             playerRackTiles={playerRackTiles}
-            handleSelectTile={handleSelectTile}
+            handleClickTile={handleClickTile}
           />
           <GameButtons
             getTiles={getTiles}
-            handleClearTiles={handleClearTiles}
-            handleShuffleRack={handleShuffleRack}
-            handleConfirmMove={handleConfirmMove}
+            handleClickClearTiles={handleClickClearTiles}
+            handleClickShuffle={handleClickShuffle}
+            handleClickConfirmMove={handleClickConfirmMove}
             handleClickResign={handleClickResign}
             handleClickPass={handleClickPass}
+            handleClickExchangeTiles={handleClickExchangeTiles}
           />
         </div>
       </div>
       <Chat chat={chat} handleSendMessage={handleSendMessage} />
       {gameIsOver && (
         <GameOverModal
-          winner="Tom"
           scores={scores}
           scoredWords={scoredWords}
-          handleCloseModal={handleCloseModal}
+          exitGame={exitGame}
         />
       )}
       {confirmMessage && (
@@ -292,7 +306,7 @@ const GameScreen = ({
           message={confirmMessage}
           handleResign={handleResign}
           handlePass={handlePass}
-          handleCancel={closeConfirmModal}
+          closeModal={closeModal}
         />
       )}
     </div>

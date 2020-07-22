@@ -10,7 +10,7 @@ import "./styles/global.css";
 const socket = io("http://localhost:4001");
 
 const App = () => {
-  const [currentComponent, setCurrentComponent] = useState("GameScreen");
+  const [currentComponent, setCurrentComponent] = useState("Login");
   const [notification, setNotification] = useState(null);
   const [user, setUser] = useState("");
   const [players, setPlayers] = useState([]);
@@ -18,7 +18,7 @@ const App = () => {
   const [gameId, setGameId] = useState("");
   const [gameData, setGameData] = useState(null);
   const [chat, setChat] = useState([]);
-  const [currentPlayer, setCurrentPlayer] = useState(0);
+  const [currentPlayer, setCurrentPlayer] = useState();
 
   const handleCloseNotificationModal = () => {
     setNotification(null);
