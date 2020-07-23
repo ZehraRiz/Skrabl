@@ -38,4 +38,4 @@ function shuffle(a) {
 }
 
 initialPouch =  shuffle(initialPouch)
-module.exports = { initialPouch };
+module.exports =  initialPouch;
