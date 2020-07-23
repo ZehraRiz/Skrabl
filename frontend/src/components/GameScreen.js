@@ -16,323 +16,318 @@ import axios from "axios";
 import "../styles/GameScreen.css";
 
 const GameScreen = ({
-  setNotification,
-  chat,
-  handleSendMessage,
-  setCurrentComponent,
-  currentPlayer,
-  gameData,
-  socket
+	setNotification,
+	chat,
+	handleSendMessage,
+	setCurrentComponent,
+	currentPlayer,
+	gameData,
+	socket
 }) => {
-  const [selectedTile, setSelectedTile] = useState(null);
-  const [selectedSquareIndex, setSelectedSquareIndex] = useState(null);
-  const [playerRackTiles, setPlayerRackTiles] = useState(currentPlayer===0? gameData.gameState.player1Tiles: gameData.gameState.player1Tiles);
-  const [placedTiles, setPlacedTiles] = useState([]);
-  const [gameIsOver, setGameIsOver] = useState(false);
-  const [confirmMessage, setConfirmMessage] = useState(null);
-  const [boardState, setBoardState] = useState(gameData.gameState.boardState);
-  const [timeLeftPlayer, setTimeLeftPlayer] = useState(currentPlayer===0? gameData.gameState. player1TimeLeft: gameData.gameState. player2TimeLeft);
-  const [timeLeftOpponent, setTimeLeftOpponent] = useState(currentPlayer===1? gameData.gameState. player1TimeLeft: gameData.gameState. player2TimeLeft);
-  const [scoredWords, setScoredWords] = useState({ 0: [], 1: [] });
-  const [scores, setScores] = useState({ 0: 0, 1: 0 });
-  const [turn, setTurn] = useState(gameData.gameState.turn)
-  console.log("turn of "+ turn)
+	const [ selectedTile, setSelectedTile ] = useState(null);
+	const [ selectedSquareIndex, setSelectedSquareIndex ] = useState(null);
+	const [ playerRackTiles, setPlayerRackTiles ] = useState(
+		currentPlayer === 0 ? gameData.gameState.player1Tiles : gameData.gameState.player1Tiles
+	);
+	const [ placedTiles, setPlacedTiles ] = useState([]);
+	const [ gameIsOver, setGameIsOver ] = useState(gameData.gameState.isOver);
+	const [ confirmMessage, setConfirmMessage ] = useState(null);
+	const [ boardState, setBoardState ] = useState(gameData.gameState.boardState);
+	const [ timeLeftPlayer, setTimeLeftPlayer ] = useState(
+		currentPlayer === 0 ? gameData.gameState.player1TimeLeft : gameData.gameState.player2TimeLeft
+	);
+	const [ timeLeftOpponent, setTimeLeftOpponent ] = useState(
+		currentPlayer === 1 ? gameData.gameState.player1TimeLeft : gameData.gameState.player2TimeLeft
+	);
+	const [ scoredWords, setScoredWords ] = useState({ 0: [], 1: [] });
+	const [ scores, setScores ] = useState(gameData.gameState.scores);
+	const [ turn, setTurn ] = useState(gameData.gameState.turn);
 
-  //EFFECTS
+	//EFFECTS
+
+	useEffect(() => {
+		getBoard();
+	}, []);
+
+	useEffect(() => {
+		updateScores();
+	}, []);
+
+	useEffect(
+		() => {
+			placeTile();
+		},
+		[ selectedSquareIndex ]
+	);
 
   useEffect(() => {
-    getBoard();
-  }, []);
-
-  useEffect(() => {
-    getTiles();
-  }, []);
-
-  useEffect(() => {
-    updateBackend();
-  }, [currentPlayer]);
-
-  useEffect(() => {
-    updateScores();
-  }, [scoredWords]);
-
-  useEffect(() => {
-    placeTile();
-  }, [selectedSquareIndex]);
-
-  const getBoard = () => {
-    const squares = generateBoardSquares(bonusSquareIndices);
-    setBoardState([...squares]);
-  };
-
-  //*dummy function* - will get tiles from backend
-  const getTiles = () => {
-    const numTilesNeeded = 7 - playerRackTiles.length;
-    socket.emit("requestTiles", { gameId: gameData.gameId, numTilesNeeded: numTilesNeeded, player: currentPlayer });
-    socket.on("gameEnded", (data) => console.log(data))
     socket.on("sendingTiles", (data) => {
       setPlayerRackTiles([...playerRackTiles, ...data]);
-    })
-    
-    //const numTilesNeeded = 7 - playerRackTiles.length;
-    // const randomTiles = [];
-    // for (let i = 0; i < numTilesNeeded; i++) {
-    //   randomTiles.push({ id: i, letter: "b", points: i });
-    // }
-    // setPlayerRackTiles([...playerRackTiles, ...randomTiles]);
-  };
+      //here currentRackTiles are always 7
+    });
 
-  const updateBackend = () => {
-    socket.emit("updateGameState", { gameId: gameData.gameId, boardState:boardState, playerRackTiles: playerRackTiles, player: currentPlayer });
-    socket.on("gameEnded", (data) => console.log(data))
-    socket.on("gameUpdated", (data) => {
+  
+    socket.on("gameEnd", (data) => {
       console.log(data);
-      //sould do setting function here
+      //redirect to players screen or show who won
+      console.log("the game has ended");
+      exitGame();
     })
+      
+		socket.on("gameUpdated", (data) => {
+			console.log(data);
+			setGameIsOver(data.gameState.isOver);
+			setBoardState(data.gameState.boardState);
+			setTimeLeftPlayer(
+				currentPlayer === 0 ? gameData.gameState.player1TimeLeft : gameData.gameState.player2TimeLeft
+			);
+			setTimeLeftOpponent(
+				currentPlayer === 1 ? gameData.gameState.player1TimeLeft : gameData.gameState.player2TimeLeft
+			);
+			setScores(data.gameState.scores);
+			setTurn(data.gameState.turn);
+		});
+	}, []);
 
-    // const currentGameState = {
-    //   boardState,
-    //   playerRackTiles,
-    // };
-    
-  };
+	const getBoard = () => {
+		const squares = generateBoardSquares(bonusSquareIndices);
+		setBoardState([ ...squares ]);
+	};
 
-  const updateScores = () => {
-    //BACKEND FUNCION AND NEW TURN?
-    const updatedScores = getScoresFromWords(scoredWords);
-    setScores(updatedScores);
-  };
+	//*dummy function* - will get tiles from backend
+	const getTiles = () => {
+		console.log("trying to get tiles");
+		const numTilesNeeded = 7 - playerRackTiles.length;
+		console.log("no of tiles needed from backend: " + numTilesNeeded);
+		if (numTilesNeeded <= 0) {
+			console.log("you have enough tiles");
+			return;
+		}
+		socket.emit("requestTiles", { gameId: gameData.gameId, numTilesNeeded: numTilesNeeded, player: currentPlayer });
+	};
 
-  const placeTile = () => {
-    if (selectedSquareIndex !== null) {
-      const squareIsOccupied = squaresAreOccupied(
-        [selectedSquareIndex],
-        boardState
-      );
-      if (squareIsOccupied) {
-        return;
-      }
-      const tileToAdd = {
-        ...selectedTile,
-        square: selectedSquareIndex,
-        player: 0,
-      };
-      const updatedBoardState = boardState.map((square) => {
-        if (square.index === selectedSquareIndex) {
-          return { ...square, tile: tileToAdd };
-        } else {
-          return square;
-        }
-      });
-      setBoardState(updatedBoardState);
-      setPlacedTiles([
-        ...placedTiles,
-        { ...selectedTile, square: selectedSquareIndex },
-      ]);
-      setPlayerRackTiles([
-        ...playerRackTiles.filter((tile) => tile.id !== selectedTile.id),
-      ]);
-      setSelectedTile(null);
-      setSelectedSquareIndex(null);
-    }
-  };
+	const nextPlayer = () => {
+		socket.emit("updateGameState", {
+			gameId: gameData.gameId,
+			boardState: boardState,
+			playerRackTiles: playerRackTiles,
+			player: currentPlayer,
+			scores: scores
+		});
+	};
 
-  //EVENT HANDLERS
+	const updateScores = () => {
+		//test and see if running
+		const updatedScores = getScoresFromWords(scoredWords);
+		setScores(updatedScores);
+	};
 
-  const handleClickSquare = (square) => {
-    if (currentPlayer !== turn) return;
-    if (selectedTile) {
-      setSelectedSquareIndex(square.index);
-    }
-  };
+	const placeTile = () => {
+		if (selectedSquareIndex !== null) {
+			const squareIsOccupied = squaresAreOccupied([ selectedSquareIndex ], boardState);
+			if (squareIsOccupied) {
+				return;
+			}
+			const tileToAdd = {
+				...selectedTile,
+				square: selectedSquareIndex,
+				player: 0
+			};
+			const updatedBoardState = boardState.map((square) => {
+				if (square.index === selectedSquareIndex) {
+					return { ...square, tile: tileToAdd };
+				} else {
+					return square;
+				}
+			});
+			setBoardState(updatedBoardState);
+			setPlacedTiles([ ...placedTiles, { ...selectedTile, square: selectedSquareIndex } ]);
+			setPlayerRackTiles([ ...playerRackTiles.filter((tile) => tile.id !== selectedTile.id) ]);
+			setSelectedTile(null);
+			setSelectedSquareIndex(null);
+		}
+	};
 
-  const handleClickPlacedTile = (tileToRemove) => {
-    if (selectedTile || currentPlayer !== turn) return;
+	//EVENT HANDLERS
 
-    if (tileToRemove.player === 0) {
-      const updatedBoardState = boardState.map((square) => {
-        if (square.tile && square.tile.square === tileToRemove.square) {
-          return { ...square, tile: null };
-        } else {
-          return square;
-        }
-      });
-      setBoardState(updatedBoardState);
-      setPlacedTiles(
-        placedTiles.filter((tile) => tile.square !== tileToRemove.square)
-      );
-      setPlayerRackTiles([...playerRackTiles, tileToRemove]);
-    }
-  };
+	const handleClickSquare = (square) => {
+		if (currentPlayer !== turn) {
+			console.log("i can click");
+			return;
+		}
+		if (selectedTile) {
+			setSelectedSquareIndex(square.index);
+		}
+	};
 
-  const handleClickPass = () => {
-    if (currentPlayer !== turn) return;
-    setConfirmMessage({
-      type: "pass",
-      message: "Are you sure you want to pass?",
-    });
-  };
+	const handleClickPlacedTile = (tileToRemove) => {
+		if (selectedTile === 0 || currentPlayer !== turn) return;
 
-  const handleClickResign = () => {
-    setConfirmMessage({
-      type: "resign",
-      message: "Are you sure you want to resign?",
-    });
-  };
+		if (tileToRemove.player === 0) {
+			const updatedBoardState = boardState.map((square) => {
+				if (square.tile && square.tile.square === tileToRemove.square) {
+					return { ...square, tile: null };
+				} else {
+					return square;
+				}
+			});
+			setBoardState(updatedBoardState);
+			setPlacedTiles(placedTiles.filter((tile) => tile.square !== tileToRemove.square));
+			setPlayerRackTiles([ ...playerRackTiles, tileToRemove ]);
+		}
+	};
 
-  const handleClickShuffle = () => {
-    const shuffled = shuffle([...playerRackTiles]);
-    setPlayerRackTiles([...shuffled]);
-  };
+	const handleClickPass = () => {
+		if (currentPlayer !== turn) return;
+		setConfirmMessage({
+			type: "pass",
+			message: "Are you sure you want to pass?"
+		});
+	};
 
-  const handleClickTile = (tile) => {
-    if (currentPlayer !== turn) return;
-    setSelectedTile(tile);
-  };
+	const handleClickResign = () => {
+		setConfirmMessage({
+			type: "resign",
+			message: "Are you sure you want to resign?"
+		});
+	};
 
-  const handleResign = () => {
-    closeModal();
-    gameOver();
-  };
+	const handleClickShuffle = () => {
+		const shuffled = shuffle([ ...playerRackTiles ]);
+		setPlayerRackTiles([ ...shuffled ]);
+		//SHOULD UPDATE BACKEND? NOT NOW
+	};
 
-  const handlePass = () => {
-    closeModal();
-    nextPlayer();
-  };
+	const handleClickTile = (tile) => {
+		if (currentPlayer !== turn) return;
+		setSelectedTile(tile);
+	};
 
-  const handleClickExchangeTiles = () => {
-    console.log("exhange tiles");
-  };
+	const handleResign = () => {
+		closeModal();
+		gameOver();
+	};
 
-  const handleClickClearTiles = () => {
-    if (currentPlayer !== turn) return;
-    setPlayerRackTiles([...playerRackTiles, ...placedTiles]);
-    const placedTilesSquares = placedTiles.map((tile) => tile.square);
+	const handlePass = () => {
+		closeModal();
+		nextPlayer();
+	};
 
-    const updatedBoardState = [
-      ...boardState.map((square) => {
-        if (placedTilesSquares.includes(square.index)) {
-          return { ...square, tile: null };
-        } else {
-          return square;
-        }
-      }),
-    ];
-    setBoardState([...updatedBoardState]);
-    setPlacedTiles([]);
-  };
+	const handleClickExchangeTiles = () => {
+		console.log("exhange tiles");
+	};
 
-  const handleClickConfirmMove = () => {
-    if (currentPlayer !== turn) return;
-    if (moveIsValid(placedTiles, boardState)) {
-      console.log("move is valid");
-      //get array of words formed in turn (objects)
-      //EXAMPLE:
-      const formedWords = [
-        { word: "house", points: 7 },
-        { word: "cat", points: 4 },
-        { word: "tea", points: 3 },
-      ];
-      axios
-        .post("http://localhost:4001/verifyWord", { words: formedWords })
-        .then((res) => {
-          const results = res.data;
-          if (Object.values(results).every((val) => val === "true")) {
-            console.log("words are verified (using dummy words)");
-            const updatedScoredWords = {
-              ...scoredWords,
-              [currentPlayer]: [...scoredWords[currentPlayer], ...formedWords],
-            };
-            setScoredWords(updatedScoredWords);
-            //*scores are updated automatically
-            nextPlayer();
-            return;
-          } else {
-            setNotification("Don't make up words!");
-            return;
-          }
-        });
-      return;
-    } else {
-      setNotification("move is not valid");
-      return;
-    }
-  };
+	const handleClickClearTiles = () => {
+		if (currentPlayer !== turn) return;
+		setPlayerRackTiles([ ...playerRackTiles, ...placedTiles ]);
+		const placedTilesSquares = placedTiles.map((tile) => tile.square);
 
-  //OTHER
+		const updatedBoardState = [
+			...boardState.map((square) => {
+				if (placedTilesSquares.includes(square.index)) {
+					return { ...square, tile: null };
+				} else {
+					return square;
+				}
+			})
+		];
+		setBoardState([ ...updatedBoardState ]);
+		setPlacedTiles([]);
+	};
 
-  const gameOver = () => {
-    //handle In backend
-    setGameIsOver(true);
-  };
+	const handleClickConfirmMove = () => {
+		if (currentPlayer !== turn) return;
+		if (moveIsValid(placedTiles, boardState)) {
+			console.log("move is valid");
+			//get array of words formed in turn (objects)
+			//EXAMPLE:
+			const formedWords = [
+				{ word: "house", points: 7 },
+				{ word: "cat", points: 4 },
+				{ word: "tea", points: 3 }
+			];
+			axios.post("http://localhost:4001/verifyWord", { words: formedWords }).then((res) => {
+				const results = res.data;
+				if (Object.values(results).every((val) => val === "true")) {
+					console.log("words are verified (using dummy words)");
+					const updatedScoredWords = {
+						...scoredWords,
+						[currentPlayer]: [ ...scoredWords[currentPlayer], ...formedWords ]
+					};
+					setScoredWords(updatedScoredWords);
+					//*scores are updated automatically
+					nextPlayer();
+					return;
+				} else {
+					setNotification("Don't make up words!");
+					return;
+				}
+			});
+			return;
+		} else {
+			setNotification("move is not valid");
+			return;
+		}
+	};
 
-  const exitGame = () => {
-    //handle in backend
-    setCurrentComponent("Players");
-  };
+	//OTHER
 
-  const nextPlayer = () => {
-    //handle in backend
-    console.log("in next player")
-    turn === 0 ? setTurn(1) : setTurn(0);
-  };
+	const gameOver = () => {
+		socket.emit("gameOver", gameData.gameId);
+		};
 
-  const closeModal = () => {
-    setConfirmMessage(null);
-  };
+	const exitGame = () => {
+		//handle backend in other functions
+		setCurrentComponent("Players");
+	};
 
-  return (
-    <div className="gameScreen__wrapper">
-      <div className="gameScreen__main">
-        <div className="gameScreen__board">
-          <StatusBar
-            scores={scores}
-            setNotification={setNotification}
-            timeLeftPlayer={timeLeftPlayer}
-            timeLeftOpponent={timeLeftOpponent}
-            setTimeLeftPlayer={setTimeLeftPlayer}
-            setTimeLeftOpponent={setTimeLeftOpponent}
-            currentPlayer={currentPlayer}
-            
-          />
-          <Board
-            handleClickSquare={handleClickSquare}
-            handleClickPlacedTile={handleClickPlacedTile}
-            boardState={boardState}
-          />
-          <TileRack
-            playerRackTiles={playerRackTiles}
-            handleClickTile={handleClickTile}
-          />
-          <GameButtons
-            getTiles={getTiles}
-            handleClickClearTiles={handleClickClearTiles}
-            handleClickShuffle={handleClickShuffle}
-            handleClickConfirmMove={handleClickConfirmMove}
-            handleClickResign={handleClickResign}
-            handleClickPass={handleClickPass}
-            handleClickExchangeTiles={handleClickExchangeTiles}
-          />
-        </div>
-      </div>
-      <Chat chat={chat} handleSendMessage={handleSendMessage} />
-      {gameIsOver && (
-        <GameOverModal
-          scores={scores}
-          scoredWords={scoredWords}
-          exitGame={exitGame}
-        />
-      )}
-      {confirmMessage && (
-        <ConfirmModal
-          message={confirmMessage}
-          handleResign={handleResign}
-          handlePass={handlePass}
-          closeModal={closeModal}
-        />
-      )}
-    </div>
-  );
+	const closeModal = () => {
+		setConfirmMessage(null);
+	};
+
+	return (
+		<div className="gameScreen__wrapper">
+			<div className="gameScreen__main">
+				<div className="gameScreen__board">
+					<StatusBar
+						scores={scores}
+						setNotification={setNotification}
+						timeLeftPlayer={timeLeftPlayer}
+						timeLeftOpponent={timeLeftOpponent}
+						setTimeLeftPlayer={setTimeLeftPlayer}
+						setTimeLeftOpponent={setTimeLeftOpponent}
+						currentPlayer={currentPlayer}
+						turn={turn}
+					/>
+					<Board
+						handleClickSquare={handleClickSquare}
+						handleClickPlacedTile={handleClickPlacedTile}
+						boardState={boardState}
+					/>
+					<TileRack playerRackTiles={playerRackTiles} handleClickTile={handleClickTile} />
+					<GameButtons
+						getTiles={getTiles}
+						handleClickClearTiles={handleClickClearTiles}
+						handleClickShuffle={handleClickShuffle}
+						handleClickConfirmMove={handleClickConfirmMove}
+						handleClickResign={handleClickResign}
+						handleClickPass={handleClickPass}
+						handleClickExchangeTiles={handleClickExchangeTiles}
+					/>
+				</div>
+			</div>
+			<Chat chat={chat} handleSendMessage={handleSendMessage} />
+			{gameIsOver && <GameOverModal scores={scores} scoredWords={scoredWords} exitGame={exitGame} />}
+			{confirmMessage && (
+				<ConfirmModal
+					message={confirmMessage}
+					handleResign={handleResign}
+					handlePass={handlePass}
+					closeModal={closeModal}
+				/>
+			)}
+		</div>
+	);
 };
 
 export default GameScreen;

@@ -10,7 +10,7 @@ const StatusBar = ({
   setTimeLeftPlayer,
   setTimeLeftOpponent,
   currentPlayer,
-  gameData
+  turn
 }) => {
   return (
     <div className="statusBar__wrapper">
@@ -21,7 +21,6 @@ const StatusBar = ({
           timeLeft={timeLeftPlayer}
           setTimeLeft={setTimeLeftPlayer}
           currentPlayer={currentPlayer}
-          currentPlayer={currentPlayer}
         />
       </div>
       <div className="statusBar__player">
@@ -31,9 +30,9 @@ const StatusBar = ({
           timeLeft={timeLeftOpponent}
           setTimeLeft={setTimeLeftOpponent}
           currentPlayer={currentPlayer}
-          currentPlayer={currentPlayer}
         />
       </div>
+      {turn===currentPlayer? <h3>Its your turn</h3> : <h6>Its the opponents turn</h6>}
     </div>
   );
 };

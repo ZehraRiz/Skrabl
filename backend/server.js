@@ -47,7 +47,8 @@ io.on("connection", (socket) => {
       });
       socket.broadcast.to(user.room).emit("welcomeNewUser", { user: user });
     }
-  });
+ });
+  
 
   //create a game
   socket.on("createGame", (userId) => {
@@ -161,45 +162,60 @@ io.on("connection", (socket) => {
   //GAME FUNCTIONS
 
   //getTiles
-  socket.on("getTiles", ({ gameId, numTilesNeeded, player }) => {
+  socket.on("requestTiles", ({ gameId, numTilesNeeded, player }) => {
     const game = findGame(gameId);
-    console.log(game.gameState.pouch)
     if (!game) { socket.emit("gameEnded", "The game has ended"); return; }
     else {
+      console.log("num tiles needed: " +numTilesNeeded)
+      tilesToSend = game.gameState.pouch.slice(0, numTilesNeeded)
+      console.log("will send: "+ tilesToSend)
       if (player === 0) {
-        game.gameState.player1Tiles =[...game.gameState.player1Tiles, ...game.gameState.pouch.splice(numTilesNeeded)]
+        game.gameState.player1Tiles = [...game.gameState.player1Tiles, ...tilesToSend]
       }
       else {
-        game.gameState.player2Tiles =[...game.gameState.player2Tiles, ...game.gameState.pouch.splice(numTilesNeeded)]
+        game.gameState.player2Tiles =[...game.gameState.player2Tiles, ...tilesToSend]
       }
-      console.log(tilesToSend)
-      console.log(game.gameState.pouch.splice(numTilesNeeded))
+      game.gameState.pouch.splice(0, numTilesNeeded)
       //send back a slice from the usertiles
-      socket.emit("sendingTiles", tiles) //tiles is an array
+      socket.emit("sendingTiles", tilesToSend) //tiles is an array
     }
   })
 
-  socket.on("updateGameState", ({gameId, boardState, playerRackTiles, player }) => {
+  socket.on("updateGameState", ({gameId, boardState, playerRackTiles, player, scores }) => {
     const game = findGame(gameId);
     if (!game) { socket.emit("gameEnded", "The game has ended"); return; }
     else {
       game.gameState.boardState = boardState;
+      game.gameState.scores = scores
       if (player === 0) {
         game.gameState.player1Tiles = playerRackTiles
+        game.gameState.turn = 1
       }
       else {
-        game.gameState.player2Tiles =playerRackTiles
+        game.gameState.player2Tiles = playerRackTiles
+        game.gameState.turn = 0
       }
-      socket.emit("gameUpdated", game) //tiles is an array
+      io.in(gameId).emit("gameUpdated", game)
     }
   })
+
+    socket.on("gameOver", (gameId) => {
+    const game = findGame(gameId);
+      if (!game) { return; }
+      else {
+        game.gameState.isOver = true;
+        removeGame(gameId)
+        io.in(gameId).emit("gameEnd", game)
+      }
+    })
+  
 
 
   //disconnects
   socket.on("disconnect", () => {
     const user = userLeave(socket.id);
     if (user) {
-      io.to(user.room).emit("message", `${user.name} has left`);
+      io.in(user.room).emit("userLeft", {user});
       const game = playerDisconnectFromGame(user.id);
       if (game !== "") {
         socket.broadcast

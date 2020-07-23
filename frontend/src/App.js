@@ -18,7 +18,27 @@ const App = () => {
 	const [ gameId, setGameId ] = useState("");
 	const [ gameData, setGameData ] = useState(null);
 	const [ chat, setChat ] = useState([]);
-	const [currentPlayer, setcurrentPlayer] = useState(); // 0 means he was the host and his data is stored as player1 at the backend. 1 means he is player2
+	const [ currentPlayer, setcurrentPlayer ] = useState(); // 0 means he was the host and his data is stored as player1 at the backend. 1 means he is player2
+	// useEffect(() => {
+	// 	const userIdFromLS = localStorage.getItem("userId");
+	// 	if (userIdFromLS) {
+	// 		socket.emit("retriveUser", userIdFromLS)
+	// 		console.log("user exists");
+	// 		socket.on("userIdError", (data) => {
+	// 			console.log(data);
+	// 			return;
+	// 		});
+	// 		socket.on("usernameRegistered", (data) => {
+	// 			console.log("updated socket");
+	// 			const user = data.user;
+	// 			localStorage.removeItem("userId");
+	// 			localStorage.setItem("userId", data.user.id);
+	// 			setUser(user);
+	// 			setPlayers(data.allOnlineUsers);
+	// 			setCurrentComponent("Players");
+	// 		});
+	// 	}
+	// }, []);
 
 	const handleCloseNotificationModal = () => {
 		setNotification(null);
@@ -78,6 +98,7 @@ const App = () => {
 					setcurrentPlayer={setcurrentPlayer}
 					currentPlayer={currentPlayer}
 					gameData={gameData}
+					socket={socket}
 				/>
 			)}
 			{notification && (

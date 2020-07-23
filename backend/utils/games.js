@@ -12,12 +12,12 @@ function gameJoin(gameId) {
             turn: Math.floor(Math.random() * Math.floor(2)),
             pouch: (initialPouch.splice(14, 100)), 
             player1Tiles: initialPouch.slice(0,7),
-            player1Score: 0,
             player1TimeLeft: 20,
             player2Tiles: initialPouch.slice(7,14),
-            player2Score: 0,
             boardState: [],
             player2TimeLeft: 20,
+            scores: { 0: 0, 0: 1 },
+            isOver: false
         }
     }
     games.push(game);
@@ -50,10 +50,9 @@ function findGame(gameId){
 function setGamePlayer1(gameId, userId, time) {
     const game = games.map(game => {
         if (game.gameId === gameId) {
-            game.player1TimeLeft = time
-            game.player2TimeLeft = time
+            game.gameState.player1TimeLeft = time
+            game.gameState.player2TimeLeft = time
             if (game.player1.playerId === "") {
-                console.log("adding player 1")
                 game.player1.playerId = userId;
                 return game
             }
@@ -66,7 +65,6 @@ function setGamePlayer2(gameId, userId) {
     const game = games.map(game => {
         if (game.gameId === gameId) {
             if (game.player2.playerId === "") {
-                console.log("adding player 2")
                 game.player2.playerId = userId;
                 return game;
             }    

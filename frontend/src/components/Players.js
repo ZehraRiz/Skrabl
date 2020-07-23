@@ -13,7 +13,6 @@ const Players = ({
 	setGameData,
 	setcurrentPlayer
 }) => {
-	let [ isUnavailable, setIsUnvailable ] = useState(false); //pretty useless
 	let [ invite, setInvite ] = useState("");
 
 	socket.on("invite", (data) => {
@@ -43,13 +42,16 @@ const Players = ({
 		setPlayers([ ...players, user ]);
 	});
 
+	socket.on("userLeft", ({user}) => {
+		setPlayers(players.filter(u=> u.id!== user.id))
+	});
+
+
 	const sendInvite = (player) => {
-		setIsUnvailable(false);
 		socket.emit("playerInGame", player);
 
 		socket.on("playerUnavailable", (data) => {
 			if (data === true) {
-				setIsUnvailable(true);
 				setNotification("Player is in another game");
 				return;
 			} else {
