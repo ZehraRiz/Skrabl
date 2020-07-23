@@ -7,7 +7,6 @@ const Timer = ({
   timeLeft,
   setTimeLeft,
   currentPlayer,
-  currentPlayer,
 }) => {
   let interval;
 

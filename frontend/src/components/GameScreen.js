@@ -19,21 +19,24 @@ const GameScreen = ({
   setNotification,
   chat,
   handleSendMessage,
-  setCurrentPlayer,
   setCurrentComponent,
   currentPlayer,
+  gameData,
+  socket
 }) => {
   const [selectedTile, setSelectedTile] = useState(null);
   const [selectedSquareIndex, setSelectedSquareIndex] = useState(null);
-  const [playerRackTiles, setPlayerRackTiles] = useState([]);
+  const [playerRackTiles, setPlayerRackTiles] = useState(currentPlayer===0? gameData.gameState.player1Tiles: gameData.gameState.player1Tiles);
   const [placedTiles, setPlacedTiles] = useState([]);
   const [gameIsOver, setGameIsOver] = useState(false);
   const [confirmMessage, setConfirmMessage] = useState(null);
-  const [boardState, setBoardState] = useState();
-  const [timeLeftPlayer, setTimeLeftPlayer] = useState(1200000);
-  const [timeLeftOpponent, setTimeLeftOpponent] = useState(1200000);
+  const [boardState, setBoardState] = useState(gameData.gameState.boardState);
+  const [timeLeftPlayer, setTimeLeftPlayer] = useState(currentPlayer===0? gameData.gameState. player1TimeLeft: gameData.gameState. player2TimeLeft);
+  const [timeLeftOpponent, setTimeLeftOpponent] = useState(currentPlayer===1? gameData.gameState. player1TimeLeft: gameData.gameState. player2TimeLeft);
   const [scoredWords, setScoredWords] = useState({ 0: [], 1: [] });
   const [scores, setScores] = useState({ 0: 0, 1: 0 });
+  const [turn, setTurn] = useState(gameData.gameState.turn)
+  console.log("turn of "+ turn)
 
   //EFFECTS
 
@@ -65,22 +68,37 @@ const GameScreen = ({
   //*dummy function* - will get tiles from backend
   const getTiles = () => {
     const numTilesNeeded = 7 - playerRackTiles.length;
-    const randomTiles = [];
-    for (let i = 0; i < numTilesNeeded; i++) {
-      randomTiles.push({ id: i, letter: "b", points: i });
-    }
-    setPlayerRackTiles([...playerRackTiles, ...randomTiles]);
+    socket.emit("requestTiles", { gameId: gameData.gameId, numTilesNeeded: numTilesNeeded, player: currentPlayer });
+    socket.on("gameEnded", (data) => console.log(data))
+    socket.on("sendingTiles", (data) => {
+      setPlayerRackTiles([...playerRackTiles, ...data]);
+    })
+    
+    //const numTilesNeeded = 7 - playerRackTiles.length;
+    // const randomTiles = [];
+    // for (let i = 0; i < numTilesNeeded; i++) {
+    //   randomTiles.push({ id: i, letter: "b", points: i });
+    // }
+    // setPlayerRackTiles([...playerRackTiles, ...randomTiles]);
   };
 
   const updateBackend = () => {
-    const currentGameState = {
-      boardState,
-      playerRackTiles,
-    };
-    //send to backend here
+    socket.emit("updateGameState", { gameId: gameData.gameId, boardState:boardState, playerRackTiles: playerRackTiles, player: currentPlayer });
+    socket.on("gameEnded", (data) => console.log(data))
+    socket.on("gameUpdated", (data) => {
+      console.log(data);
+      //sould do setting function here
+    })
+
+    // const currentGameState = {
+    //   boardState,
+    //   playerRackTiles,
+    // };
+    
   };
 
   const updateScores = () => {
+    //BACKEND FUNCION AND NEW TURN?
     const updatedScores = getScoresFromWords(scoredWords);
     setScores(updatedScores);
   };
@@ -122,14 +140,14 @@ const GameScreen = ({
   //EVENT HANDLERS
 
   const handleClickSquare = (square) => {
-    if (currentPlayer !== 0) return;
+    if (currentPlayer !== turn) return;
     if (selectedTile) {
       setSelectedSquareIndex(square.index);
     }
   };
 
   const handleClickPlacedTile = (tileToRemove) => {
-    if (selectedTile || currentPlayer !== 0) return;
+    if (selectedTile || currentPlayer !== turn) return;
 
     if (tileToRemove.player === 0) {
       const updatedBoardState = boardState.map((square) => {
@@ -148,7 +166,7 @@ const GameScreen = ({
   };
 
   const handleClickPass = () => {
-    if (currentPlayer !== 0) return;
+    if (currentPlayer !== turn) return;
     setConfirmMessage({
       type: "pass",
       message: "Are you sure you want to pass?",
@@ -168,8 +186,7 @@ const GameScreen = ({
   };
 
   const handleClickTile = (tile) => {
-    if (currentPlayer !== 0) return;
-
+    if (currentPlayer !== turn) return;
     setSelectedTile(tile);
   };
 
@@ -188,7 +205,7 @@ const GameScreen = ({
   };
 
   const handleClickClearTiles = () => {
-    if (currentPlayer !== 0) return;
+    if (currentPlayer !== turn) return;
     setPlayerRackTiles([...playerRackTiles, ...placedTiles]);
     const placedTilesSquares = placedTiles.map((tile) => tile.square);
 
@@ -206,7 +223,7 @@ const GameScreen = ({
   };
 
   const handleClickConfirmMove = () => {
-    if (currentPlayer !== 0) return;
+    if (currentPlayer !== turn) return;
     if (moveIsValid(placedTiles, boardState)) {
       console.log("move is valid");
       //get array of words formed in turn (objects)
@@ -245,15 +262,19 @@ const GameScreen = ({
   //OTHER
 
   const gameOver = () => {
+    //handle In backend
     setGameIsOver(true);
   };
 
   const exitGame = () => {
+    //handle in backend
     setCurrentComponent("Players");
   };
 
   const nextPlayer = () => {
-    setCurrentPlayer(currentPlayer === 0 ? 1 : 0);
+    //handle in backend
+    console.log("in next player")
+    turn === 0 ? setTurn(1) : setTurn(0);
   };
 
   const closeModal = () => {
@@ -272,6 +293,7 @@ const GameScreen = ({
             setTimeLeftPlayer={setTimeLeftPlayer}
             setTimeLeftOpponent={setTimeLeftOpponent}
             currentPlayer={currentPlayer}
+            
           />
           <Board
             handleClickSquare={handleClickSquare}

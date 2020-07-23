@@ -40,6 +40,13 @@ function isPlayerInGame(userId) {
     return found;
 }
 
+function findGame(gameId){
+    const game = games.find((g) => {
+      return g.gameId === gameId;
+    });
+    return game
+}
+
 function setGamePlayer1(gameId, userId, time) {
     const game = games.map(game => {
         if (game.gameId === gameId) {
@@ -116,7 +123,7 @@ module.exports = {
     getAllGames,
     playerDisconnectFromGame,
     isPlayerInGame,
-    // getCurrentUser,
+    findGame,
     removeGame
     // getRoomUsers
 

@@ -10,7 +10,7 @@ const StatusBar = ({
   setTimeLeftPlayer,
   setTimeLeftOpponent,
   currentPlayer,
-  currentPlayer
+  gameData
 }) => {
   return (
     <div className="statusBar__wrapper">
