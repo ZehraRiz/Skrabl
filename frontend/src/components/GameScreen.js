@@ -68,7 +68,11 @@ const GameScreen = ({
     if (placedTiles.length > 0) {
       getWordsOnBoard();
     }
-	}, [placedTiles]);
+  }, [placedTiles]);
+  
+  useEffect(() => {
+    console.log(tilesToExchange)
+	}, [tilesToExchange]);
 
   useEffect(() => {
     socket.on("sendingTiles", (data) => {
@@ -222,10 +226,8 @@ const GameScreen = ({
     if (boardIsDisabled) {
       if ([...tilesToExchange].filter(item => item.id === tile.id).length === 0) {
         setTilesToExchange([...tilesToExchange, tile]);
-        console.log(tilesToExchange);
       } else {
         setTilesToExchange([...tilesToExchange].filter(item => item.id !== tile.id));
-        console.log(tilesToExchange);
       }
     } else setSelectedTile(tile);
 	};
