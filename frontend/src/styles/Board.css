@@ -62,6 +62,13 @@
   background: purple;
 }
 
+.disabled {
+  filter: grayscale(30%);
+  -webkit-filter: grayscale(30%);
+  opacity: 0.3;
+  pointer-events: none;
+}
+
 /* tablet */
 @media (min-width: 500px) {
   .board__square {

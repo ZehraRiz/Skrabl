@@ -10,6 +10,8 @@ import { generateBoardSquares } from "../utils/generateBoardSquares";
 import { shuffle } from "../utils/shuffle";
 import { moveIsValid } from "../utils/moveIsValid";
 import { squaresAreOccupied } from "../utils/squaresAreOccupied";
+import { calculateWordScore } from "../utils/calculateWordScore";
+import { findWordsOnBoard } from "../utils/findWordsOnBoard";
 import { getScoresFromWords } from "../utils/getScoresFromWords";
 import { bonusSquareIndices } from "../assets/bonusSquareIndices";
 import axios from "axios";
@@ -42,7 +44,8 @@ const GameScreen = ({
 	const [ scoredWords, setScoredWords ] = useState({ 0: [], 1: [] });
 	const [ scores, setScores ] = useState(gameData.gameState.scores);
 	const [ turn, setTurn ] = useState(gameData.gameState.turn);
-
+  
+  const [ isDisabled, setIsDisabled ] = useState(false);
 	//EFFECTS
 
 	useEffect(() => {
@@ -58,7 +61,13 @@ const GameScreen = ({
 			placeTile();
 		},
 		[ selectedSquareIndex ]
-	);
+  );
+  
+  useEffect(() => {
+    if (placedTiles.length > 0) {
+      getWordsOnBoard();
+    }
+	}, [placedTiles]);
 
   useEffect(() => {
     socket.on("sendingTiles", (data) => {
@@ -93,6 +102,16 @@ const GameScreen = ({
 		const squares = generateBoardSquares(bonusSquareIndices);
 		setBoardState([ ...squares ]);
 	};
+
+
+  const getWordsOnBoard = () => {
+    const words = findWordsOnBoard(boardState);
+    console.log('Words:');
+    console.log(words);
+    //console.log('PlacedTiles:');
+    //if (placedTiles) console.log(...placedTiles);
+    //console.log('words: ' +  ...words);
+  }
 
 	//*dummy function* - will get tiles from backend
 	const getTiles = () => {
@@ -144,7 +163,9 @@ const GameScreen = ({
 			setPlacedTiles([ ...placedTiles, { ...selectedTile, square: selectedSquareIndex } ]);
 			setPlayerRackTiles([ ...playerRackTiles.filter((tile) => tile.id !== selectedTile.id) ]);
 			setSelectedTile(null);
-			setSelectedSquareIndex(null);
+      setSelectedSquareIndex(null);
+      console.log('Placed tiles: ');
+      console.log(placedTiles);
 		}
 	};
 
@@ -214,7 +235,9 @@ const GameScreen = ({
 	};
 
 	const handleClickExchangeTiles = () => {
-		console.log("exhange tiles");
+    setIsDisabled(!isDisabled);
+
+		console.log('disabled? ' + isDisabled);
 	};
 
 	const handleClickClearTiles = () => {
@@ -302,7 +325,8 @@ const GameScreen = ({
 					<Board
 						handleClickSquare={handleClickSquare}
 						handleClickPlacedTile={handleClickPlacedTile}
-						boardState={boardState}
+            boardState={boardState}
+            isDisabled={isDisabled}
 					/>
 					<TileRack playerRackTiles={playerRackTiles} handleClickTile={handleClickTile} />
 					<GameButtons

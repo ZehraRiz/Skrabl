@@ -16,10 +16,10 @@ const getBonusClassName = (square) => {
   return bonusClassName;
 };
 
-const Board = ({ handleClickSquare, handleClickPlacedTile, boardState }) => {
+const Board = ({ handleClickSquare, handleClickPlacedTile, boardState, isDisabled }) => {
   return (
     <div className="board__wrapper">
-      <div className="board__board">
+      <div className={'board__board ' + (isDisabled ? 'disabled' : '')}>
         {boardState &&
           boardState.length > 0 &&
           boardState.map((square, index) => {
