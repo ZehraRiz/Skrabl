@@ -2,6 +2,7 @@ import React from "react";
 import "../styles/Login.css";
 
 const Login = ({ setCurrentComponent, setUser, socket, setPlayers }) => {
+  
   const handleLogin = (e) => {
     e.preventDefault();
     const name = e.target.name.value;
@@ -12,25 +13,24 @@ const Login = ({ setCurrentComponent, setUser, socket, setPlayers }) => {
     });
     socket.on("usernameRegistered", (data) => {
       const user = data.user;
-      //set in ls
-      setUser(user)
-      setPlayers(data.allOnlineUsers)
+      // localStorage.setItem("userId", data.user.id)
+      setUser(user);
+      setPlayers(data.allOnlineUsers);
       setCurrentComponent("Players");
-  });
-    
-    e.target.reset();
-  };
+    });
 
-  return (
-    <div className="login__wrapper">
-      <h2>Login</h2>
-      <form onSubmit={handleLogin}>
-        <label htmlFor="name">Your name:</label>
-        <input type="text" id="name" />
-        <button type="submit">Go</button>
-      </form>
-    </div>
-  );
+    e.target.reset();
+  }
+		return (
+			<div className="login__wrapper">
+				<h2>Login</h2>
+				<form onSubmit={handleLogin}>
+					<label htmlFor="name">Your name:</label>
+					<input type="text" id="name" />
+					<button type="submit">Go</button>
+				</form>
+			</div>
+		);
 };
 
 export default Login;

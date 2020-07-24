@@ -7,26 +7,25 @@ const Timer = ({
   timeLeft,
   setTimeLeft,
   currentPlayer,
-  playerIndex,
 }) => {
   let interval;
 
-  useEffect(() => {
-    if (currentPlayer === playerIndex) {
-      interval = setInterval(() => {
-        setTimeLeft(timeLeft - 1000);
-      }, 1000);
+  // useEffect(() => {
+  //   if (currentPlayer === currentPlayer) {
+  //     interval = setInterval(() => {
+  //       setTimeLeft(timeLeft - 1000);
+  //     }, 1000);
 
-      return () => clearInterval(interval);
-    }
-  }, [timeLeft, currentPlayer]);
+  //     return () => clearInterval(interval);
+  //   }
+  // }, [timeLeft, currentPlayer]);
 
-  useEffect(() => {
-    if (timeLeft === 0) {
-      clearInterval(interval);
-      setNotification("Time's up");
-    }
-  }, [timeLeft]);
+  // useEffect(() => {
+  //   if (timeLeft === 0) {
+  //     clearInterval(interval);
+  //     setNotification("Time's up");
+  //   }
+  // }, [timeLeft]);
 
   return (
     <div className="timer__wrapper">
