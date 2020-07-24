@@ -47,21 +47,6 @@ const GameScreen = ({
 
 	//EFFECTS
 
-	useEffect(() => {
-		getBoard();
-	}, []);
-
-	useEffect(() => {
-		updateScores();
-	}, []);
-
-	useEffect(
-		() => {
-			placeTile();
-		},
-		[ selectedSquareIndex ]
-	);
-
   useEffect(() => {
     getBoard();
   }, []);
