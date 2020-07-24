@@ -61,7 +61,13 @@ const GameScreen = ({
 			placeTile();
 		},
 		[ selectedSquareIndex ]
-	);
+  );
+  
+  useEffect(() => {
+    if (placedTiles.length > 0) {
+      getWordsOnBoard();
+    }
+	}, [placedTiles]);
 
   useEffect(() => {
     socket.on("sendingTiles", (data) => {
@@ -160,7 +166,6 @@ const GameScreen = ({
       setSelectedSquareIndex(null);
       console.log('Placed tiles: ');
       console.log(placedTiles);
-      getWordsOnBoard();
 		}
 	};
 
