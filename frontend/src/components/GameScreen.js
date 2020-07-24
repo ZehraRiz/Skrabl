@@ -11,6 +11,8 @@ import { shuffle } from "../utils/shuffle";
 import { moveIsValid } from "../utils/moveIsValid";
 import { squaresAreOccupied } from "../utils/squaresAreOccupied";
 import { getScoresFromWords } from "../utils/getScoresFromWords";
+import { calculateWordScore } from "../utils/calculateWordScore";
+import { findWordsOnBoard } from "../utils/findWordsOnBoard";
 import { bonusSquareIndices } from "../assets/bonusSquareIndices";
 import axios from "axios";
 import "../styles/GameScreen.css";
@@ -62,6 +64,15 @@ const GameScreen = ({
     setBoardState([...squares]);
   };
 
+  const getWordsOnBoard = () => {
+    const words = findWordsOnBoard(boardState);
+    console.log('Words:');
+    console.log(words);
+    //console.log('PlacedTiles:');
+    //if (placedTiles) console.log(...placedTiles);
+    //console.log('words: ' +  ...words);
+  }
+
   //*dummy function* - will get tiles from backend
   const getTiles = () => {
     const numTilesNeeded = 7 - playerRackTiles.length;
@@ -106,16 +117,19 @@ const GameScreen = ({
           return square;
         }
       });
-      setBoardState(updatedBoardState);
+      
       setPlacedTiles([
         ...placedTiles,
         { ...selectedTile, square: selectedSquareIndex },
       ]);
+      setBoardState(updatedBoardState);
+      
       setPlayerRackTiles([
         ...playerRackTiles.filter((tile) => tile.id !== selectedTile.id),
       ]);
       setSelectedTile(null);
       setSelectedSquareIndex(null);
+      getWordsOnBoard(boardState);
     }
   };
 
