@@ -17,7 +17,6 @@ const App = () => {
 	const [ invitedPlayer, setInvitedPlayer ] = useState(null);
 	const [ gameId, setGameId ] = useState("");
 	const [ gameData, setGameData ] = useState(null);
-	const [ chat, setChat ] = useState([]);
 	const [ currentPlayer, setcurrentPlayer ] = useState(); // 0 means he was the host and his data is stored as player1 at the backend. 1 means he is player2
 	// useEffect(() => {
 	// 	const userIdFromLS = localStorage.getItem("userId");
@@ -42,14 +41,6 @@ const App = () => {
 
 	const handleCloseNotificationModal = () => {
 		setNotification(null);
-	};
-
-	const handleSendMessage = (e) => {
-		e.preventDefault();
-		const newMessage = e.target.message.value;
-		setChat([ ...chat, newMessage ]);
-		//emit message to backend here
-		e.target.reset();
 	};
 
 	return (
@@ -92,8 +83,6 @@ const App = () => {
 			{currentComponent === "GameScreen" && (
 				<GameScreen
 					setNotification={setNotification}
-					handleSendMessage={handleSendMessage}
-					chat={chat}
 					setCurrentComponent={setCurrentComponent}
 					setcurrentPlayer={setcurrentPlayer}
 					currentPlayer={currentPlayer}

@@ -24,6 +24,16 @@
   margin: 0.2rem 0;
 }
 
+.guest {
+  color: red ;
+  font-size: 8px;
+}
+
+.host {
+  color: blue;
+  font-size: 8px;
+}
+
 /* tablet */
 @media (min-width: 500px) {
 }
