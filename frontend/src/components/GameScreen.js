@@ -4,6 +4,7 @@ import TileRack from "./TileRack";
 import StatusBar from "./StatusBar";
 import Chat from "./Chat";
 import GameButtons from "./GameButtons";
+import ExchangeTilesButtons from "./ExchangeTilesButtons";
 import ConfirmModal from "./ConfirmModal";
 import GameOverModal from "./GameOverModal";
 import { generateBoardSquares } from "../utils/generateBoardSquares";
@@ -26,7 +27,7 @@ const GameScreen = ({
 	gameData,
 	socket
 }) => {
-	const [ selectedTile, setSelectedTile ] = useState(null);
+  const [ selectedTile, setSelectedTile ] = useState(null);
 	const [ selectedSquareIndex, setSelectedSquareIndex ] = useState(null);
 	const [ playerRackTiles, setPlayerRackTiles ] = useState(
 		currentPlayer === 0 ? gameData.gameState.player1Tiles : gameData.gameState.player1Tiles
@@ -44,8 +45,8 @@ const GameScreen = ({
 	const [ scoredWords, setScoredWords ] = useState({ 0: [], 1: [] });
 	const [ scores, setScores ] = useState(gameData.gameState.scores);
 	const [ turn, setTurn ] = useState(gameData.gameState.turn);
-  
-  const [ isDisabled, setIsDisabled ] = useState(false);
+  const [ tilesToExchange, setTilesToExchange ] = useState([]);
+  const [ boardIsDisabled, setBoardIsDisabled ] = useState(false);
 	//EFFECTS
 
 	useEffect(() => {
@@ -67,7 +68,11 @@ const GameScreen = ({
     if (placedTiles.length > 0) {
       getWordsOnBoard();
     }
-	}, [placedTiles]);
+  }, [placedTiles]);
+  
+  useEffect(() => {
+    console.log(tilesToExchange)
+	}, [tilesToExchange]);
 
   useEffect(() => {
     socket.on("sendingTiles", (data) => {
@@ -108,9 +113,6 @@ const GameScreen = ({
     const words = findWordsOnBoard(boardState);
     console.log('Words:');
     console.log(words);
-    //console.log('PlacedTiles:');
-    //if (placedTiles) console.log(...placedTiles);
-    //console.log('words: ' +  ...words);
   }
 
 	//*dummy function* - will get tiles from backend
@@ -220,8 +222,14 @@ const GameScreen = ({
 	};
 
 	const handleClickTile = (tile) => {
-		if (currentPlayer !== turn) return;
-		setSelectedTile(tile);
+    if (currentPlayer !== turn) return;
+    if (boardIsDisabled) {
+      if ([...tilesToExchange].filter(item => item.id === tile.id).length === 0) {
+        setTilesToExchange([...tilesToExchange, tile]);
+      } else {
+        setTilesToExchange([...tilesToExchange].filter(item => item.id !== tile.id));
+      }
+    } else setSelectedTile(tile);
 	};
 
 	const handleResign = () => {
@@ -235,10 +243,18 @@ const GameScreen = ({
 	};
 
 	const handleClickExchangeTiles = () => {
-    setIsDisabled(!isDisabled);
+    setBoardIsDisabled(!boardIsDisabled);
+		console.log('disabled? ' + boardIsDisabled);
+  };
+  
+  const handleCancelExchange = () => {
+    setTilesToExchange([]);
+    setBoardIsDisabled(!boardIsDisabled);
+  }
 
-		console.log('disabled? ' + isDisabled);
-	};
+  const handleConfirmExchange = () => {
+    
+  }
 
 	const handleClickClearTiles = () => {
 		if (currentPlayer !== turn) return;
@@ -326,18 +342,26 @@ const GameScreen = ({
 						handleClickSquare={handleClickSquare}
 						handleClickPlacedTile={handleClickPlacedTile}
             boardState={boardState}
-            isDisabled={isDisabled}
+            isDisabled={boardIsDisabled}
 					/>
 					<TileRack playerRackTiles={playerRackTiles} handleClickTile={handleClickTile} />
-					<GameButtons
-						getTiles={getTiles}
-						handleClickClearTiles={handleClickClearTiles}
-						handleClickShuffle={handleClickShuffle}
-						handleClickConfirmMove={handleClickConfirmMove}
-						handleClickResign={handleClickResign}
-						handleClickPass={handleClickPass}
-						handleClickExchangeTiles={handleClickExchangeTiles}
-					/>
+					{!boardIsDisabled && 
+            <GameButtons
+              getTiles={getTiles}
+              handleClickClearTiles={handleClickClearTiles}
+              handleClickShuffle={handleClickShuffle}
+              handleClickConfirmMove={handleClickConfirmMove}
+              handleClickResign={handleClickResign}
+              handleClickPass={handleClickPass}
+              handleClickExchangeTiles={handleClickExchangeTiles}
+            />
+          }
+          {boardIsDisabled && 
+            <ExchangeTilesButtons
+              handleCancelExchange={handleCancelExchange}
+              handleConfirmExchange={handleConfirmExchange}
+            />
+          }
 				</div>
 			</div>
 			<Chat chat={chat} handleSendMessage={handleSendMessage} />

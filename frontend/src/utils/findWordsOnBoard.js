@@ -14,7 +14,6 @@ export const findWordsOnBoard = (boardState) => {
                 if (wordStart !== ''){                          // tests if word is already being recorded
                     if (letters.length > 1) {
                         words.push({word: letters.join(''), start: wordStart, dir: dir});     // captures word
-                        console.log(words);
                     }
                 }
                 wordStart = '';       // ends recording of word
