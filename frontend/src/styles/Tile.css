@@ -13,6 +13,11 @@
 
 .tile__wrapper:hover {
   background: #fff652;
+  /*box-shadow: inset 0 0 5px  white;*/
+}
+
+.tile__wrapper--selected {
+  background: #fff652;
 }
 
 .tile__letter {

@@ -5,3 +5,6 @@ import { letterValues } from "../assets/letterValues";
 
 
 
+export const calculateWordScore = () => {
+    return 'SCORE';
+}
