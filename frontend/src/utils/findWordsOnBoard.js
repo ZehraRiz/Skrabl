@@ -31,6 +31,7 @@ export const findWordsOnBoard = (boardState) => {
     }
 
     // Scan all columns for words down
+    dir = 'down';
     for (var col = 0; col < 15; col++) {
         for (var row = 0; row < 15; row++) { 
             var currentSquare = boardState[col + ((row * 15))];
