@@ -220,8 +220,13 @@ const GameScreen = ({
 	const handleClickTile = (tile) => {
     if (currentPlayer !== turn) return;
     if (boardIsDisabled) {
-      setTilesToExchange([...tilesToExchange, tile]);
-      console.log(tilesToExchange);
+      if ([...tilesToExchange].filter(item => item.id === tile.id).length === 0) {
+        setTilesToExchange([...tilesToExchange, tile]);
+        console.log(tilesToExchange);
+      } else {
+        setTilesToExchange([...tilesToExchange].filter(item => item.id !== tile.id));
+        console.log(tilesToExchange);
+      }
     } else setSelectedTile(tile);
 	};
 
