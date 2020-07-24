@@ -10,9 +10,9 @@ import { generateBoardSquares } from "../utils/generateBoardSquares";
 import { shuffle } from "../utils/shuffle";
 import { moveIsValid } from "../utils/moveIsValid";
 import { squaresAreOccupied } from "../utils/squaresAreOccupied";
-import { getScoresFromWords } from "../utils/getScoresFromWords";
 import { calculateWordScore } from "../utils/calculateWordScore";
 import { findWordsOnBoard } from "../utils/findWordsOnBoard";
+import { getScoresFromWords } from "../utils/getScoresFromWords";
 import { bonusSquareIndices } from "../assets/bonusSquareIndices";
 import axios from "axios";
 import "../styles/GameScreen.css";
@@ -47,133 +47,25 @@ const GameScreen = ({
 
 	//EFFECTS
 
-  useEffect(() => {
-    getBoard();
-  }, []);
+	useEffect(() => {
+		getBoard();
+	}, []);
+
+	useEffect(() => {
+		updateScores();
+	}, []);
+
+	useEffect(
+		() => {
+			placeTile();
+		},
+		[ selectedSquareIndex ]
+	);
 
   useEffect(() => {
-    getTiles();
-  }, []);
-
-  useEffect(() => {
-    updateBackend();
-  }, [currentPlayer]);
-
-  useEffect(() => {
-    updateScores();
-  }, [scoredWords]);
-
-  useEffect(() => {
-    placeTile();
-  }, [selectedSquareIndex]);
-
-  const getBoard = () => {
-    const squares = generateBoardSquares(bonusSquareIndices);
-    setBoardState([...squares]);
-  };
-
-  const getWordsOnBoard = () => {
-    const words = findWordsOnBoard(boardState);
-    console.log('Words:');
-    console.log(words);
-    //console.log('PlacedTiles:');
-    //if (placedTiles) console.log(...placedTiles);
-    //console.log('words: ' +  ...words);
-  }
-
-  //*dummy function* - will get tiles from backend
-  const getTiles = () => {
-    const numTilesNeeded = 7 - playerRackTiles.length;
-    const randomTiles = [];
-    for (let i = 0; i < numTilesNeeded; i++) {
-      randomTiles.push({ id: i, letter: "b", points: i });
-    }
-    setPlayerRackTiles([...playerRackTiles, ...randomTiles]);
-  };
-
-  const updateBackend = () => {
-    const currentGameState = {
-      boardState,
-      playerRackTiles,
-    };
-    //send to backend here
-  };
-
-  const updateScores = () => {
-    const updatedScores = getScoresFromWords(scoredWords);
-    setScores(updatedScores);
-  };
-
-  const placeTile = () => {
-    if (selectedSquareIndex !== null) {
-      const squareIsOccupied = squaresAreOccupied(
-        [selectedSquareIndex],
-        boardState
-      );
-      if (squareIsOccupied) {
-        return;
-      }
-      const tileToAdd = {
-        ...selectedTile,
-        square: selectedSquareIndex,
-        player: 0,
-      };
-      const updatedBoardState = boardState.map((square) => {
-        if (square.index === selectedSquareIndex) {
-          return { ...square, tile: tileToAdd };
-        } else {
-          return square;
-        }
-      });
-      
-      setPlacedTiles([
-        ...placedTiles,
-        { ...selectedTile, square: selectedSquareIndex },
-      ]);
-      setBoardState(updatedBoardState);
-      
-      setPlayerRackTiles([
-        ...playerRackTiles.filter((tile) => tile.id !== selectedTile.id),
-      ]);
-      setSelectedTile(null);
-      setSelectedSquareIndex(null);
-      getWordsOnBoard(boardState);
-    }
-  };
-
-  //EVENT HANDLERS
-
-  const handleClickSquare = (square) => {
-    if (currentPlayer !== 0) return;
-    if (selectedTile) {
-      setSelectedSquareIndex(square.index);
-    }
-  };
-
-  const handleClickPlacedTile = (tileToRemove) => {
-    if (selectedTile || currentPlayer !== 0) return;
-
-    if (tileToRemove.player === 0) {
-      const updatedBoardState = boardState.map((square) => {
-        if (square.tile && square.tile.square === tileToRemove.square) {
-          return { ...square, tile: null };
-        } else {
-          return square;
-        }
-      });
-      setBoardState(updatedBoardState);
-      setPlacedTiles(
-        placedTiles.filter((tile) => tile.square !== tileToRemove.square)
-      );
-      setPlayerRackTiles([...playerRackTiles, tileToRemove]);
-    }
-  };
-
-  const handleClickPass = () => {
-    if (currentPlayer !== 0) return;
-    setConfirmMessage({
-      type: "pass",
-      message: "Are you sure you want to pass?",
+    socket.on("sendingTiles", (data) => {
+      setPlayerRackTiles([...playerRackTiles, ...data]);
+      //here currentRackTiles are always 7
     });
 
   
@@ -203,6 +95,16 @@ const GameScreen = ({
 		const squares = generateBoardSquares(bonusSquareIndices);
 		setBoardState([ ...squares ]);
 	};
+
+
+  const getWordsOnBoard = () => {
+    const words = findWordsOnBoard(boardState);
+    console.log('Words:');
+    console.log(words);
+    //console.log('PlacedTiles:');
+    //if (placedTiles) console.log(...placedTiles);
+    //console.log('words: ' +  ...words);
+  }
 
 	//*dummy function* - will get tiles from backend
 	const getTiles = () => {
@@ -254,7 +156,8 @@ const GameScreen = ({
 			setPlacedTiles([ ...placedTiles, { ...selectedTile, square: selectedSquareIndex } ]);
 			setPlayerRackTiles([ ...playerRackTiles.filter((tile) => tile.id !== selectedTile.id) ]);
 			setSelectedTile(null);
-			setSelectedSquareIndex(null);
+      setSelectedSquareIndex(null);
+      getWordsOnBoard();
 		}
 	};
 
