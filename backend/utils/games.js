@@ -61,6 +61,8 @@ function setGamePlayer1(gameId, userId, time) {
     }); return game
 }
 
+
+
 function setGamePlayer2(gameId, userId) {
     const game = games.map(game => {
         if (game.gameId === gameId) {
@@ -91,7 +93,6 @@ function playerDisconnectFromGame(id) {
         
     })
     games = gamesWithoutUser;
-
     return g;
 }
 
@@ -122,7 +123,7 @@ module.exports = {
     playerDisconnectFromGame,
     isPlayerInGame,
     findGame,
-    removeGame
+    removeGame,
     // getRoomUsers
 
 }

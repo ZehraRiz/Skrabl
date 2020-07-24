@@ -8,6 +8,8 @@ const io = socketIO(server);
 require("dotenv").config();
 const axios = require("axios");
 const cors = require("cors");
+const moment = require('moment');
+let now = moment();
 
 app.use(express.json());
 app.use(cors());
@@ -26,7 +28,8 @@ const {
   playerDisconnectFromGame,
   removeGame,
   isPlayerInGame,
-  findGame
+  findGame,
+  getPlayerNumber
 } = require("./utils/games.js");
 
 const games = getAllGames();
@@ -199,16 +202,30 @@ io.on("connection", (socket) => {
     }
   })
 
-    socket.on("gameOver", (gameId) => {
+  socket.on("sendMsg", ({  gameId, currentPlayer, newMessage }) => {
     const game = findGame(gameId);
-      if (!game) { return; }
+      if (!game) { socket.emit("gameEnded", "The game has ended"); return; }
+      const user = getCurrentUser(socket.id);
+      if (!user) { socket.emit("opponentLeft", "The opponent has left the game"); return; }
+      const msgObject = {
+        playerFromBackend: currentPlayer,
+        playerName: user.name,
+        msg: newMessage,
+        date: now.format("h:mm:ss a")
+      }
+      io.in(gameId).emit("recieveMsg", msgObject) //also return time here
+    })
+  
+  //
+       socket.on("gameOver", (gameId) => {
+    const game = findGame(gameId);
+      if (!game) { socket.emit("gameEnded", "The game has ended"); return; }
       else {
         game.gameState.isOver = true;
         removeGame(gameId)
         io.in(gameId).emit("gameEnd", game)
       }
     })
-  
 
 
   //disconnects

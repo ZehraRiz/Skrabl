@@ -17,8 +17,6 @@ import "../styles/GameScreen.css";
 
 const GameScreen = ({
 	setNotification,
-	chat,
-	handleSendMessage,
 	setCurrentComponent,
 	currentPlayer,
 	gameData,
@@ -316,7 +314,7 @@ const GameScreen = ({
 					/>
 				</div>
 			</div>
-			<Chat chat={chat} handleSendMessage={handleSendMessage} />
+			<Chat gameId={gameData.gameId} currentPlayer={currentPlayer} socket={socket}/>
 			{gameIsOver && <GameOverModal scores={scores} scoredWords={scoredWords} exitGame={exitGame} />}
 			{confirmMessage && (
 				<ConfirmModal
