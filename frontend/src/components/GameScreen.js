@@ -44,7 +44,8 @@ const GameScreen = ({
 	const [ scoredWords, setScoredWords ] = useState({ 0: [], 1: [] });
 	const [ scores, setScores ] = useState(gameData.gameState.scores);
 	const [ turn, setTurn ] = useState(gameData.gameState.turn);
-
+  
+  const [ isDisabled, setIsDisabled ] = useState(false);
 	//EFFECTS
 
 	useEffect(() => {
@@ -157,6 +158,8 @@ const GameScreen = ({
 			setPlayerRackTiles([ ...playerRackTiles.filter((tile) => tile.id !== selectedTile.id) ]);
 			setSelectedTile(null);
       setSelectedSquareIndex(null);
+      console.log('Placed tiles: ');
+      console.log(placedTiles);
       getWordsOnBoard();
 		}
 	};
@@ -227,7 +230,9 @@ const GameScreen = ({
 	};
 
 	const handleClickExchangeTiles = () => {
-		console.log("exhange tiles");
+    setIsDisabled(!isDisabled);
+
+		console.log('disabled? ' + isDisabled);
 	};
 
 	const handleClickClearTiles = () => {
@@ -315,7 +320,8 @@ const GameScreen = ({
 					<Board
 						handleClickSquare={handleClickSquare}
 						handleClickPlacedTile={handleClickPlacedTile}
-						boardState={boardState}
+            boardState={boardState}
+            isDisabled={isDisabled}
 					/>
 					<TileRack playerRackTiles={playerRackTiles} handleClickTile={handleClickTile} />
 					<GameButtons
