@@ -45,6 +45,11 @@ const GameScreen = ({
 	const [ turn, setTurn ] = useState(gameData.gameState.turn);
   const [ tilesToExchange, setTilesToExchange ] = useState([]);
   const [ boardIsDisabled, setBoardIsDisabled ] = useState(false);
+  const [ wordsOnBoard, setWordsOnBoard ] = useState([]);
+  const [consecutivePasses, setConsecutivePasses] = useState(gameData.gameState.consecutivePasses);
+
+
+
 	//EFFECTS
 
 	useEffect(() => {
@@ -66,12 +71,24 @@ const GameScreen = ({
     if (placedTiles.length > 0) {
       getWordsOnBoard();
     }
+    console.log('placedTiles: ', placedTiles );
   }, [placedTiles]);
-  
-  useEffect(() => {
-    console.log(tilesToExchange)
-	}, [tilesToExchange]);
 
+  useEffect(() => {
+    console.log('wordsOnBoard: ', wordsOnBoard);
+    var score = calculateWordScore(wordsOnBoard);
+    console.log('score: ', score );
+  }, [wordsOnBoard]);
+
+  useEffect(() => {
+    console.log('tilesToExchange: ', tilesToExchange)
+  }, [tilesToExchange]);
+
+  useEffect(() => {
+    console.log("consecutivePasses: ", consecutivePasses);
+  }, [consecutivePasses]);
+  
+  
   useEffect(() => {
     socket.on("sendingTiles", (data) => {
       setPlayerRackTiles([...playerRackTiles, ...data]);
@@ -106,11 +123,9 @@ const GameScreen = ({
 		setBoardState([ ...squares ]);
 	};
 
-
   const getWordsOnBoard = () => {
     const words = findWordsOnBoard(boardState);
-    console.log('Words:');
-    console.log(words);
+    setWordsOnBoard([...words]);
   }
 
 	//*dummy function* - will get tiles from backend
@@ -131,7 +146,8 @@ const GameScreen = ({
 			boardState: boardState,
 			playerRackTiles: playerRackTiles,
 			player: currentPlayer,
-			scores: scores
+			scores: scores,
+			consecutivePasses: consecutivePasses
 		});
 	};
 
@@ -164,8 +180,6 @@ const GameScreen = ({
 			setPlayerRackTiles([ ...playerRackTiles.filter((tile) => tile.id !== selectedTile.id) ]);
 			setSelectedTile(null);
       setSelectedSquareIndex(null);
-      console.log('Placed tiles: ');
-      console.log(placedTiles);
 		}
 	};
 
@@ -183,7 +197,6 @@ const GameScreen = ({
 
 	const handleClickPlacedTile = (tileToRemove) => {
 		if (selectedTile === 0 || currentPlayer !== turn) return;
-
 		if (tileToRemove.player === 0) {
 			const updatedBoardState = boardState.map((square) => {
 				if (square.tile && square.tile.square === tileToRemove.square) {
@@ -236,6 +249,7 @@ const GameScreen = ({
 	};
 
 	const handlePass = () => {
+		setConsecutivePasses(consecutivePasses + 1);
 		closeModal();
 		nextPlayer();
 	};
@@ -251,7 +265,7 @@ const GameScreen = ({
   }
 
   const handleConfirmExchange = () => {
-    
+	  // send tilesToExchange to backend, return new tiles
   }
 
 	const handleClickClearTiles = () => {
@@ -291,6 +305,7 @@ const GameScreen = ({
 						...scoredWords,
 						[currentPlayer]: [ ...scoredWords[currentPlayer], ...formedWords ]
 					};
+					setConsecutivePasses(0);
 					setScoredWords(updatedScoredWords);
 					//*scores are updated automatically
 					nextPlayer();
