@@ -43,11 +43,12 @@ const GameScreen = ({
 	const [ scoredWords, setScoredWords ] = useState({ 0: [], 1: [] });
 	const [ scores, setScores ] = useState(gameData.gameState.scores);
 	const [ turn, setTurn ] = useState(gameData.gameState.turn);
-  const [ tilesToExchange, setTilesToExchange ] = useState([]);
-  const [ boardIsDisabled, setBoardIsDisabled ] = useState(false);
-  const [ wordsOnBoard, setWordsOnBoard ] = useState([]);
-  const [consecutivePasses, setConsecutivePasses] = useState(gameData.gameState.consecutivePasses);
-
+  	const [ tilesToExchange, setTilesToExchange ] = useState([]);
+	const [ boardIsDisabled, setBoardIsDisabled ] = useState(false);
+	const [ wordsOnBoard, setWordsOnBoard ] = useState([]);
+	const [consecutivePasses, setConsecutivePasses] = useState(gameData.gameState.consecutivePasses);
+	const pouch = gameData.gameState.pouch; 
+	
 
 
 	//EFFECTS
@@ -85,24 +86,28 @@ const GameScreen = ({
   }, [tilesToExchange]);
 
   useEffect(() => {
-    console.log("consecutivePasses: ", consecutivePasses);
+	console.log("consecutivePasses: ", consecutivePasses);
+	if (consecutivePasses > 5 || (consecutivePasses > 1 && pouch.length === 0 )){  // game ends if players pass six turns in a row, or pass twice when there are no tiles left in pouch
+		// end game
+		console.log('END GAME');
+	} 
   }, [consecutivePasses]);
   
   
-  useEffect(() => {
-    socket.on("sendingTiles", (data) => {
-      setPlayerRackTiles([...playerRackTiles, ...data]);
-      //here currentRackTiles are always 7
-    });
+	useEffect(() => {
+		socket.on("sendingTiles", (data) => {
+			setPlayerRackTiles([...playerRackTiles, ...data]);
+			//here currentRackTiles are always 7
+		});
 
-  
-    socket.on("gameEnd", (data) => {
-      console.log(data);
-      //redirect to players screen or show who won
-      console.log("the game has ended");
-      exitGame();
-    })
-      
+	
+		socket.on("gameEnd", (data) => {
+			console.log(data);
+			//redirect to players screen or show who won
+			console.log("the game has ended");
+			exitGame();
+		})
+		
 		socket.on("gameUpdated", (data) => {
 			console.log(data);
 			setGameIsOver(data.gameState.isOver);
@@ -115,6 +120,7 @@ const GameScreen = ({
 			);
 			setScores(data.gameState.scores);
 			setTurn(data.gameState.turn);
+			setConsecutivePasses(data.gameState.consecutivePasses);
 		});
 	}, []);
 
@@ -123,10 +129,10 @@ const GameScreen = ({
 		setBoardState([ ...squares ]);
 	};
 
-  const getWordsOnBoard = () => {
-    const words = findWordsOnBoard(boardState);
-    setWordsOnBoard([...words]);
-  }
+	const getWordsOnBoard = () => {
+		const words = findWordsOnBoard(boardState);
+		setWordsOnBoard([...words]);
+	}
 
 	//*dummy function* - will get tiles from backend
 	const getTiles = () => {
@@ -179,7 +185,7 @@ const GameScreen = ({
 			setPlacedTiles([ ...placedTiles, { ...selectedTile, square: selectedSquareIndex } ]);
 			setPlayerRackTiles([ ...playerRackTiles.filter((tile) => tile.id !== selectedTile.id) ]);
 			setSelectedTile(null);
-      setSelectedSquareIndex(null);
+      		setSelectedSquareIndex(null);
 		}
 	};
 
@@ -249,8 +255,8 @@ const GameScreen = ({
 	};
 
 	const handlePass = () => {
-		setConsecutivePasses(consecutivePasses + 1);
 		closeModal();
+		setConsecutivePasses(consecutivePasses + 1);  
 		nextPlayer();
 	};
 
@@ -305,10 +311,12 @@ const GameScreen = ({
 						...scoredWords,
 						[currentPlayer]: [ ...scoredWords[currentPlayer], ...formedWords ]
 					};
-					setConsecutivePasses(0);
-					setScoredWords(updatedScoredWords);
+					
 					//*scores are updated automatically
+					setScoredWords(updatedScoredWords);
+					setConsecutivePasses(0);  
 					nextPlayer();
+
 					return;
 				} else {
 					setNotification("Don't make up words!");
