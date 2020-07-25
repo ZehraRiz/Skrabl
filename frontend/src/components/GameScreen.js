@@ -83,6 +83,10 @@ const GameScreen = ({
   useEffect(() => {
     console.log('tilesToExchange: ', tilesToExchange)
   }, [tilesToExchange]);
+
+  useEffect(() => {
+    console.log("consecutivePasses: ", consecutivePasses);
+  }, [consecutivePasses]);
   
   
   useEffect(() => {
