@@ -15,6 +15,8 @@ const {
   findGame,
   getPlayerNumber
 } = require("../utils/games.js");
+const moment = require('moment');
+let now = moment();
 
 const games = getAllGames();
 
