@@ -8,12 +8,10 @@ export const findWordsOnBoard = (boardState) => {
     const checkSquare = (dir, x, y) => {
         let [row, col] = dir === 'across' ? [x, y] : [y, x];
         var currentSquare = boardState[col + ((row * 15))];
-        
+
         if (!currentSquare.hasOwnProperty('tile')) {  
-            if (wordStart !== ''){                         
-                if (letters.length > 1) {
-                    words.push({word: letters.join(''), start: wordStart, dir: dir});     
-                }
+            if (wordStart !== '' && letters.length > 1){                         
+                words.push({word: letters.join(''), start: wordStart, dir: dir});
             }
             wordStart = ''; 
             letters = [];
