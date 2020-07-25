@@ -256,7 +256,7 @@ const GameScreen = ({
 
 	const handlePass = () => {
 		closeModal();
-		setConsecutivePasses(consecutivePasses + 1);
+		//setConsecutivePasses(consecutivePasses + 1);
 		nextPlayer(1);
 	};
 
