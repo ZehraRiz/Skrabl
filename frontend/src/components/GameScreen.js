@@ -314,8 +314,7 @@ const GameScreen = ({
 					
 					//*scores are updated automatically
 					setScoredWords(updatedScoredWords);
-					setConsecutivePasses(0);  
-					nextPlayer();
+					nextPlayer(consecutivePasses * -1);  // resets consecutivePasses by deducting it from itself
 
 					return;
 				} else {
