@@ -43,10 +43,11 @@ const GameScreen = ({
 	const [ scoredWords, setScoredWords ] = useState({ 0: [], 1: [] });
 	const [ scores, setScores ] = useState(gameData.gameState.scores);
 	const [ turn, setTurn ] = useState(gameData.gameState.turn);
-  const [ tilesToExchange, setTilesToExchange ] = useState([]);
-  const [ boardIsDisabled, setBoardIsDisabled ] = useState(false);
-  const [ wordsOnBoard, setWordsOnBoard ] = useState([]);
-  const [consecutivePasses, setConsecutivePasses] = useState(gameData.gameState.consecutivePasses);
+  	const [ tilesToExchange, setTilesToExchange ] = useState([]);
+	const [ boardIsDisabled, setBoardIsDisabled ] = useState(false);
+	const [ wordsOnBoard, setWordsOnBoard ] = useState([]);
+	const [consecutivePasses, setConsecutivePasses] = useState(gameData.gameState.consecutivePasses);
+	const [pouch] = gameData.gameState.pouch; 
 
 
 
@@ -85,7 +86,10 @@ const GameScreen = ({
   }, [tilesToExchange]);
 
   useEffect(() => {
-    console.log("consecutivePasses: ", consecutivePasses);
+	console.log("consecutivePasses: ", consecutivePasses);
+	if (consecutivePasses > 5 || (consecutivePasses > 1 && pouch.length === 0 )){  // game ends if players pass six turns in a row, or pass twice when there are no tiles left in pouch
+		// end game
+	} else nextPlayer();
   }, [consecutivePasses]);
   
   
@@ -249,9 +253,8 @@ const GameScreen = ({
 	};
 
 	const handlePass = () => {
-		setConsecutivePasses(consecutivePasses + 1);
 		closeModal();
-		nextPlayer();
+		setConsecutivePasses(consecutivePasses + 1);
 	};
 
 	const handleClickExchangeTiles = () => {
