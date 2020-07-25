@@ -184,10 +184,11 @@ io.on("connection", (socket) => {
     }
   })
 
-  socket.on("updateGameState", ({gameId, boardState, playerRackTiles, player, scores }) => {
+  socket.on("updateGameState", ({gameId, boardState, playerRackTiles, player, scores, consecutivePasses }) => {
     const game = findGame(gameId);
     if (!game) { socket.emit("gameEnded", "The game has ended"); return; }
     else {
+      game.gameState.consecutivePasses = consecutivePasses;
       game.gameState.boardState = boardState;
       game.gameState.scores = scores
       if (player === 0) {
