@@ -71,7 +71,7 @@ const GameScreen = ({
   
 	useEffect(() => {
 		if (placedTiles.length > 0) {
-		getWordsOnBoard();
+		getWordsOnBoard();					// this needs to be moved to somewhere it can get latest boardState - causes null result when tile is removed
 		}
 		console.log('placedTiles: ', placedTiles );
 	}, [placedTiles]);
@@ -256,7 +256,6 @@ const GameScreen = ({
 
 	const handlePass = () => {
 		closeModal();
-		//setConsecutivePasses(consecutivePasses + 1);
 		nextPlayer(1);
 	};
 
