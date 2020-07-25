@@ -46,6 +46,7 @@ const GameScreen = ({
   const [ tilesToExchange, setTilesToExchange ] = useState([]);
   const [ boardIsDisabled, setBoardIsDisabled ] = useState(false);
   const [ wordsOnBoard, setWordsOnBoard ] = useState([]);
+  const [consecutivePasses, setConsecutivePasses] = useState(gameData.gameState.consecutivePasses);
 
 
 
@@ -141,7 +142,8 @@ const GameScreen = ({
 			boardState: boardState,
 			playerRackTiles: playerRackTiles,
 			player: currentPlayer,
-			scores: scores
+			scores: scores,
+			consecutivePasses: consecutivePasses
 		});
 	};
 
@@ -243,6 +245,7 @@ const GameScreen = ({
 	};
 
 	const handlePass = () => {
+		setConsecutivePasses(consecutivePasses + 1);
 		closeModal();
 		nextPlayer();
 	};
@@ -298,6 +301,7 @@ const GameScreen = ({
 						...scoredWords,
 						[currentPlayer]: [ ...scoredWords[currentPlayer], ...formedWords ]
 					};
+					setConsecutivePasses(0);
 					setScoredWords(updatedScoredWords);
 					//*scores are updated automatically
 					nextPlayer();

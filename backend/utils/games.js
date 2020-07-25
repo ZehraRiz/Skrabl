@@ -16,6 +16,7 @@ function gameJoin(gameId) {
             player2Tiles: initialPouch.slice(7,14),
             boardState: [],
             player2TimeLeft: 20,
+            consecutivePasses: 0,
             scores: { 0: 0, 0: 1 },
             isOver: false
         }
