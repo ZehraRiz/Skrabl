@@ -6,7 +6,6 @@ export const findWordsOnBoard = (boardState) => {
         letters = [];
     
     // Scan all rows for words across
-
     for (var row = 0; row < 15; row++) { 
         for (var col = 0; col < 15; col++) { 
             var currentSquare = boardState[col + ((row * 15))];
@@ -19,7 +18,7 @@ export const findWordsOnBoard = (boardState) => {
                 wordStart = '';       // ends recording of word
                 letters = [];
             } else {
-                letters.push(currentSquare.tile.letter);   
+                letters.push(currentSquare.tile.letter);  
                 if (wordStart !== '' && col === 14 ) {                                  // includes last tile if word ends at end of board.
                     words.push({word: letters.join(''), start: wordStart, dir: dir});           
                 } else if (wordStart == '') {
@@ -28,7 +27,7 @@ export const findWordsOnBoard = (boardState) => {
             }
         }
     }
-
+    
     // Scan all columns for words down
     dir = 'down';
     for (var col = 0; col < 15; col++) {
