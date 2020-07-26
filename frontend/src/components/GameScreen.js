@@ -24,6 +24,7 @@ const GameScreen = ({
   currentPlayer,
   gameData,
   socket,
+  gameMode,
 }) => {
   const [selectedTile, setSelectedTile] = useState(null);
   const [selectedSquareIndex, setSelectedSquareIndex] = useState(null);

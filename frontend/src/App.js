@@ -18,6 +18,7 @@ const App = () => {
   const [invitedPlayer, setInvitedPlayer] = useState(null);
   const [gameId, setGameId] = useState("");
   const [gameData, setGameData] = useState(null);
+  const [gameMode, setGameMode] = useState(null);
   const [currentPlayer, setcurrentPlayer] = useState(); // 0 means he was the host and his data is stored as player1 at the backend. 1 means he is player2
   // useEffect(() => {
   // 	const userIdFromLS = localStorage.getItem("userId");
@@ -40,15 +41,35 @@ const App = () => {
   // 	}
   // }, []);
 
+  useEffect(() => {
+    if (gameMode === "Computer") {
+      setCurrentComponent("GameScreen");
+    }
+    if (gameMode === "Online") {
+      setCurrentComponent("Login");
+    }
+  }, [gameMode]);
+
   const handleCloseNotificationModal = () => {
     setNotification(null);
+  };
+
+  const handleChooseComputer = () => {
+    setGameMode("Computer");
+  };
+
+  const handleChooseOnline = () => {
+    setGameMode("Online");
   };
 
   return (
     <div>
       <Header />
       {currentComponent === "WelcomeScreen" && (
-        <WelcomeScreen setCurrentComponent={setCurrentComponent} />
+        <WelcomeScreen
+          handleChooseOnline={handleChooseOnline}
+          handleChooseComputer={handleChooseComputer}
+        />
       )}
       {currentComponent === "Login" && (
         <Login
@@ -92,6 +113,7 @@ const App = () => {
           currentPlayer={currentPlayer}
           gameData={gameData}
           socket={socket}
+          gameMode={gameMode}
         />
       )}
       {notification && (

@@ -1,14 +1,10 @@
 import React from "react";
 
-const WelcomeScreen = ({ setCurrentComponent }) => {
-  const handleChooseComputer = () => {
-    setCurrentComponent("GameScreen");
-  };
-
-  const handleChooseOnline = () => {
-    setCurrentComponent("Login");
-  };
-
+const WelcomeScreen = ({
+  setCurrentComponent,
+  handleChooseComputer,
+  handleChooseOnline,
+}) => {
   return (
     <div>
       <h1>Words With Mates</h1>
