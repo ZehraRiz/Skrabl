@@ -19,11 +19,11 @@ import axios from "axios";
 import "../styles/GameScreen.css";
 
 const GameScreen = ({
-	setNotification,
-	setCurrentComponent,
-	currentPlayer,
-	gameData,
-	socket
+  setNotification,
+  setCurrentComponent,
+  currentPlayer,
+  gameData,
+  socket,
 }) => {
   const [ selectedTile, setSelectedTile ] = useState(null);
 	const [ selectedSquareIndex, setSelectedSquareIndex ] = useState(null);
@@ -241,10 +241,14 @@ const GameScreen = ({
 	const handleClickTile = (tile) => {
     if (currentPlayer !== turn) return;
     if (boardIsDisabled) {
-      if ([...tilesToExchange].filter(item => item.id === tile.id).length === 0) {
+      if (
+        [...tilesToExchange].filter((item) => item.id === tile.id).length === 0
+      ) {
         setTilesToExchange([...tilesToExchange, tile]);
       } else {
-        setTilesToExchange([...tilesToExchange].filter(item => item.id !== tile.id));
+        setTilesToExchange(
+          [...tilesToExchange].filter((item) => item.id !== tile.id)
+        );
       }
     } else setSelectedTile(tile);
 	};
@@ -362,9 +366,12 @@ const GameScreen = ({
 						handleClickPlacedTile={handleClickPlacedTile}
             boardState={boardState}
             isDisabled={boardIsDisabled}
-					/>
-					<TileRack playerRackTiles={playerRackTiles} handleClickTile={handleClickTile} />
-					{!boardIsDisabled && 
+          />
+          <TileRack
+            playerRackTiles={playerRackTiles}
+            handleClickTile={handleClickTile}
+          />
+          {!boardIsDisabled && (
             <GameButtons
               getTiles={getTiles}
               handleClickClearTiles={handleClickClearTiles}
@@ -374,27 +381,37 @@ const GameScreen = ({
               handleClickPass={handleClickPass}
               handleClickExchangeTiles={handleClickExchangeTiles}
             />
-          }
-          {boardIsDisabled && 
+          )}
+          {boardIsDisabled && (
             <ExchangeTilesButtons
               handleCancelExchange={handleCancelExchange}
               handleConfirmExchange={handleConfirmExchange}
             />
-          }
-				</div>
-			</div>
-			<Chat gameId={gameData.gameId} currentPlayer={currentPlayer} socket={socket}/>
-			{gameIsOver && <GameOverModal scores={scores} scoredWords={scoredWords} exitGame={exitGame} />}
-			{confirmMessage && (
-				<ConfirmModal
-					message={confirmMessage}
-					handleResign={handleResign}
-					handlePass={handlePass}
-					closeModal={closeModal}
-				/>
-			)}
-		</div>
-	);
+          )}
+        </div>
+      </div>
+      <Chat
+        gameId={gameData.gameId}
+        currentPlayer={currentPlayer}
+        socket={socket}
+      />
+      {gameIsOver && (
+        <GameOverModal
+          scores={scores}
+          scoredWords={scoredWords}
+          exitGame={exitGame}
+        />
+      )}
+      {confirmMessage && (
+        <ConfirmModal
+          message={confirmMessage}
+          handleResign={handleResign}
+          handlePass={handlePass}
+          closeModal={closeModal}
+        />
+      )}
+    </div>
+  );
 };
 
 export default GameScreen;
