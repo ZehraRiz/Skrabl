@@ -17,7 +17,6 @@ import { getScoresFromWords } from "../utils/getScoresFromWords";
 import { bonusSquareIndices } from "../assets/bonusSquareIndices";
 import axios from "axios";
 import "../styles/GameScreen.css";
-import { getAllTiles } from "../utils/getAllTiles";
 
 const GameScreen = ({
   setNotification,
@@ -47,8 +46,6 @@ const GameScreen = ({
   const [computerRackTiles, setComputerRackTiles] = useState([]);
 
   const fillPouch = async () => {
-    // const shuffled = shuffle(getAllTiles());
-    // setPouch(shuffled);
     const res = await axios.get("http://localhost:4001/getPouch");
     setPouch(res.data);
   };

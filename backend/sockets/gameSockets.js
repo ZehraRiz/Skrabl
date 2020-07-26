@@ -13,16 +13,16 @@ const {
   removeGame,
   isPlayerInGame,
   findGame,
-  getPlayerNumber
+  getPlayerNumber,
 } = require("../utils/games.js");
 
-  const moment = require("moment");
+const moment = require("moment");
 let now = moment();
 
 const games = getAllGames();
 
-module.exports.listen = function(io, socket){
- //create a game
+module.exports.listen = function (io, socket) {
+  //create a game
   socket.on("createGame", (userId) => {
     if (getCurrentUser(userId)) {
       const gameId = Math.floor(Math.random() * 10000).toString();
@@ -120,89 +120,96 @@ module.exports.listen = function(io, socket){
       socket.emit("player1left", "The host has left");
       return;
     }
-		const Newgame = setGamePlayer2(gameId, userId);
-		if (Newgame) {
-			socket.join(gameId, function () {
-			});
-			io.in(gameId).emit("gameJoined2", {game: game})
-		} else {
-			socket.emit("user2Error", "Sorry, could not set you up for the game");
-		}
+    const Newgame = setGamePlayer2(gameId, userId);
+    if (Newgame) {
+      socket.join(gameId, function () {});
+      io.in(gameId).emit("gameJoined2", { game: game });
+    } else {
+      socket.emit("user2Error", "Sorry, could not set you up for the game");
+    }
   });
-  
 
   //GAME FUNCTIONS
 
   //getTiles
   socket.on("requestTiles", ({ gameId, numTilesNeeded, player }) => {
     const game = findGame(gameId);
-    if (!game) { socket.emit("gameEnded", "The game has ended"); return; }
-    else {
-      console.log("num tiles needed: " +numTilesNeeded)
-      tilesToSend = game.gameState.pouch.slice(0, numTilesNeeded)
-      console.log("will send: "+ tilesToSend)
+    if (!game) {
+      socket.emit("gameEnded", "The game has ended");
+      return;
+    } else {
+      console.log("num tiles needed: " + numTilesNeeded);
+      tilesToSend = game.gameState.pouch.slice(0, numTilesNeeded);
+      console.log("will send: " + tilesToSend);
       if (player === 0) {
-        game.gameState.player1Tiles = [...game.gameState.player1Tiles, ...tilesToSend]
+        game.gameState.player1Tiles = [
+          ...game.gameState.player1Tiles,
+          ...tilesToSend,
+        ];
+      } else {
+        game.gameState.player2Tiles = [
+          ...game.gameState.player2Tiles,
+          ...tilesToSend,
+        ];
       }
-      else {
-        game.gameState.player2Tiles =[...game.gameState.player2Tiles, ...tilesToSend]
-      }
-      game.gameState.pouch.splice(0, numTilesNeeded)
+      game.gameState.pouch.splice(0, numTilesNeeded);
       //send back a slice from the usertiles
-      socket.emit("sendingTiles", tilesToSend) //tiles is an array
+      socket.emit("sendingTiles", tilesToSend); //tiles is an array
     }
-  })
+  });
 
-  socket.on("updateGameState", ({gameId, boardState, playerRackTiles, player, scores }) => {
-    const game = findGame(gameId);
-    if (!game) { socket.emit("gameEnded", "The game has ended"); return; }
-    else {
-      game.gameState.boardState = boardState;
-      game.gameState.scores = scores
-      if (player === 0) {
-        game.gameState.player1Tiles = playerRackTiles
-        game.gameState.turn = 1
+  socket.on(
+    "updateGameState",
+    ({ gameId, boardState, playerRackTiles, player, scores }) => {
+      const game = findGame(gameId);
+      if (!game) {
+        socket.emit("gameEnded", "The game has ended");
+        return;
+      } else {
+        game.gameState.boardState = boardState;
+        game.gameState.scores = scores;
+        if (player === 0) {
+          game.gameState.player1Tiles = playerRackTiles;
+          game.gameState.turn = 1;
+        } else {
+          game.gameState.player2Tiles = playerRackTiles;
+          game.gameState.turn = 0;
+        }
+        io.in(gameId).emit("gameUpdated", game);
       }
-      else {
-        game.gameState.player2Tiles = playerRackTiles
-        game.gameState.turn = 0
-      }
-      io.in(gameId).emit("gameUpdated", game)
     }
-  })
+  );
 
-          socket.on("gameOver", (gameId) => {
+  socket.on("gameOver", (gameId) => {
     const game = findGame(gameId);
-      if (!game) { socket.emit("gameEnded", "The game has ended"); return; }
-      else {
-        game.gameState.isOver = true;
-        removeGame(gameId)
-        io.in(gameId).emit("gameEnd", game)
-      }
-          })
-  
-  
-  
-  //USER CHAT 
-	socket.on("sendMsg", ({ gameId, currentPlayer, newMessage }) => {
-		const game = findGame(gameId);
-		if (!game) {
-			socket.emit("gameEnded", "The game has ended");
-			return;
-		}
-		const user = getCurrentUser(socket.id);
-		if (!user) {
-			socket.emit("opponentLeft", "The opponent has left the game");
-			return;
-		}
-		const msgObject = {
-			playerFromBackend: currentPlayer,
-			playerName: user.name,
-			msg: newMessage,
-			date: now.format("h:mm:ss a")
-		};
-		io.in(gameId).emit("recieveMsg", msgObject); //also return time here
-	});
+    if (!game) {
+      socket.emit("gameEnded", "The game has ended");
+      return;
+    } else {
+      game.gameState.isOver = true;
+      removeGame(gameId);
+      io.in(gameId).emit("gameEnd", game);
+    }
+  });
 
-
+  //USER CHAT
+  socket.on("sendMsg", ({ gameId, currentPlayer, newMessage }) => {
+    const game = findGame(gameId);
+    if (!game) {
+      socket.emit("gameEnded", "The game has ended");
+      return;
+    }
+    const user = getCurrentUser(socket.id);
+    if (!user) {
+      socket.emit("opponentLeft", "The opponent has left the game");
+      return;
+    }
+    const msgObject = {
+      playerFromBackend: currentPlayer,
+      playerName: user.name,
+      msg: newMessage,
+      date: now.format("h:mm:ss a"),
+    };
+    io.in(gameId).emit("recieveMsg", msgObject); //also return time here
+  });
 };

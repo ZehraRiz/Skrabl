@@ -1,9 +1,10 @@
-const initialPouch = require("../constants/initializePouch");
+const initializePouch = require("../constants/initializePouch");
 let games = [];
 
 //Join connection to player
 
 function gameJoin(gameId) {
+  const initialPouch = initializePouch();
   const game = {
     gameId: gameId,
     player1: { playerId: "", isConnected: false },
