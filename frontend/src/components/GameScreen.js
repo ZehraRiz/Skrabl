@@ -130,7 +130,7 @@ const GameScreen = ({
 	};
 
 	const getWordsOnBoard = () => {
-		const words = findWordsOnBoard(boardState);
+		const words = findWordsOnBoard(boardState, placedTiles);
 		setWordsOnBoard([...words]);
 	}
 
