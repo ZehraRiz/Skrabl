@@ -28,6 +28,7 @@ export const findWordsOnBoard = (boardState, placedTiles) => {
             
         } else {
             letters.push(currentSquare.tile.letter);
+            wordMultipliers.push(currentSquare.wordMultiplier);
             wordScore += currentSquare.tile.points * currentSquare.letterMultiplier;
             if (placedTiles.filter(item => 
                 item.id === currentSquare.tile.id
