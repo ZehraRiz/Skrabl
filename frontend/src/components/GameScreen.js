@@ -28,7 +28,7 @@ const GameScreen = ({
   const [ selectedTile, setSelectedTile ] = useState(null);
 	const [ selectedSquareIndex, setSelectedSquareIndex ] = useState(null);
 	const [ playerRackTiles, setPlayerRackTiles ] = useState(
-		currentPlayer === 0 ? gameData.gameState.player1Tiles : gameData.gameState.player1Tiles
+		currentPlayer === 0 ? gameData.gameState.player1Tiles : gameData.gameState.player2Tiles
 	);
 	const [ placedTiles, setPlacedTiles ] = useState([]);
 	const [ gameIsOver, setGameIsOver ] = useState(gameData.gameState.isOver);
