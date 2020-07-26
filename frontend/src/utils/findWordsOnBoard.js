@@ -13,7 +13,7 @@ export const findWordsOnBoard = (boardState, placedTiles) => {
         var currentSquare = boardState[col + (row * 15)];
         const addWord = () => {
             wordMultipliers.forEach(wordMultiplier => {
-                wordScore = wordMultiplier ? wordScore * wordMultiplier : wordScore;
+                wordScore = wordScore * wordMultiplier;
             });
             words.push({word: letters.join(''), start: wordStart, dir: dir, newWord: newWord, wordScore: wordScore});
             newWord = false; 
@@ -28,7 +28,7 @@ export const findWordsOnBoard = (boardState, placedTiles) => {
             
         } else {
             letters.push(currentSquare.tile.letter);
-            wordScore = currentSquare.letterMultiplier ? currentSquare.tile.points * currentSquare.letterMultiplier : wordScore;
+            wordScore += currentSquare.tile.points * currentSquare.letterMultiplier;
             if (placedTiles.filter(item => 
                 item.id === currentSquare.tile.id
             ).length > 0) {
