@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import Board from "../components/Board";
 import TileRack from "./TileRack";
@@ -325,9 +326,9 @@ const GameScreen = ({
 						console.log('wordScore: ' + word.wordScore);
 						console.log('scores[currentPlayer]: ' + scores[currentPlayer]);
 					})
-					
-					console.log(scores);
 					setScores(scores);
+					console.log(scores);
+					
 					
 					//*scores are updated automatically
 					//setScoredWords(updatedScoredWords);
@@ -418,3 +419,4 @@ const GameScreen = ({
 };
 
 export default GameScreen;
+
