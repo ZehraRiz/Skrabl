@@ -241,10 +241,20 @@ const GameScreen = ({
   };
 
   const handleClickPass = () => {
-    if (currentPlayer !== turn) return;
+	if (currentPlayer !== turn) return;
+
     setConfirmMessage({
       type: "pass",
       message: "Are you sure you want to pass?",
+    });
+  };
+
+  const handleConfirmMove = () => {
+	if (currentPlayer !== turn) return;
+
+    setConfirmMessage({
+      type: "confirm",
+      message: "Confirm move end?",
     });
   };
 
@@ -406,6 +416,7 @@ const GameScreen = ({
 		/>
         {!boardIsDisabled && (
           <GameButtons
+			placedTiles={placedTiles}
             getTiles={getTiles}
             handleClickClearTiles={handleClickClearTiles}
             handleClickShuffle={handleClickShuffle}
@@ -438,7 +449,8 @@ const GameScreen = ({
         <ConfirmModal
           message={confirmMessage}
           handleResign={handleResign}
-          handlePass={handlePass}
+		  handlePass={handlePass}
+		  handleConfirmMove={handleConfirmMove}
           closeModal={closeModal}
         />
       )}
