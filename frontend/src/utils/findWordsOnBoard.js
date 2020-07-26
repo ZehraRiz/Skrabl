@@ -25,7 +25,7 @@ export const findWordsOnBoard = (boardState, placedTiles) => {
             wordStart = ''; 
             letters = [];
             wordScore = 0;
-            
+            newWord = false; 
         } else {
             letters.push(currentSquare.tile.letter);
             wordMultipliers.push(currentSquare.wordMultiplier);
