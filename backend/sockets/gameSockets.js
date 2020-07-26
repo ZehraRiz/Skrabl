@@ -16,6 +16,9 @@ const {
   getPlayerNumber
 } = require("../utils/games.js");
 
+  const moment = require("moment");
+let now = moment();
+
 const games = getAllGames();
 
 module.exports.listen = function(io, socket){
@@ -176,6 +179,30 @@ module.exports.listen = function(io, socket){
         removeGame(gameId)
         io.in(gameId).emit("gameEnd", game)
       }
-    })
+          })
+  
+  
+  
+  //USER CHAT 
+	socket.on("sendMsg", ({ gameId, currentPlayer, newMessage }) => {
+		const game = findGame(gameId);
+		if (!game) {
+			socket.emit("gameEnded", "The game has ended");
+			return;
+		}
+		const user = getCurrentUser(socket.id);
+		if (!user) {
+			socket.emit("opponentLeft", "The opponent has left the game");
+			return;
+		}
+		const msgObject = {
+			playerFromBackend: currentPlayer,
+			playerName: user.name,
+			msg: newMessage,
+			date: now.format("h:mm:ss a")
+		};
+		io.in(gameId).emit("recieveMsg", msgObject); //also return time here
+	});
+
 
 };

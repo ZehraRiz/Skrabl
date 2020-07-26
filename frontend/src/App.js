@@ -17,27 +17,29 @@ const App = () => {
 	const [ invitedPlayer, setInvitedPlayer ] = useState(null);
 	const [ gameId, setGameId ] = useState("");
 	const [ gameData, setGameData ] = useState(null);
-	const [ currentPlayer, setcurrentPlayer ] = useState(); // 0 means he was the host and his data is stored as player1 at the backend. 1 means he is player2
-	// useEffect(() => {
-	// 	const userIdFromLS = localStorage.getItem("userId");
-	// 	if (userIdFromLS) {
-	// 		socket.emit("retriveUser", userIdFromLS)
-	// 		console.log("user exists");
-	// 		socket.on("userIdError", (data) => {
-	// 			console.log(data);
-	// 			return;
-	// 		});
-	// 		socket.on("usernameRegistered", (data) => {
-	// 			console.log("updated socket");
-	// 			const user = data.user;
-	// 			localStorage.removeItem("userId");
-	// 			localStorage.setItem("userId", data.user.id);
-	// 			setUser(user);
-	// 			setPlayers(data.allOnlineUsers);
-	// 			setCurrentComponent("Players");
-	// 		});
-	// 	}
-	// }, []);
+	const [currentPlayer, setcurrentPlayer] = useState();
+	
+
+	//Search for an existing token in ls and send it
+	useEffect(() => {
+		const userIdFromLS = localStorage.getItem("token");
+		if (userIdFromLS) {
+			socket.emit("retriveUser", userIdFromLS)
+			console.log("user token exists at frontend");
+			//backend does not recognize the token
+			socket.on("tokenError", (data) => {
+				setCurrentComponent("Login");
+				localStorage.removeItem("token")
+				console.log(data);
+				return;
+			});
+			socket.on("retrievdUser", (data) => {
+				setCurrentComponent("Players")
+				console.log("found your previous session");
+			});
+		}
+		else setCurrentComponent("Login")
+	}, []);
 
 	const handleCloseNotificationModal = () => {
 		setNotification(null);

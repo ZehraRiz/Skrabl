@@ -1,26 +1,12 @@
 const { userJoin, getCurrentUser, userLeave, getRoomUsers } = require("../utils/users.js");
-const {
-	gameJoin,
-	setGamePlayer1,
-	setGamePlayer2,
-	getAllGames,
-	playerDisconnectFromGame,
-	removeGame,
-	isPlayerInGame,
-	findGame,
-	getPlayerNumber
-} = require("../utils/games.js");
-
 const { findRegisteredUser, setRegisteredUser } = require("../store/registeredUsers");
 
-const moment = require("moment");
-let now = moment();
 
-const games = getAllGames();
+
 
 module.exports.listen = function (io, socket) {
   
-
+//USER LOGIN WITH A USERNAME
 	socket.on("username", (username) => {
 		if (username === "") {
 			//validation needs to be improved
@@ -39,8 +25,10 @@ module.exports.listen = function (io, socket) {
 			console.log(`${user.name} has joined the lobby`);
 			socket.broadcast.to(user.room).emit("welcomeNewUser", { user: user });
 		}
-	});
+  });
+  
 
+//USER LOGIN USING TOKEN IN LS 
 	socket.on("retriveUser", (token) => {
 		if (token === "") {
       socket.emit("tokenError", "We have no saved sessions");
@@ -54,38 +42,9 @@ module.exports.listen = function (io, socket) {
 		socket.emit("retrievdUser", user);
 	});
 
-	socket.on("sendMsg", ({ gameId, currentPlayer, newMessage }) => {
-		const game = findGame(gameId);
-		if (!game) {
-			socket.emit("gameEnded", "The game has ended");
-			return;
-		}
-		const user = getCurrentUser(socket.id);
-		if (!user) {
-			socket.emit("opponentLeft", "The opponent has left the game");
-			return;
-		}
-		const msgObject = {
-			playerFromBackend: currentPlayer,
-			playerName: user.name,
-			msg: newMessage,
-			date: now.format("h:mm:ss a")
-		};
-		io.in(gameId).emit("recieveMsg", msgObject); //also return time here
-	});
-
-	//disconnects
-	socket.on("disconnect", () => {
-		const user = userLeave(socket.id);
-		if (user) {
-			io.in(user.room).emit("userLeft", { user });
-			const game = playerDisconnectFromGame(user.id);
-			if (game !== "") {
-				socket.broadcast.to(game.gameId).emit("playerLeft", `${user.name} has left the game`);
-			} else {
-				console.log("user was not in a game");
-			}
-		}
+	//USER DISCONNECTS
+  socket.on("disconnect", () => {
+    //needs work
 		console.log("A connection left");
 	});
 };

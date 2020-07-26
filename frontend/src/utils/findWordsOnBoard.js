@@ -1,4 +1,3 @@
-
 export const findWordsOnBoard = (boardState, placedTiles) => {
     let wordStart = '',
         wordScore = 0,
@@ -42,7 +41,7 @@ export const findWordsOnBoard = (boardState, placedTiles) => {
             }
         }
       }
-    }
+    
     dirs.forEach(dir => {
         for (var x = 0; x < 15; x++) { 
             for (var y = 0; y < 15; y++) { 
@@ -53,5 +52,3 @@ export const findWordsOnBoard = (boardState, placedTiles) => {
 
     return words;
 }
-
-
