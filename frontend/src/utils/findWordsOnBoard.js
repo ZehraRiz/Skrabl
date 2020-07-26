@@ -1,24 +1,32 @@
 
-export const findWordsOnBoard = (boardState) => {
-    let wordStart = '',
+export const findWordsOnBoard = (boardState, placedTiles) => {
+    let wordStart = '', 
+        newWord = false,
         words = [],
         letters = [], 
         dirs = ['across', 'down'];
 
     const checkSquare = (dir, x, y) => {
         let [row, col] = dir === 'across' ? [x, y] : [y, x];
-        var currentSquare = boardState[col + ((row * 15))];
+        var currentSquare = boardState[col + (row * 15)];
         const addWord = () => {
-            words.push({word: letters.join(''), start: wordStart, dir: dir}); 
+            words.push({word: letters.join(''), start: wordStart, dir: dir, newWord: newWord});
+            newWord = false; 
         }
-        if (!currentSquare.hasOwnProperty('tile')) {  
+        if (!currentSquare.tile) {  
             if (wordStart !== '' && letters.length > 1) {                         
                 addWord();
             }
             wordStart = ''; 
             letters = [];
+            
         } else {
-            letters.push(currentSquare.tile.letter); 
+            letters.push(currentSquare.tile.letter);
+            if (placedTiles.filter(item => 
+                item.id === currentSquare.tile.id
+            ).length > 0) {
+                newWord = true;
+            }
             if (wordStart !== '' && col === 14 ) {                                 
                 addWord();           
             } else if (wordStart == '') {
@@ -38,4 +46,14 @@ export const findWordsOnBoard = (boardState) => {
     return words;
 }
 
+/*
   
+square.tile = {
+    id: 71, 
+    letter: "D", 
+    player: 0, 
+    point: 2, 
+    square: 112
+}
+
+*/
