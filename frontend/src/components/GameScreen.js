@@ -46,9 +46,11 @@ const GameScreen = ({
   const [pouch, setPouch] = useState([]);
   const [computerRackTiles, setComputerRackTiles] = useState([]);
 
-  const fillPouch = () => {
-    const shuffled = shuffle(getAllTiles());
-    setPouch(shuffled);
+  const fillPouch = async () => {
+    // const shuffled = shuffle(getAllTiles());
+    // setPouch(shuffled);
+    const res = await axios.get("http://localhost:4001/getPouch");
+    setPouch(res.data);
   };
 
   const getComputerTiles = () => {
