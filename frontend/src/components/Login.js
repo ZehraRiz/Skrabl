@@ -7,13 +7,11 @@ const Login = ({ setCurrentComponent, setUser, socket, setPlayers }) => {
     e.preventDefault();
     const name = e.target.name.value;
     socket.emit("username", name);
-    socket.on("usernameError", (data) => {
-      console.log("invalid user name " + data);
-      return;
-    });
+    socket.on("usernameError", (data) => { console.log(data);return;});
     socket.on("usernameRegistered", (data) => {
+      console.log("got back user token: " +data.token)
       const user = data.user;
-      // localStorage.setItem("userId", data.user.id)
+      localStorage.setItem("token", data.token)
       setUser(user);
       setPlayers(data.allOnlineUsers);
       setCurrentComponent("Players");

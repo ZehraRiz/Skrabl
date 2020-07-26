@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import Board from "../components/Board";
 import TileRack from "./TileRack";
@@ -28,7 +29,7 @@ const GameScreen = ({
   const [ selectedTile, setSelectedTile ] = useState(null);
 	const [ selectedSquareIndex, setSelectedSquareIndex ] = useState(null);
 	const [ playerRackTiles, setPlayerRackTiles ] = useState(
-		currentPlayer === 0 ? gameData.gameState.player1Tiles : gameData.gameState.player1Tiles
+		currentPlayer === 0 ? gameData.gameState.player1Tiles : gameData.gameState.player2Tiles
 	);
 	const [ placedTiles, setPlacedTiles ] = useState([]);
 	const [ gameIsOver, setGameIsOver ] = useState(gameData.gameState.isOver);
@@ -48,7 +49,6 @@ const GameScreen = ({
 	const [ wordsOnBoard, setWordsOnBoard ] = useState([]);
 	const [consecutivePasses, setConsecutivePasses] = useState(gameData.gameState.consecutivePasses);
 	const pouch = gameData.gameState.pouch; 
-	let buffer = false;
 	
 
 
@@ -78,8 +78,8 @@ const GameScreen = ({
 
 	useEffect(() => {
 		console.log('wordsOnBoard: ', wordsOnBoard);
-		var score = calculateWordScore(wordsOnBoard);
-		console.log('score: ', score );
+		//var score = calculateWordScore(wordsOnBoard);
+		//console.log('score: ', score );
 	}, [wordsOnBoard]);
 
 	useEffect(() => {
@@ -130,7 +130,7 @@ const GameScreen = ({
 	};
 
 	const getWordsOnBoard = () => {
-		const words = findWordsOnBoard(boardState);
+		const words = findWordsOnBoard(boardState, placedTiles);
 		setWordsOnBoard([...words]);
 	}
 
@@ -146,13 +146,13 @@ const GameScreen = ({
 		socket.emit("requestTiles", { gameId: gameData.gameId, numTilesNeeded: numTilesNeeded, player: currentPlayer });
 	};
 
-	const nextPlayer = (x = 0) => {
+	const nextPlayer = (x = 0, newScores = {0: 0, 0: 0}) => {
 		socket.emit("updateGameState", {
 			gameId: gameData.gameId,
 			boardState: boardState,
 			playerRackTiles: playerRackTiles,
 			player: currentPlayer,
-			scores: scores,
+			scores: newScores,
 			consecutivePasses: consecutivePasses + x
 		});
 	};
@@ -160,7 +160,7 @@ const GameScreen = ({
 	const updateScores = () => {
 		//test and see if running
 		const updatedScores = getScoresFromWords(scoredWords);
-		setScores(updatedScores);
+		setScores(scores);
 	};
 
 	const placeTile = () => {
@@ -294,27 +294,36 @@ const GameScreen = ({
 	const handleClickConfirmMove = () => {
 		if (currentPlayer !== turn) return;
 		if (moveIsValid(placedTiles, boardState)) {
-			console.log("move is valid");
-			//get array of words formed in turn (objects)
-			//EXAMPLE:
-			const formedWords = [
-				{ word: "house", points: 7 },
-				{ word: "cat", points: 4 },
-				{ word: "tea", points: 3 }
+			/*
+			wordsOnBoard = [
+				{ 
+					word: "house", 
+					points: 7,
+					newWord: true 
+				}
 			];
-			axios.post("http://localhost:4001/verifyWord", { words: formedWords }).then((res) => {
+			*/
+			axios.post("http://localhost:4001/verifyWord", { words: wordsOnBoard }).then((res) => {
 				const results = res.data;
 				if (Object.values(results).every((val) => val === "true")) {
-					console.log("words are verified (using dummy words)");
-					const updatedScoredWords = {
-						...scoredWords,
-						[currentPlayer]: [ ...scoredWords[currentPlayer], ...formedWords ]
-					};
+					
+					var newWords = wordsOnBoard.filter(word => word.newWord === true);
+					var newScores = scores;
+					newWords.forEach(word => {
+						newScores[currentPlayer] = newScores[currentPlayer] + word.wordScore;
+						console.log('wordScore: ' + word.wordScore);
+						console.log('scores[currentPlayer]: ' + scores[currentPlayer]);
+					})
+					setScores(newScores);
+					console.log(newScores);
+					
 					
 					//*scores are updated automatically
-					setScoredWords(updatedScoredWords);
-					nextPlayer(consecutivePasses * -1);  // resets consecutivePasses by deducting it from itself
+					//setScoredWords(updatedScoredWords);
 
+
+					nextPlayer(consecutivePasses * -1, newScores);  // resets consecutivePasses by deducting it from itself
+					setPlacedTiles([]);
 					return;
 				} else {
 					setNotification("Don't make up words!");
@@ -398,3 +407,4 @@ const GameScreen = ({
 };
 
 export default GameScreen;
+

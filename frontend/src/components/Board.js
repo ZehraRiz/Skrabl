@@ -13,13 +13,21 @@ const getBonusClassName = (square) => {
       ? (bonusClassName = "double-word")
       : (bonusClassName = "triple-word");
   }
+  if (square.letterMultiplier === 1 && square.wordMultiplier === 1) {
+      bonusClassName = ""
+  }
   return bonusClassName;
 };
 
-const Board = ({ handleClickSquare, handleClickPlacedTile, boardState, isDisabled }) => {
+const Board = ({
+  handleClickSquare,
+  handleClickPlacedTile,
+  boardState,
+  isDisabled,
+}) => {
   return (
     <div className="board__wrapper">
-      <div className={'board__board ' + (isDisabled ? 'disabled' : '')}>
+      <div className={"board__board " + (isDisabled ? "disabled" : "")}>
         {boardState &&
           boardState.length > 0 &&
           boardState.map((square, index) => {
@@ -38,7 +46,9 @@ const Board = ({ handleClickSquare, handleClickPlacedTile, boardState, isDisable
             }
             return (
               <div
-                className={`board__square ${bonusClassName}`}
+                className={`board__square ${bonusClassName} ${
+                  index === 112 && "board__centre"
+                }`}
                 key={index}
                 onClick={(e) => handleClickSquare(square)}
               >
