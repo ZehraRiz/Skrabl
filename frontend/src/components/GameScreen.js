@@ -326,7 +326,7 @@ const GameScreen = ({
 						console.log('wordScore: ' + word.wordScore);
 						console.log('scores[currentPlayer]: ' + scores[currentPlayer]);
 					})
-					
+					setScores(scores);
 					console.log(scores);
 					
 					
