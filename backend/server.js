@@ -14,7 +14,6 @@ app.use(express.json());
 app.use(cors());
 
 
-//when a client connects to the server
 io.on("connection", (socket) => {
   require('./sockets/authSockets').listen(io, socket);
   require('./sockets/gameSockets').listen(io, socket);
