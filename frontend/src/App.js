@@ -46,7 +46,7 @@ const App = () => {
 	};
 
 	return (
-		<div>
+		<div class="page">
 			<Header />
 			{currentComponent === "Login" && (
 				<Login
