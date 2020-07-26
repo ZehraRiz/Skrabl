@@ -327,7 +327,7 @@ const GameScreen = ({
 					})
 					
 					console.log(scores);
-					
+					setScores(scores);
 					
 					//*scores are updated automatically
 					//setScoredWords(updatedScoredWords);
