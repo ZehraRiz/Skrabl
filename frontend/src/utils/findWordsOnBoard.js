@@ -41,8 +41,8 @@ export const findWordsOnBoard = (boardState, placedTiles) => {
                 wordStart = `${row}-${col}`;  
             }
         }
-      }
     }
+    
     dirs.forEach(dir => {
         for (var x = 0; x < 15; x++) { 
             for (var y = 0; y < 15; y++) { 
