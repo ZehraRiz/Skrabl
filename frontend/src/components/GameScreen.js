@@ -11,7 +11,6 @@ import { generateBoardSquares } from "../utils/generateBoardSquares";
 import { shuffle } from "../utils/shuffle";
 import { moveIsValid } from "../utils/moveIsValid";
 import { squaresAreOccupied } from "../utils/squaresAreOccupied";
-import { calculateWordScore } from "../utils/calculateWordScore";
 import { findWordsOnBoard } from "../utils/findWordsOnBoard";
 import { getScoresFromWords } from "../utils/getScoresFromWords";
 import { bonusSquareIndices } from "../assets/bonusSquareIndices";
@@ -415,8 +414,6 @@ const GameScreen = ({
             newWords.forEach((word) => {
               newScores[currentPlayer] =
                 newScores[currentPlayer] + word.wordScore;
-              console.log("wordScore: " + word.wordScore);
-              console.log("scores[currentPlayer]: " + scores[currentPlayer]);
             });
             setScores(newScores);
             nextPlayer(consecutivePasses * -1); // resets consecutivePasses by deducting it from itself

@@ -23,9 +23,6 @@ const letterValuesExpanded = Object.entries(letterValues).reduce(
   {}
 );
 
-console.log("letterValuesExpanded");
-console.log(letterValuesExpanded);
-
 const getNumLettersBefore = (word, letter) => {
   const res = word.search(letter);
   return res;
@@ -269,12 +266,8 @@ const placeTiles = (wordObj, boardState) => {
       row = boardSquareToUse.row;
       col = boardSquareToUse.col - firstPartOfWord.length + i;
     }
-
     const letter = firstPartOfWord[i];
     const points = letterValuesExpanded[letter];
-
-    console.log("Letter:" + letter);
-    console.log("Points: " + points);
     const square = {
       col,
       row,
