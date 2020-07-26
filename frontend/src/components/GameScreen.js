@@ -17,33 +17,103 @@ import { getScoresFromWords } from "../utils/getScoresFromWords";
 import { bonusSquareIndices } from "../assets/bonusSquareIndices";
 import axios from "axios";
 import "../styles/GameScreen.css";
+import { getAllTiles } from "../utils/getAllTiles";
 
 const GameScreen = ({
   setNotification,
   setCurrentComponent,
   currentPlayer,
+  setCurrentPlayer,
   gameData,
   socket,
   gameMode,
 }) => {
   const [selectedTile, setSelectedTile] = useState(null);
   const [selectedSquareIndex, setSelectedSquareIndex] = useState(null);
-  const [playerRackTiles, setPlayerRackTiles] = useState();
+  const [playerRackTiles, setPlayerRackTiles] = useState([]);
   const [placedTiles, setPlacedTiles] = useState([]);
-  const [gameIsOver, setGameIsOver] = useState();
+  const [gameIsOver, setGameIsOver] = useState(false);
   const [confirmMessage, setConfirmMessage] = useState(null);
-  const [boardState, setBoardState] = useState();
-  const [timeLeftPlayer, setTimeLeftPlayer] = useState();
-  const [timeLeftOpponent, setTimeLeftOpponent] = useState();
+  const [boardState, setBoardState] = useState([]);
+  const [timeLeftPlayer, setTimeLeftPlayer] = useState(null);
+  const [timeLeftOpponent, setTimeLeftOpponent] = useState(null);
   const [scoredWords, setScoredWords] = useState({ 0: [], 1: [] });
-  const [scores, setScores] = useState();
-  const [turn, setTurn] = useState();
+  const [scores, setScores] = useState({ 0: 0, 1: 0 });
+  const [turn, setTurn] = useState(null);
   const [tilesToExchange, setTilesToExchange] = useState([]);
   const [boardIsDisabled, setBoardIsDisabled] = useState(false);
   const [wordsOnBoard, setWordsOnBoard] = useState([]);
-  const [consecutivePasses, setConsecutivePasses] = useState();
-  const pouch = gameData.gameState.pouch;
+  const [consecutivePasses, setConsecutivePasses] = useState(0);
+  const [pouch, setPouch] = useState([]);
+  const [computerRackTiles, setComputerRackTiles] = useState([]);
+
   let buffer = false;
+
+  const fillPouch = () => {
+    const shuffled = shuffle(getAllTiles());
+    setPouch(shuffled);
+  };
+
+  const getComputerTiles = () => {
+    const numTilesNeeded = 7 - computerRackTiles.length;
+    const pouchCopy = [...pouch];
+    pouchCopy.splice(0, numTilesNeeded);
+    const newTiles = pouch.slice(0, numTilesNeeded);
+    setPouch([...pouchCopy]);
+    setComputerRackTiles([...computerRackTiles, ...newTiles]);
+  };
+
+  useEffect(() => {
+    console.log("turn has changed");
+    console.log("game mode: " + gameMode);
+    if (gameMode === "Computer" && turn === 1) {
+      console.log("getting computer tiles...");
+      getComputerTiles();
+    }
+  }, [turn, gameMode]);
+
+  useEffect(() => {
+    if (gameMode === "Computer" && turn === 1) {
+      setTimeout(() => {
+        computerMove();
+      }, 5000);
+    }
+  }, [computerRackTiles]);
+
+  const computerMove = () => {
+    axios
+      .post("http://localhost:4001/computerMove/", {
+        rackLetters: computerRackTiles,
+        boardState,
+      })
+      .then((res) => {
+        console.log("got response from backend");
+        console.log(res);
+        if (res.data.pass) {
+          setNotification("The computer has decided to pass.");
+        } else {
+          console.log("setting board state with res and calling nextPlayer");
+          setBoardState(res.data.boardState);
+          nextPlayer();
+          //in this order so doesn't call backend twice
+          let computerRackTilesCopy = [...computerRackTiles];
+          const lettersUsed = res.data.lettersUsed;
+          let lettersUsedCopy = [...lettersUsed];
+          computerRackTilesCopy = computerRackTilesCopy.filter((tile) => {
+            if (lettersUsedCopy.includes(tile.letter)) {
+              const indexToRemove = lettersUsedCopy.indexOf(tile.letter);
+              lettersUsedCopy.splice(indexToRemove, 1);
+              return false;
+            } else {
+              return true;
+            }
+          });
+
+          setComputerRackTiles(computerRackTilesCopy);
+        }
+        nextPlayer();
+      });
+  };
 
   //EFFECTS
 
@@ -70,6 +140,7 @@ const GameScreen = ({
       setScores(gameData.gameState.scores);
       setTurn(gameData.gameState.turn);
       setConsecutivePasses(gameData.gameState.consecutivePasses);
+      setPouch(gameData.gameState.pouch);
     }
     if (gameMode === "Computer") {
       setGameIsOver(false);
@@ -78,18 +149,23 @@ const GameScreen = ({
       setTimeLeftPlayer(null);
       setTimeLeftOpponent(null);
       setScores({ 0: 0, 1: 0 });
-      setTurn(null);
+      setTurn(0);
       setConsecutivePasses(null);
     }
-  }, []);
+  }, [gameMode]);
 
   useEffect(() => {
+    if (gameMode === "Computer") {
+      fillPouch();
+    }
     getBoard();
   }, []);
 
   useEffect(() => {
-    updateScores();
-  }, []);
+    if (scoredWords[0].length > 0 && scoredWords[1].length > 0) {
+      updateScores();
+    }
+  }, [scoredWords]);
 
   useEffect(() => {
     placeTile();
@@ -125,36 +201,38 @@ const GameScreen = ({
   }, [consecutivePasses]);
 
   useEffect(() => {
-    socket.on("sendingTiles", (data) => {
-      setPlayerRackTiles([...playerRackTiles, ...data]);
-      //here currentRackTiles are always 7
-    });
+    if (gameMode === "Online") {
+      socket.on("sendingTiles", (data) => {
+        setPlayerRackTiles([...playerRackTiles, ...data]);
+        //here currentRackTiles are always 7
+      });
 
-    socket.on("gameEnd", (data) => {
-      console.log(data);
-      //redirect to players screen or show who won
-      console.log("the game has ended");
-      exitGame();
-    });
+      socket.on("gameEnd", (data) => {
+        console.log(data);
+        //redirect to players screen or show who won
+        console.log("the game has ended");
+        exitGame();
+      });
 
-    socket.on("gameUpdated", (data) => {
-      console.log(data);
-      setGameIsOver(data.gameState.isOver);
-      setBoardState(data.gameState.boardState);
-      setTimeLeftPlayer(
-        currentPlayer === 0
-          ? gameData.gameState.player1TimeLeft
-          : gameData.gameState.player2TimeLeft
-      );
-      setTimeLeftOpponent(
-        currentPlayer === 1
-          ? gameData.gameState.player1TimeLeft
-          : gameData.gameState.player2TimeLeft
-      );
-      setScores(data.gameState.scores);
-      setTurn(data.gameState.turn);
-      setConsecutivePasses(data.gameState.consecutivePasses);
-    });
+      socket.on("gameUpdated", (data) => {
+        console.log(data);
+        setGameIsOver(data.gameState.isOver);
+        setBoardState(data.gameState.boardState);
+        setTimeLeftPlayer(
+          currentPlayer === 0
+            ? gameData.gameState.player1TimeLeft
+            : gameData.gameState.player2TimeLeft
+        );
+        setTimeLeftOpponent(
+          currentPlayer === 1
+            ? gameData.gameState.player1TimeLeft
+            : gameData.gameState.player2TimeLeft
+        );
+        setScores(data.gameState.scores);
+        setTurn(data.gameState.turn);
+        setConsecutivePasses(data.gameState.consecutivePasses);
+      });
+    }
   }, [playerRackTiles]);
 
   const getBoard = () => {
@@ -175,22 +253,40 @@ const GameScreen = ({
       console.log("you have enough tiles");
       return;
     }
-    socket.emit("requestTiles", {
-      gameId: gameData.gameId,
-      numTilesNeeded: numTilesNeeded,
-      player: currentPlayer,
-    });
+
+    if (gameMode === "Online") {
+      socket.emit("requestTiles", {
+        gameId: gameData.gameId,
+        numTilesNeeded: numTilesNeeded,
+        player: currentPlayer,
+      });
+    }
+    if (gameMode === "Computer") {
+      const pouchCopy = [...pouch];
+      pouchCopy.splice(0, numTilesNeeded);
+      const newTiles = pouch.slice(0, numTilesNeeded);
+      setPlayerRackTiles([...playerRackTiles, ...newTiles]);
+      setPouch([...pouchCopy]);
+    }
   };
 
   const nextPlayer = (x = 0) => {
-    socket.emit("updateGameState", {
-      gameId: gameData.gameId,
-      boardState: boardState,
-      playerRackTiles: playerRackTiles,
-      player: currentPlayer,
-      scores: scores,
-      consecutivePasses: consecutivePasses + x,
-    });
+    console.log("This is next player");
+    if (gameMode === "Online") {
+      socket.emit("updateGameState", {
+        gameId: gameData.gameId,
+        boardState: boardState,
+        playerRackTiles: playerRackTiles,
+        player: currentPlayer,
+        scores: scores,
+        consecutivePasses: consecutivePasses + x,
+      });
+    }
+    if (gameMode === "Computer") {
+      console.log("mode is computer");
+      // setCurrentPlayer(currentPlayer === 0 ? 1 : 0);
+      setTurn(turn === 0 ? 1 : 0);
+    }
   };
 
   const updateScores = () => {
@@ -348,32 +444,33 @@ const GameScreen = ({
       console.log("move is valid");
       //get array of words formed in turn (objects)
       //EXAMPLE:
-      const formedWords = [
-        { word: "house", points: 7 },
-        { word: "cat", points: 4 },
-        { word: "tea", points: 3 },
-      ];
-      axios
-        .post("http://localhost:4001/verifyWord", { words: formedWords })
-        .then((res) => {
-          const results = res.data;
-          if (Object.values(results).every((val) => val === "true")) {
-            console.log("words are verified (using dummy words)");
-            const updatedScoredWords = {
-              ...scoredWords,
-              [currentPlayer]: [...scoredWords[currentPlayer], ...formedWords],
-            };
+      // const formedWords = [
+      //   { word: "house", points: 7 },
+      //   { word: "cat", points: 4 },
+      //   { word: "tea", points: 3 },
+      // ];
+      // axios
+      //   .post("http://localhost:4001/verifyWord", { words: formedWords })
+      //   .then((res) => {
+      //     const results = res.data;
+      //     if (Object.values(results).every((val) => val === "true")) {
+      //       console.log("words are verified (using dummy words)");
+      //       const updatedScoredWords = {
+      //         ...scoredWords,
+      //         [currentPlayer]: [...scoredWords[currentPlayer], ...formedWords],
+      //       };
 
-            //*scores are updated automatically
-            setScoredWords(updatedScoredWords);
-            nextPlayer(consecutivePasses * -1); // resets consecutivePasses by deducting it from itself
-
-            return;
-          } else {
-            setNotification("Don't make up words!");
-            return;
-          }
-        });
+      //       //*scores are updated automatically
+      //       setScoredWords(updatedScoredWords);
+      //       nextPlayer(consecutivePasses * -1); // resets consecutivePasses by deducting it from itself
+      //       setPlacedTiles([]);
+      //     } else {
+      //       setNotification("Don't make up words!");
+      //       return;
+      //     }
+      //   });
+      nextPlayer(consecutivePasses * -1);
+      setPlacedTiles([]);
       return;
     } else {
       setNotification("move is not valid");
@@ -384,12 +481,22 @@ const GameScreen = ({
   //OTHER
 
   const gameOver = () => {
-    socket.emit("gameOver", gameData.gameId);
+    if (gameMode === "Online") {
+      socket.emit("gameOver", gameData.gameId);
+    }
+    if (gameMode === "Computer") {
+      setGameIsOver(true);
+    }
   };
 
   const exitGame = () => {
     //handle backend in other functions
-    setCurrentComponent("Players");
+    if (gameMode === "Online") {
+      setCurrentComponent("Players");
+    }
+    if (gameMode === "Computer") {
+      setCurrentComponent("WelcomeScreen");
+    }
   };
 
   const closeModal = () => {
@@ -409,6 +516,7 @@ const GameScreen = ({
             setTimeLeftOpponent={setTimeLeftOpponent}
             currentPlayer={currentPlayer}
             turn={turn}
+            gameMode={gameMode}
           />
           <Board
             handleClickSquare={handleClickSquare}
@@ -439,11 +547,13 @@ const GameScreen = ({
           )}
         </div>
       </div>
-      <Chat
-        gameId={gameData.gameId}
-        currentPlayer={currentPlayer}
-        socket={socket}
-      />
+      {gameMode === "Online" && (
+        <Chat
+          gameId={gameData.gameId}
+          currentPlayer={currentPlayer}
+          socket={socket}
+        />
+      )}
       {gameIsOver && (
         <GameOverModal
           scores={scores}

@@ -8,7 +8,6 @@ import GameScreen from "./components/GameScreen";
 import NotificationModal from "./components/NotificationModal";
 import "./styles/global.css";
 import WelcomeScreen from "./components/WelcomeScreen";
-const socket = io("http://localhost:4001");
 
 const App = () => {
   const [currentComponent, setCurrentComponent] = useState("WelcomeScreen");
@@ -19,7 +18,9 @@ const App = () => {
   const [gameId, setGameId] = useState("");
   const [gameData, setGameData] = useState(null);
   const [gameMode, setGameMode] = useState(null);
-  const [currentPlayer, setcurrentPlayer] = useState(); // 0 means he was the host and his data is stored as player1 at the backend. 1 means he is player2
+  const [currentPlayer, setCurrentPlayer] = useState(); // 0 means he was the host and his data is stored as player1 at the backend. 1 means he is player2
+  const [socket, setSocket] = useState(null);
+
   // useEffect(() => {
   // 	const userIdFromLS = localStorage.getItem("userId");
   // 	if (userIdFromLS) {
@@ -43,9 +44,14 @@ const App = () => {
 
   useEffect(() => {
     if (gameMode === "Computer") {
+      setCurrentPlayer(0);
       setCurrentComponent("GameScreen");
     }
     if (gameMode === "Online") {
+      console.log(
+        "game mode has changed to 'online' so setting value of socket variable"
+      );
+      setSocket(io("http://localhost:4001"));
       setCurrentComponent("Login");
     }
   }, [gameMode]);
@@ -90,7 +96,7 @@ const App = () => {
           setGameId={setGameId}
           setGameData={setGameData}
           setNotification={setNotification}
-          setcurrentPlayer={setcurrentPlayer}
+          setCurrentPlayer={setCurrentPlayer}
         />
       )}
       {currentComponent === "InviteScreen" && (
@@ -102,14 +108,14 @@ const App = () => {
           gameId={gameId}
           setGameData={setGameData}
           socket={socket}
-          setcurrentPlayer={setcurrentPlayer}
+          setCurrentPlayer={setCurrentPlayer}
         />
       )}
       {currentComponent === "GameScreen" && (
         <GameScreen
           setNotification={setNotification}
           setCurrentComponent={setCurrentComponent}
-          setcurrentPlayer={setcurrentPlayer}
+          setCurrentPlayer={setCurrentPlayer}
           currentPlayer={currentPlayer}
           gameData={gameData}
           socket={socket}

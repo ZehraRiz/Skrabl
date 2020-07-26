@@ -10,9 +10,11 @@ const axios = require("axios");
 const cors = require("cors");
 const moment = require("moment");
 let now = moment();
+const computerRoute = require("./computerRoute");
 
 app.use(express.json());
 app.use(cors());
+app.use("/computerMove", computerRoute);
 
 const {
   userJoin,
@@ -299,3 +301,5 @@ app.post("/verifyWord", async (req, res) => {
   }
   res.status(200).send(results);
 });
+
+//
