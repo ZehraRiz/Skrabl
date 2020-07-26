@@ -13,6 +13,9 @@ const getBonusClassName = (square) => {
       ? (bonusClassName = "double-word")
       : (bonusClassName = "triple-word");
   }
+  if (square.letterMultiplier === 1 && square.wordMultiplier === 1) {
+      bonusClassName = ""
+  }
   return bonusClassName;
 };
 
