@@ -69,6 +69,10 @@
   pointer-events: none;
 }
 
+.board__centre {
+  background: purple;
+}
+
 /* tablet */
 @media (min-width: 500px) {
   .board__square {
