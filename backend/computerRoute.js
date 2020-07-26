@@ -3,6 +3,29 @@ const router = express.Router();
 const readline = require("readline");
 const fs = require("fs");
 
+const letterValues = {
+  1: ["a", "e", "i", "o", "u", "l", "n", "r", "s", "t"],
+  2: ["d", "g"],
+  3: ["b", "c", "m", "p"],
+  4: ["f", "h", "v", "w", "y"],
+  5: ["k"],
+  8: ["j", "x"],
+  10: ["q", "z"],
+};
+
+const letterValuesExpanded = Object.entries(letterValues).reduce(
+  (result, [score, letters]) => {
+    letters.forEach((letter) => {
+      result[letter] = score;
+    });
+    return result;
+  },
+  {}
+);
+
+console.log("letterValuesExpanded");
+console.log(letterValuesExpanded);
+
 const getNumLettersBefore = (word, letter) => {
   const res = word.search(letter);
   return res;
@@ -246,7 +269,20 @@ const placeTiles = (wordObj, boardState) => {
       row = boardSquareToUse.row;
       col = boardSquareToUse.col - firstPartOfWord.length + i;
     }
-    const square = { col, row, tile: { letter: firstPartOfWord[i] } };
+
+    const letter = firstPartOfWord[i];
+    const points = letterValuesExpanded[letter];
+
+    console.log("Letter:" + letter);
+    console.log("Points: " + points);
+    const square = {
+      col,
+      row,
+      tile: {
+        letter,
+        points,
+      },
+    };
     firstSquares.push(square);
   }
   for (let i = 0; i < firstSquares.length; i++) {

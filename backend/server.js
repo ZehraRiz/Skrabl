@@ -54,7 +54,6 @@ app.post("/verifyWord", async (req, res) => {
 });
 
 app.get("/getPouch", (req, res) => {
-  console.log("get pouch");
   const pouch = initializePouch();
   res.status(200).send(pouch);
 });
