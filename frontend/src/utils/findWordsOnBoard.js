@@ -16,7 +16,8 @@ export const findWordsOnBoard = (boardState, placedTiles) => {
                 wordScore = wordScore * wordMultiplier;
             });
             words.push({word: letters.join(''), start: wordStart, dir: dir, newWord: newWord, wordScore: wordScore});
-            newWord = false; 
+            newWord = false;
+            
         }
         if (!currentSquare.tile) {  
             if (wordStart !== '' && letters.length > 1) {                         
@@ -24,8 +25,8 @@ export const findWordsOnBoard = (boardState, placedTiles) => {
             }
             wordStart = ''; 
             letters = [];
-            wordScore = 0;
-            newWord = false; 
+            newWord = false;
+            wordScore = 0; 
         } else {
             letters.push(currentSquare.tile.letter);
             wordMultipliers.push(currentSquare.wordMultiplier);
