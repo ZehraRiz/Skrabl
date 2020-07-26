@@ -30,7 +30,7 @@ const GameScreen = ({
   const [playerRackTiles, setPlayerRackTiles] = useState(
     currentPlayer === 0
       ? gameData.gameState.player1Tiles
-      : gameData.gameState.player1Tiles
+      : gameData.gameState.player2Tiles
   );
   const [placedTiles, setPlacedTiles] = useState([]);
   const [gameIsOver, setGameIsOver] = useState(gameData.gameState.isOver);
