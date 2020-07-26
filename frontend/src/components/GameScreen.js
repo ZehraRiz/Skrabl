@@ -294,32 +294,19 @@ const GameScreen = ({
 	const handleClickConfirmMove = () => {
 		if (currentPlayer !== turn) return;
 		if (moveIsValid(placedTiles, boardState)) {
-			console.log("move is valid");
-			//get array of words formed in turn (objects)
-			//EXAMPLE:
 			/*
-			const formedWords / wordsOnBoard = [
+			wordsOnBoard = [
 				{ 
 					word: "house", 
 					points: 7,
 					newWord: true 
-				},
-				{ word: "cat", points: 4 },
-				{ word: "tea", points: 3 }
+				}
 			];
 			*/
 			axios.post("http://localhost:4001/verifyWord", { words: wordsOnBoard }).then((res) => {
 				const results = res.data;
 				if (Object.values(results).every((val) => val === "true")) {
-					//console.log("words are verified (using dummy words)");
-					/*
-					const updatedScoredWords = {
-						...scoredWords,
-						[currentPlayer]: [ ...scoredWords[currentPlayer], ...wordsOnBoard ]
-					};
-
-					scores = { 0: 0, 0: 1 },
-					*/
+					
 					var newWords = wordsOnBoard.filter(word => word.newWord === true);
 					var newScores = scores;
 					newWords.forEach(word => {
