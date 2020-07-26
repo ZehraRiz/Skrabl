@@ -34,8 +34,8 @@ export const generateBoardSquares = (bonusSquareIndices) => {
     } else {
       allSquares.push({
         index: i,
-        letterMultiplier: 1,
-        wordMultiplier: 1,
+        letterMultiplier: null,
+        wordMultiplier: null,
         row,
         col,
       });
