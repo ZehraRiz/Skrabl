@@ -2,16 +2,25 @@
 
 .board__wrapper {
   margin: 0 auto;
-}
-.board__board {
   display: flex;
-  flex-wrap: wrap;
-  width: 100%;
+  justify-content: center;
+}
+
+.board__board {
+  object-fit: contain;
+  display: grid;
+  grid-template-columns: repeat(15, 1fr);
+  grid-template-rows: repeat(15, 1fr);
+  max-width: 650px;
 }
 
 .board__square {
-  flex-basis: calc(100% / 15);
-  border: 1px solid white;
+ 
+  width: 4.5em;
+  height: 4.2em;
+  border-top: 1px solid rgba(38, 38, 17);
+  border: 1px solid rgba(38, 38, 17);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5);
   font-size: 0.6rem;
   text-align: center;
   padding: 0.5rem 0;
@@ -24,20 +33,21 @@
 }
 
 .board__tile {
-  width: 95%;
+  width: 90%;
   display: flex;
   align-items: center;
   justify-content: center;
   background: #fffcb9;
-  border-radius: 3px;
+  border-radius: 2px;
   position: absolute;
   width: 90%;
   height: 90%;
   font-size: 1.1rem;
+  
 }
 
 .board__square:hover {
-  border: 1px solid yellow;
+  outline: 2px solid yellow;
 }
 
 .board__bonus-text {

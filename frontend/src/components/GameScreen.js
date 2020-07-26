@@ -314,7 +314,7 @@ const GameScreen = ({
 					//*scores are updated automatically
 					setScoredWords(updatedScoredWords);
 					nextPlayer(consecutivePasses * -1);  // resets consecutivePasses by deducting it from itself
-
+					setPlacedTiles([]);
 					return;
 				} else {
 					setNotification("Don't make up words!");
