@@ -146,13 +146,13 @@ const GameScreen = ({
 		socket.emit("requestTiles", { gameId: gameData.gameId, numTilesNeeded: numTilesNeeded, player: currentPlayer });
 	};
 
-	const nextPlayer = (x = 0) => {
+	const nextPlayer = (x = 0, newScores = {0: 0, 0: 0}) => {
 		socket.emit("updateGameState", {
 			gameId: gameData.gameId,
 			boardState: boardState,
 			playerRackTiles: playerRackTiles,
 			player: currentPlayer,
-			scores: scores,
+			scores: newScores,
 			consecutivePasses: consecutivePasses + x
 		});
 	};
@@ -321,7 +321,7 @@ const GameScreen = ({
 					scores = { 0: 0, 0: 1 },
 					*/
 					var newWords = wordsOnBoard.filter(word => word.newWord === true);
-					var {newScores} = scores;
+					var newScores = scores;
 					newWords.forEach(word => {
 						newScores[currentPlayer] = newScores[currentPlayer] + word.wordScore;
 						console.log('wordScore: ' + word.wordScore);
@@ -335,7 +335,7 @@ const GameScreen = ({
 					//setScoredWords(updatedScoredWords);
 
 
-					nextPlayer(consecutivePasses * -1);  // resets consecutivePasses by deducting it from itself
+					nextPlayer(consecutivePasses * -1, newScores);  // resets consecutivePasses by deducting it from itself
 					setPlacedTiles([]);
 					return;
 				} else {
