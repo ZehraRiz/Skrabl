@@ -49,26 +49,38 @@ const GameScreen = ({
 
   useEffect(() => {
     //set inital state
-    setGameIsOver(gameData.gameState.isOver);
-    setPlayerRackTiles(
-      currentPlayer === 0
-        ? gameData.gameState.player1Tiles
-        : gameData.gameState.player2Tiles
-    );
-    setBoardState(gameData.gameState.boardState);
-    setTimeLeftPlayer(
-      currentPlayer === 0
-        ? gameData.gameState.player1TimeLeft
-        : gameData.gameState.player2TimeLeft
-    );
-    setTimeLeftOpponent(
-      currentPlayer === 1
-        ? gameData.gameState.player1TimeLeft
-        : gameData.gameState.player2TimeLeft
-    );
-    setScores(gameData.gameState.scores);
-    setTurn(gameData.gameState.turn);
-    setConsecutivePasses(gameData.gameState.consecutivePasses);
+    if (gameMode === "Online") {
+      setGameIsOver(gameData.gameState.isOver);
+      setPlayerRackTiles(
+        currentPlayer === 0
+          ? gameData.gameState.player1Tiles
+          : gameData.gameState.player2Tiles
+      );
+      setBoardState(gameData.gameState.boardState);
+      setTimeLeftPlayer(
+        currentPlayer === 0
+          ? gameData.gameState.player1TimeLeft
+          : gameData.gameState.player2TimeLeft
+      );
+      setTimeLeftOpponent(
+        currentPlayer === 1
+          ? gameData.gameState.player1TimeLeft
+          : gameData.gameState.player2TimeLeft
+      );
+      setScores(gameData.gameState.scores);
+      setTurn(gameData.gameState.turn);
+      setConsecutivePasses(gameData.gameState.consecutivePasses);
+    }
+    if (gameMode === "Computer") {
+      setGameIsOver(false);
+      setPlayerRackTiles([]);
+      setBoardState([]);
+      setTimeLeftPlayer(null);
+      setTimeLeftOpponent(null);
+      setScores({ 0: 0, 1: 0 });
+      setTurn(null);
+      setConsecutivePasses(null);
+    }
   }, []);
 
   useEffect(() => {
