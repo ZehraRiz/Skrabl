@@ -1,8 +1,8 @@
 export const generateBoardSquares = (bonusSquareIndices) => {
   let bonusSquares = [];
   Object.keys(bonusSquareIndices).forEach((key) => {
-    let letterMultiplier = null;
-    let wordMultiplier = null;
+    let letterMultiplier = 1;
+    let wordMultiplier = 1;
     if (key === "doubleLetter") {
       letterMultiplier = 2;
     } else if (key === "tripleLetter") {
