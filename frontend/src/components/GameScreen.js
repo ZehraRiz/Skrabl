@@ -48,7 +48,6 @@ const GameScreen = ({
 	const [ wordsOnBoard, setWordsOnBoard ] = useState([]);
 	const [consecutivePasses, setConsecutivePasses] = useState(gameData.gameState.consecutivePasses);
 	const pouch = gameData.gameState.pouch; 
-	let buffer = false;
 	
 
 
@@ -78,8 +77,8 @@ const GameScreen = ({
 
 	useEffect(() => {
 		console.log('wordsOnBoard: ', wordsOnBoard);
-		var score = calculateWordScore(wordsOnBoard);
-		console.log('score: ', score );
+		//var score = calculateWordScore(wordsOnBoard);
+		//console.log('score: ', score );
 	}, [wordsOnBoard]);
 
 	useEffect(() => {
@@ -160,7 +159,7 @@ const GameScreen = ({
 	const updateScores = () => {
 		//test and see if running
 		const updatedScores = getScoresFromWords(scoredWords);
-		setScores(updatedScores);
+		setScores(scores);
 	};
 
 	const placeTile = () => {
@@ -297,22 +296,43 @@ const GameScreen = ({
 			console.log("move is valid");
 			//get array of words formed in turn (objects)
 			//EXAMPLE:
-			const formedWords = [
-				{ word: "house", points: 7 },
+			/*
+			const formedWords / wordsOnBoard = [
+				{ 
+					word: "house", 
+					points: 7,
+					newWord: true 
+				},
 				{ word: "cat", points: 4 },
 				{ word: "tea", points: 3 }
 			];
-			axios.post("http://localhost:4001/verifyWord", { words: formedWords }).then((res) => {
+			*/
+			axios.post("http://localhost:4001/verifyWord", { words: wordsOnBoard }).then((res) => {
 				const results = res.data;
 				if (Object.values(results).every((val) => val === "true")) {
-					console.log("words are verified (using dummy words)");
+					//console.log("words are verified (using dummy words)");
+					/*
 					const updatedScoredWords = {
 						...scoredWords,
-						[currentPlayer]: [ ...scoredWords[currentPlayer], ...formedWords ]
+						[currentPlayer]: [ ...scoredWords[currentPlayer], ...wordsOnBoard ]
 					};
+
+					scores = { 0: 0, 0: 1 },
+					*/
+					var newWords = wordsOnBoard.filter(word => word.newWord === true);
+					newWords.forEach(word => {
+						scores[currentPlayer] = scores[currentPlayer] + word.wordScore;
+						console.log('wordScore: ' + word.wordScore);
+						console.log('scores[currentPlayer]: ' + scores[currentPlayer]);
+					})
+					
+					console.log(scores);
+					
 					
 					//*scores are updated automatically
-					setScoredWords(updatedScoredWords);
+					//setScoredWords(updatedScoredWords);
+
+
 					nextPlayer(consecutivePasses * -1);  // resets consecutivePasses by deducting it from itself
 					setPlacedTiles([]);
 					return;
