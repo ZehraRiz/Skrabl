@@ -1,56 +1,57 @@
 
-export const findWordsOnBoard = (boardState) => {
-    let dir = 'across',
-        wordStart = '',
+export const findWordsOnBoard = (boardState, placedTiles) => {
+    let wordStart = '',
+        wordScore = 0,
+        wordMultipliers = [], 
+        newWord = false,
         words = [],
-        letters = [];
-    
-    // Scan all rows for words across
-    for (var row = 0; row < 15; row++) { 
-        for (var col = 0; col < 15; col++) { 
-            var currentSquare = boardState[col + ((row * 15))];
-            if (!currentSquare.hasOwnProperty('tile')) {  
-                if (wordStart !== ''){                          // tests if word is already being recorded
-                    if (letters.length > 1) {
-                        words.push({word: letters.join(''), start: wordStart, dir: dir});     // captures word
-                    }
-                }
-                wordStart = '';       // ends recording of word
-                letters = [];
-            } else {
-                letters.push(currentSquare.tile.letter);  
-                if (wordStart !== '' && col === 14 ) {                                  // includes last tile if word ends at end of board.
-                    words.push({word: letters.join(''), start: wordStart, dir: dir});           
-                } else if (wordStart == '') {
-                    wordStart = `${row}-${col}`;                // begins recording word
-                }
+        letters = [], 
+        dirs = ['across', 'down'];
+
+    const checkSquare = (dir, x, y) => {
+        let [row, col] = dir === 'across' ? [x, y] : [y, x];
+        var currentSquare = boardState[col + (row * 15)];
+        const addWord = () => {
+            wordMultipliers.forEach(wordMultiplier => {
+                wordScore = wordScore * wordMultiplier;
+            });
+            words.push({word: letters.join(''), start: wordStart, dir: dir, newWord: newWord, wordScore: wordScore});
+            newWord = false; 
+        }
+        if (!currentSquare.tile) {  
+            if (wordStart !== '' && letters.length > 1) {                         
+                addWord();
+            }
+            wordStart = ''; 
+            letters = [];
+            wordScore = 0;
+            newWord = false; 
+        } else {
+            letters.push(currentSquare.tile.letter);
+            wordMultipliers.push(currentSquare.wordMultiplier);
+            wordScore += currentSquare.tile.points * currentSquare.letterMultiplier;
+            if (placedTiles.filter(item => 
+                item.id === currentSquare.tile.id
+            ).length > 0) {
+                newWord = true;
+            }
+            if (wordStart !== '' && col === 14 ) {                                 
+                addWord();           
+            } else if (wordStart == '') {
+                wordStart = `${row}-${col}`;  
             }
         }
+      }
     }
-    
-    // Scan all columns for words down
-    dir = 'down';
-    for (var col = 0; col < 15; col++) {
-        for (var row = 0; row < 15; row++) { 
-            var currentSquare = boardState[col + ((row * 15))];
-            if (!currentSquare.hasOwnProperty('tile')) { 
-                if (wordStart !== ''){                          // tests if word is already being recorded
-                    if (letters.length > 1) {
-                        words.push({word: letters.join(''), start: wordStart, dir: dir});     // captures word
-                    }
-                }
-                wordStart = '';     // ends recording of word
-                letters = [];
-            } else {
-                letters.push(currentSquare.tile.letter);    
-                if (wordStart !== '' && row === 14 ) {                 
-                    words.push({word: letters.join(''), start: wordStart, dir: dir});   //  includes last tile if word ends at end of board.
-                } else if (wordStart == '') {
-                    wordStart = `${row}-${col}`;                   // begins recording word
-                }
+    dirs.forEach(dir => {
+        for (var x = 0; x < 15; x++) { 
+            for (var y = 0; y < 15; y++) { 
+                checkSquare(dir, x, y);
             }
         }
-    }
+    });
+
     return words;
 }
+
 

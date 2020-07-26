@@ -3,11 +3,15 @@
 .gameScreen__wrapper {
   display: flex;
   flex-direction: column;
+  background: rgb(223,206,174);
+  background: linear-gradient(0deg, rgba(223,206,174,1) 71%, rgba(187,172,144,1) 100%);
+
 }
 
 .gameScreen__board {
   width: 100%;
   margin: 0 auto;
+  perspective: 1000px;
 }
 
 /* tablet */
