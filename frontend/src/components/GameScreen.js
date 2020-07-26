@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import Board from "../components/Board";
 import TileRack from "./TileRack";
@@ -418,3 +419,4 @@ const GameScreen = ({
 };
 
 export default GameScreen;
+

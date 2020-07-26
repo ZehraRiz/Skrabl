@@ -41,8 +41,8 @@ export const findWordsOnBoard = (boardState, placedTiles) => {
                 wordStart = `${row}-${col}`;  
             }
         }
+      }
     }
-
     dirs.forEach(dir => {
         for (var x = 0; x < 15; x++) { 
             for (var y = 0; y < 15; y++) { 
@@ -54,14 +54,4 @@ export const findWordsOnBoard = (boardState, placedTiles) => {
     return words;
 }
 
-/*
-  
-square.tile = {
-    id: 71, 
-    letter: "D", 
-    player: 0, 
-    point: 2, 
-    square: 112
-}
 
-*/
