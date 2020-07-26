@@ -132,7 +132,7 @@ const GameScreen = ({
       setTurn(data.gameState.turn);
       setConsecutivePasses(data.gameState.consecutivePasses);
     });
-  }, []);
+  }, [playerRackTiles]);
 
   const getBoard = () => {
     const squares = generateBoardSquares(bonusSquareIndices);
@@ -144,7 +144,6 @@ const GameScreen = ({
     setWordsOnBoard([...words]);
   };
 
-  //*dummy function* - will get tiles from backend
   const getTiles = () => {
     console.log("trying to get tiles");
     const numTilesNeeded = 7 - playerRackTiles.length;
