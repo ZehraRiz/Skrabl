@@ -28,38 +28,48 @@ const GameScreen = ({
 }) => {
   const [selectedTile, setSelectedTile] = useState(null);
   const [selectedSquareIndex, setSelectedSquareIndex] = useState(null);
-  const [playerRackTiles, setPlayerRackTiles] = useState(
-    currentPlayer === 0
-      ? gameData.gameState.player1Tiles
-      : gameData.gameState.player2Tiles
-  );
+  const [playerRackTiles, setPlayerRackTiles] = useState();
   const [placedTiles, setPlacedTiles] = useState([]);
-  const [gameIsOver, setGameIsOver] = useState(gameData.gameState.isOver);
+  const [gameIsOver, setGameIsOver] = useState();
   const [confirmMessage, setConfirmMessage] = useState(null);
-  const [boardState, setBoardState] = useState(gameData.gameState.boardState);
-  const [timeLeftPlayer, setTimeLeftPlayer] = useState(
-    currentPlayer === 0
-      ? gameData.gameState.player1TimeLeft
-      : gameData.gameState.player2TimeLeft
-  );
-  const [timeLeftOpponent, setTimeLeftOpponent] = useState(
-    currentPlayer === 1
-      ? gameData.gameState.player1TimeLeft
-      : gameData.gameState.player2TimeLeft
-  );
+  const [boardState, setBoardState] = useState();
+  const [timeLeftPlayer, setTimeLeftPlayer] = useState();
+  const [timeLeftOpponent, setTimeLeftOpponent] = useState();
   const [scoredWords, setScoredWords] = useState({ 0: [], 1: [] });
-  const [scores, setScores] = useState(gameData.gameState.scores);
-  const [turn, setTurn] = useState(gameData.gameState.turn);
+  const [scores, setScores] = useState();
+  const [turn, setTurn] = useState();
   const [tilesToExchange, setTilesToExchange] = useState([]);
   const [boardIsDisabled, setBoardIsDisabled] = useState(false);
   const [wordsOnBoard, setWordsOnBoard] = useState([]);
-  const [consecutivePasses, setConsecutivePasses] = useState(
-    gameData.gameState.consecutivePasses
-  );
+  const [consecutivePasses, setConsecutivePasses] = useState();
   const pouch = gameData.gameState.pouch;
   let buffer = false;
 
   //EFFECTS
+
+  useEffect(() => {
+    //set inital state
+    setGameIsOver(gameData.gameState.isOver);
+    setPlayerRackTiles(
+      currentPlayer === 0
+        ? gameData.gameState.player1Tiles
+        : gameData.gameState.player2Tiles
+    );
+    setBoardState(gameData.gameState.boardState);
+    setTimeLeftPlayer(
+      currentPlayer === 0
+        ? gameData.gameState.player1TimeLeft
+        : gameData.gameState.player2TimeLeft
+    );
+    setTimeLeftOpponent(
+      currentPlayer === 1
+        ? gameData.gameState.player1TimeLeft
+        : gameData.gameState.player2TimeLeft
+    );
+    setScores(gameData.gameState.scores);
+    setTurn(gameData.gameState.turn);
+    setConsecutivePasses(gameData.gameState.consecutivePasses);
+  }, []);
 
   useEffect(() => {
     getBoard();
