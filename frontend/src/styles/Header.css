@@ -2,6 +2,9 @@
 
 .header__wrapper {
   text-align: center;
-  background: rgb(250, 163, 163);
+  background: rgb(54, 38, 17);
   padding: 1rem;
+  color:  #fffcb9;
+  font-family: scripts;
+  letter-spacing: 5px;
 }

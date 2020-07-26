@@ -17,7 +17,7 @@ function gameJoin(gameId) {
             boardState: [],
             player2TimeLeft: 20,
             consecutivePasses: 0,
-            scores: { 0: 0, 0: 1 },
+            scores: { 0: 0, 1: 0 },
             isOver: false
         }
     }

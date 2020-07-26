@@ -21,6 +21,28 @@ const App = () => {
   const [currentPlayer, setCurrentPlayer] = useState(); // 0 means he was the host and his data is stored as player1 at the backend. 1 means he is player2
   const [socket, setSocket] = useState(null);
 
+  //Search for an existing token in ls and send it
+  useEffect(() => {
+    if (gameMode === "onilne") {
+      const userIdFromLS = localStorage.getItem("token");
+      if (userIdFromLS) {
+        socket.emit("retriveUser", userIdFromLS);
+        console.log("user token exists at frontend");
+        //backend does not recognize the token
+        socket.on("tokenError", (data) => {
+          setCurrentComponent("Login");
+          localStorage.removeItem("token");
+          console.log(data);
+          return;
+        });
+        socket.on("retrievdUser", (data) => {
+          setCurrentComponent("Players");
+          console.log("found your previous session");
+        });
+      } else setCurrentComponent("Login");
+    }
+  }, []);
+
   // useEffect(() => {
   // 	const userIdFromLS = localStorage.getItem("userId");
   // 	if (userIdFromLS) {
