@@ -321,13 +321,14 @@ const GameScreen = ({
 					scores = { 0: 0, 0: 1 },
 					*/
 					var newWords = wordsOnBoard.filter(word => word.newWord === true);
+					var {newScores} = scores;
 					newWords.forEach(word => {
-						scores[currentPlayer] = scores[currentPlayer] + word.wordScore;
+						newScores[currentPlayer] = newScores[currentPlayer] + word.wordScore;
 						console.log('wordScore: ' + word.wordScore);
 						console.log('scores[currentPlayer]: ' + scores[currentPlayer]);
 					})
-					setScores(scores);
-					console.log(scores);
+					setScores(newScores);
+					console.log(newScores);
 					
 					
 					//*scores are updated automatically
