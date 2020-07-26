@@ -26,7 +26,7 @@ export const findWordsOnBoard = (boardState, placedTiles) => {
             wordStart = ''; 
             letters = [];
             newWord = false;
-            wordScore = 0; 
+            wordScore = 0; // maybe repeat in addWord?
         } else {
             letters.push(currentSquare.tile.letter);
             wordMultipliers.push(currentSquare.wordMultiplier);
@@ -37,7 +37,8 @@ export const findWordsOnBoard = (boardState, placedTiles) => {
                 newWord = true;
             }
             if (wordStart !== '' && col === 14 ) {                                 
-                addWord();           
+                addWord();
+                           
             } else if (wordStart == '') {
                 wordStart = `${row}-${col}`;  
             }
