@@ -3,3 +3,38 @@
   justify-content: space-around;
   padding: 0.5rem 0;
 }
+
+
+
+button {
+	box-shadow:inset 0px 1px 0px 0px #a6827e;
+	background:linear-gradient(to bottom, #7d5d3b 5%, #634b30 100%);
+	background-color:#7d5d3b;
+	border-radius:3px;
+	border:1px solid #967351;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size: 1em;
+	padding: 10px 15px;
+	text-decoration:none;
+  text-shadow:0px 1px 0px #4d3534;
+  white-space: nowrap;
+  letter-spacing: .05em;
+}
+button:hover {
+	background:linear-gradient(to bottom, #634b30 5%, #7d5d3b 100%);
+	background-color:#634b30;
+}
+button:active {
+	position:relative;
+	top:1px;
+}
+
+
+@media (max-width: 1100px ) {
+  button {
+    font-size: .8em;
+  }
+}

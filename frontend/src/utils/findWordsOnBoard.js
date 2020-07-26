@@ -1,6 +1,8 @@
 
 export const findWordsOnBoard = (boardState, placedTiles) => {
-    let wordStart = '', 
+    let wordStart = '',
+        wordScore = 0,
+        wordMultipliers = [], 
         newWord = false,
         words = [],
         letters = [], 
@@ -10,7 +12,10 @@ export const findWordsOnBoard = (boardState, placedTiles) => {
         let [row, col] = dir === 'across' ? [x, y] : [y, x];
         var currentSquare = boardState[col + (row * 15)];
         const addWord = () => {
-            words.push({word: letters.join(''), start: wordStart, dir: dir, newWord: newWord});
+            wordMultipliers.forEach(wordMultiplier => {
+                wordScore = wordMultiplier ? wordScore * wordMultiplier : wordScore;
+            });
+            words.push({word: letters.join(''), start: wordStart, dir: dir, newWord: newWord, wordScore: wordScore});
             newWord = false; 
         }
         if (!currentSquare.tile) {  
@@ -19,9 +24,11 @@ export const findWordsOnBoard = (boardState, placedTiles) => {
             }
             wordStart = ''; 
             letters = [];
+            wordScore = 0;
             
         } else {
             letters.push(currentSquare.tile.letter);
+            wordScore = currentSquare.letterMultiplier ? currentSquare.tile.points * currentSquare.letterMultiplier : wordScore;
             if (placedTiles.filter(item => 
                 item.id === currentSquare.tile.id
             ).length > 0) {
