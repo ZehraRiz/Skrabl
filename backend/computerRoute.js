@@ -253,6 +253,7 @@ const placeTiles = (wordObj, boardState) => {
     (square) => square.index === wordObj.squareIndex
   )[0];
   let updatedBoardState = [...boardState];
+  const updatedSquaresIndices = [];
 
   //first part
   const firstSquares = [];
@@ -288,6 +289,8 @@ const placeTiles = (wordObj, boardState) => {
       ...squareToUpdate,
       ...squareToUpdate.tile,
       index: matchingBoardSquare.index,
+      letterMultiplier: matchingBoardSquare.letterMultiplier,
+      wordMultiplier: matchingBoardSquare.wordMultiplier,
     };
     updatedSquare.tile.square = matchingBoardSquare.index;
     updatedBoardState = updatedBoardState.map((square) => {
@@ -297,6 +300,7 @@ const placeTiles = (wordObj, boardState) => {
         return square;
       }
     });
+    updatedSquaresIndices.push(matchingBoardSquare.index);
   }
   //second part
   const secondSquares = [];
@@ -312,14 +316,8 @@ const placeTiles = (wordObj, boardState) => {
     }
     const letter = secondPartOfWord[i];
     const points = letterValuesExpanded[letter];
-    const square = {
-      col,
-      row,
-      tile: {
-        letter,
-        points,
-      },
-    };
+
+    const square = { col, row, tile: { letter, points } };
     secondSquares.push(square);
   }
 
@@ -333,6 +331,8 @@ const placeTiles = (wordObj, boardState) => {
       ...squareToUpdate,
       tile: { ...squareToUpdate.tile },
       index: matchingBoardSquare.index,
+      letterMultiplier: matchingBoardSquare.letterMultiplier,
+      wordMultiplier: matchingBoardSquare.wordMultiplier,
     };
     updatedSquare.tile.square = matchingBoardSquare.index;
     updatedBoardState = updatedBoardState.map((square) => {
@@ -345,8 +345,9 @@ const placeTiles = (wordObj, boardState) => {
         return square;
       }
     });
+    updatedSquaresIndices.push(matchingBoardSquare.index);
   }
-  return updatedBoardState;
+  return { updatedBoardState, updatedSquaresIndices };
 };
 
 const makeMove = async (rackLetters, boardState) => {
@@ -371,7 +372,10 @@ const makeMove = async (rackLetters, boardState) => {
     (a, b) => b.length - a.length
   )[0];
 
-  const newBoardState = placeTiles(longestPlayableWord, boardState);
+  const { updatedBoardState, updatedSquaresIndices } = placeTiles(
+    longestPlayableWord,
+    boardState
+  );
   const firstPartOfWord = longestPlayableWord.word.slice(
     0,
     longestPlayableWord.letterIndex
@@ -382,8 +386,9 @@ const makeMove = async (rackLetters, boardState) => {
   const lettersUsed = [...firstPartOfWord, ...secondPartOfWord];
   return {
     pass: false,
-    boardState: newBoardState,
+    boardState: updatedBoardState,
     word: longestPlayableWord.word,
+    updatedSquaresIndices,
     lettersUsed,
   };
 };
