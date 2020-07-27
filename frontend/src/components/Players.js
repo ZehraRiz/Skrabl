@@ -28,6 +28,7 @@ const Players = ({
 		});
 		socket.on("gameJoined2", (data) => {
 			console.log(data);
+			setInvitedPlayer(invite.host);
 			setCurrentPlayer(1);
 			setGameData(data.game);
 			setCurrentComponent("GameScreen");

@@ -517,14 +517,15 @@ const GameScreen = ({
               handleConfirmExchange={handleConfirmExchange}
             />
           )}
-      </div>
-      {gameMode === "Online" && (
+          {gameMode === "Online" && (
         <Chat
           gameId={gameData.gameId}
           currentPlayer={currentPlayer}
           socket={socket}
         />
       )}
+      </div>
+      
       {gameIsOver && (
         <GameOverModal
           scores={scores}

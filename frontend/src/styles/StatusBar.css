@@ -9,7 +9,8 @@
   flex-direction: column;
   min-height: 6rem;
   background: rgb(247, 243, 236);
-  border: 3px solid rgb(69, 57, 36);
+  border: 2px solid rgb(155, 131, 88);
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
   border-radius: 3px;;
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
@@ -30,7 +31,6 @@
   align-items: center;
   padding: .5em .5em;
   border-radius: 3px;
-  //align-items: center;
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
   -ms-border-radius: 3px;
@@ -83,20 +83,19 @@
 }
 
 /* large tablet */
-@media (min-width: 750px) {
+@media (min-width: 850px) {
   .gameScreen__boardAndRack {
     //width: 80%;
     //margin: 0 auto;
   }
 
+
   .statusBar__wrapper {
-    order: 1;
-    width: auto;
     grid-column: 1/2;
-    grid-row: 1/1;
-    flex-direction: column;
-    height: 50%;
-    align-self: flex-start;
+    grid-row: 1/2;
+    margin-top: 10px;
+    /*height: 50%;
+    align-self: flex-start;*/
   }
   .statusBar__player {
     flex-direction: column;

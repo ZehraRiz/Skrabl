@@ -31,7 +31,7 @@ const StatusBar = ({
         
       </div>
       <div className={turn !== currentPlayer ? "statusBar__player opponent__active" : "statusBar__player"}>
-        <div class="player__name">{gameMode === "Computer" ? "ScrabbleBot" : invitedPlayer.name }</div>
+        <div class="player__name">{gameMode === "Computer" ? "ScrabbleBot" : 'invitedPlayer.name' }</div>
         <div class="player__time">
           <Timer
             setNotification={setNotification}
