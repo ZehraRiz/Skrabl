@@ -1,13 +1,20 @@
 /* mobile */
 
 .statusBar__wrapper {
+  order: -1;
   display: flex;
   align-items: center;
-  padding: 0.5rem 0;
-  justify-content: space-around;
+  padding: .5rem;
+  justify-content: space-between;
   flex-direction: column;
-  height: 4rem;
-  background: rgb(155, 199, 230);
+  min-height: 6rem;
+  background: rgb(247, 243, 236);
+  border: 3px solid rgb(69, 57, 36);
+  border-radius: 3px;;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
 }
 
 .statusBar__wrapper button {
@@ -16,8 +23,59 @@
 
 .statusBar__player {
   display: flex;
-  width: 30%;
-  justify-content: space-between;
+  flex-direction: row;
+  width: 100%;
+  height: 45%;
+  justify-content: space-around;
+  align-items: center;
+  padding: .5em .5em;
+  border-radius: 3px;
+  //align-items: center;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
+  color: #333;
+}
+
+.statusBar__player > * {
+  //padding: .2em;
+}
+
+.player__thinking {
+  display: none;
+}
+
+.player__name {
+  //text-align: center;
+   font-size: 1.3em;
+   font-weight: bold;
+
+   min-width: 125px;
+}
+
+.player__active {
+  color: white;
+  background: rgb(49, 132, 45);
+  border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+}
+
+.opponent__active {
+  color: white;
+  background: rgb(145, 56, 40);
+  border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+}
+
+.player__time, .player__score {
+  //padding-left: 1em;
 }
 
 /* tablet */
@@ -27,11 +85,12 @@
 /* large tablet */
 @media (min-width: 750px) {
   .gameScreen__boardAndRack {
-    //width/: 80%;
+    //width: 80%;
     //margin: 0 auto;
   }
 
   .statusBar__wrapper {
+    order: 1;
     width: auto;
     grid-column: 1/2;
     grid-row: 1/1;
@@ -39,6 +98,13 @@
     height: 50%;
     align-self: flex-start;
   }
+  .statusBar__player {
+    flex-direction: column;
+  }
+  .player__name {
+    text-align: center;
+  }
+ 
 }
 
 /* laptop */
