@@ -24,6 +24,7 @@ button {
   text-shadow:0px 1px 0px #4d3534;
   white-space: nowrap;
   letter-spacing: .05em;
+  height: 15%;
 }
 button:hover {
 	background:linear-gradient(to bottom, #634b30 5%, #7d5d3b 100%);

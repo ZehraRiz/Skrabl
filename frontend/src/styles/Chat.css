@@ -44,6 +44,7 @@
   .chat__wrapper {
     grid-column: 3;
     grid-row: 1/3;
+
   }
 }
 
