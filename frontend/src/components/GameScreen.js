@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import Board from "../components/Board";
 import TileRack from "./TileRack";
@@ -19,6 +18,8 @@ import axios from "axios";
 import "../styles/GameScreen.css";
 
 const GameScreen = ({
+  user,
+  invitedPlayer,
   setNotification,
   setCurrentComponent,
   currentPlayer,
@@ -340,9 +341,9 @@ const GameScreen = ({
       message: "Are you sure you want to resign?",
     });
   };
-  
+
   const handleConfirmMove = () => {
-	if (currentPlayer !== turn) return;
+    if (currentPlayer !== turn) return;
 
     setConfirmMessage({
       type: "confirm",
@@ -479,43 +480,47 @@ const GameScreen = ({
             playerRackTiles={playerRackTiles}
             handleClickTile={handleClickTile}
           />
-      </div>
-          <StatusBar
-            scores={scores}
-            setNotification={setNotification}
-            timeLeftPlayer={timeLeftPlayer}
-            timeLeftOpponent={timeLeftOpponent}
-            setTimeLeftPlayer={setTimeLeftPlayer}
-            setTimeLeftOpponent={setTimeLeftOpponent}
-            currentPlayer={currentPlayer}
-            turn={turn}
-            gameMode={gameMode}
-          />
-          {!boardIsDisabled && (
-            <GameButtons
-              getTiles={getTiles}
-              handleClickClearTiles={handleClickClearTiles}
-              handleClickShuffle={handleClickShuffle}
-              handleClickConfirmMove={handleClickConfirmMove}
-              handleClickResign={handleClickResign}
-              handleClickPass={handleClickPass}
-              handleClickExchangeTiles={handleClickExchangeTiles}
-            />
-          )}
-          {boardIsDisabled && (
-            <ExchangeTilesButtons
-              handleCancelExchange={handleCancelExchange}
-              handleConfirmExchange={handleConfirmExchange}
-            />
-          )}
-      </div>
-      {gameMode === "Online" && (
-        <Chat
-          gameId={gameData.gameId}
+        </div>
+        <StatusBar
+          scores={scores}
+          user={user}
+          invitedPlayer={invitedPlayer}
+          setNotification={setNotification}
+          timeLeftPlayer={timeLeftPlayer}
+          timeLeftOpponent={timeLeftOpponent}
+          setTimeLeftPlayer={setTimeLeftPlayer}
+          setTimeLeftOpponent={setTimeLeftOpponent}
           currentPlayer={currentPlayer}
-          socket={socket}
+          turn={turn}
+          gameMode={gameMode}
         />
-      )}
+        {!boardIsDisabled && (
+          <GameButtons
+            getTiles={getTiles}
+            placedTiles={placedTiles}
+            handleClickClearTiles={handleClickClearTiles}
+            handleClickShuffle={handleClickShuffle}
+            handleClickConfirmMove={handleClickConfirmMove}
+            handleClickResign={handleClickResign}
+            handleClickPass={handleClickPass}
+            handleClickExchangeTiles={handleClickExchangeTiles}
+          />
+        )}
+        {boardIsDisabled && (
+          <ExchangeTilesButtons
+            handleCancelExchange={handleCancelExchange}
+            handleConfirmExchange={handleConfirmExchange}
+          />
+        )}
+        {gameMode === "Online" && (
+          <Chat
+            gameId={gameData.gameId}
+            currentPlayer={currentPlayer}
+            socket={socket}
+          />
+        )}
+      </div>
+
       {gameIsOver && (
         <GameOverModal
           scores={scores}

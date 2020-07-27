@@ -1,13 +1,20 @@
 /* mobile */
 
 .statusBar__wrapper {
+  
+  order: -1;
   display: flex;
   align-items: center;
-  padding: 0.5rem 0;
+  padding: 0.5rem .5rem;
   justify-content: space-around;
   flex-direction: column;
-  height: 4rem;
-  background: rgb(155, 199, 230);
+  background: rgb(250, 244, 233);
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
+  width: 100%;
 }
 
 .statusBar__wrapper button {
@@ -16,9 +23,30 @@
 
 .statusBar__player {
   display: flex;
-  width: 30%;
+  flex-direction: row;
   justify-content: space-between;
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
+  width: 100%;
+  padding: 10px;
+  height: 45%;
 }
+
+.player__active {
+  background: green;
+  color: white;
+}
+
+
+.opponent__active {
+  background: red;
+  color: white;
+}
+
+
 
 /* tablet */
 @media (min-width: 500px) {
@@ -26,19 +54,20 @@
 
 /* large tablet */
 @media (min-width: 750px) {
-  .gameScreen__boardAndRack {
-    //width/: 80%;
-    //margin: 0 auto;
-  }
-
+  
   .statusBar__wrapper {
-    width: auto;
-    grid-column: 1/2;
-    grid-row: 1/1;
-    flex-direction: column;
-    height: 50%;
+    order: auto;
+    grid-row: 1/3;
+    grid-column: 1;
     align-self: flex-start;
+    height: 40%;
   }
+  .statusBar__player {
+
+    flex-direction: column;
+
+  }
+  
 }
 
 /* laptop */

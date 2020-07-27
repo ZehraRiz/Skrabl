@@ -5,14 +5,37 @@
   font-family: Arial, Helvetica, sans-serif;
 }
 
+body {
+  //width: 100vw;
+  background: rgb(223,206,174);
+  background: linear-gradient(0deg, rgba(223,206,174,1) 71%, rgba(187,172,144,1) 100%) fixed;
+}
+
 html {
   height: 100%;
 }
 
 .page {
-  height: 100%;
+  //min-height: 100vh;
 }
 
 #root {
   height: 100%;
+}
+
+h1 {
+  font-size: 1.5em;
+}
+
+@media (min-width: 750px) {
+  .page {
+    display: flex;
+    flex-direction: column;
+    //align-items: center;
+    //justify-content: center;
+  }
+  
+  h1 {
+    font-size: 2em;
+  }
 }
