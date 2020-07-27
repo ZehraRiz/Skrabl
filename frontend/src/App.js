@@ -93,6 +93,8 @@ const App = () => {
       )}
       {currentComponent === "GameScreen" && (
         <GameScreen
+          user={user}
+          invitedPlayer={invitedPlayer}
           setNotification={setNotification}
           setCurrentComponent={setCurrentComponent}
           setCurrentPlayer={setCurrentPlayer}

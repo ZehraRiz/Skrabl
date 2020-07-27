@@ -18,6 +18,8 @@ import axios from "axios";
 import "../styles/GameScreen.css";
 
 const GameScreen = ({
+  user,
+  invitedPlayer,
   setNotification,
   setCurrentComponent,
   currentPlayer,
@@ -43,7 +45,6 @@ const GameScreen = ({
   const [consecutivePasses, setConsecutivePasses] = useState(0);
   const [pouch, setPouch] = useState([]);
   const [computerRackTiles, setComputerRackTiles] = useState([]);
-
   const fillPouch = async () => {
     const res = await axios.get("http://localhost:4001/getPouch");
     setPouch(res.data);
@@ -196,6 +197,10 @@ const GameScreen = ({
   //     getWordsOnBoard();
   //   }
   // }, [placedTiles]);
+
+  useEffect(() => {
+    console.log("wordsOnBoard: ", wordsOnBoard);
+  }, [wordsOnBoard]);
 
   useEffect(() => {
     if (
@@ -443,14 +448,13 @@ const GameScreen = ({
   const handleClickConfirmMove = () => {
     if (currentPlayer !== turn) return;
     if (moveIsValid(placedTiles, boardState)) {
-      const allWords = findWordsOnBoard(boardState, placedTiles);
-      setWordsOnBoard(allWords);
+      console.log("move is valid");
+      var newWords = wordsOnBoard.filter((word) => word.newWord === true);
       axios
-        .post("http://localhost:4001/verifyWord", { words: allWords })
+        .post("http://localhost:4001/verifyWord", { words: newWords })
         .then((res) => {
           const results = res.data;
           if (Object.values(results).every((val) => val === "true")) {
-            var newWords = allWords.filter((word) => word.newWord === true);
             var newScores = scores;
             newWords.forEach((word) => {
               newScores[currentPlayer] =
@@ -512,6 +516,8 @@ const GameScreen = ({
           />
         </div>
         <StatusBar
+          user={user}
+          invitedPlayer={invitedPlayer}
           scores={scores}
           setNotification={setNotification}
           timeLeftPlayer={timeLeftPlayer}
