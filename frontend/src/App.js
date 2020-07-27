@@ -104,7 +104,8 @@ const App = () => {
         />
       )}
        {currentComponent === "UserBusy" && (
-        <UserBusy/>
+        <UserBusy
+          socket={socket}/>
       )}
       {notification && (
         <NotificationModal

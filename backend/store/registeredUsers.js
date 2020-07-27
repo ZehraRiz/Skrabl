@@ -37,19 +37,7 @@ function setUserGame(token, gameId) {
 	return userToUpdate
 }
 
-function deleteSocket(socketId) {
-	let userToReturn;
-	registeredUsers.map((user) => {
-		var index = user.currentSessions.indexOf(socketId);
-		if (index > -1) {
-			userToReturn = user
-			user.currentSessions.splice(index, 1);
-			return;
-		}
-	});
 
-	return userToReturn;
-}
 
 function getAllRegisteredUsers() {
 	return registeredUsers;
@@ -94,6 +82,36 @@ function removeGameSocket(token) {
 }
 
 
+function deleteSocket(socketId) {
+	let userToReturn;
+	registeredUsers.map((user) => {
+		var index = user.currentSessions.indexOf(socketId);
+		if (index > -1) {
+			userToReturn = user
+			user.currentSessions.splice(index, 1);
+			return;
+		}
+	});
+	return userToReturn;
+}
+function switchGameSocket(u) {
+	let gameId;
+	registeredUsers.map(user => {
+		if (user.token === u.token) {
+			console.log(user.currentSessions.length)
+			if (user.currentSessions.length <= 0) {
+				user.socketWithGame= 0
+			}
+			else {
+				u.socketWithGame = user.currentSessions[0]
+				gameId = u.gameId;
+			}
+		}
+	})
+	return gameId
+}
+
+
 module.exports = {
 	findRegisteredUser,
 	setRegisteredUser,
@@ -103,5 +121,6 @@ module.exports = {
 	setUserGame,
 	removeGameFromUser,
 	setGameSocket,
-	removeGameSocket
+	removeGameSocket,
+	switchGameSocket
 };

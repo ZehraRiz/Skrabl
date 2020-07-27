@@ -17,6 +17,7 @@ useEffect(() => {
 			});
       socket.on("retrievdUser", (data) => {
         console.log("found your previous session");
+        console.log("need to set back game on this socket: " + data.setGameOnSocket)
         setUser(data.user);
         if (data.inGame) {
           setCurrentComponent("UserBusy")

@@ -33,13 +33,11 @@ module.exports.listen = function (io, socket) {
   socket.on("createGame", (userToken) => {
       const gameId = Math.floor(Math.random() * 10000).toString();
       gameJoin(gameId);
-    const user = setUserGame(userToken, gameId)
-    if (user) {
+   
       removeGameSocket(userToken)
       socket.emit("gameCreateResponse", gameId);
-    }
     
-      else socket.emit("createGameError", "please register before creating a game");
+     socket.emit("createGameError", "please register before creating a game");
   });
 
   socket.on("playerInGame", (player) => {
@@ -139,6 +137,7 @@ module.exports.listen = function (io, socket) {
     const Newgame = setGamePlayer2(gameId, userId=token);
     if (Newgame) {
       socket.join(gameId);
+     setUserGame(token, gameId)
       setGameSocket(token, socket.id)
       io.in(gameId).emit("gameJoined2", { game: game });
     } else {
