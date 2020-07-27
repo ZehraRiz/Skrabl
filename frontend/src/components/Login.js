@@ -2,7 +2,9 @@ import React from "react";
 import "../styles/Login.css";
 
 const Login = ({ setCurrentComponent, setUser, socket, setPlayers }) => {
-  
+  console.log("This is login comopnent");
+  console.log("socket:" + socket);
+
   const handleLogin = (e) => {
     e.preventDefault();
     const name = e.target.name.value;
@@ -18,17 +20,17 @@ const Login = ({ setCurrentComponent, setUser, socket, setPlayers }) => {
     });
 
     e.target.reset();
-  }
-		return (
-			<div className="login__wrapper">
-				<h2>Login</h2>
-				<form onSubmit={handleLogin}>
-					<label htmlFor="name">Your name:</label>
-					<input type="text" id="name" />
-					<button type="submit">Go</button>
-				</form>
-			</div>
-		);
+  };
+  return (
+    <div className="login__wrapper">
+      <h2>Login</h2>
+      <form onSubmit={handleLogin}>
+        <label htmlFor="name">Your name:</label>
+        <input type="text" id="name" />
+        <button type="submit">Go</button>
+      </form>
+    </div>
+  );
 };
 
 export default Login;

@@ -11,7 +11,8 @@ const GameOverModal = ({ scores, scoredWords, exitGame }) => {
         <p>Player 0: {scores[0]}</p>
         <p>Player 1: {scores[1]}</p>
         <h3>Highest scoring word:</h3>
-        {highestScoringWord.word} ({highestScoringWord.points} points)
+        {highestScoringWord && highestScoringWord.word} (
+        {highestScoringWord && highestScoringWord.points} points)
         <button onClick={exitGame}>Close</button>
       </div>
     </div>
