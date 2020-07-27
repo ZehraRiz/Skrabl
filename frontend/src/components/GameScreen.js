@@ -494,6 +494,7 @@ const GameScreen = ({
           {!boardIsDisabled && (
             <GameButtons
               getTiles={getTiles}
+	      placedTiles={placedTiles}
               handleClickClearTiles={handleClickClearTiles}
               handleClickShuffle={handleClickShuffle}
               handleClickConfirmMove={handleClickConfirmMove}
