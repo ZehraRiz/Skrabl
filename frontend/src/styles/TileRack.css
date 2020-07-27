@@ -30,7 +30,7 @@
  
   .tileRack__tile {
     flex-basis: 10%;
-  max-width: 12.7%;
+    max-width: 12.7%;
   }
 }
 
