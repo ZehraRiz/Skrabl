@@ -24,10 +24,10 @@ const StatusBar = ({
             : "statusBar__player"
         }
       >
-        <div class="player__name">
+        <div className="player__name">
           {gameMode === "Computer" ? "Player" : user.name} {}
         </div>
-        <div class="player__time">
+        <div className="player__time">
           <Timer
             setNotification={setNotification}
             timeLeft={timeLeftPlayer}
@@ -35,7 +35,7 @@ const StatusBar = ({
             currentPlayer={currentPlayer}
           />
         </div>
-        <div class="player__score">Score: {scores && scores[0]}</div>
+        <div className="player__score">Score: {scores && scores[0]}</div>
       </div>
       <div
         className={
@@ -44,10 +44,11 @@ const StatusBar = ({
             : "statusBar__player"
         }
       >
-        <div class="player__name">
-          {gameMode === "Computer" ? "ScrabbleBot" : invitedPlayer.name}
+        <div className="player__name">
+          {gameMode === "Computer" && "ScrabbleBot"}
+          {gameMode === "Online" && invitedPlayer && invitedPlayer.name}
         </div>
-        <div class="player__time">
+        <div className="player__time">
           <Timer
             setNotification={setNotification}
             timeLeft={timeLeftOpponent}
@@ -55,8 +56,8 @@ const StatusBar = ({
             currentPlayer={currentPlayer}
           />
         </div>
-        <div class="player__score">Score: {scores && scores[1]}</div>
-        <div class="player__thinking">
+        <div className="player__score">Score: {scores && scores[1]}</div>
+        <div className="player__thinking">
           {gameMode === "Computer" && turn === 1 && <span> (thinking...)</span>}
         </div>
       </div>
