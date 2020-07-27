@@ -56,17 +56,17 @@ module.exports.listen = function (io, socket) {
 	socket.on("disconnect", () => {
 		console.log("A connection left");
 		const user = deleteSocket(socket.id);
-		console.log(user)
+	
 		if (!user) return; 
 		if (user.socketWithGame === socket.id) {
 			const gameId = switchGameSocket(user)
 			//gameId will be returned if there are more sockets available
 			// null will be returned if not more sockets available
-			console.log(gameId)
+		
 			//emit game to new socket and join
 			//send them on extra screen
 			const newSetSocket = findRegisteredUser(user.token).socketWithGame
-			console.log(newSetSocket)
+			
 			io.to(newSetSocket).emit('retrivedGame', gameId);
 		}
 		if(!user.currentSessions.length){ socket.broadcast.to(ONLINE_SOCKETS).emit("userLeft", user)}; //should be sent to the game as well

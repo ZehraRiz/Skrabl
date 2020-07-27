@@ -77,7 +77,6 @@ function removeGameSocket(token) {
 			return
 		}
 	})
-	console.log("remove game socket working " + updatedUser)
 	return updatedUser;
 }
 

@@ -30,6 +30,7 @@ const Players = ({
 			console.log(data);
 			setCurrentPlayer(1);
 			setGameData(data.game);
+			setInvitedPlayer(invite.host)
 			setCurrentComponent("GameScreen");
 		});
 	};
@@ -49,6 +50,7 @@ const Players = ({
 	
 
 	const sendInvite = (player) => {
+		
 		socket.emit("playerInGame", player);
 
 		socket.on("playerUnavailable", (data) => {
@@ -57,7 +59,6 @@ const Players = ({
 		        setNotification("Player is in another game");
 		        return;
 		      } else {
-		        setInvitedPlayer(player);
 		        socket.emit("createGame", user.token);
 		        //invalid userId on create game
 		        socket.on("createGameError", (data) => {

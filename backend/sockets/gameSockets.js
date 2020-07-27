@@ -37,7 +37,6 @@ module.exports.listen = function (io, socket) {
       removeGameSocket(userToken)
       socket.emit("gameCreateResponse", gameId);
     
-     socket.emit("createGameError", "please register before creating a game");
   });
 
   socket.on("playerInGame", (player) => {
@@ -121,6 +120,7 @@ module.exports.listen = function (io, socket) {
 
   //player 2 accepts game request
   socket.on("inviteAccepted", async ({ token, gameId }) => {
+    console.log(token)
     const user = findRegisteredUser(token);
     const game = games.find((g) => {
       return g.gameId === gameId;
