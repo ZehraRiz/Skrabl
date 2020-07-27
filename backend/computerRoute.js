@@ -16,7 +16,7 @@ const letterValues = {
 const letterValuesExpanded = Object.entries(letterValues).reduce(
   (result, [score, letters]) => {
     letters.forEach((letter) => {
-      result[letter] = score;
+      result[letter] = Number(score);
     });
     return result;
   },
