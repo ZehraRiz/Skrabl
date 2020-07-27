@@ -15,7 +15,6 @@ const GameButtons = ({
   return (
     <div className="gameButtons__wrapper">
       <button onClick={getTiles}>Get more</button>
-      <button onClick={handleClickClearTiles}>Clear</button>
       <button onClick={handleClickShuffle}>Shuffle</button>
       <button onClick={handleClickExchangeTiles}>Exchange</button>
       {numPlacedTiles === 0 && <button onClick={handleClickPass}>Pass</button>}

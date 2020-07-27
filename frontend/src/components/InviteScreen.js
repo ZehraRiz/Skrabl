@@ -34,7 +34,7 @@ const InviteScreen = ({
   });
   const acceptInvite = () => {
     socket.emit("inviteAccepted", {
-      userId: user.id,
+      token: user.token,
       gameId: invite.game.gameId,
     });
     socket.on("2joinGameError", (data) => {
@@ -44,6 +44,7 @@ const InviteScreen = ({
       console.log(data);
       setCurrentPlayer(1);
       setGameData(data.game);
+      setInvitedPlayer(invite.host)
       setCurrentComponent("GameScreen");
     });
   };
@@ -118,7 +119,7 @@ const InviteScreen = ({
         {invite !== "" && (
           <div>
             <p>{invite.host.name} sent you a game request</p>
-            <button onClick={acceptInvite}>Click to accpet</button>
+            <button onClick={acceptInvite}>Click to accept</button>
           </div>
         )}
       </div>
