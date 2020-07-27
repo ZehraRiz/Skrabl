@@ -22,7 +22,6 @@ const App = () => {
   const [currentPlayer, setCurrentPlayer] = useState(); // 0 means he was the host and his data is stored as player1 at the backend. 1 means he is player2
   const [socket, setSocket] = useState(null);
 
- 
   useEffect(() => {
     if (gameMode === "Computer") {
       setCurrentPlayer(0);
@@ -50,7 +49,7 @@ const App = () => {
   };
 
   return (
-    <div class="page">
+    <div className="page">
       <Header />
       {currentComponent === "WelcomeScreen" && (
         <WelcomeScreen
@@ -105,9 +104,7 @@ const App = () => {
           gameMode={gameMode}
         />
       )}
-       {currentComponent === "UserBusy" && (
-        <UserBusy/>
-      )}
+      {currentComponent === "UserBusy" && <UserBusy />}
       {notification && (
         <NotificationModal
           notification={notification}
