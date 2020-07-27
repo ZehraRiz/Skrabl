@@ -60,6 +60,11 @@ const GameScreen = ({
   };
 
   useEffect(() => {
+    if (gameMode === "Online") {
+      if (turn === 1) {
+        getTiles();
+      }
+    }
     if (gameMode === "Computer" && pouch.length > 0) {
       if (turn === 1) {
         getComputerTiles();
@@ -71,7 +76,7 @@ const GameScreen = ({
   }, [turn, gameMode]);
 
   useEffect(() => {
-    if (turn === 0 && pouch.length === 100) {
+    if (gameMode === "Computer" && turn === 0 && pouch.length === 100) {
       getTiles();
     }
   }, [pouch]);
