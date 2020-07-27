@@ -100,9 +100,7 @@ const GameScreen = ({
           );
           const updatedSquaresIndices = res.data.updatedSquaresIndices;
           const lettersUsedAgain = [...res.data.lettersUsed];
-
           let tilesUsedCopy = [...tilesUsed];
-
           for (let i = 0; i < returnedBoardState.length; i++) {
             if (
               updatedSquaresIndices.includes(returnedBoardState[i].index) &&
@@ -118,14 +116,17 @@ const GameScreen = ({
               );
             }
           }
-
           const allWords = findWordsOnBoard(returnedBoardState, tilesUsed);
           setWordsOnBoard(allWords);
           var newWords = allWords.filter((word) => word.newWord === true);
+          console.log("new words (computer move)");
+          console.log(newWords);
           var newScores = scores;
           newWords.forEach((word) => {
             newScores[1] = newScores[1] + word.wordScore;
           });
+          console.log("new scores (computer move)");
+          console.log(newScores);
           setBoardState(returnedBoardState);
           nextPlayer();
           //in this order so doesn't call backend twice
@@ -192,16 +193,6 @@ const GameScreen = ({
     placeTile();
   }, [selectedSquareIndex]);
 
-  // useEffect(() => {
-  //   if (placedTiles.length > 0) {
-  //     getWordsOnBoard();
-  //   }
-  // }, [placedTiles]);
-
-  useEffect(() => {
-    console.log("wordsOnBoard: ", wordsOnBoard);
-  }, [wordsOnBoard]);
-
   useEffect(() => {
     if (
       consecutivePasses > 5 ||
@@ -250,11 +241,6 @@ const GameScreen = ({
   const getBoard = () => {
     const squares = generateBoardSquares(bonusSquareIndices);
     setBoardState([...squares]);
-  };
-
-  const getWordsOnBoard = () => {
-    const words = findWordsOnBoard(boardState, placedTiles);
-    setWordsOnBoard([...words]);
   };
 
   const getTiles = () => {
@@ -449,7 +435,11 @@ const GameScreen = ({
     if (currentPlayer !== turn) return;
     if (moveIsValid(placedTiles, boardState)) {
       console.log("move is valid");
-      var newWords = wordsOnBoard.filter((word) => word.newWord === true);
+      const allWords = findWordsOnBoard(boardState, placedTiles);
+      setWordsOnBoard(allWords);
+      var newWords = allWords.filter((word) => word.newWord === true);
+      console.log("new words (human move");
+      console.log(newWords);
       axios
         .post("http://localhost:4001/verifyWord", { words: newWords })
         .then((res) => {
@@ -460,6 +450,8 @@ const GameScreen = ({
               newScores[currentPlayer] =
                 newScores[currentPlayer] + word.wordScore;
             });
+            console.log("new scores (human move)");
+            console.log(newScores);
             setScores(newScores);
             nextPlayer(consecutivePasses * -1, newScores); // resets consecutivePasses by deducting it from itself
             setPlacedTiles([]);
