@@ -10,12 +10,14 @@ const StatusBar = ({
   setTimeLeftPlayer,
   setTimeLeftOpponent,
   currentPlayer,
-  turn
+  turn,
+  gameMode,
 }) => {
   return (
     <div className="statusBar__wrapper">
       <div className="statusBar__player">
-        Player 1: {scores[0]}
+        Player 1: {scores && scores[0]}
+        {gameMode === "Computer" && turn === 1 && <span> (thinking...)</span>}
         <Timer
           setNotification={setNotification}
           timeLeft={timeLeftPlayer}
@@ -24,7 +26,7 @@ const StatusBar = ({
         />
       </div>
       <div className="statusBar__player">
-        Player 2: {scores[1]}
+        Player 2: {scores && scores[1]}
         <Timer
           setNotification={setNotification}
           timeLeft={timeLeftOpponent}

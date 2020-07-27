@@ -2,8 +2,8 @@ const users = [];
 
 //Join connection to player
 
-function userJoin(id, name, room="registeredUsers") {
-    const user = { id, name, room }
+function userJoin(id, name, token, room="registeredUsers") {
+    const user = { id, name, token,  room }
     users.push(user);
     return user;
 }

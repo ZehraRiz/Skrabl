@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import Board from "../components/Board";
 import TileRack from "./TileRack";
@@ -11,7 +12,6 @@ import { generateBoardSquares } from "../utils/generateBoardSquares";
 import { shuffle } from "../utils/shuffle";
 import { moveIsValid } from "../utils/moveIsValid";
 import { squaresAreOccupied } from "../utils/squaresAreOccupied";
-import { calculateWordScore } from "../utils/calculateWordScore";
 import { findWordsOnBoard } from "../utils/findWordsOnBoard";
 import { getScoresFromWords } from "../utils/getScoresFromWords";
 import { bonusSquareIndices } from "../assets/bonusSquareIndices";
@@ -24,48 +24,137 @@ const GameScreen = ({
   currentPlayer,
   gameData,
   socket,
+  gameMode,
 }) => {
   const [selectedTile, setSelectedTile] = useState(null);
   const [selectedSquareIndex, setSelectedSquareIndex] = useState(null);
-  const [playerRackTiles, setPlayerRackTiles] = useState(
-    currentPlayer === 0
-      ? gameData.gameState.player1Tiles
-      : gameData.gameState.player2Tiles
-  );
+  const [playerRackTiles, setPlayerRackTiles] = useState([]);
   const [placedTiles, setPlacedTiles] = useState([]);
-  const [gameIsOver, setGameIsOver] = useState(gameData.gameState.isOver);
+  const [gameIsOver, setGameIsOver] = useState(false);
   const [confirmMessage, setConfirmMessage] = useState(null);
-  const [boardState, setBoardState] = useState(gameData.gameState.boardState);
-  const [timeLeftPlayer, setTimeLeftPlayer] = useState(
-    currentPlayer === 0
-      ? gameData.gameState.player1TimeLeft
-      : gameData.gameState.player2TimeLeft
-  );
-  const [timeLeftOpponent, setTimeLeftOpponent] = useState(
-    currentPlayer === 1
-      ? gameData.gameState.player1TimeLeft
-      : gameData.gameState.player2TimeLeft
-  );
+  const [boardState, setBoardState] = useState([]);
+  const [timeLeftPlayer, setTimeLeftPlayer] = useState(null);
+  const [timeLeftOpponent, setTimeLeftOpponent] = useState(null);
   const [scoredWords, setScoredWords] = useState({ 0: [], 1: [] });
-  const [scores, setScores] = useState(gameData.gameState.scores);
-  const [turn, setTurn] = useState(gameData.gameState.turn);
+  const [scores, setScores] = useState(null);
+  const [turn, setTurn] = useState(null);
   const [tilesToExchange, setTilesToExchange] = useState([]);
   const [boardIsDisabled, setBoardIsDisabled] = useState(false);
   const [wordsOnBoard, setWordsOnBoard] = useState([]);
-  const [consecutivePasses, setConsecutivePasses] = useState(
-    gameData.gameState.consecutivePasses
-  );
-  const pouch = gameData.gameState.pouch;
+  const [consecutivePasses, setConsecutivePasses] = useState(0);
+  const [pouch, setPouch] = useState([]);
+  const [computerRackTiles, setComputerRackTiles] = useState([]);
+
+  const fillPouch = async () => {
+    const res = await axios.get("http://localhost:4001/getPouch");
+    setPouch(res.data);
+  };
+
+  const getComputerTiles = () => {
+    const numTilesNeeded = 7 - computerRackTiles.length;
+    const pouchCopy = [...pouch];
+    pouchCopy.splice(0, numTilesNeeded);
+    const newTiles = pouch.slice(0, numTilesNeeded);
+    setPouch([...pouchCopy]);
+    setComputerRackTiles([...computerRackTiles, ...newTiles]);
+  };
+
+  useEffect(() => {
+    if (gameMode === "Computer" && turn === 1) {
+      getComputerTiles();
+    }
+  }, [turn, gameMode]);
+
+  useEffect(() => {
+    if (gameMode === "Computer" && turn === 1) {
+      setTimeout(() => {
+        computerMove();
+      }, 5000);
+    }
+  }, [computerRackTiles]);
+
+  const computerMove = () => {
+    axios
+      .post("http://localhost:4001/computerMove/", {
+        rackLetters: computerRackTiles,
+        boardState,
+      })
+      .then((res) => {
+        if (res.data.pass) {
+          setNotification("The computer has decided to pass.");
+        } else {
+          setBoardState(res.data.boardState);
+          nextPlayer();
+          //in this order so doesn't call backend twice
+          let computerRackTilesCopy = [...computerRackTiles];
+          const lettersUsed = res.data.lettersUsed;
+          let lettersUsedCopy = [...lettersUsed];
+          computerRackTilesCopy = computerRackTilesCopy.filter((tile) => {
+            if (lettersUsedCopy.includes(tile.letter)) {
+              const indexToRemove = lettersUsedCopy.indexOf(tile.letter);
+              lettersUsedCopy.splice(indexToRemove, 1);
+              return false;
+            } else {
+              return true;
+            }
+          });
+          setComputerRackTiles(computerRackTilesCopy);
+        }
+        nextPlayer();
+      });
+  };
 
   //EFFECTS
 
   useEffect(() => {
+    //set inital state
+    if (gameMode === "Online") {
+      setGameIsOver(gameData.gameState.isOver);
+      setPlayerRackTiles(
+        currentPlayer === 0
+          ? gameData.gameState.player1Tiles
+          : gameData.gameState.player2Tiles
+      );
+      setBoardState(gameData.gameState.boardState);
+      setTimeLeftPlayer(
+        currentPlayer === 0
+          ? gameData.gameState.player1TimeLeft
+          : gameData.gameState.player2TimeLeft
+      );
+      setTimeLeftOpponent(
+        currentPlayer === 1
+          ? gameData.gameState.player1TimeLeft
+          : gameData.gameState.player2TimeLeft
+      );
+      setScores(gameData.gameState.scores);
+      setTurn(gameData.gameState.turn);
+      setConsecutivePasses(gameData.gameState.consecutivePasses);
+      setPouch(gameData.gameState.pouch);
+    }
+    if (gameMode === "Computer") {
+      setGameIsOver(false);
+      setPlayerRackTiles([]);
+      setBoardState([]);
+      setTimeLeftPlayer(null);
+      setTimeLeftOpponent(null);
+      setScores({ 0: 0, 1: 0 });
+      setTurn(0);
+      setConsecutivePasses(null);
+    }
+  }, [gameMode]);
+
+  useEffect(() => {
+    if (gameMode === "Computer") {
+      fillPouch();
+    }
     getBoard();
   }, []);
 
   useEffect(() => {
-    updateScores();
-  }, []);
+    if (scoredWords[0].length > 0 && scoredWords[1].length > 0) {
+      updateScores();
+    }
+  }, [scoredWords]);
 
   useEffect(() => {
     placeTile();
@@ -73,23 +162,11 @@ const GameScreen = ({
 
   useEffect(() => {
     if (placedTiles.length > 0) {
-      getWordsOnBoard(); // this needs to be moved to somewhere it can get latest boardState - causes null result when tile is removed
+      getWordsOnBoard();
     }
-    console.log("placedTiles: ", placedTiles);
   }, [placedTiles]);
 
   useEffect(() => {
-    console.log("wordsOnBoard: ", wordsOnBoard);
-    //var score = calculateWordScore(wordsOnBoard);
-    //console.log('score: ', score );
-  }, [wordsOnBoard]);
-
-  useEffect(() => {
-    console.log("tilesToExchange: ", tilesToExchange);
-  }, [tilesToExchange]);
-
-  useEffect(() => {
-    console.log("consecutivePasses: ", consecutivePasses);
     if (
       consecutivePasses > 5 ||
       (consecutivePasses > 1 && pouch.length === 0)
@@ -101,37 +178,38 @@ const GameScreen = ({
   }, [consecutivePasses]);
 
   useEffect(() => {
-    socket.on("sendingTiles", (data) => {
-      setPlayerRackTiles([...playerRackTiles, ...data]);
-      //here currentRackTiles are always 7
-    });
+    if (gameMode === "Online") {
+      socket.on("sendingTiles", (data) => {
+        setPlayerRackTiles([...playerRackTiles, ...data]);
+        //here currentRackTiles are always 7
+      });
 
-    socket.on("gameEnd", (data) => {
-      console.log(data);
-      //redirect to players screen or show who won
-      console.log("the game has ended");
-      exitGame();
-    });
+      socket.on("gameEnd", (data) => {
+        console.log(data);
+        //redirect to players screen or show who won
+        console.log("the game has ended");
+        exitGame();
+      });
 
-    socket.on("gameUpdated", (data) => {
-      console.log(data);
-      setGameIsOver(data.gameState.isOver);
-      setBoardState(data.gameState.boardState);
-      setTimeLeftPlayer(
-        currentPlayer === 0
-          ? gameData.gameState.player1TimeLeft
-          : gameData.gameState.player2TimeLeft
-      );
-      setTimeLeftOpponent(
-        currentPlayer === 1
-          ? gameData.gameState.player1TimeLeft
-          : gameData.gameState.player2TimeLeft
-      );
-      setScores(data.gameState.scores);
-      setTurn(data.gameState.turn);
-      setConsecutivePasses(data.gameState.consecutivePasses);
-    });
-  }, []);
+      socket.on("gameUpdated", (data) => {
+        setGameIsOver(data.gameState.isOver);
+        setBoardState(data.gameState.boardState);
+        setTimeLeftPlayer(
+          currentPlayer === 0
+            ? gameData.gameState.player1TimeLeft
+            : gameData.gameState.player2TimeLeft
+        );
+        setTimeLeftOpponent(
+          currentPlayer === 1
+            ? gameData.gameState.player1TimeLeft
+            : gameData.gameState.player2TimeLeft
+        );
+        setScores(data.gameState.scores);
+        setTurn(data.gameState.turn);
+        setConsecutivePasses(data.gameState.consecutivePasses);
+      });
+    }
+  }, [playerRackTiles]);
 
   const getBoard = () => {
     const squares = generateBoardSquares(bonusSquareIndices);
@@ -143,37 +221,46 @@ const GameScreen = ({
     setWordsOnBoard([...words]);
   };
 
-  //*dummy function* - will get tiles from backend
   const getTiles = () => {
-    console.log("trying to get tiles");
     const numTilesNeeded = 7 - playerRackTiles.length;
-    console.log("no of tiles needed from backend: " + numTilesNeeded);
     if (numTilesNeeded <= 0) {
-      console.log("you have enough tiles");
       return;
     }
-    socket.emit("requestTiles", {
-      gameId: gameData.gameId,
-      numTilesNeeded: numTilesNeeded,
-      player: currentPlayer,
-    });
+    if (gameMode === "Online") {
+      socket.emit("requestTiles", {
+        gameId: gameData.gameId,
+        numTilesNeeded: numTilesNeeded,
+        player: currentPlayer,
+      });
+    }
+    if (gameMode === "Computer") {
+      const pouchCopy = [...pouch];
+      pouchCopy.splice(0, numTilesNeeded);
+      const newTiles = pouch.slice(0, numTilesNeeded);
+      setPlayerRackTiles([...playerRackTiles, ...newTiles]);
+      setPouch([...pouchCopy]);
+    }
   };
 
   const nextPlayer = (x = 0, newScores = { 0: 0, 0: 0 }) => {
-    socket.emit("updateGameState", {
-      gameId: gameData.gameId,
-      boardState: boardState,
-      playerRackTiles: playerRackTiles,
-      player: currentPlayer,
-      scores: newScores,
-      consecutivePasses: consecutivePasses + x,
-    });
+    if (gameMode === "Online") {
+      socket.emit("updateGameState", {
+        gameId: gameData.gameId,
+        boardState: boardState,
+        playerRackTiles: playerRackTiles,
+        player: currentPlayer,
+        scores: newScores,
+        consecutivePasses: consecutivePasses + x,
+      });
+    }
+    if (gameMode === "Computer") {
+      setTurn(turn === 0 ? 1 : 0);
+    }
   };
 
   const updateScores = () => {
-    //test and see if running
     const updatedScores = getScoresFromWords(scoredWords);
-    setScores(scores);
+    setScores(updatedScores);
   };
 
   const placeTile = () => {
@@ -214,7 +301,6 @@ const GameScreen = ({
 
   const handleClickSquare = (square) => {
     if (currentPlayer !== turn) {
-      console.log("i can click");
       return;
     }
     if (selectedTile) {
@@ -241,20 +327,10 @@ const GameScreen = ({
   };
 
   const handleClickPass = () => {
-	if (currentPlayer !== turn) return;
-
+    if (currentPlayer !== turn) return;
     setConfirmMessage({
       type: "pass",
       message: "Are you sure you want to pass?",
-    });
-  };
-
-  const handleConfirmMove = () => {
-	if (currentPlayer !== turn) return;
-
-    setConfirmMessage({
-      type: "confirm",
-      message: "Confirm move end?",
     });
   };
 
@@ -264,11 +340,19 @@ const GameScreen = ({
       message: "Are you sure you want to resign?",
     });
   };
+  
+  const handleConfirmMove = () => {
+	if (currentPlayer !== turn) return;
+
+    setConfirmMessage({
+      type: "confirm",
+      message: "Confirm move end?",
+    });
+  };
 
   const handleClickShuffle = () => {
     const shuffled = shuffle([...playerRackTiles]);
     setPlayerRackTiles([...shuffled]);
-    //SHOULD UPDATE BACKEND? NOT NOW
   };
 
   const handleClickTile = (tile) => {
@@ -298,7 +382,6 @@ const GameScreen = ({
 
   const handleClickExchangeTiles = () => {
     setBoardIsDisabled(!boardIsDisabled);
-    console.log("disabled? " + boardIsDisabled);
   };
 
   const handleCancelExchange = () => {
@@ -314,7 +397,6 @@ const GameScreen = ({
     if (currentPlayer !== turn) return;
     setPlayerRackTiles([...playerRackTiles, ...placedTiles]);
     const placedTilesSquares = placedTiles.map((tile) => tile.square);
-
     const updatedBoardState = [
       ...boardState.map((square) => {
         if (placedTilesSquares.includes(square.index)) {
@@ -331,15 +413,7 @@ const GameScreen = ({
   const handleClickConfirmMove = () => {
     if (currentPlayer !== turn) return;
     if (moveIsValid(placedTiles, boardState)) {
-      /*
-			wordsOnBoard = [
-				{ 
-					word: "house", 
-					points: 7,
-					newWord: true 
-				}
-			];
-			*/
+      console.log("move is valid");
       axios
         .post("http://localhost:4001/verifyWord", { words: wordsOnBoard })
         .then((res) => {
@@ -350,15 +424,8 @@ const GameScreen = ({
             newWords.forEach((word) => {
               newScores[currentPlayer] =
                 newScores[currentPlayer] + word.wordScore;
-              console.log("wordScore: " + word.wordScore);
-              console.log("scores[currentPlayer]: " + scores[currentPlayer]);
             });
             setScores(newScores);
-            console.log(newScores);
-
-            //*scores are updated automatically
-            //setScoredWords(updatedScoredWords);
-
             nextPlayer(consecutivePasses * -1, newScores); // resets consecutivePasses by deducting it from itself
             setPlacedTiles([]);
             return;
@@ -377,12 +444,21 @@ const GameScreen = ({
   //OTHER
 
   const gameOver = () => {
-    socket.emit("gameOver", gameData.gameId);
+    if (gameMode === "Online") {
+      socket.emit("gameOver", gameData.gameId);
+    }
+    if (gameMode === "Computer") {
+      setGameIsOver(true);
+    }
   };
 
   const exitGame = () => {
-    //handle backend in other functions
-    setCurrentComponent("Players");
+    if (gameMode === "Online") {
+      setCurrentComponent("Players");
+    }
+    if (gameMode === "Computer") {
+      setCurrentComponent("WelcomeScreen");
+    }
   };
 
   const closeModal = () => {
@@ -403,41 +479,43 @@ const GameScreen = ({
             playerRackTiles={playerRackTiles}
             handleClickTile={handleClickTile}
           />
-        </div>
-		<StatusBar
-			scores={scores}
-			setNotification={setNotification}
-			timeLeftPlayer={timeLeftPlayer}
-			timeLeftOpponent={timeLeftOpponent}
-			setTimeLeftPlayer={setTimeLeftPlayer}
-			setTimeLeftOpponent={setTimeLeftOpponent}
-			currentPlayer={currentPlayer}
-			turn={turn}
-		/>
-        {!boardIsDisabled && (
-          <GameButtons
-			placedTiles={placedTiles}
-            getTiles={getTiles}
-            handleClickClearTiles={handleClickClearTiles}
-            handleClickShuffle={handleClickShuffle}
-            handleClickConfirmMove={handleClickConfirmMove}
-            handleClickResign={handleClickResign}
-            handleClickPass={handleClickPass}
-            handleClickExchangeTiles={handleClickExchangeTiles}
-          />
-        )}
-        {boardIsDisabled && (
-          <ExchangeTilesButtons
-            handleCancelExchange={handleCancelExchange}
-            handleConfirmExchange={handleConfirmExchange}
-          />
-        )}
       </div>
-      <Chat
-        gameId={gameData.gameId}
-        currentPlayer={currentPlayer}
-        socket={socket}
-      />
+          <StatusBar
+            scores={scores}
+            setNotification={setNotification}
+            timeLeftPlayer={timeLeftPlayer}
+            timeLeftOpponent={timeLeftOpponent}
+            setTimeLeftPlayer={setTimeLeftPlayer}
+            setTimeLeftOpponent={setTimeLeftOpponent}
+            currentPlayer={currentPlayer}
+            turn={turn}
+            gameMode={gameMode}
+          />
+          {!boardIsDisabled && (
+            <GameButtons
+              getTiles={getTiles}
+              handleClickClearTiles={handleClickClearTiles}
+              handleClickShuffle={handleClickShuffle}
+              handleClickConfirmMove={handleClickConfirmMove}
+              handleClickResign={handleClickResign}
+              handleClickPass={handleClickPass}
+              handleClickExchangeTiles={handleClickExchangeTiles}
+            />
+          )}
+          {boardIsDisabled && (
+            <ExchangeTilesButtons
+              handleCancelExchange={handleCancelExchange}
+              handleConfirmExchange={handleConfirmExchange}
+            />
+          )}
+      </div>
+      {gameMode === "Online" && (
+        <Chat
+          gameId={gameData.gameId}
+          currentPlayer={currentPlayer}
+          socket={socket}
+        />
+      )}
       {gameIsOver && (
         <GameOverModal
           scores={scores}
@@ -449,8 +527,8 @@ const GameScreen = ({
         <ConfirmModal
           message={confirmMessage}
           handleResign={handleResign}
-		  handlePass={handlePass}
-		  handleConfirmMove={handleConfirmMove}
+          handlePass={handlePass}
+          handleConfirmMove={handleConfirmMove}
           closeModal={closeModal}
         />
       )}
