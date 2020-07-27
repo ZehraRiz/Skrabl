@@ -4,6 +4,7 @@ import Login from "./components/Login";
 import Header from "./components/Header";
 import Players from "./components/Players";
 import InviteScreen from "./components/InviteScreen";
+import UserBusy from "./components/UserBusy";
 import GameScreen from "./components/GameScreen";
 import NotificationModal from "./components/NotificationModal";
 import "./styles/global.css";
@@ -21,49 +22,7 @@ const App = () => {
   const [currentPlayer, setCurrentPlayer] = useState(); // 0 means he was the host and his data is stored as player1 at the backend. 1 means he is player2
   const [socket, setSocket] = useState(null);
 
-  //Search for an existing token in ls and send it
-  useEffect(() => {
-    if (gameMode === "onilne") {
-      const userIdFromLS = localStorage.getItem("token");
-      if (userIdFromLS) {
-        socket.emit("retriveUser", userIdFromLS);
-        console.log("user token exists at frontend");
-        //backend does not recognize the token
-        socket.on("tokenError", (data) => {
-          setCurrentComponent("Login");
-          localStorage.removeItem("token");
-          console.log(data);
-          return;
-        });
-        socket.on("retrievdUser", (data) => {
-          setCurrentComponent("Players");
-          console.log("found your previous session");
-        });
-      } else setCurrentComponent("Login");
-    }
-  }, []);
-
-  // useEffect(() => {
-  // 	const userIdFromLS = localStorage.getItem("userId");
-  // 	if (userIdFromLS) {
-  // 		socket.emit("retriveUser", userIdFromLS)
-  // 		console.log("user exists");
-  // 		socket.on("userIdError", (data) => {
-  // 			console.log(data);
-  // 			return;
-  // 		});
-  // 		socket.on("usernameRegistered", (data) => {
-  // 			console.log("updated socket");
-  // 			const user = data.user;
-  // 			localStorage.removeItem("userId");
-  // 			localStorage.setItem("userId", data.user.id);
-  // 			setUser(user);
-  // 			setPlayers(data.allOnlineUsers);
-  // 			setCurrentComponent("Players");
-  // 		});
-  // 	}
-  // }, []);
-
+ 
   useEffect(() => {
     if (gameMode === "Computer") {
       setCurrentPlayer(0);
@@ -143,6 +102,9 @@ const App = () => {
           socket={socket}
           gameMode={gameMode}
         />
+      )}
+       {currentComponent === "UserBusy" && (
+        <UserBusy/>
       )}
       {notification && (
         <NotificationModal

@@ -23,7 +23,6 @@ function gameJoin(gameId) {
     },
   };
   games.push(game);
-  console.log(game);
   return game;
 }
 
