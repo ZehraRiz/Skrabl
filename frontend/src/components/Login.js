@@ -13,7 +13,7 @@ const Login = ({ setCurrentComponent, setUser, socket, setPlayers }) => {
       const user = data.user;
       localStorage.setItem("token", data.token)
       setUser(user);
-      setPlayers(data.allOnlineUsers);
+      setPlayers(data.allOnlineUsers.filter(u => { return (u.token != localStorage.getItem("token"))}))
       setCurrentComponent("Players");
     });
 

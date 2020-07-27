@@ -17,28 +17,28 @@ const App = () => {
 	const [ invitedPlayer, setInvitedPlayer ] = useState(null);
 	const [ gameId, setGameId ] = useState("");
 	const [ gameData, setGameData ] = useState(null);
-	const [currentPlayer, setcurrentPlayer] = useState();
-	
+	const [ currentPlayer, setcurrentPlayer ] = useState();
 
 	//Search for an existing token in ls and send it
 	useEffect(() => {
 		const userIdFromLS = localStorage.getItem("token");
 		if (userIdFromLS) {
-			socket.emit("retriveUser", userIdFromLS)
+			socket.emit("retriveUser", userIdFromLS);
 			console.log("user token exists at frontend");
 			//backend does not recognize the token
 			socket.on("tokenError", (data) => {
 				setCurrentComponent("Login");
-				localStorage.removeItem("token")
+				localStorage.removeItem("token");
 				console.log(data);
 				return;
 			});
 			socket.on("retrievdUser", (data) => {
-				setCurrentComponent("Players")
+				setUser(data.user);
+				setPlayers(data.allOnlineUsers.filter((user) => {return(user.token != localStorage.getItem("token"))}));
+				setCurrentComponent("Players");
 				console.log("found your previous session");
 			});
-		}
-		else setCurrentComponent("Login")
+		} else setCurrentComponent("Login");
 	}, []);
 
 	const handleCloseNotificationModal = () => {

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../styles/Players.css";
 
 const Players = ({
@@ -19,6 +19,8 @@ const Players = ({
 		setInvite(data);
 	});
 
+
+
 	const acceptInvite = () => {
 		socket.emit("inviteAccepted", { userId: user.id, gameId: invite.game.gameId });
 		socket.on("invalidGame", (data) => {
@@ -38,13 +40,19 @@ const Players = ({
 		});
 	};
 
-	socket.on("welcomeNewUser", ({ user }) => {
-		setPlayers([ ...players, user ]);
+
+	socket.on("welcomeNewUser", (data) => {
+		if (data.token == localStorage.getItem("token")) return;
+		console.log(" a player has joined")
+		setPlayers([...players, data]);
+		 console.log(players)
 	});
 
-	socket.on("userLeft", ({user}) => {
-		setPlayers(players.filter(u=> u.id!== user.id))
+	socket.on("userLeft", (user) => {
+		setPlayers(players.filter(u=> u.token!= user.token))
 	});
+	
+	
 
 
 	const sendInvite = (player) => {
@@ -77,10 +85,8 @@ const Players = ({
 			<h3>Players Online</h3>
 			Clink on a player to invite them for a game
 			<ul className="players__list">
-				{players.length > 1 &&
-					players.map((player, index) => {
-						if (player.id !== user.id) {
-							return (
+					{players.map((player, index) => {
+						return (
 								<li
 									key={index}
 									value={player}
@@ -91,10 +97,10 @@ const Players = ({
 									{player.name}
 								</li>
 							);
-						}
+		
 					})}
 			</ul>
-			{players.length === 1 && <p>No one's online at the moment.</p>}
+			{players.length<1 && <p>No one's online at the moment.</p>}
 			{invite !== "" && (
 				<div>
 					<p>{invite.host.name} sent you a game request</p>
