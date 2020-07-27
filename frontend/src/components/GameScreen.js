@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import Board from "../components/Board";
 import TileRack from "./TileRack";
@@ -83,22 +82,54 @@ const GameScreen = ({
         if (res.data.pass) {
           setNotification("The computer has decided to pass.");
         } else {
-          setBoardState(res.data.boardState);
-          nextPlayer();
-          //in this order so doesn't call backend twice
-          let computerRackTilesCopy = [...computerRackTiles];
-          const lettersUsed = res.data.lettersUsed;
-          let lettersUsedCopy = [...lettersUsed];
-          computerRackTilesCopy = computerRackTilesCopy.filter((tile) => {
-            if (lettersUsedCopy.includes(tile.letter)) {
-              const indexToRemove = lettersUsedCopy.indexOf(tile.letter);
-              lettersUsedCopy.splice(indexToRemove, 1);
+          const lettersUsed = [...res.data.lettersUsed];
+          let tilesUsed = [];
+          const updatedComputerRackTiles = computerRackTiles.filter((tile) => {
+            if (lettersUsed.includes(tile.letter)) {
+              tilesUsed.push(tile);
+              const indexToRemove = lettersUsed.indexOf(tile.letter);
+              lettersUsed.splice(indexToRemove, 1);
               return false;
             } else {
               return true;
             }
           });
-          setComputerRackTiles(computerRackTilesCopy);
+          const returnedBoardState = JSON.parse(
+            JSON.stringify(res.data.boardState)
+          );
+          const updatedSquaresIndices = res.data.updatedSquaresIndices;
+          const lettersUsedAgain = [...res.data.lettersUsed];
+
+          let tilesUsedCopy = [...tilesUsed];
+
+          for (let i = 0; i < returnedBoardState.length; i++) {
+            if (
+              updatedSquaresIndices.includes(returnedBoardState[i].index) &&
+              lettersUsedAgain.includes(returnedBoardState[i].tile.letter)
+            ) {
+              let replacementTile = tilesUsedCopy.filter(
+                (tile) => tile.letter === returnedBoardState[i].tile.letter
+              )[0];
+              replacementTile = { ...replacementTile, player: 1 };
+              returnedBoardState[i].tile = replacementTile;
+              tilesUsedCopy = tilesUsedCopy.filter(
+                (tile) => tile.id !== replacementTile.id
+              );
+            }
+          }
+
+          const allWords = findWordsOnBoard(returnedBoardState, tilesUsed);
+          setWordsOnBoard(allWords);
+          var newWords = allWords.filter((word) => word.newWord === true);
+          var newScores = scores;
+          newWords.forEach((word) => {
+            newScores[1] = newScores[1] + word.wordScore;
+          });
+          setBoardState(returnedBoardState);
+          nextPlayer();
+          //in this order so doesn't call backend twice
+          setScores(newScores);
+          setComputerRackTiles(updatedComputerRackTiles);
         }
         nextPlayer();
       });
@@ -160,11 +191,11 @@ const GameScreen = ({
     placeTile();
   }, [selectedSquareIndex]);
 
-  useEffect(() => {
-    if (placedTiles.length > 0) {
-      getWordsOnBoard();
-    }
-  }, [placedTiles]);
+  // useEffect(() => {
+  //   if (placedTiles.length > 0) {
+  //     getWordsOnBoard();
+  //   }
+  // }, [placedTiles]);
 
   useEffect(() => {
     if (
@@ -340,10 +371,9 @@ const GameScreen = ({
       message: "Are you sure you want to resign?",
     });
   };
-  
-  const handleConfirmMove = () => {
-	if (currentPlayer !== turn) return;
 
+  const handleConfirmMove = () => {
+    if (currentPlayer !== turn) return;
     setConfirmMessage({
       type: "confirm",
       message: "Confirm move end?",
@@ -413,13 +443,14 @@ const GameScreen = ({
   const handleClickConfirmMove = () => {
     if (currentPlayer !== turn) return;
     if (moveIsValid(placedTiles, boardState)) {
-      console.log("move is valid");
+      const allWords = findWordsOnBoard(boardState, placedTiles);
+      setWordsOnBoard(allWords);
       axios
-        .post("http://localhost:4001/verifyWord", { words: wordsOnBoard })
+        .post("http://localhost:4001/verifyWord", { words: allWords })
         .then((res) => {
           const results = res.data;
           if (Object.values(results).every((val) => val === "true")) {
-            var newWords = wordsOnBoard.filter((word) => word.newWord === true);
+            var newWords = allWords.filter((word) => word.newWord === true);
             var newScores = scores;
             newWords.forEach((word) => {
               newScores[currentPlayer] =
@@ -479,36 +510,36 @@ const GameScreen = ({
             playerRackTiles={playerRackTiles}
             handleClickTile={handleClickTile}
           />
-      </div>
-          <StatusBar
-            scores={scores}
-            setNotification={setNotification}
-            timeLeftPlayer={timeLeftPlayer}
-            timeLeftOpponent={timeLeftOpponent}
-            setTimeLeftPlayer={setTimeLeftPlayer}
-            setTimeLeftOpponent={setTimeLeftOpponent}
-            currentPlayer={currentPlayer}
-            turn={turn}
-            gameMode={gameMode}
+        </div>
+        <StatusBar
+          scores={scores}
+          setNotification={setNotification}
+          timeLeftPlayer={timeLeftPlayer}
+          timeLeftOpponent={timeLeftOpponent}
+          setTimeLeftPlayer={setTimeLeftPlayer}
+          setTimeLeftOpponent={setTimeLeftOpponent}
+          currentPlayer={currentPlayer}
+          turn={turn}
+          gameMode={gameMode}
+        />
+        {!boardIsDisabled && (
+          <GameButtons
+            getTiles={getTiles}
+            placedTiles={placedTiles}
+            handleClickClearTiles={handleClickClearTiles}
+            handleClickShuffle={handleClickShuffle}
+            handleClickConfirmMove={handleClickConfirmMove}
+            handleClickResign={handleClickResign}
+            handleClickPass={handleClickPass}
+            handleClickExchangeTiles={handleClickExchangeTiles}
           />
-          {!boardIsDisabled && (
-            <GameButtons
-              getTiles={getTiles}
-	      placedTiles={placedTiles}
-              handleClickClearTiles={handleClickClearTiles}
-              handleClickShuffle={handleClickShuffle}
-              handleClickConfirmMove={handleClickConfirmMove}
-              handleClickResign={handleClickResign}
-              handleClickPass={handleClickPass}
-              handleClickExchangeTiles={handleClickExchangeTiles}
-            />
-          )}
-          {boardIsDisabled && (
-            <ExchangeTilesButtons
-              handleCancelExchange={handleCancelExchange}
-              handleConfirmExchange={handleConfirmExchange}
-            />
-          )}
+        )}
+        {boardIsDisabled && (
+          <ExchangeTilesButtons
+            handleCancelExchange={handleCancelExchange}
+            handleConfirmExchange={handleConfirmExchange}
+          />
+        )}
       </div>
       {gameMode === "Online" && (
         <Chat
