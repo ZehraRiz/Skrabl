@@ -1,6 +1,7 @@
 /* mobile */
 
 .header__wrapper {
+  width: 100%;
   text-align: center;
   background: rgb(54, 38, 17);
   padding: 1rem;

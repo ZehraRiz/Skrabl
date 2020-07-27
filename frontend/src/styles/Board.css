@@ -1,7 +1,7 @@
 /* mobile */
 
 .board__wrapper {
-  margin: 0;
+  margin: 5px 0 0 0 ;
   display: flex;
   justify-content: center;
   width: 100%;
@@ -9,19 +9,18 @@
 }
 
 .board__board {
-  object-fit: contain;
+  width: 90vw;
+  height: 90vw;
   display: grid;
   grid-template-columns: repeat(15, 1fr);
   grid-template-rows: repeat(15, 1fr);
-  //max-width: 400px;
   background: rgba(38, 38, 17);
-  width: 100%;
 }
 
 .board__square {
-  height: 3.5vh;
-  max-width: 4.5em;
-  max-height: 4.2em;
+  width: 100%;
+  height: 100%;
+  //outline: 1px solid yellow;
   //border-top: 1px solid rgba(38, 38, 17);
   border: 1px solid rgba(38, 38, 17);
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5);
@@ -33,7 +32,7 @@
   justify-content: center;
   align-items: center;
   position: relative;
-  flex-grow: 1;
+  //flex-grow: 1;
 }
 
 .board__tile {
@@ -90,22 +89,34 @@
 
 /* tablet */
 @media (min-width: 500px) {
-  .board__square {
-    padding: 1rem 0;
+ 
+}
+
+
+@media (min-width: 550px) {
+  .board__board {
+    align-self: center;
+    width: 61vh;
+    height: 61vh;
   }
 }
 
 /* large tablet */
 @media (min-width: 750px) {
-  .board__board {
-  width: 65vh;
-  height: 65vh;
+  .board__wrapper {
+    display: flex;
+    flex-direction: column;
   }
+  .board__board {
+    align-self: center;
+    width: 70vh;
+    height: 70vh;
+  }
+  
 }
 
 /* laptop */
-@media (min-width: 1000px) {
-}
+
 
 /* desktop */
 @media (min-width: 1250px) {
@@ -113,7 +124,16 @@
     display: block;
     font-size: 0.6rem;
   }
-  .board__square {
-    padding: 1rem 0;
-  }
+
 }
+
+
+
+@media (max-width: 970px) {
+ 
+}
+
+@media (min-width: 1200px) {
+ 
+}
+
