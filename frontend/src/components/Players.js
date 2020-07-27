@@ -2,22 +2,22 @@ import React, { useState, useEffect } from "react";
 import "../styles/Players.css";
 
 const Players = ({
-	players,
-	setPlayers,
-	socket,
-	user,
-	setCurrentComponent,
-	setInvitedPlayer,
-	setGameId,
-	setNotification,
-	setGameData,
-	setcurrentPlayer
+  players,
+  setPlayers,
+  socket,
+  user,
+  setCurrentComponent,
+  setInvitedPlayer,
+  setGameId,
+  setNotification,
+  setGameData,
+  setCurrentPlayer,
 }) => {
-	let [ invite, setInvite ] = useState("");
+  let [invite, setInvite] = useState("");
 
-	socket.on("invite", (data) => {
-		setInvite(data);
-	});
+  socket.on("invite", (data) => {
+    setInvite(data);
+  });
 
 
 
@@ -54,9 +54,30 @@ const Players = ({
 	
 	
 
+  const sendInvite = (player) => {
+    socket.emit("playerInGame", player);
 
-	const sendInvite = (player) => {
-		socket.emit("playerInGame", player);
+    socket.on("playerUnavailable", (data) => {
+      if (data === true) {
+        setNotification("Player is in another game");
+        return;
+      } else {
+        setInvitedPlayer(player);
+        socket.emit("createGame", user.id);
+        //invalid userId on create game
+        socket.on("createGameError", (data) => {
+          console.log(data);
+          return;
+        });
+        socket.on("gameCreateResponse", (data) => {
+          console.log("the game Id got back: " + data);
+          setGameId(data);
+          setInvitedPlayer(player);
+          setCurrentComponent("InviteScreen");
+        });
+      }
+    });
+  };
 
 		socket.on("playerUnavailable", (data) => {
 			if (data === true) {
@@ -78,7 +99,7 @@ const Players = ({
 				});
 			}
 		});
-	};
+	
 
 	return (
 		<div className="players__wrapper">
