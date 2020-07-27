@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import Board from "../components/Board";
 import TileRack from "./TileRack";
@@ -241,14 +242,14 @@ const GameScreen = ({
     }
   };
 
-  const nextPlayer = (x = 0) => {
+  const nextPlayer = (x = 0, newScores = { 0: 0, 0: 0 }) => {
     if (gameMode === "Online") {
       socket.emit("updateGameState", {
         gameId: gameData.gameId,
         boardState: boardState,
         playerRackTiles: playerRackTiles,
         player: currentPlayer,
-        scores: scores,
+        scores: newScores,
         consecutivePasses: consecutivePasses + x,
       });
     }
@@ -339,6 +340,15 @@ const GameScreen = ({
       message: "Are you sure you want to resign?",
     });
   };
+  
+  const handleConfirmMove = () => {
+	if (currentPlayer !== turn) return;
+
+    setConfirmMessage({
+      type: "confirm",
+      message: "Confirm move end?",
+    });
+  };
 
   const handleClickShuffle = () => {
     const shuffled = shuffle([...playerRackTiles]);
@@ -416,7 +426,7 @@ const GameScreen = ({
                 newScores[currentPlayer] + word.wordScore;
             });
             setScores(newScores);
-            nextPlayer(consecutivePasses * -1); // resets consecutivePasses by deducting it from itself
+            nextPlayer(consecutivePasses * -1, newScores); // resets consecutivePasses by deducting it from itself
             setPlacedTiles([]);
             return;
           } else {
@@ -459,6 +469,17 @@ const GameScreen = ({
     <div className="gameScreen__wrapper">
       <div className="gameScreen__main">
         <div className="gameScreen__board">
+          <Board
+            handleClickSquare={handleClickSquare}
+            handleClickPlacedTile={handleClickPlacedTile}
+            boardState={boardState}
+            isDisabled={boardIsDisabled}
+          />
+          <TileRack
+            playerRackTiles={playerRackTiles}
+            handleClickTile={handleClickTile}
+          />
+      </div>
           <StatusBar
             scores={scores}
             setNotification={setNotification}
@@ -470,19 +491,10 @@ const GameScreen = ({
             turn={turn}
             gameMode={gameMode}
           />
-          <Board
-            handleClickSquare={handleClickSquare}
-            handleClickPlacedTile={handleClickPlacedTile}
-            boardState={boardState}
-            isDisabled={boardIsDisabled}
-          />
-          <TileRack
-            playerRackTiles={playerRackTiles}
-            handleClickTile={handleClickTile}
-          />
           {!boardIsDisabled && (
             <GameButtons
               getTiles={getTiles}
+	      placedTiles={placedTiles}
               handleClickClearTiles={handleClickClearTiles}
               handleClickShuffle={handleClickShuffle}
               handleClickConfirmMove={handleClickConfirmMove}
@@ -497,7 +509,6 @@ const GameScreen = ({
               handleConfirmExchange={handleConfirmExchange}
             />
           )}
-        </div>
       </div>
       {gameMode === "Online" && (
         <Chat
@@ -518,6 +529,7 @@ const GameScreen = ({
           message={confirmMessage}
           handleResign={handleResign}
           handlePass={handlePass}
+          handleConfirmMove={handleConfirmMove}
           closeModal={closeModal}
         />
       )}

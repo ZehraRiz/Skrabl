@@ -14,7 +14,7 @@ const getBonusClassName = (square) => {
       : (bonusClassName = "triple-word");
   }
   if (square.letterMultiplier === 1 && square.wordMultiplier === 1) {
-      bonusClassName = ""
+      bonusClassName = "";
   }
   return bonusClassName;
 };
@@ -40,7 +40,7 @@ const Board = ({
                   onClick={() => handleClickPlacedTile(square.tile)}
                 >
                   <span>{square.tile.letter}</span>
-                  <span>{square.tile.points}</span>
+                  <span className="tile__points--sm">{square.tile.points}</span>
                 </span>
               );
             }

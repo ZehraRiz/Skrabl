@@ -7,6 +7,7 @@
   justify-content: space-around;
   flex-direction: column;
   height: 4rem;
+  background: rgb(155, 199, 230);
 }
 
 .statusBar__wrapper button {
@@ -26,8 +27,17 @@
 /* large tablet */
 @media (min-width: 750px) {
   .gameScreen__boardAndRack {
-    width: 80%;
-    margin: 0 auto;
+    //width/: 80%;
+    //margin: 0 auto;
+  }
+
+  .statusBar__wrapper {
+    width: auto;
+    grid-column: 1/2;
+    grid-row: 1/1;
+    flex-direction: column;
+    height: 50%;
+    align-self: flex-start;
   }
 }
 

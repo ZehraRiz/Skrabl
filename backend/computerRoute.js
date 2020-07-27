@@ -310,7 +310,16 @@ const placeTiles = (wordObj, boardState) => {
       row = boardSquareToUse.row;
       col = boardSquareToUse.col + i + 1;
     }
-    const square = { col, row, tile: { letter: secondPartOfWord[i] } };
+    const letter = secondPartOfWord[i];
+    const points = letterValuesExpanded[letter];
+    const square = {
+      col,
+      row,
+      tile: {
+        letter,
+        points,
+      },
+    };
     secondSquares.push(square);
   }
 

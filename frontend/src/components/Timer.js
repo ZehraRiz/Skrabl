@@ -29,7 +29,7 @@ const Timer = ({
 
   return (
     <div className="timer__wrapper">
-      Time left: {formatMilliseconds(timeLeft)}
+      Time: {formatMilliseconds(timeLeft)}
     </div>
   );
 };
