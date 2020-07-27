@@ -1,11 +1,23 @@
 import React from "react";
 import "../styles/ConfirmModal.css";
 
-const ConfirmModal = ({ message, handleResign, handlePass, closeModal }) => {
+const ConfirmModal = ({ message, handleResign, handlePass, handleConfirmMove, closeModal }) => {
   let confirmFunction;
   message.type === "resign"
     ? (confirmFunction = handleResign)
     : (confirmFunction = handlePass);
+
+  switch(message.type){
+    case "resign": 
+      confirmFunction = handleResign;
+      break
+    case "pass": 
+      confirmFunction = handlePass;
+      break
+    case "confirm": 
+      confirmFunction = handleConfirmMove;
+      break
+  }
   return (
     <div className="confirmModal__wrapper">
       <div className="confirmModal__content">

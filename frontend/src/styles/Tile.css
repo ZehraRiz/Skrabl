@@ -36,6 +36,10 @@
   font-size: 0.7rem;
 }
 
+.tile__points--sm {
+  
+}
+
 /* tablet */
 @media (min-width: 500px) {
   .tile__letter {

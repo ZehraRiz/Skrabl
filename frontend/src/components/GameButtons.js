@@ -9,16 +9,19 @@ const GameButtons = ({
   handleClickResign,
   handleClickPass,
   handleClickExchangeTiles,
+  placedTiles
 }) => {
+  const numPlacedTiles = placedTiles.length;
   return (
     <div className="gameButtons__wrapper">
-      <button onClick={getTiles}>Get more tiles</button>
-      <button onClick={handleClickClearTiles}>Clear tiles</button>
-      <button onClick={handleClickShuffle}>Shuffle tiles</button>
-      <button onClick={handleClickExchangeTiles}>Exchange tiles</button>
-      <button onClick={handleClickConfirmMove}>Confirm move</button>
+      <button onClick={getTiles}>Get more</button>
+      <button onClick={handleClickClearTiles}>Clear</button>
+      <button onClick={handleClickShuffle}>Shuffle</button>
+      <button onClick={handleClickExchangeTiles}>Exchange</button>
+      {numPlacedTiles === 0 && <button onClick={handleClickPass}>Pass</button>}
+      {numPlacedTiles > 0 && <button onClick={handleClickConfirmMove}>Confirm</button>}
       <button onClick={handleClickResign}>Resign</button>
-      <button onClick={handleClickPass}>Pass</button>
+      
     </div>
   );
 };

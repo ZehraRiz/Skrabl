@@ -34,11 +34,7 @@ const StatusBar = ({
           currentPlayer={currentPlayer}
         />
       </div>
-      {turn === currentPlayer ? (
-        <h3>Its your turn</h3>
-      ) : (
-        <h6>Its the opponents turn</h6>
-      )}
+      {turn===currentPlayer? <h3>Your Move...</h3> : <h6>Opponent's Move...</h6>}
     </div>
   );
 };
