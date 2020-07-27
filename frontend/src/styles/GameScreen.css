@@ -43,7 +43,7 @@
   
   .gameScreen__main {
     height: auto;
-    grid-template-columns: minmax(150px, 200px) 1fr minmax(100px, 200px);
+    grid-template-columns: minmax(150px, 200px) auto minmax(100px, 200px);
     grid-template-rows: auto 1fr auto;
     //background: grey;
     grid-gap: 10px;
