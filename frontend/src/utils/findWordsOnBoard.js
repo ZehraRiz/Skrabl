@@ -25,16 +25,18 @@ export const findWordsOnBoard = (boardState, placedTiles) => {
             wordStart = ''; 
             letters = [];
             newWord = false;
-            wordScore = 0; // maybe repeat in addWord?
+            wordScore = 0; 
         } else {
             letters.push(currentSquare.tile.letter);
-            wordMultipliers.push(currentSquare.wordMultiplier);
-            wordScore += currentSquare.tile.points * currentSquare.letterMultiplier;
+            
+            
             if (placedTiles.filter(item => 
                 item.id === currentSquare.tile.id
             ).length > 0) {
                 newWord = true;
-            }
+                wordMultipliers.push(currentSquare.wordMultiplier);
+                wordScore += currentSquare.tile.points * currentSquare.letterMultiplier; 
+            } else  wordScore += currentSquare.tile.points;
             if (wordStart !== '' && col === 14 ) {                                 
                 addWord();
                            

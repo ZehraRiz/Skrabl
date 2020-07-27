@@ -44,5 +44,5 @@ export const bonusSquareIndices = {
     208,
   ],
   tripleLetter: [20, 24, 76, 80, 84, 88, 136, 140, 144, 148, 200, 204, 210],
-  tripleWord: [0, 7, 14, 105, 119, 210, 217, 224],
+  tripleWord: [0, 7, 14, 105, 119, 210, 217, 224]
 };
