@@ -15,6 +15,13 @@ const {
   findGame,
   getPlayerNumber,
 } = require("../utils/games.js");
+const {
+  findRegisteredUser,
+  setUserGame,
+  removeGameFromUser,
+  setGameSocket,
+  removeGameSocket
+} = require("../store/registeredUsers")
 
 const moment = require("moment");
 let now = moment();
@@ -23,20 +30,24 @@ const games = getAllGames();
 
 module.exports.listen = function (io, socket) {
   //create a game
-  socket.on("createGame", (userId) => {
-    if (getCurrentUser(userId)) {
+  socket.on("createGame", (userToken) => {
       const gameId = Math.floor(Math.random() * 10000).toString();
       gameJoin(gameId);
+    const user = setUserGame(userToken, gameId)
+    if (user) {
+      removeGameSocket(userToken)
       socket.emit("gameCreateResponse", gameId);
-      return;
-    } else
-      socket.emit("createGameError", "please register before creating a game");
+    }
+    
+      else socket.emit("createGameError", "please register before creating a game");
   });
 
   socket.on("playerInGame", (player) => {
-    const isBusy = isPlayerInGame(player.id);
-    socket.emit("playerUnavailable", isBusy);
-  });
+    const user = findRegisteredUser(player.token)
+  
+    const isBusy = user.socketWithGame != ""
+    socket.emit("playerUnavailable", isBusy);}
+  );
 
   //cancel game
   socket.on("removeGame", (gameId) => {
@@ -52,8 +63,8 @@ module.exports.listen = function (io, socket) {
   });
 
   //creator joins game
-  socket.on("joinGame", ({ userId, gameId, time }) => {
-    if (!getCurrentUser(userId)) {
+  socket.on("joinGame", ({ token, gameId, time }) => {
+    if (!findRegisteredUser(token)) {
       socket.emit("joinGameError", "please register before joining a game");
       return;
     }
@@ -61,71 +72,77 @@ module.exports.listen = function (io, socket) {
       return g.gameId === gameId;
     });
     if (!game) {
-      socket.emit("invalidGame", "Sorry, the game does not exist");
+      socket.emit("joinGameError", "Sorry, the game does not exist");
       return;
     } else {
       if (game.player1.playerId !== "") {
-        socket.emit("player1present", "You are already in game");
+        socket.emit("joinGameError", "You are already in game");
         return;
       } else {
-        const game = setGamePlayer1(gameId, userId, time);
-
-        if (game) {
+        const user = setUserGame(token, gameId)
+        const game = setGamePlayer1(gameId, userId=token, time);
+        if (game && user) {
           socket.join(gameId);
+          setGameSocket(token, socket.id)
           socket.emit(
             "gameJoined",
             "You have joined the game. Waiting for other player"
           );
         } else {
-          socket.emit("user1Error", "Sorry, could not set you up for the game");
+          socket.emit("joinGameError", "Sorry, could not set you up for the game");
         }
       }
     }
   });
 
   //invite player 2
-  socket.on("gameRequest", ({ userId, gameId, invitedPlayer }) => {
+  socket.on("gameRequest", ({ token, gameId, invitedPlayer }) => {
     const game = games.find((g) => {
       return g.gameId === gameId;
     });
     if (!game) {
-      socket.emit("invalidGame", "Sorry, the game does not exists");
+      socket.emit("gameRequestError", "Sorry, the game does not exists");
       return;
     } else {
       if (game.player2.playerId !== "") {
-        socket.emit("player2present", "Player has already joined your game");
+        socket.emit("gameRequestError", "Player has already joined your game");
         return;
       } else {
-        let user = getCurrentUser(userId);
-        io.to(invitedPlayer.id).emit("invite", { host: user, game: game });
+        let guest = findRegisteredUser(invitedPlayer.token)
+        let host = findRegisteredUser(token);
+        if (!guest || !host ) {
+          socket.emit("gameRequestError", "Player has left the lobby");
+          return;
+        }
+        guest.currentSessions.map(session => {
+          io.to(session).emit("invite", { host: host, game: game });
+        })
       }
     }
   });
 
   //player 2 accepts game request
-  socket.on("inviteAccepted", async ({ userId, gameId }) => {
-    const user = getCurrentUser(userId);
-    if (!user) {
-      socket.emit("joinGameError", "please register before joining the game");
-      return;
-    }
+  socket.on("inviteAccepted", async ({ token, gameId }) => {
+    const user = findRegisteredUser(token);
     const game = games.find((g) => {
       return g.gameId === gameId;
     });
-    if (!game) {
-      socket.emit("invalidGame", "Sorry, the game does not exist anymore");
+    if (!user || !game) {
+      socket.emit("2joinGameError", "something went wrong");
       return;
     }
+    
     if (game.player1.playerId === "") {
-      socket.emit("player1left", "The host has left");
+      socket.emit("2joinGameError", "The host has left");
       return;
     }
-    const Newgame = setGamePlayer2(gameId, userId);
+    const Newgame = setGamePlayer2(gameId, userId=token);
     if (Newgame) {
-      socket.join(gameId, function () {});
+      socket.join(gameId);
+      setGameSocket(token, socket.id)
       io.in(gameId).emit("gameJoined2", { game: game });
     } else {
-      socket.emit("user2Error", "Sorry, could not set you up for the game");
+      socket.emit("2joinGameError", "Sorry, could not set you up for the game");
     }
   });
 
