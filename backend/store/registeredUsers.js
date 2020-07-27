@@ -15,14 +15,26 @@ function addUserSession(token, socketId) {
 	return updatedUser;
 }
 
-function findUserBySocket(socketId) {
-	const newArr = registeredUsers.map((user) => {
-		user.currentSessions.map((session) => {
-			if (session == socketId) {
-			}
-		});
-	});
-	console.log(newArr);
+function removeGameFromUser(token, gameId) {
+	let userToUpdate;
+	registeredUsers.map(user => {
+		if (user.token == token) {
+			user.gameId = "";
+			userToUpdate = user
+		}
+	})
+	return userToUpdate
+}
+
+function setUserGame(token, gameId) {
+	let userToUpdate;
+	registeredUsers.map(user => {
+		if (user.token == token) {
+			user.gameId = gameId;
+			userToUpdate = user
+		}
+	})
+	return userToUpdate
 }
 
 function deleteSocket(socketId) {
@@ -47,16 +59,49 @@ function setRegisteredUser(token, name, currentSessions) {
 	const registeredUser = {
 		token: token,
 		name: name,
-		currentSessions: currentSessions
+		currentSessions: currentSessions,
+		socketWithGame: "",
+		gameId: ""
 	};
 	registeredUsers.push(registeredUser);
 	return registeredUser;
 }
+
+function setGameSocket(token, socketId) {
+	let updatedUser;
+	registeredUsers.map(user => {
+		if (user.token == token) {
+			user.socketWithGame = socketId;
+			updatedUser = user
+			return;
+		}
+	})
+	return updatedUser;
+}
+
+
+function removeGameSocket(token) {
+	let updatedUser;
+	registeredUsers.map(user => {
+		if (user.token === token) {
+			user.socketWithGame = "";
+			updatedUser= user
+			return
+		}
+	})
+	console.log("remove game socket working " + updatedUser)
+	return updatedUser;
+}
+
 
 module.exports = {
 	findRegisteredUser,
 	setRegisteredUser,
 	getAllRegisteredUsers,
 	addUserSession,
-	deleteSocket
+	deleteSocket,
+	setUserGame,
+	removeGameFromUser,
+	setGameSocket,
+	removeGameSocket
 };

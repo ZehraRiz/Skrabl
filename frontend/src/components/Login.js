@@ -1,9 +1,36 @@
-import React from "react";
+import React,{useEffect} from "react";
 import "../styles/Login.css";
 
 const Login = ({ setCurrentComponent, setUser, socket, setPlayers }) => {
-  console.log("This is login comopnent");
-  console.log("socket:" + socket);
+
+useEffect(() => {
+		const userIdFromLS = localStorage.getItem("token");
+		if (userIdFromLS) {
+			socket.emit("retriveUser", userIdFromLS);
+			console.log("user token exists at frontend");
+			//backend does not recognize the token
+			socket.on("tokenError", (data) => {
+				setCurrentComponent("Login");
+				localStorage.removeItem("token");
+				console.log(data);
+				return;
+			});
+      socket.on("retrievdUser", (data) => {
+        console.log("found your previous session");
+        setUser(data.user);
+        if (data.inGame) {
+          setCurrentComponent("UserBusy")
+        }
+        else {
+          setPlayers(data.allOnlineUsers.filter((user) => { return (user.token != localStorage.getItem("token")) }));
+          setCurrentComponent("Players");
+        }
+      });
+      
+      
+		} else setCurrentComponent("Login");
+	}, []);
+
 
   const handleLogin = (e) => {
     e.preventDefault();

@@ -15,26 +15,20 @@ const Players = ({
 }) => {
   let [invite, setInvite] = useState("");
 
-  socket.on("invite", (data) => {
+	socket.on("invite", (data) => {
     setInvite(data);
   });
 
 
 
 	const acceptInvite = () => {
-		socket.emit("inviteAccepted", { userId: user.id, gameId: invite.game.gameId });
-		socket.on("invalidGame", (data) => {
-			console.log(data);
-		});
-		socket.on("player1left", (data) => {
-			console.log(data);
-		});
-		socket.on("user2Error", (data) => {
+		socket.emit("inviteAccepted", { token: user.token, gameId: invite.game.gameId });
+		socket.on("2joinGameError", (data) => {
 			console.log(data);
 		});
 		socket.on("gameJoined2", (data) => {
 			console.log(data);
-			setcurrentPlayer(1);
+			setCurrentPlayer(1);
 			setGameData(data.game);
 			setCurrentComponent("GameScreen");
 		});
@@ -54,52 +48,34 @@ const Players = ({
 	
 	
 
-  const sendInvite = (player) => {
-    socket.emit("playerInGame", player);
-
-    socket.on("playerUnavailable", (data) => {
-      if (data === true) {
-        setNotification("Player is in another game");
-        return;
-      } else {
-        setInvitedPlayer(player);
-        socket.emit("createGame", user.id);
-        //invalid userId on create game
-        socket.on("createGameError", (data) => {
-          console.log(data);
-          return;
-        });
-        socket.on("gameCreateResponse", (data) => {
-          console.log("the game Id got back: " + data);
-          setGameId(data);
-          setInvitedPlayer(player);
-          setCurrentComponent("InviteScreen");
-        });
-      }
-    });
-  };
+	const sendInvite = (player) => {
+		socket.emit("playerInGame", player);
 
 		socket.on("playerUnavailable", (data) => {
-			if (data === true) {
-				setNotification("Player is in another game");
-				return;
-			} else {
-				setInvitedPlayer(player);
-				socket.emit("createGame", user.id);
-				//invalid userId on create game
-				socket.on("createGameError", (data) => {
-					console.log(data);
-					return;
-				});
-				socket.on("gameCreateResponse", (data) => {
-					console.log("the game Id got back: " + data);
-					setGameId(data);
-					setInvitedPlayer(player);
-					setCurrentComponent("InviteScreen");
-				});
-			}
-		});
-	
+				console.log(data)
+		      if (data === true) {
+		        setNotification("Player is in another game");
+		        return;
+		      } else {
+		        setInvitedPlayer(player);
+		        socket.emit("createGame", user.token);
+		        //invalid userId on create game
+		        socket.on("createGameError", (data) => {
+		          console.log(data);
+		          return;
+		        });
+		        socket.on("gameCreateResponse", (data) => {
+		          console.log("the game Id got back: " + data);
+		          setGameId(data);
+		          setInvitedPlayer(player);
+		          setCurrentComponent("InviteScreen");
+		        });
+		      }
+		   });
+		  };
+
+
+
 
 	return (
 		<div className="players__wrapper">

@@ -29,19 +29,21 @@ module.exports.listen = function (io, socket) {
 //USER LOGIN USING TOKEN IN LS 
 	socket.on("retriveUser", (token) => {
 		if (token === "") {
-      socket.emit("tokenError", "We have no saved sessions");
+			socket.emit("tokenError", "We have no saved sessions");
 			return;
-    }
-    const user = findRegisteredUser(token);
+		}
+		const user = findRegisteredUser(token);
 		if (!user) {
 			socket.emit("tokenError", "We have no saved sessions");
 			return;
 		}
 		socket.join(ONLINE_SOCKETS);
 		const updatedUser = addUserSession(token, socket.id)
+		const inGame = updatedUser.socketWithGame != ""
 		socket.emit("retrievdUser", {
 			user: updatedUser,
 			allOnlineUsers: getAllRegisteredUsers(),//send all currently online users
+			inGame: inGame
 		});
 		console.log(updatedUser.currentSessions.length)
 		if(updatedUser.currentSessions.length <= 1){ socket.broadcast.to(ONLINE_SOCKETS).emit("welcomeNewUser", updatedUser)};
@@ -50,9 +52,10 @@ module.exports.listen = function (io, socket) {
 	//USER DISCONNECTS
 	socket.on("disconnect", () => {
 		console.log("A connection left");
-		const user = deleteSocket(socket.id);
-		if (!user) return;
-		if(!user.currentSessions.length){ socket.broadcast.to(ONLINE_SOCKETS).emit("userLeft", user)};
+		const user = deleteSocket(socket.id); 
+		//should update game socket too
+		if (!user) return; 
+		if(!user.currentSessions.length){ socket.broadcast.to(ONLINE_SOCKETS).emit("userLeft", user)}; //should be sent to the game as well
 		
 	});
 };

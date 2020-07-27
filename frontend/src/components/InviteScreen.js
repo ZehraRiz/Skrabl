@@ -22,8 +22,8 @@ const InviteScreen = ({
 
   const handleClose = () => {
     socket.emit("removeGame", gameId);
-
     socket.on("removedGame", (data) => {
+      console.log(data)
       setInvitedPlayer("");
       setCurrentComponent("Players");
     });
@@ -37,13 +37,7 @@ const InviteScreen = ({
       userId: user.id,
       gameId: invite.game.gameId,
     });
-    socket.on("invalidGame", (data) => {
-      console.log(data);
-    });
-    socket.on("player1left", (data) => {
-      console.log(data);
-    });
-    socket.on("user2Error", (data) => {
+    socket.on("2joinGameError", (data) => {
       console.log(data);
     });
     socket.on("gameJoined2", (data) => {
@@ -58,7 +52,7 @@ const InviteScreen = ({
     setInviteSent(true);
     //request to join game
     socket.emit("joinGame", {
-      userId: user.id,
+      token: user.token,
       gameId: gameId,
       time: timeInput,
     });
@@ -69,32 +63,18 @@ const InviteScreen = ({
       setInviteSent(false);
       setCurrentComponent = "Players";
     });
-    socket.on("invalidGame", (data) => {
-      console.log(data);
-      setInviteSent(false);
-      setCurrentComponent = "Players";
-    });
-    socket.on("player1present", (data) => {
-      console.log(data);
-      setInviteSent(false);
-      setCurrentComponent = "Players";
-    });
-    socket.on("user1Error", (data) => {
-      console.log(data);
-      setInviteSent(false);
-      setCurrentComponent = "Players";
-    });
 
     //on succesful game join
     socket.on("gameJoined", (data) => {
       console.log(data);
       setInviteSent(true);
       socket.emit("gameRequest", {
-        userId: user.id,
+        token: user.token,
         gameId: gameId,
         invitedPlayer: invitedPlayer,
       });
-      socket.on("player2present", (data) => {
+      socket.on("gameRequestError", (data) => {
+        //should remove game from uId in backend too
         console.log(data);
         setInviteSent(false);
         setCurrentComponent = "Players";
