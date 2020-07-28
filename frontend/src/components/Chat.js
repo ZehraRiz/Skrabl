@@ -4,23 +4,18 @@ const moment = require('moment');
 let now = moment();
 
 const Chat = ({ gameId, currentPlayer, socket }) => {
-  const [chatThread, setChatThread] = useState([{ playerFromBackend: 0, playerName: "ScrabbleBot", msg: "Welcome, you are now connected", date: now.format("h:mm:ss a") }]);
- 
-  
-  console.log(chatThread)
-
-	useEffect(() => {
-    socket.on("gameEnded", data=> console.log(data))
-    socket.on("opponentLeft", (data) => { console.log(data) })
-		socket.on("recieveMsg", (data) => {
+	const [chatThread, setChatThread] = useState([{ playerFromBackend: 0, playerName: "ScrabbleBot", msg: "Welcome, you are now connected", date: now.format("h:mm:ss a") }]);
+	
+ 	socket.on("recieveMsg", (data) => {
       setChatThread([...chatThread, data]);
     });
-	}, [chatThread]);
+	socket.on("chatError", data=> console.log(data))
 
   const handleSendMessage = (e) => {
-    e.preventDefault();
+	  e.preventDefault();
+	  const token = localStorage.getItem("token")
 		const newMessage = e.target.message.value;
-    socket.emit("sendMsg", { gameId, currentPlayer, newMessage });
+    socket.emit("sendMsg", { token , gameId, currentPlayer, newMessage });
     e.target.reset()
   };
 

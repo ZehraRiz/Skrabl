@@ -13,6 +13,7 @@ const {
   removeGame,
   isPlayerInGame,
   findGame,
+  player2Accepted,
   getPlayerNumber,
 } = require("../utils/games.js");
 const {
@@ -33,12 +34,8 @@ module.exports.listen = function (io, socket) {
   socket.on("createGame", (userToken) => {
     const gameId = Math.floor(Math.random() * 10000).toString();
     gameJoin(gameId);
-    const user = setUserGame(userToken, gameId);
-    if (user) {
-      removeGameSocket(userToken);
-      socket.emit("gameCreateResponse", gameId);
-    } else
-      socket.emit("createGameError", "please register before creating a game");
+    removeGameSocket(userToken);
+    socket.emit("gameCreateResponse", gameId);
   });
 
   socket.on("playerInGame", (player) => {
@@ -116,6 +113,7 @@ module.exports.listen = function (io, socket) {
           socket.emit("gameRequestError", "Player has left the lobby");
           return;
         }
+        setGamePlayer2(gameId, (userId = invitedPlayer.token));
         guest.currentSessions.map((session) => {
           io.to(session).emit("invite", { host: host, game: game });
         });
@@ -129,6 +127,7 @@ module.exports.listen = function (io, socket) {
     const game = games.find((g) => {
       return g.gameId === gameId;
     });
+
     if (!user || !game) {
       socket.emit("2joinGameError", "something went wrong");
       return;
@@ -138,11 +137,12 @@ module.exports.listen = function (io, socket) {
       socket.emit("2joinGameError", "The host has left");
       return;
     }
-    const Newgame = setGamePlayer2(gameId, (userId = token));
-    if (Newgame) {
+    const newGame = player2Accepted(gameId);
+    if (newGame) {
       socket.join(gameId);
+      setUserGame(token, gameId);
       setGameSocket(token, socket.id);
-      io.in(gameId).emit("gameJoined2", { game: game });
+      io.in(gameId).emit("gameJoined2", { game: newGame });
     } else {
       socket.emit("2joinGameError", "Sorry, could not set you up for the game");
     }
@@ -157,9 +157,8 @@ module.exports.listen = function (io, socket) {
       socket.emit("gameEnded", "The game has ended");
       return;
     } else {
-      console.log("num tiles needed: " + numTilesNeeded);
       tilesToSend = game.gameState.pouch.slice(0, numTilesNeeded);
-      console.log("will send: " + tilesToSend);
+
       if (player === 0) {
         game.gameState.player1Tiles = [
           ...game.gameState.player1Tiles,
@@ -222,15 +221,15 @@ module.exports.listen = function (io, socket) {
   });
 
   //USER CHAT
-  socket.on("sendMsg", ({ gameId, currentPlayer, newMessage }) => {
+  socket.on("sendMsg", ({ token, gameId, currentPlayer, newMessage }) => {
     const game = findGame(gameId);
+    const user = findRegisteredUser(token);
     if (!game) {
-      socket.emit("gameEnded", "The game has ended");
+      socket.emit("chatError", "The game has ended");
       return;
     }
-    const user = getCurrentUser(socket.id);
     if (!user) {
-      socket.emit("opponentLeft", "The opponent has left the game");
+      socket.emit("chatError", "Something went wrong");
       return;
     }
     const msgObject = {
