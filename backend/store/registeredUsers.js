@@ -97,7 +97,6 @@ function switchGameSocket(u) {
 	let gameId;
 	registeredUsers.map(user => {
 		if (user.token === u.token) {
-			console.log(user.currentSessions.length)
 			if (user.currentSessions.length <= 0) {
 				user.socketWithGame= 0
 			}

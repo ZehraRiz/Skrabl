@@ -64,8 +64,10 @@ const App = () => {
 					setPlayers={setPlayers}
 					setInvitedPlayer={setInvitedPlayer}
 					setGameId={setGameId}
-          setInvitedPlayer={setInvitedPlayer}
-          setInviteSent = {setInviteSent}
+					setInvitedPlayer={setInvitedPlayer}
+					setInviteSent={setInviteSent}
+					setCurrentPlayer={setCurrentPlayer}
+					setGameData={setGameData}
 				/>
 			)}
 			{currentComponent === "Players" && (
@@ -79,8 +81,7 @@ const App = () => {
 					setGameId={setGameId}
 					setGameData={setGameData}
 					setNotification={setNotification}
-          setCurrentPlayer={setCurrentPlayer}
-          
+					setCurrentPlayer={setCurrentPlayer}
 				/>
 			)}
 			{currentComponent === "InviteScreen" && (
@@ -100,7 +101,7 @@ const App = () => {
 			{currentComponent === "GameScreen" && (
 				<GameScreen
 					user={user}
-					invitedPlayer={invitedPlayer}
+					invitedPlayer={invitedPlayer} //basically, the opponent
 					setNotification={setNotification}
 					setCurrentComponent={setCurrentComponent}
 					setCurrentPlayer={setCurrentPlayer}

@@ -136,7 +136,6 @@ module.exports.listen = function (io, socket) {
       return;
     }
     const newGame = player2Accepted(gameId)
-    console.log(newGame)
     if (newGame) {
       socket.join(gameId);
       setUserGame(token, gameId)
@@ -156,9 +155,8 @@ module.exports.listen = function (io, socket) {
       socket.emit("gameEnded", "The game has ended");
       return;
     } else {
-      console.log("num tiles needed: " + numTilesNeeded);
       tilesToSend = game.gameState.pouch.slice(0, numTilesNeeded);
-      console.log("will send: " + tilesToSend);
+      
       if (player === 0) {
         game.gameState.player1Tiles = [
           ...game.gameState.player1Tiles,

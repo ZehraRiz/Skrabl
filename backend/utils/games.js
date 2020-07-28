@@ -77,7 +77,6 @@ function setGamePlayer2(gameId, userId) {
 
 function playerDisconnectFromGame(id) {
   let g = "";
-  console.log(id);
   let gamesWithoutUser = [];
 
   games.map((game) => {

@@ -1,7 +1,17 @@
 import React, { useEffect } from "react";
 import "../styles/Login.css";
 
-const Login = ({ setCurrentComponent, setUser, socket, setPlayers, setInvitedPlayer, setGameId, setInviteSent }) => {
+const Login = ({
+	setCurrentComponent,
+	setUser,
+	socket,
+	setPlayers,
+	setInvitedPlayer,
+	setGameId,
+	setInviteSent,
+	setCurrentPlayer,
+	setGameData
+}) => {
 	useEffect(() => {
 		const userIdFromLS = localStorage.getItem("token");
 		if (userIdFromLS) {
@@ -14,20 +24,28 @@ const Login = ({ setCurrentComponent, setUser, socket, setPlayers, setInvitedPla
 				console.log(data);
 				return;
 			});
-			socket.on("retrievdUser", (data) => {//found your previous session
+			socket.on("retrievdUser", (data) => {
+				//found your previous session
 				setUser(data.user);
-        if (data.setGameOnSocket) {//setup thhe game and return;
-          if (!data.game.player2.isConnected) {//player 2 hasnt accepted yet
-            console.log("player 2 hanst accpted")
-            setGameId(data.game.gameId)
-            setInvitedPlayer(data.invitedPlayer)
-            setInviteSent(true)
-            setCurrentComponent("InviteScreen");
-            return;
-					} else {//player 2 has been connected
-					
-          }
-          return;
+				if (data.setGameOnSocket) {
+					//setup thhe game and return;
+					if (!data.game.player2.isConnected) {
+						//player 2 hasnt accepted yet
+						console.log("player 2 hanst accpted");
+						setGameId(data.game.gameId);
+						setInvitedPlayer(data.invitedPlayer);
+						setInviteSent(true);
+						setCurrentComponent("InviteScreen");
+						return;
+					} else {
+						//SET BACK GAME 
+						console.log(data)
+						setInvitedPlayer(data.invitedPlayer);
+						setCurrentPlayer(data.currentPlayer);
+						setGameData(data.game);
+						setCurrentComponent("GameScreen");
+					}
+					return;
 				}
 
 				if (data.inGame) {

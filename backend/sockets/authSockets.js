@@ -52,15 +52,22 @@ module.exports.listen = function (io, socket) {
 
 		let game;
 		let invitedPlayer;
+		let currentPlayer;
 		
 		const gameSocket = updatedUser.socketWithGame
 		if (gameSocket!== "") { //game id and game socket are set together in all games.  
 			game = findGame(user.gameId)
 			if (game) {
 				socket.join(game.gameId)
-				console.log(game.gameId)
-				invitedPlayer = findRegisteredUser(game.player2.playerId)
-				
+				if (token == game.player1.playerId)
+				{
+					invitedPlayer = findRegisteredUser(game.player2.playerId)
+					currentPlayer = 0
+				}	
+				else {
+					invitedPlayer = findRegisteredUser(game.player1.playerId)
+					currentPlayer =1
+				}
 			}
 		}
 		socket.emit("retrievdUser", {
@@ -69,7 +76,8 @@ module.exports.listen = function (io, socket) {
 			inGame: (gameSocket === "") ? false : true,
 			setGameOnSocket: (gameSocket === 0) ? true : false,
 			game: game,
-			invitedPlayer: invitedPlayer
+			currentPlayer:currentPlayer,
+			invitedPlayer: invitedPlayer //oppponent player
 		});
 		if(updatedUser.currentSessions.length <= 1){ socket.broadcast.to(ONLINE_SOCKETS).emit("welcomeNewUser", updatedUser)};
 	});
