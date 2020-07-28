@@ -75,7 +75,7 @@ const Board = ({
                   className="board__tile"
                   onClick={() => handleClickPlacedTile(square.tile)}
                 >
-                  <span>{square.tile.letter}</span>
+                  <span>{square.tile.letter.toUpperCase()}</span>
                   <span className="tile__points--sm">{square.tile.points}</span>
                 </span>
               );
