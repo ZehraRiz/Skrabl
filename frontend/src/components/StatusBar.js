@@ -23,9 +23,10 @@ const StatusBar = ({
 
           <Timer
             setNotification={setNotification}
-            timeLeft={timeLeftPlayer}
+            timeLeft={timeLeftPlayer*60}
             setTimeLeft={setTimeLeftPlayer}
             currentPlayer={currentPlayer}
+            turn={turn}
           />
         </div>
 
@@ -45,9 +46,10 @@ const StatusBar = ({
         <div className="player__time">
           <Timer
             setNotification={setNotification}
-            timeLeft={timeLeftOpponent}
+            timeLeft={timeLeftOpponent*60}
             setTimeLeft={setTimeLeftOpponent}
-            currentPlayer={currentPlayer}
+            currentPlayer={(!currentPlayer)}
+            turn={turn}
           />
         </div>
         <div class="player__score">Score: {scores && scores[1]}</div>
