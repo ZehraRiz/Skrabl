@@ -38,9 +38,7 @@ const Players = ({
 
 	socket.on("welcomeNewUser", (data) => {
 		if (data.token == localStorage.getItem("token")) return;
-		console.log(" a player has joined")
 		setPlayers([...players, data]);
-		 console.log(players)
 	});
 
 	socket.on("userLeft", (user) => {

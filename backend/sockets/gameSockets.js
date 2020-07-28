@@ -13,6 +13,7 @@ const {
   removeGame,
   isPlayerInGame,
   findGame,
+  player2Accepted,
   getPlayerNumber,
 } = require("../utils/games.js");
 const {
@@ -33,7 +34,6 @@ module.exports.listen = function (io, socket) {
   socket.on("createGame", (userToken) => {
       const gameId = Math.floor(Math.random() * 10000).toString();
       gameJoin(gameId);
-   
       removeGameSocket(userToken)
       socket.emit("gameCreateResponse", gameId);
     
@@ -111,6 +111,7 @@ module.exports.listen = function (io, socket) {
           socket.emit("gameRequestError", "Player has left the lobby");
           return;
         }
+        setGamePlayer2(gameId, userId=invitedPlayer.token);
         guest.currentSessions.map(session => {
           io.to(session).emit("invite", { host: host, game: game });
         })
@@ -120,11 +121,11 @@ module.exports.listen = function (io, socket) {
 
   //player 2 accepts game request
   socket.on("inviteAccepted", async ({ token, gameId }) => {
-    console.log(token)
     const user = findRegisteredUser(token);
     const game = games.find((g) => {
       return g.gameId === gameId;
     });
+   
     if (!user || !game) {
       socket.emit("2joinGameError", "something went wrong");
       return;
@@ -134,12 +135,13 @@ module.exports.listen = function (io, socket) {
       socket.emit("2joinGameError", "The host has left");
       return;
     }
-    const Newgame = setGamePlayer2(gameId, userId=token);
-    if (Newgame) {
+    const newGame = player2Accepted(gameId)
+    console.log(newGame)
+    if (newGame) {
       socket.join(gameId);
-     setUserGame(token, gameId)
+      setUserGame(token, gameId)
       setGameSocket(token, socket.id)
-      io.in(gameId).emit("gameJoined2", { game: game });
+      io.in(gameId).emit("gameJoined2", { game: newGame });
     } else {
       socket.emit("2joinGameError", "Sorry, could not set you up for the game");
     }

@@ -1,4 +1,14 @@
-const { userJoin, getCurrentUser, userLeave, getRoomUsers } = require("../utils/users.js");
+const {
+  gameJoin,
+  setGamePlayer1,
+  setGamePlayer2,
+  getAllGames,
+  playerDisconnectFromGame,
+  removeGame,
+  isPlayerInGame,
+  findGame,
+  getPlayerNumber,
+} = require("../utils/games.js");
 const { findRegisteredUser, setRegisteredUser, getAllRegisteredUsers, addUserSession, deleteSocket, switchGameSocket } = require("../store/registeredUsers");
 const ONLINE_SOCKETS = "onlineSockets"
 
@@ -40,14 +50,26 @@ module.exports.listen = function (io, socket) {
 		socket.join(ONLINE_SOCKETS);
 		const updatedUser = addUserSession(token, socket.id)
 
+		let game;
+		let invitedPlayer;
 		
 		const gameSocket = updatedUser.socketWithGame
-
+		if (gameSocket!== "") { //game id and game socket are set together in all games.  
+			game = findGame(user.gameId)
+			if (game) {
+				socket.join(game.gameId)
+				console.log(game.gameId)
+				invitedPlayer = findRegisteredUser(game.player2.playerId)
+				
+			}
+		}
 		socket.emit("retrievdUser", {
 			user: updatedUser,
 			allOnlineUsers: getAllRegisteredUsers(),//send all currently online users
 			inGame: (gameSocket === "") ? false : true,
-			setGameOnSocket: (gameSocket === 0)? true: false,
+			setGameOnSocket: (gameSocket === 0) ? true : false,
+			game: game,
+			invitedPlayer: invitedPlayer
 		});
 		if(updatedUser.currentSessions.length <= 1){ socket.broadcast.to(ONLINE_SOCKETS).emit("welcomeNewUser", updatedUser)};
 	});
