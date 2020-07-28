@@ -5,7 +5,6 @@
   display: flex;
   justify-content: center;
   width: 100%;
-  
 }
 
 .board__board {
@@ -16,13 +15,11 @@
   grid-template-rows: repeat(15, 1fr);
   background: rgba(38, 38, 17);
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.5);
-  
 }
 
 .board__square {
   width: 100%;
   height: 100%;
- 
   border: 1px solid rgba(38, 38, 17, 0.7);
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
   font-size: 0.6rem;
@@ -36,42 +33,46 @@
 }
 
 .board__tile {
-  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   background: #fffcb9;
   border-radius: 2px;
-  //position: absolute;
-  width: 100%;
-  height: 100%;
+  width: 99%;
+  height: 95%;
   font-size: 1.1rem;
   box-shadow: 0 0 0px 1px black, inset 0 -1px 3px rgba(0, 0, 0, 0.5);
 }
 
 .board__square:hover {
   outline: 2px solid yellow;
+  z-index: 3;
 }
 
 .board__bonus-text {
   color: rgb(140, 136, 136);
 }
+
 .board__square {
   background: rgb(244, 247, 246);
-  //background: radial-gradient(circle, rgba(73,150,73,1) 57%, rgba(63,142,63,1) 100%);
 }
+
 .board__square.double-letter {
   background: rgb(190, 231, 243);
 }
+
 .board__square.triple-letter {
   background: rgb(172, 196, 252);
 }
+
 .board__square.double-word {
   background: rgb(250, 207, 168);
 }
+
 .board__square.triple-word {
   background: rgb(252, 138, 138);
 }
+
 .board__square.with-tile {
   background: purple;
 }
@@ -127,6 +128,7 @@
   }
 
 }
+
 
 
 

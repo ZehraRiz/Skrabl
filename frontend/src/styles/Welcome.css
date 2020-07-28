@@ -1,0 +1,25 @@
+.welcome__main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: calc(80vh - 75px);
+}
+
+.welcome__menu {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.welcome__menu h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.welcome__menu button {
+    margin: 10px;
+    max-width: 300px;
+    height: 3em;
+}
