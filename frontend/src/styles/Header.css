@@ -10,3 +10,8 @@ background: radial-gradient(circle, rgba(62,61,60,1) 1%, rgba(47,46,45,1) 100%);
   font-family: scripts;
   letter-spacing: 5px;
 }
+
+.header__wrapper h1 {
+  margin: 0;
+  text-shadow: 3px 3px 0px rgba(0, 0, 0, .7);
+}
