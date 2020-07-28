@@ -546,6 +546,7 @@ const GameScreen = ({
               isDisabled={boardIsDisabled}
             />
             <TileRack
+              selectedTile={selectedTile}
               tilesToExchange={tilesToExchange}
               playerRackTiles={playerRackTiles}
               handleClickTile={handleClickTile}
