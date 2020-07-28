@@ -1,29 +1,29 @@
 /* mobile */
 
 .gameScreen__wrapper {
-  display: flex;
   width: 100%;
-  flex-direction: column;
-  background: rgb(223,206,174);
-  background: linear-gradient(0deg, rgba(223,206,174,1) 71%, rgba(187,172,144,1) 100%);
-  padding: 20px;
   height: 100%;
+ 
 }
 
 .gameScreen__main {
-    width: 100%;
-    display: grid;
-    grid-template-rows: auto auto auto;
-    //grid-template-columns: auto;
+  //outline: 3px solid green;
+  width: 100%;
+  display: inline-grid;
+  grid-template-rows: auto 1fr auto auto;
+  grid-template-columns: 1fr;
+  //background: grey;
+  height: 100%;
+  justify-content: space-between;
+  padding: 10px;
 }
 
 .gameScreen__board {
+  //background: blue;
   display: flex;
-    flex-direction: column;
-  justify-content: center;;
-  margin: 0;
+  flex-direction: column;
+  justify-content: center;
   perspective: 1000px;
-  object-fit: contain;
 }
 
 /* tablet */
@@ -35,15 +35,28 @@
 
 /* large tablet */
 @media (min-width: 750px) {
-  .gameScreen__board {
-    
-  }
+   
   .gameScreen__wrapper {
-    flex-direction: row;
+    width: auto;
+    height: auto;
   }
+  
   .gameScreen__main {
-    grid-template-rows: auto auto;
-    grid-template-columns: auto auto;
+    height: auto;
+    grid-template-columns: minmax(150px, 200px) auto minmax(100px, 200px);
+    grid-template-rows: auto 1fr auto;
+    //background: grey;
+    grid-gap: 10px;
+    padding: 10px;
+  }
+  
+  .gameScreen__board {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    //background: blue;
+    grid-column: 2;
+    grid-row: 1/3;
   }
 }
 
