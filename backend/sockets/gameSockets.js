@@ -209,15 +209,15 @@ module.exports.listen = function (io, socket) {
   });
 
   //USER CHAT
-  socket.on("sendMsg", ({ gameId, currentPlayer, newMessage }) => {
+  socket.on("sendMsg", ({ token, gameId, currentPlayer, newMessage }) => {
     const game = findGame(gameId);
-    if (!game) {
-      socket.emit("gameEnded", "The game has ended");
+    const user = findRegisteredUser(token)
+    if (!game ) {
+      socket.emit("chatError", "The game has ended");
       return;
     }
-    const user = getCurrentUser(socket.id);
     if (!user) {
-      socket.emit("opponentLeft", "The opponent has left the game");
+      socket.emit("chatError", "Something went wrong");
       return;
     }
     const msgObject = {
