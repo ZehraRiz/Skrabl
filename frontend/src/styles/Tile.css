@@ -5,8 +5,9 @@
   align-items: center;
   justify-content: center;
   width: 100%;
+  height: 100%;
   position: relative;
-  background: #fffcb9;
+  background: #f3f2d2;
   border-radius: 4px;
   cursor: pointer;
   box-shadow: inset 0 -3px 3px rgba(0, 0, 0, 0.4);
@@ -37,7 +38,11 @@
 }
 
 .tile__points--sm {
-  
+  color: rgb(42, 102, 42);
+  position: absolute;
+  bottom: 2px;
+  right: 5px;
+  font-size: 0.6rem;
 }
 
 /* tablet */
@@ -59,6 +64,8 @@
   }
   .tile__points {
     font-size: 1.2rem;
+    bottom: 5px;
+    right: 8px;
   }
 }
 
