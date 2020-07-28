@@ -102,7 +102,7 @@ const Players = ({
 				{invite !== "" && (
 					<div>
 						<p>{invite.host.name} sent you a game request</p>
-						<button onClick={acceptInvite}>Click to accpet</button>
+						<button onClick={acceptInvite}>Click to accept</button>
 					</div>
 				)}
 			</div>

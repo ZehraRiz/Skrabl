@@ -14,6 +14,10 @@
 }
 
 .players__list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   margin-top: 2rem;
   list-style: none;
   width: 100%;
@@ -31,6 +35,8 @@
   -moz-border-radius: 5px;
   -ms-border-radius: 5px;
   -o-border-radius: 5px;
+  width: 250px;
+  text-align: center;
 }
 
 .players__player:hover {

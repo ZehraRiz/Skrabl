@@ -33,7 +33,7 @@
   -o-border-radius: 3px;
   width: 100%;
   padding: 10px;
-  height: 45%;
+  height: 50%;
 }
 
 .player__name {
@@ -68,6 +68,7 @@
   }
   .statusBar__player {
     flex-direction: column;
+    padding-bottom: 20px;
   }
 
   .player__name {
