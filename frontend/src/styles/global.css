@@ -6,9 +6,9 @@
 }
 
 body {
-  //width: 100vw;
-  background: rgb(223,206,174);
-  background: linear-gradient(0deg, rgba(223,206,174,1) 71%, rgba(187,172,144,1) 100%) fixed;
+  
+  background: rgb(231,225,214);
+  background: radial-gradient(circle, rgb(221, 218, 211) 1%, rgb(164, 160, 151) 100%) fixed;
 }
 
 html {
@@ -31,8 +31,8 @@ h1 {
   .page {
     display: flex;
     flex-direction: column;
-    //align-items: center;
-    //justify-content: center;
+     align-items: center;
+    justify-content: center;
   }
   
   h1 {

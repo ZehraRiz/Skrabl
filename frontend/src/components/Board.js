@@ -4,25 +4,61 @@ import "../styles/Board.css";
 
 const getBonusClassName = (square) => {
   let bonusClassName = "";
-  if (square.letterMultiplier) {
-    square.letterMultiplier === 2
-      ? (bonusClassName = "double-letter")
-      : (bonusClassName = "triple-letter");
-  } else if (square.wordMultiplier) {
-    square.wordMultiplier === 2
-      ? (bonusClassName = "double-word")
-      : (bonusClassName = "triple-word");
+
+  switch(square.letterMultiplier) {
+    case 2: 
+      bonusClassName = "double-letter";
+      break;
+    case 3: 
+      bonusClassName = "triple-letter";
+      break;
+    default:
+      bonusClassName = bonusClassName;
   }
-  if (square.letterMultiplier === 1 && square.wordMultiplier === 1) {
-      bonusClassName = "";
+  switch(square.wordMultiplier) {
+    case 2: 
+      bonusClassName = "double-word";
+      break;
+    case 3: 
+      bonusClassName = "triple-word";
+      break;
+    default:
+      bonusClassName = bonusClassName;
   }
+  
   return bonusClassName;
 };
+
+
+const getBonusText = (square) => {
+  let bonusText = '';
+  switch(square.letterMultiplier) {
+    case 2: 
+      bonusText = "2L";
+      break;
+    case 3: 
+      bonusText = "3L";
+      break;
+    default:
+      bonusText = bonusText;
+  }
+  switch(square.wordMultiplier) {
+    case 2: 
+      bonusText = "3W";
+      break;
+    case 3: 
+      bonusText = "3W";
+      break;
+    default:
+      bonusText = bonusText;
+  }
+  return bonusText
+} 
 
 const Board = ({
   handleClickSquare,
   handleClickPlacedTile,
-  boardState,
+  boardState, 
   isDisabled,
 }) => {
   return (
@@ -54,7 +90,7 @@ const Board = ({
               >
                 {!placedTile && (
                   <span className="board__bonus-text">
-                    {removeDashes(bonusClassName).toUpperCase()}
+                    {getBonusText(square)}
                   </span>
                 )}
                 {placedTile && placedTile}
