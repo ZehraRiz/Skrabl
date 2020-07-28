@@ -82,6 +82,13 @@ const GameScreen = ({
   }, [pouch]);
 
   useEffect(() => {
+    //get tiles after user confirms tile exchange
+    if (!boardIsDisabled && tilesToExchange.length > 0) {
+      getTiles();
+    }
+  }, [boardIsDisabled]);
+
+  useEffect(() => {
     if (gameMode === "Computer" && turn === 1) {
       setTimeout(() => {
         computerMove();
@@ -290,6 +297,7 @@ const GameScreen = ({
         player: currentPlayer,
         scores: newScores,
         consecutivePasses: consecutivePasses + x,
+        returnedTiles: tilesToExchange,
       });
     }
     if (gameMode === "Computer") {
@@ -428,7 +436,16 @@ const GameScreen = ({
   };
 
   const handleConfirmExchange = () => {
-    // send tilesToExchange to backend, return new tiles
+    const idsToRemove = tilesToExchange.map((tile) => tile.id);
+    const updatedRack = playerRackTiles.filter(
+      (tile) => !idsToRemove.includes(tile.id)
+    );
+    setPlayerRackTiles(updatedRack);
+    setBoardIsDisabled(false);
+    //in online mode, tiles will be returned at end of turn
+    if (gameMode === "Computer") {
+      setPouch([...pouch, ...tilesToExchange]);
+    }
   };
 
   const handleClickClearTiles = () => {
