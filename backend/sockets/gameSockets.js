@@ -185,6 +185,8 @@ module.exports.listen = function (io, socket) {
       player,
       scores,
       returnedTiles,
+      currentPlayerTimeLeft,
+      opponentTimeLeft
     }) => {
       const game = findGame(gameId);
       if (!game) {
@@ -196,9 +198,13 @@ module.exports.listen = function (io, socket) {
         if (player === 0) {
           game.gameState.player1Tiles = playerRackTiles;
           game.gameState.turn = 1;
+          game.gameState.player1TimeLeft = currentPlayerTimeLeft
+          game.gameState.player2TimeLeft = opponentTimeLeft
         } else {
           game.gameState.player2Tiles = playerRackTiles;
           game.gameState.turn = 0;
+          game.gameState.player2TimeLeft = currentPlayerTimeLeft
+          game.gameState.player1TimeLeft = opponentTimeLeft
         }
         if (returnedTiles && returnedTiles.length > 0) {
           game.gameState.pouch = [...game.gameState.pouch, ...returnedTiles];
