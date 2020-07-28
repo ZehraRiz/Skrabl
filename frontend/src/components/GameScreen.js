@@ -300,7 +300,7 @@ const GameScreen = ({
         consecutivePasses: consecutivePasses + x,
         returnedTiles: tilesToExchange,
         currentPlayerTimeLeft: timeLeftPlayer,
-        opponentTimeLeft: timeLeftOpponent
+        opponentTimeLeft: timeLeftOpponent,
       });
     }
     if (gameMode === "Computer") {
@@ -359,7 +359,14 @@ const GameScreen = ({
   };
 
   const handleClickPlacedTile = (tileToRemove) => {
-    if (selectedTile === 0 || currentPlayer !== turn) return;
+    if (
+      selectedTile === 0 ||
+      currentPlayer !== turn ||
+      placedTiles.filter((tile) => tile.square !== tileToRemove.square)
+        .length === 0
+    )
+      return;
+
     if (tileToRemove.player === 0) {
       const updatedBoardState = boardState.map((square) => {
         if (square.tile && square.tile.square === tileToRemove.square) {
