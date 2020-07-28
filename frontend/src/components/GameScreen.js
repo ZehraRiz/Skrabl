@@ -451,6 +451,7 @@ const GameScreen = ({
     if (gameMode === "Computer") {
       setPouch([...pouch, ...tilesToExchange]);
     }
+    nextPlayer();
   };
 
   const handleClickClearTiles = () => {

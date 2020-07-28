@@ -7,7 +7,7 @@
   padding: 0.5rem .5rem;
   justify-content: space-around;
   flex-direction: column;
-  background: rgb(250, 244, 233);
+  background: rgb(223, 222, 220);
   border-radius: 3px;
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
@@ -15,6 +15,7 @@
   -o-border-radius: 3px;
   width: 100%;
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.5);
+  //margin: 0 .5%;
 }
 
 .statusBar__wrapper button {
@@ -35,6 +36,10 @@
   width: 100%;
   padding: 10px;
   height: 45%;
+}
+
+.player__name {
+  min-width: 100px;
 }
 
 .player__active {
