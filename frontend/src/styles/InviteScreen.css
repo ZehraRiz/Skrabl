@@ -6,7 +6,8 @@
   align-items: center;
   justify-content: center;
   height: calc(80vh - 75px);
-  width: 100%;
+  width: 100vw;
+  opacity: 0;
 }
 
 .inviteScreen__wrapper h3 {
