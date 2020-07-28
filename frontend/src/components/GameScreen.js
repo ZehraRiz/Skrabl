@@ -298,6 +298,8 @@ const GameScreen = ({
         scores: newScores,
         consecutivePasses: consecutivePasses + x,
         returnedTiles: tilesToExchange,
+        currentPlayerTimeLeft: timeLeftPlayer,
+        opponentTimeLeft: timeLeftOpponent
       });
     }
     if (gameMode === "Computer") {
