@@ -519,9 +519,9 @@ const GameScreen = ({
           />
         </div>
         <StatusBar
+          scores={scores}
           user={user}
           invitedPlayer={invitedPlayer}
-          scores={scores}
           setNotification={setNotification}
           timeLeftPlayer={timeLeftPlayer}
           timeLeftOpponent={timeLeftOpponent}
@@ -548,14 +548,15 @@ const GameScreen = ({
             handleConfirmExchange={handleConfirmExchange}
           />
         )}
+        {gameMode === "Online" && (
+          <Chat
+            gameId={gameData.gameId}
+            currentPlayer={currentPlayer}
+            socket={socket}
+          />
+        )}
       </div>
-      {gameMode === "Online" && (
-        <Chat
-          gameId={gameData.gameId}
-          currentPlayer={currentPlayer}
-          socket={socket}
-        />
-      )}
+
       {gameIsOver && (
         <GameOverModal
           scores={scores}

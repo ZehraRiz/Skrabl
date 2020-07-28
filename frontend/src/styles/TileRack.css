@@ -1,9 +1,8 @@
 /* mobile */
 
 .tileRack__wrapper {
-  width: 90%;
+  width: 95%;
   align-self: center;
-  margin: 1rem;
   display: flex;
   background: rgb(54, 38, 17);
   box-shadow: inset 0 -5px 10px rgba(0, 0, 0, 0.9), 0px 5px 10px rgba(0, 0, 0, 0.5);
@@ -17,10 +16,11 @@
   -moz-transform: rotateX(5deg);
   -ms-transform: rotateX(5deg);
   -o-transform: rotateX(5deg);
+  margin-top: 5px;
 }
 
 .tileRack__tile {
-  flex-basis: 15%;
+  width: 12%;
   max-width: 100px;
   margin: 0 2px;
 }
@@ -32,8 +32,12 @@
 /* large tablet */
 @media (min-width: 750px) {
   .tileRack__wrapper {
-  
+    width: 100%;
+    margin-top: 10px;
+    //background: brown;
+    //height: 120px;
   }
+  
 }
 
 /* laptop */
