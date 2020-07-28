@@ -11,23 +11,22 @@ const Timer = ({
 }) => {
   let interval;
 
-  console.log(timeLeft)
-  useEffect(() => {
-    
-    if (currentPlayer == turn) {
-    const interval = setInterval(() => {
-      setTimeLeft(timeLeft => timeLeft - 1/60);
-    }, 1000);
-    return () => clearInterval(interval);}
-  }, [currentPlayer, timeLeft, setTimeLeft]);
+   useEffect(() => {
+    if (currentPlayer === turn) {
+      interval = setInterval(() => {
+        setTimeLeft(timeLeft - 1/60);
+      }, 1000);
+
+      return () => clearInterval(interval);
+    }
+  }, [timeLeft, currentPlayer]);
 
   useEffect(() => {
     if (timeLeft === 0) {
       clearInterval(interval);
       setNotification("Time's up");
     }
-  }, [timeLeft, currentPlayer, setTimeLeft]);
-
+  }, [timeLeft]);
   return (
     <div className="timer__wrapper">
       Time: {formatMilliseconds(timeLeft*60*1000)}

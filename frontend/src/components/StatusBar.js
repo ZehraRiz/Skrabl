@@ -50,7 +50,7 @@ const StatusBar = ({
             setNotification={setNotification}
             timeLeft={timeLeftOpponent}
             setTimeLeft={setTimeLeftOpponent}
-            currentPlayer={(currentPlayer==0)? 1 : 0}
+            currentPlayer={(currentPlayer==1)? 0 :1 }
             turn={turn}
           />
         </div>

@@ -244,8 +244,6 @@ const GameScreen = ({
       });
 
       socket.on("gameUpdated", (data) => {
-        console.log("in game updated")
-        console.log(data)
         setGameIsOver(data.gameState.isOver);
         setBoardState(data.gameState.boardState);
         setTimeLeftPlayer(
