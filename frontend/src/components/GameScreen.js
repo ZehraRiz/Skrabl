@@ -535,7 +535,7 @@ const GameScreen = ({
   };
 
   return (
-    <Fade triggerOnce>
+    <Fade className="container__full-height" triggerOnce>
       <div className="gameScreen__wrapper">
         <div className="gameScreen__main">
           <div className="gameScreen__board">
