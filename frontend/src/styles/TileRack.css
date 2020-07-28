@@ -18,6 +18,7 @@
   -o-transform: rotateX(5deg);
   margin-top: 5px;
   justify-content: center;
+  min-height: 55px;
 }
 
 .tileRack__tile {
