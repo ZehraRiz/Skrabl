@@ -16,7 +16,7 @@
   -moz-transform: rotateX(5deg);
   -ms-transform: rotateX(5deg);
   -o-transform: rotateX(5deg);
-  margin-top: 5px;
+  margin: 10px 0 5px;
   min-height: 55px;
 }
 

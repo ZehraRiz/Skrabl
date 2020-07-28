@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "../styles/InviteScreen.css";
+import { Fade } from "react-awesome-reveal";
 
 const InviteScreen = ({
   user,
@@ -107,41 +108,43 @@ const InviteScreen = ({
   };
 
   return (
-    <div className="inviteScreen__wrapper">
-      <h3>You are inviting: {invitedPlayer.name}</h3>
-      <div className="inviteScreen__list">
-        <div className="inviteScreen__option">
-          <label htmlFor="time">Time per player per game (mins):</label>
-          <input
-            type="number"
-            id="time"
-            value={timeInput}
-            onChange={handleTimeChange}
-          />
+    <Fade triggerOnce>
+      <div className="inviteScreen__wrapper">
+        <h3>You are inviting: {invitedPlayer.name}</h3>
+        <div className="inviteScreen__list">
+          <div className="inviteScreen__option">
+            <label htmlFor="time">Time per player per game (mins):</label>
+            <input
+              type="number"
+              id="time"
+              value={timeInput}
+              onChange={handleTimeChange}
+            />
+          </div>
+        </div>
+        <div className="inviteScreen__buttons">
+          <button type="button" onClick={handleClose}>
+            Cancel
+          </button>
+
+          {!inviteSent && (
+            <button type="button" onClick={handleApplyOptions}>
+              Send Invite
+            </button>
+          )}
+
+          {inviteSent && (
+            <p>Waiting for player to accept invite</p>
+          )}
+          {invite !== "" && (
+            <div>
+              <p>{invite.host.name} sent you a game request</p>
+              <button onClick={acceptInvite}>Click to accept</button>
+            </div>
+          )}
         </div>
       </div>
-      <div className="inviteScreen__buttons">
-        <button type="button" onClick={handleClose}>
-          Cancel
-        </button>
-
-        {!inviteSent && (
-          <button type="button" onClick={handleApplyOptions}>
-            Send Invite
-          </button>
-        )}
-
-        {inviteSent && (
-          <p>Waiting for player to accept invite</p>
-        )}
-        {invite !== "" && (
-          <div>
-            <p>{invite.host.name} sent you a game request</p>
-            <button onClick={acceptInvite}>Click to accept</button>
-          </div>
-        )}
-      </div>
-    </div>
+    </Fade>
   );
 };
 

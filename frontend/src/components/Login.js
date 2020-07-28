@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import "../styles/Login.css";
+import { Fade } from "react-awesome-reveal";
 
 const Login = ({
 	setCurrentComponent,
@@ -86,14 +87,16 @@ const Login = ({
 		e.target.reset();
 	};
 	return (
-		<div className="login__wrapper">
-			<h2>Login</h2>
-			<form onSubmit={handleLogin}>
-				<label htmlFor="name">Your name:</label>
-				<input type="text" id="name" maxLength="12"/>
-				<button type="submit">Go</button>
-			</form>
-		</div>
+		<Fade triggerOnce>
+			<div className="login__wrapper">
+				<h2>Login</h2>
+				<form onSubmit={handleLogin}>
+					<label htmlFor="name">Your name:</label>
+					<input type="text" id="name" maxLength="12"/>
+					<button type="submit">Go</button>
+				</form>
+			</div>
+		</Fade>
 	);
 };
 
