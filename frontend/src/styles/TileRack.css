@@ -1,7 +1,7 @@
 /* mobile */
 
 .tileRack__wrapper {
-  width: 95%;
+  width: 99%;
   align-self: center;
   display: flex;
   background: rgb(47, 46, 45);
@@ -21,7 +21,7 @@
 }
 
 .tileRack__tile {
-  width: 142%;
+  width: 13%;
   max-width: 100px;
   margin: 0 2px;
 }
@@ -39,7 +39,7 @@
     justify-content: flex-start;
   }
   .tileRack__tile {
-    width: 13.5%;
+    width: 14%;
     max-width: 100px;
     margin: 0 2px;
   }

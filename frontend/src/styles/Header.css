@@ -5,7 +5,7 @@
   text-align: center;
   background: rgb(62,61,60);
 background: radial-gradient(circle, rgba(62,61,60,1) 1%, rgba(47,46,45,1) 100%);
-  padding: 1rem;
+  padding: .5rem;
   color:  #f0f6fa;
   font-family: scripts;
   letter-spacing: 5px;

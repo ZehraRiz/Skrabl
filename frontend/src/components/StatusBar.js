@@ -51,7 +51,6 @@ const StatusBar = ({
           />
         </div>
         <div className="player__score">Score: {scores && scores[1]}</div>
-        <div className="player__thinking">{gameMode === "Computer" && turn === 1 && <span> (thinking...)</span>}</div>
        
       </div>
     </div>
