@@ -225,8 +225,10 @@ const GameScreen = ({
     ) {
       // game ends if players pass six turns in a row, or pass twice when there are no tiles left in pouch
       // end game
+      gameOver();
       console.log("END GAME");
     }
+    console.log(consecutivePasses);
   }, [consecutivePasses]);
 
   useEffect(() => {
@@ -433,7 +435,8 @@ const GameScreen = ({
 
   const handlePass = () => {
     closeModal();
-    nextPlayer(1);
+    nextPlayer(1, scores);
+    setConsecutivePasses(consecutivePasses + 1);
   };
 
   const handleClickExchangeTiles = () => {
