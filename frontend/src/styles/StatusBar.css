@@ -14,7 +14,7 @@
   -ms-border-radius: 3px;
   -o-border-radius: 3px;
   width: 100%;
-
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.5);
 }
 
 .statusBar__wrapper button {
@@ -38,13 +38,13 @@
 }
 
 .player__active {
-  background: green;
+  background: rgb(47, 85, 123);
   color: white;
 }
 
 
 .opponent__active {
-  background: red;
+  background: rgb(125, 47, 27);
   color: white;
 }
 
