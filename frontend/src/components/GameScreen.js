@@ -166,6 +166,7 @@ const GameScreen = ({
   useEffect(() => {
     //set inital state
     if (gameMode === "Online") {
+      console.log("in inital setup")
       setGameIsOver(gameData.gameState.isOver);
       setPlayerRackTiles(
         currentPlayer === 0
@@ -243,6 +244,8 @@ const GameScreen = ({
       });
 
       socket.on("gameUpdated", (data) => {
+        console.log("in game updated")
+        console.log(data)
         setGameIsOver(data.gameState.isOver);
         setBoardState(data.gameState.boardState);
         setTimeLeftPlayer(
@@ -298,6 +301,8 @@ const GameScreen = ({
         scores: newScores,
         consecutivePasses: consecutivePasses + x,
         returnedTiles: tilesToExchange,
+        currentPlayerTimeLeft: timeLeftPlayer,
+        opponentTimeLeft: timeLeftOpponent
       });
     }
     if (gameMode === "Computer") {

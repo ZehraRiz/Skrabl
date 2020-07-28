@@ -15,15 +15,17 @@ const StatusBar = ({
   turn,
   gameMode,
 }) => {
+  console.log("time left player: " + timeLeftPlayer)
+  console.log("time left opponent: "+timeLeftOpponent)
   return (
     <div className="statusBar__wrapper">
       <div className={turn === currentPlayer ? "statusBar__player player__active" : "statusBar__player"}>
-        <div className="player__name">{gameMode === "Computer" ? "Player" : user.name } {}</div>
-        <div className="player__time">
+        <div class="player__name">{gameMode === "Computer" ? "Player" : user.name } {}</div>
+        <div class="player__time">
 
           <Timer
             setNotification={setNotification}
-            timeLeft={timeLeftPlayer*60}
+            timeLeft={timeLeftPlayer}
             setTimeLeft={setTimeLeftPlayer}
             currentPlayer={currentPlayer}
             turn={turn}
@@ -46,14 +48,14 @@ const StatusBar = ({
         <div className="player__time">
           <Timer
             setNotification={setNotification}
-            timeLeft={timeLeftOpponent*60}
+            timeLeft={timeLeftOpponent}
             setTimeLeft={setTimeLeftOpponent}
-            currentPlayer={(!currentPlayer)}
+            currentPlayer={(currentPlayer==0)? 1 : 0}
             turn={turn}
           />
         </div>
-        <div className="player__score">Score: {scores && scores[1]}</div>
-        <div className="player__thinking">{gameMode === "Computer" && turn === 1 && <span> (thinking...)</span>}</div>
+        <div class="player__score">Score: {scores && scores[1]}</div>
+        <div class="player__thinking">{gameMode === "Computer" && turn === 1 && <span> (thinking...)</span>}</div>
        
       </div>
     </div>
