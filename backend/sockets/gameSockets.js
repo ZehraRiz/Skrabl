@@ -209,6 +209,7 @@ module.exports.listen = function (io, socket) {
         if (returnedTiles && returnedTiles.length > 0) {
           game.gameState.pouch = [...game.gameState.pouch, ...returnedTiles];
         }
+        console.log(game)
         io.in(gameId).emit("gameUpdated", game);
       }
     }

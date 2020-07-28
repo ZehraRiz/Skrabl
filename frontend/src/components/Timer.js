@@ -19,7 +19,7 @@ const Timer = ({
 
       return () => clearInterval(interval);
     }
-  }, [timeLeft, currentPlayer]);
+  }, [timeLeft, turn]);
 
   useEffect(() => {
     if (timeLeft === 0) {

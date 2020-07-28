@@ -166,6 +166,7 @@ const GameScreen = ({
   useEffect(() => {
     //set inital state
     if (gameMode === "Online") {
+      
       console.log("in inital setup")
       setGameIsOver(gameData.gameState.isOver);
       setPlayerRackTiles(
@@ -260,6 +261,9 @@ const GameScreen = ({
         setTurn(data.gameState.turn);
         setConsecutivePasses(data.gameState.consecutivePasses);
       });
+      console.log("from retrived")
+      console.log(timeLeftPlayer)
+      console.log(timeLeftOpponent)
     }
   }, [playerRackTiles]);
 
@@ -290,6 +294,8 @@ const GameScreen = ({
   };
 
   const nextPlayer = (x = 0, newScores = { 0: 0, 0: 0 }) => {
+    console.log("player time: " + timeLeftPlayer)
+    console.log("opponent time " +timeLeftOpponent)
     if (gameMode === "Online") {
       socket.emit("updateGameState", {
         gameId: gameData.gameId,
