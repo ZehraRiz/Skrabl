@@ -166,7 +166,6 @@ const GameScreen = ({
   useEffect(() => {
     //set inital state
     if (gameMode === "Online") {
-      console.log("in inital setup")
       setGameIsOver(gameData.gameState.isOver);
       setPlayerRackTiles(
         currentPlayer === 0
