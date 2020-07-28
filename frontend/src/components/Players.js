@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "../styles/Players.css";
+import { Fade } from "react-awesome-reveal";
 
 const Players = ({
   players,
@@ -77,33 +78,35 @@ const Players = ({
 
 
 	return (
-		<div className="players__wrapper">
-			<h3>Players Online</h3>
-			Clink on a player to invite them for a game
-			<ul className="players__list">
-					{players.map((player, index) => {
-						return (
-								<li
-									key={index}
-									value={player}
-									onClick={() => {
-										sendInvite(player);
-									}}
-									className="players__player">
-									{player.name}
-								</li>
-							);
-		
-					})}
-			</ul>
-			{players.length<1 && <p>No one's online at the moment.</p>}
-			{invite !== "" && (
-				<div>
-					<p>{invite.host.name} sent you a game request</p>
-					<button onClick={acceptInvite}>Click to accpet</button>
-				</div>
-			)}
-		</div>
+		<Fade triggerOnce>
+			<div className="players__wrapper">
+				<h3>Players Online</h3>
+				Clink on a player to invite them for a game
+				<ul className="players__list">
+						{players.map((player, index) => {
+							return (
+									<li
+										key={index}
+										value={player}
+										onClick={() => {
+											sendInvite(player);
+										}}
+										className="players__player">
+										{player.name}
+									</li>
+								);
+			
+						})}
+				</ul>
+				{players.length<1 && <p>No one's online at the moment.</p>}
+				{invite !== "" && (
+					<div>
+						<p>{invite.host.name} sent you a game request</p>
+						<button onClick={acceptInvite}>Click to accpet</button>
+					</div>
+				)}
+			</div>
+		</Fade>
 	);
 };
 

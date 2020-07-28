@@ -14,6 +14,7 @@ import { squaresAreOccupied } from "../utils/squaresAreOccupied";
 import { findWordsOnBoard } from "../utils/findWordsOnBoard";
 import { getScoresFromWords } from "../utils/getScoresFromWords";
 import { bonusSquareIndices } from "../assets/bonusSquareIndices";
+import { Fade } from "react-awesome-reveal";
 import axios from "axios";
 import "../styles/GameScreen.css";
 
@@ -524,77 +525,79 @@ const GameScreen = ({
   };
 
   return (
-    <div className="gameScreen__wrapper">
-      <div className="gameScreen__main">
-        <div className="gameScreen__board">
-          <Board
-            handleClickSquare={handleClickSquare}
-            handleClickPlacedTile={handleClickPlacedTile}
-            boardState={boardState}
-            isDisabled={boardIsDisabled}
-          />
-          <TileRack
-            tilesToExchange={tilesToExchange}
-            playerRackTiles={playerRackTiles}
-            handleClickTile={handleClickTile}
-          />
-        </div>
-        <StatusBar
-          scores={scores}
-          user={user}
-          invitedPlayer={invitedPlayer}
-          setNotification={setNotification}
-          timeLeftPlayer={timeLeftPlayer}
-          timeLeftOpponent={timeLeftOpponent}
-          setTimeLeftPlayer={setTimeLeftPlayer}
-          setTimeLeftOpponent={setTimeLeftOpponent}
-          currentPlayer={currentPlayer}
-          turn={turn}
-          gameMode={gameMode}
-        />
-        {!boardIsDisabled && (
-          <GameButtons
-            placedTiles={placedTiles}
-            handleClickClearTiles={handleClickClearTiles}
-            handleClickShuffle={handleClickShuffle}
-            handleClickConfirmMove={handleClickConfirmMove}
-            handleClickResign={handleClickResign}
-            handleClickPass={handleClickPass}
-            handleClickExchangeTiles={handleClickExchangeTiles}
-          />
-        )}
-        {boardIsDisabled && (
-          <ExchangeTilesButtons
-            handleCancelExchange={handleCancelExchange}
-            handleConfirmExchange={handleConfirmExchange}
-          />
-        )}
-        {gameMode === "Online" && (
-          <Chat
-            gameId={gameData.gameId}
+    <Fade triggerOnce>
+      <div className="gameScreen__wrapper">
+        <div className="gameScreen__main">
+          <div className="gameScreen__board">
+            <Board
+              handleClickSquare={handleClickSquare}
+              handleClickPlacedTile={handleClickPlacedTile}
+              boardState={boardState}
+              isDisabled={boardIsDisabled}
+            />
+            <TileRack
+              tilesToExchange={tilesToExchange}
+              playerRackTiles={playerRackTiles}
+              handleClickTile={handleClickTile}
+            />
+          </div>
+          <StatusBar
+            scores={scores}
+            user={user}
+            invitedPlayer={invitedPlayer}
+            setNotification={setNotification}
+            timeLeftPlayer={timeLeftPlayer}
+            timeLeftOpponent={timeLeftOpponent}
+            setTimeLeftPlayer={setTimeLeftPlayer}
+            setTimeLeftOpponent={setTimeLeftOpponent}
             currentPlayer={currentPlayer}
-            socket={socket}
+            turn={turn}
+            gameMode={gameMode}
+          />
+          {!boardIsDisabled && (
+            <GameButtons
+              placedTiles={placedTiles}
+              handleClickClearTiles={handleClickClearTiles}
+              handleClickShuffle={handleClickShuffle}
+              handleClickConfirmMove={handleClickConfirmMove}
+              handleClickResign={handleClickResign}
+              handleClickPass={handleClickPass}
+              handleClickExchangeTiles={handleClickExchangeTiles}
+            />
+          )}
+          {boardIsDisabled && (
+            <ExchangeTilesButtons
+              handleCancelExchange={handleCancelExchange}
+              handleConfirmExchange={handleConfirmExchange}
+            />
+          )}
+          {gameMode === "Online" && (
+            <Chat
+              gameId={gameData.gameId}
+              currentPlayer={currentPlayer}
+              socket={socket}
+            />
+          )}
+        </div>
+
+        {gameIsOver && (
+          <GameOverModal
+            scores={scores}
+            scoredWords={scoredWords}
+            exitGame={exitGame}
+          />
+        )}
+        {confirmMessage && (
+          <ConfirmModal
+            message={confirmMessage}
+            handleResign={handleResign}
+            handlePass={handlePass}
+            handleConfirmMove={handleConfirmMove}
+            closeModal={closeModal}
           />
         )}
       </div>
-
-      {gameIsOver && (
-        <GameOverModal
-          scores={scores}
-          scoredWords={scoredWords}
-          exitGame={exitGame}
-        />
-      )}
-      {confirmMessage && (
-        <ConfirmModal
-          message={confirmMessage}
-          handleResign={handleResign}
-          handlePass={handlePass}
-          handleConfirmMove={handleConfirmMove}
-          closeModal={closeModal}
-        />
-      )}
-    </div>
+    </Fade>
   );
 };
 
