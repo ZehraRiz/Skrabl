@@ -4,6 +4,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  height: calc(80vh - 75px);
 }
 
 .players__wrapper h3 {
@@ -19,14 +21,14 @@
 .players__player {
   padding: 1rem;
   font-size: 1.2rem;
-  background: rgb(79, 79, 153);
+  background: rgb(79, 112, 153);
   color: white;
   border: 1px solid white;
   cursor: pointer;
 }
 
 .players__player:hover {
-  background: rgb(53, 53, 107);
+  background: rgb(102, 141, 189);
 }
 
 /* tablet */

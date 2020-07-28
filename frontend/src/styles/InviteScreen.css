@@ -4,11 +4,13 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  height: calc(80vh - 75px);
 }
 
 .inviteScreen__wrapper h3 {
   margin: 2rem 0;
 }
+
 
 .inviteScreen__list {
   margin-top: 2rem;

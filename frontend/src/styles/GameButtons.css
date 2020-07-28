@@ -2,15 +2,11 @@
   display: flex;
   justify-content: space-between;
   padding: 0.5rem 0;
-  //flex-wrap: wrap;
 }
-
-
 
 button {
 	display: flex;
 	flex-direction: row;
-
 	align-items: center;
 	justify-content: center;
 	background: rgb(135, 131, 128);
@@ -28,7 +24,6 @@ button {
   	text-shadow:0px 1px 0px #4d3534;
   	white-space: nowrap;
   	letter-spacing: .05em;
-  	
 }
 
 .button__text {
@@ -36,7 +31,6 @@ button {
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	
 	width: 100%;
 	font-size: 1em;
 }
@@ -46,28 +40,24 @@ button img {
 	width: 20px;
 	height: auto;
 	opacity: .9;
-	
-
 }
 
 button:hover {
-	
 	background: rgb(159, 156, 154);
 }
+
 button:active {
 	position:relative;
 	top:1px;
 }
 
 
-
 @media (max-width: 1100px ) {
   button {
     font-size: .8em;
   }
-
-  
 }
+
 @media (min-width: 750px ) {
 	  
 	.gameButtons__wrapper {
@@ -80,14 +70,14 @@ button:active {
 		height: 60%;
 		flex-wrap: nowrap;
 		padding: 0;
-	  }
-	
-	  .gameButtons__wrapper button {
+	}
+
+	.gameButtons__wrapper button {
 		height: 20%;
 		padding: 10px 15px;
 		margin: 5px 0px;
 		height: 20%;
-	  }
+	}
 
 	  
 	.button__text {
@@ -104,12 +94,10 @@ button:active {
 		width: 40px;
 		height: auto;
 		opacity: .9;
-		margin-right: 1.5em;
-		
-	
+		margin-right: 1em;
 	}
   
-	
   }
 
-
+ 
+  
