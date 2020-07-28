@@ -1,5 +1,15 @@
-const { userJoin, getCurrentUser, userLeave, getRoomUsers } = require("../utils/users.js");
-const { findRegisteredUser, setRegisteredUser, getAllRegisteredUsers, addUserSession, deleteSocket } = require("../store/registeredUsers");
+const {
+  gameJoin,
+  setGamePlayer1,
+  setGamePlayer2,
+  getAllGames,
+  playerDisconnectFromGame,
+  removeGame,
+  isPlayerInGame,
+  findGame,
+  getPlayerNumber,
+} = require("../utils/games.js");
+const { findRegisteredUser, setRegisteredUser, getAllRegisteredUsers, addUserSession, deleteSocket, switchGameSocket } = require("../store/registeredUsers");
 const ONLINE_SOCKETS = "onlineSockets"
 
 
@@ -39,22 +49,56 @@ module.exports.listen = function (io, socket) {
 		}
 		socket.join(ONLINE_SOCKETS);
 		const updatedUser = addUserSession(token, socket.id)
-		const inGame = updatedUser.socketWithGame != ""
+
+		let game;
+		let invitedPlayer;
+		let currentPlayer;
+		
+		const gameSocket = updatedUser.socketWithGame
+		if (gameSocket!== "") { //game id and game socket are set together in all games.  
+			game = findGame(user.gameId)
+			if (game) {
+				socket.join(game.gameId)
+				if (token == game.player1.playerId)
+				{
+					invitedPlayer = findRegisteredUser(game.player2.playerId)
+					currentPlayer = 0
+				}	
+				else {
+					invitedPlayer = findRegisteredUser(game.player1.playerId)
+					currentPlayer =1
+				}
+			}
+		}
 		socket.emit("retrievdUser", {
 			user: updatedUser,
 			allOnlineUsers: getAllRegisteredUsers(),//send all currently online users
-			inGame: inGame
+			inGame: (gameSocket === "") ? false : true,
+			setGameOnSocket: (gameSocket === 0) ? true : false,
+			game: game,
+			currentPlayer:currentPlayer,
+			invitedPlayer: invitedPlayer //oppponent player
 		});
-		console.log(updatedUser.currentSessions.length)
 		if(updatedUser.currentSessions.length <= 1){ socket.broadcast.to(ONLINE_SOCKETS).emit("welcomeNewUser", updatedUser)};
 	});
 
 	//USER DISCONNECTS
 	socket.on("disconnect", () => {
 		console.log("A connection left");
-		const user = deleteSocket(socket.id); 
-		//should update game socket too
+		const user = deleteSocket(socket.id);
+	
 		if (!user) return; 
+		if (user.socketWithGame === socket.id) {
+			const gameId = switchGameSocket(user)
+			//gameId will be returned if there are more sockets available
+			// null will be returned if not more sockets available
+		
+			//emit game to new socket and join
+			//send them on extra screen
+			const newSetSocket = findRegisteredUser(user.token).socketWithGame
+			
+			io.to(newSetSocket).emit('retrivedGame', gameId);
+		}
 		if(!user.currentSessions.length){ socket.broadcast.to(ONLINE_SOCKETS).emit("userLeft", user)}; //should be sent to the game as well
 		
 	});

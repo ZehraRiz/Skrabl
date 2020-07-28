@@ -55,6 +55,7 @@ function setGamePlayer1(gameId, userId, time) {
       game.gameState.player2TimeLeft = time;
       if (game.player1.playerId === "") {
         game.player1.playerId = userId;
+        game.player1.isConnected = true;
         return game;
       }
     }
@@ -76,7 +77,6 @@ function setGamePlayer2(gameId, userId) {
 
 function playerDisconnectFromGame(id) {
   let g = "";
-  console.log(id);
   let gamesWithoutUser = [];
 
   games.map((game) => {
@@ -94,12 +94,16 @@ function playerDisconnectFromGame(id) {
   return g;
 }
 
-//get current user
-
-// function getCurrentUser(id) {
-//     return users.find(user => user.id === id)
-// }
-//     //user leaves
+function player2Accepted(gameId) {
+  let newGame;
+  games.map(game => {
+    if (game.gameId === gameId) {
+      game.player2.isConnected = true;
+      newGame = game
+    }
+  })
+  return newGame
+}
 
 function removeGame(id) {
   const index = games.findIndex((game) => game.gameId === id);
@@ -122,5 +126,6 @@ module.exports = {
   isPlayerInGame,
   findGame,
   removeGame,
+  player2Accepted
   // getRoomUsers
 };

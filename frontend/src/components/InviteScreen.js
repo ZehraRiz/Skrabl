@@ -10,10 +10,11 @@ const InviteScreen = ({
   setGameData,
   socket,
   setCurrentPlayer,
+  inviteSent, 
+  setInviteSent
 }) => {
   const [timeInput, setTimeInput] = useState(20);
-  const [allPlayersReady, setAllPlayersReady] = useState(false);
-  const [inviteSent, setInviteSent] = useState(false);
+  
   let [invite, setInvite] = useState("");
 
   const handleTimeChange = (e) => {
@@ -29,12 +30,29 @@ const InviteScreen = ({
     });
   };
 
+  socket.on("gameJoined2", (data) => {
+    if(invite===""){
+        setCurrentPlayer(0);
+        setGameData(data.game);
+        setCurrentComponent("GameScreen");
+    }
+    else {
+      setCurrentPlayer(1);
+      setGameData(data.game);
+      setInvitedPlayer(invite.host)
+      setCurrentComponent("GameScreen");
+    }
+  });
+
+  
+
   socket.on("invite", (data) => {
     setInvite(data);
   });
   const acceptInvite = () => {
+    setInvite("")
     socket.emit("inviteAccepted", {
-      userId: user.id,
+      token: user.token,
       gameId: invite.game.gameId,
     });
     socket.on("2joinGameError", (data) => {
@@ -44,6 +62,7 @@ const InviteScreen = ({
       console.log(data);
       setCurrentPlayer(1);
       setGameData(data.game);
+      setInvitedPlayer(invite.host)
       setCurrentComponent("GameScreen");
     });
   };
@@ -112,7 +131,7 @@ const InviteScreen = ({
           </button>
         )}
 
-        {inviteSent && !allPlayersReady && (
+        {inviteSent && (
           <p>Waiting for player to accept invite</p>
         )}
         {invite !== "" && (
