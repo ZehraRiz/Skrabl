@@ -21,8 +21,8 @@ const {
   setUserGame,
   removeGameFromUser,
   setGameSocket,
-  removeGameSocket
-} = require("../store/registeredUsers")
+  removeGameSocket,
+} = require("../store/registeredUsers");
 
 const moment = require("moment");
 let now = moment();
@@ -32,19 +32,18 @@ const games = getAllGames();
 module.exports.listen = function (io, socket) {
   //create a game
   socket.on("createGame", (userToken) => {
-      const gameId = Math.floor(Math.random() * 10000).toString();
-      gameJoin(gameId);
-      removeGameSocket(userToken)
-      socket.emit("gameCreateResponse", gameId);
-    
+    const gameId = Math.floor(Math.random() * 10000).toString();
+    gameJoin(gameId);
+    removeGameSocket(userToken);
+    socket.emit("gameCreateResponse", gameId);
   });
 
   socket.on("playerInGame", (player) => {
-    const user = findRegisteredUser(player.token)
-  
-    const isBusy = user.socketWithGame != ""
-    socket.emit("playerUnavailable", isBusy);}
-  );
+    const user = findRegisteredUser(player.token);
+
+    const isBusy = user.socketWithGame != "";
+    socket.emit("playerUnavailable", isBusy);
+  });
 
   //cancel game
   socket.on("removeGame", (gameId) => {
@@ -76,17 +75,20 @@ module.exports.listen = function (io, socket) {
         socket.emit("joinGameError", "You are already in game");
         return;
       } else {
-        const user = setUserGame(token, gameId)
-        const game = setGamePlayer1(gameId, userId=token, time);
+        const user = setUserGame(token, gameId);
+        const game = setGamePlayer1(gameId, (userId = token), time);
         if (game && user) {
           socket.join(gameId);
-          setGameSocket(token, socket.id)
+          setGameSocket(token, socket.id);
           socket.emit(
             "gameJoined",
             "You have joined the game. Waiting for other player"
           );
         } else {
-          socket.emit("joinGameError", "Sorry, could not set you up for the game");
+          socket.emit(
+            "joinGameError",
+            "Sorry, could not set you up for the game"
+          );
         }
       }
     }
@@ -105,16 +107,16 @@ module.exports.listen = function (io, socket) {
         socket.emit("gameRequestError", "Player has already joined your game");
         return;
       } else {
-        let guest = findRegisteredUser(invitedPlayer.token)
+        let guest = findRegisteredUser(invitedPlayer.token);
         let host = findRegisteredUser(token);
-        if (!guest || !host ) {
+        if (!guest || !host) {
           socket.emit("gameRequestError", "Player has left the lobby");
           return;
         }
-        setGamePlayer2(gameId, userId=invitedPlayer.token);
-        guest.currentSessions.map(session => {
+        setGamePlayer2(gameId, (userId = invitedPlayer.token));
+        guest.currentSessions.map((session) => {
           io.to(session).emit("invite", { host: host, game: game });
-        })
+        });
       }
     }
   });
@@ -125,21 +127,21 @@ module.exports.listen = function (io, socket) {
     const game = games.find((g) => {
       return g.gameId === gameId;
     });
-   
+
     if (!user || !game) {
       socket.emit("2joinGameError", "something went wrong");
       return;
     }
-    
+
     if (game.player1.playerId === "") {
       socket.emit("2joinGameError", "The host has left");
       return;
     }
-    const newGame = player2Accepted(gameId)
+    const newGame = player2Accepted(gameId);
     if (newGame) {
       socket.join(gameId);
-      setUserGame(token, gameId)
-      setGameSocket(token, socket.id)
+      setUserGame(token, gameId);
+      setGameSocket(token, socket.id);
       io.in(gameId).emit("gameJoined2", { game: newGame });
     } else {
       socket.emit("2joinGameError", "Sorry, could not set you up for the game");
@@ -156,7 +158,7 @@ module.exports.listen = function (io, socket) {
       return;
     } else {
       tilesToSend = game.gameState.pouch.slice(0, numTilesNeeded);
-      
+
       if (player === 0) {
         game.gameState.player1Tiles = [
           ...game.gameState.player1Tiles,
@@ -176,7 +178,14 @@ module.exports.listen = function (io, socket) {
 
   socket.on(
     "updateGameState",
-    ({ gameId, boardState, playerRackTiles, player, scores }) => {
+    ({
+      gameId,
+      boardState,
+      playerRackTiles,
+      player,
+      scores,
+      returnedTiles,
+    }) => {
       const game = findGame(gameId);
       if (!game) {
         socket.emit("gameEnded", "The game has ended");
@@ -190,6 +199,9 @@ module.exports.listen = function (io, socket) {
         } else {
           game.gameState.player2Tiles = playerRackTiles;
           game.gameState.turn = 0;
+        }
+        if (returnedTiles && returnedTiles.length > 0) {
+          game.gameState.pouch = [...game.gameState.pouch, ...returnedTiles];
         }
         io.in(gameId).emit("gameUpdated", game);
       }
@@ -211,8 +223,8 @@ module.exports.listen = function (io, socket) {
   //USER CHAT
   socket.on("sendMsg", ({ token, gameId, currentPlayer, newMessage }) => {
     const game = findGame(gameId);
-    const user = findRegisteredUser(token)
-    if (!game ) {
+    const user = findRegisteredUser(token);
+    if (!game) {
       socket.emit("chatError", "The game has ended");
       return;
     }
