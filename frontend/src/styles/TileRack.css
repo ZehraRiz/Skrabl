@@ -16,8 +16,8 @@
   -moz-transform: rotateX(5deg);
   -ms-transform: rotateX(5deg);
   -o-transform: rotateX(5deg);
-  margin-top: 5px;
-  justify-content: center;
+  margin: 10px 0 5px;
+  min-height: 55px;
 }
 
 .tileRack__tile {
@@ -43,7 +43,6 @@
     max-width: 100px;
     margin: 0 2px;
   }
-  
 }
 
 /* laptop */

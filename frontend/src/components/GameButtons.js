@@ -7,7 +7,6 @@ import confirm from "../images/013-play.svg";
 import resign from "../images/003-stop.svg";
 
 const GameButtons = ({
-  handleClickClearTiles,
   handleClickShuffle,
   handleClickConfirmMove,
   handleClickResign,

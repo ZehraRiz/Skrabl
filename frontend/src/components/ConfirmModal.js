@@ -1,5 +1,6 @@
 import React from "react";
 import "../styles/ConfirmModal.css";
+import { Fade } from "react-awesome-reveal";
 
 const ConfirmModal = ({ message, handleResign, handlePass, handleConfirmMove, closeModal }) => {
   let confirmFunction;
@@ -19,15 +20,17 @@ const ConfirmModal = ({ message, handleResign, handlePass, handleConfirmMove, cl
       break
   }
   return (
-    <div className="confirmModal__wrapper">
-      <div className="confirmModal__content">
-        <p>{message.message}</p>
-        <div className="confirmModal__buttons">
-          <button onClick={closeModal}>Cancel</button>
-          <button onClick={confirmFunction}>Confirm</button>
-        </div>
+    <Fade triggerOnce> 
+      <div className="confirmModal__wrapper">
+          <div className="confirmModal__content">
+            <p>{message.message}</p>
+            <div className="confirmModal__buttons">
+              <button onClick={closeModal}>Cancel</button>
+              <button onClick={confirmFunction}>Confirm</button>
+            </div>
+          </div>
       </div>
-    </div>
+    </Fade>
   );
 };
 

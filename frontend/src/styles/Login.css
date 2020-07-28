@@ -1,11 +1,28 @@
 .login__wrapper {
+  height: calc(80vh - 80px);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 2rem;
+  opacity: 0;
 }
 
 .login__wrapper h2 {
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
+}
+
+.login__wrapper button {
+  margin: 1rem 0;
+}
+
+.login__wrapper input {
+  width: 100%;
+}
+
+@media (min-width: 320px) {
+  .login__wrapper input {
+    margin-left: 1em;
+    width: 65%;
+  }
 }
