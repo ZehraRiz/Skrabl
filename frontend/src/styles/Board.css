@@ -33,6 +33,7 @@
 }
 
 .board__tile {
+  color: rgb(42, 102, 42);
   display: flex;
   align-items: center;
   justify-content: center;
