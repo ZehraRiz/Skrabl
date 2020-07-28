@@ -15,8 +15,8 @@ const StatusBar = ({
   turn,
   gameMode,
 }) => {
-  console.log("time left player: " + timeLeftPlayer)
-  console.log("time left opponent: " + timeLeftOpponent)
+  //console.log("time left player: " + timeLeftPlayer)
+  //console.log("time left opponent: " + timeLeftOpponent)
   return (
     <div className="statusBar__wrapper">
       <div className={turn === currentPlayer ? "statusBar__player player__active" : "statusBar__player"}>
