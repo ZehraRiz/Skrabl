@@ -90,7 +90,7 @@ const Login = ({
 			<h2>Login</h2>
 			<form onSubmit={handleLogin}>
 				<label htmlFor="name">Your name:</label>
-				<input type="text" id="name" />
+				<input type="text" id="name" maxLength="12"/>
 				<button type="submit">Go</button>
 			</form>
 		</div>
