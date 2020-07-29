@@ -209,6 +209,7 @@ router.post("/", async (req, res) => {
   const { rackTiles, boardState } = req.body;
   try {
     const data = await makeMove(rackTiles, boardState);
+
     res.status(200).send(data);
   } catch (err) {
     console.log(err);

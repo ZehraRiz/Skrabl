@@ -144,19 +144,19 @@ const GameScreen = ({
               );
             }
           }
-          const allWords = findWordsOnBoard(returnedBoardState, tilesUsed);
-          setWordsOnBoard(allWords);
-          var newWords = allWords.filter((word) => word.newWord === true);
-          var newScores = scores;
-          newWords.forEach((word) => {
-            newScores[1] = newScores[1] + word.wordScore;
-          });
           setTimeout(() => {
+            const allWords = findWordsOnBoard(returnedBoardState, tilesUsed);
+            setWordsOnBoard(allWords);
+            const newWords = allWords.filter((word) => word.newWord === true);
+            const newScores = scores;
+            newWords.forEach((word) => {
+              newScores[1] = newScores[1] + word.wordScore;
+            });
             setBoardState(returnedBoardState);
             nextPlayer();
             setScores(newScores);
             setComputerRackTiles(updatedComputerRackTiles);
-          }, 4000);
+          }, 5000);
         }
       });
   };
