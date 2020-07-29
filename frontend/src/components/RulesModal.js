@@ -4,8 +4,9 @@ import { Fade } from "react-awesome-reveal";
 
 const RulesModal = ({closeModal}) => {
   return (
-    <Fade triggerOnce>
-      <div className="rulesModal__wrapper">
+    
+      
+    <Fade triggerOnce className="rulesModal__wrapper">
         <div className="rulesModal__content">
           <h1>Skrabl Rules</h1>
           <p>
@@ -205,7 +206,6 @@ const RulesModal = ({closeModal}) => {
             <button onClick={closeModal}>Close</button>
           </div>
         </div>
-      </div>
     </Fade>
   );
 };
