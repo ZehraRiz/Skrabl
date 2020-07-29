@@ -70,7 +70,7 @@ const GameScreen = ({
       if (turn === 1) {
         getComputerTiles();
       }
-      if (turn === 0) {
+      if (turn === 1) {
         getTiles();
       }
     }
@@ -91,23 +91,22 @@ const GameScreen = ({
 
   useEffect(() => {
     if (gameMode === "Computer" && turn === 1) {
-      setTimeout(() => {
-        computerMove();
-      }, 5000);
+      computerMove();
     }
   }, [computerRackTiles]);
 
   const computerMove = () => {
     axios
       .post("http://localhost:4001/computerMove/", {
-        rackLetters: computerRackTiles,
+        rackTiles: computerRackTiles,
         boardState,
       })
       .then((res) => {
         if (res.data.pass) {
           setNotification("The computer has decided to pass.");
+          nextPlayer();
         } else {
-          const lettersUsed = [...res.data.lettersUsed];
+          const lettersUsed = res.data.word.split("");
           let tilesUsed = [];
           const updatedComputerRackTiles = computerRackTiles.filter((tile) => {
             if (lettersUsed.includes(tile.letter)) {
@@ -122,8 +121,8 @@ const GameScreen = ({
           const returnedBoardState = JSON.parse(
             JSON.stringify(res.data.boardState)
           );
-          const updatedSquaresIndices = res.data.updatedSquaresIndices;
-          const lettersUsedAgain = [...res.data.lettersUsed];
+          const updatedSquaresIndices = res.data.updatedSquares;
+          const lettersUsedAgain = res.data.word.split("");
           let tilesUsedCopy = [...tilesUsed];
           for (let i = 0; i < returnedBoardState.length; i++) {
             if (
@@ -145,20 +144,20 @@ const GameScreen = ({
               );
             }
           }
-          const allWords = findWordsOnBoard(returnedBoardState, tilesUsed);
-          setWordsOnBoard(allWords);
-          var newWords = allWords.filter((word) => word.newWord === true);
-          var newScores = scores;
-          newWords.forEach((word) => {
-            newScores[1] = newScores[1] + word.wordScore;
-          });
-          setBoardState(returnedBoardState);
-          nextPlayer();
-          //in this order so doesn't call backend twice
-          setScores(newScores);
-          setComputerRackTiles(updatedComputerRackTiles);
+          setTimeout(() => {
+            const allWords = findWordsOnBoard(returnedBoardState, tilesUsed);
+            setWordsOnBoard(allWords);
+            const newWords = allWords.filter((word) => word.newWord === true);
+            const newScores = scores;
+            newWords.forEach((word) => {
+              newScores[1] = newScores[1] + word.wordScore;
+            });
+            setBoardState(returnedBoardState);
+            nextPlayer();
+            setScores(newScores);
+            setComputerRackTiles(updatedComputerRackTiles);
+          }, 5000);
         }
-        nextPlayer();
       });
   };
 
