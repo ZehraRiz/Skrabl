@@ -1,6 +1,7 @@
 import React from "react";
 import { removeDashes } from "../utils/removeDashes";
 import "../styles/Board.css";
+import Star from "../images/star.svg";
 
 const getBonusClassName = (square) => {
   let bonusClassName = "";
@@ -92,6 +93,9 @@ const Board = ({
                   <span className="board__bonus-text">
                     {getBonusText(square)}
                   </span>
+                )}
+                {!placedTile && index === 112 && (
+                  <img className="center__star" src={Star} />
                 )}
                 {placedTile && placedTile}
               </div>
