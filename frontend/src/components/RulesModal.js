@@ -103,16 +103,9 @@ const RulesModal = ({closeModal}) => {
           </p>
 
           <h3>Starting the Game</h3>
+          
           <p>
-            Without looking at any of the tiles in the bag, players will take
-            one tile. The player that has the letter that is closest to “A” will
-            begin the game. A blank tile will win the start of the game. The
-            tiles are them replaced to the bag and used in the remainder of the
-            game.
-          </p>
-
-          <p>
-            Every player will start their turn by drawing seven tiles from the
+            Each player will start their turn with seven tiles from the
             Skrabl bag. There are three options during any turn. The player
             can place a word, they can exchange tiles for new tiles or they can
             choose to pass. In most cases, players will try to place a word as
@@ -150,8 +143,6 @@ const RulesModal = ({closeModal}) => {
           <p>
             Once tiles are played on the board, players will draw new tiles to
             replace those. Players will always have seven tiles during the game.
-            Drawing tiles is always done without looking into the bag so that
-            the letters are always unknown.
           </p>
 
           <h3>The Fifty Point Bonus</h3>
@@ -193,8 +184,7 @@ const RulesModal = ({closeModal}) => {
           <h3>Accepted Skrabl Words</h3>
           <p>
             Any word that is found in a standard English dictionary can be used
-            in the game of Skrabl. There are also Official Skrabl
-            Dictionaries that can be purchased for more word options.
+            in the game of Skrabl. 
           </p>
 
           <p>
