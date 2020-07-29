@@ -100,9 +100,12 @@ const Players = ({
 				</ul>
 				{players.length<1 && <p>No one's online at the moment.</p>}
 				{invite !== "" && (
-					<div>
-						<p>{invite.host.name} sent you a game request</p>
-						<button onClick={acceptInvite}>Click to accept</button>
+					<div className="player__invitations" >
+						<h3>Incoming Invitations</h3>
+						<div className="player__invite-request">
+							<p>{invite.host.name} sent you a game request</p>
+							<button onClick={acceptInvite}>Click to accept</button>
+						</div>
 					</div>
 				)}
 			</div>
