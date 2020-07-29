@@ -592,6 +592,9 @@ const GameScreen = ({
 
         {gameIsOver && (
           <GameOverModal
+            user={user}
+            invitedPlayer={invitedPlayer}
+            currentPlayer={currentPlayer}
             scores={scores}
             scoredWords={scoredWords}
             exitGame={exitGame}

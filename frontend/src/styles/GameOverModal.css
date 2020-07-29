@@ -17,24 +17,34 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 1rem 0;
+  padding: 1.5rem .5em;
   font-size: 1.5rem;
   min-height: 200px;
   border-radius: 6px;
 }
 
+.gameOverModal__content h3 {
+  margin-bottom: .5em;
+}
+
 .gameOverModal__content h4 {
-  margin-bottom: 1em;
+  margin-bottom: .5em;
+  text-align: center;
 }
 
 .gameOverModal__content p {
-  margin-bottom: 1em;
+  margin-bottom: .5em;
+}
+
+.gameOverModal__content p:last-of-type {
+  margin-bottom: 1.5em;
 }
 
 .gameOverModal__content button {
   margin-top: 2rem;
   font-size: 1.2rem;
   max-width: 200px;
+  margin: 2em 0 0;
 }
 
 /* tablet */
