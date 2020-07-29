@@ -14,6 +14,7 @@ import { squaresAreOccupied } from "../utils/squaresAreOccupied";
 import { findWordsOnBoard } from "../utils/findWordsOnBoard";
 import { getScoresFromWords } from "../utils/getScoresFromWords";
 import { bonusSquareIndices } from "../assets/bonusSquareIndices";
+import { Fade } from "react-awesome-reveal";
 import axios from "axios";
 import "../styles/GameScreen.css";
 
@@ -223,8 +224,10 @@ const GameScreen = ({
     ) {
       // game ends if players pass six turns in a row, or pass twice when there are no tiles left in pouch
       // end game
+      gameOver();
       console.log("END GAME");
     }
+    console.log(consecutivePasses);
   }, [consecutivePasses]);
 
   useEffect(() => {
@@ -357,7 +360,14 @@ const GameScreen = ({
   };
 
   const handleClickPlacedTile = (tileToRemove) => {
-    if (selectedTile === 0 || currentPlayer !== turn) return;
+    if (
+      selectedTile === 0 ||
+      currentPlayer !== turn ||
+      placedTiles.filter((tile) => tile.square !== tileToRemove.square)
+        .length === 0
+    )
+      return;
+
     if (tileToRemove.player === 0) {
       const updatedBoardState = boardState.map((square) => {
         if (square.tile && square.tile.square === tileToRemove.square) {
@@ -424,7 +434,8 @@ const GameScreen = ({
 
   const handlePass = () => {
     closeModal();
-    nextPlayer(1);
+    nextPlayer(1, scores);
+    setConsecutivePasses(consecutivePasses + 1);
   };
 
   const handleClickExchangeTiles = () => {
@@ -523,76 +534,80 @@ const GameScreen = ({
   };
 
   return (
-    <div className="gameScreen__wrapper">
-      <div className="gameScreen__main">
-        <div className="gameScreen__board">
-          <Board
-            handleClickSquare={handleClickSquare}
-            handleClickPlacedTile={handleClickPlacedTile}
-            boardState={boardState}
-            isDisabled={boardIsDisabled}
-          />
-          <TileRack
-            playerRackTiles={playerRackTiles}
-            handleClickTile={handleClickTile}
-          />
-        </div>
-        <StatusBar
-          scores={scores}
-          user={user}
-          invitedPlayer={invitedPlayer}
-          setNotification={setNotification}
-          timeLeftPlayer={timeLeftPlayer}
-          timeLeftOpponent={timeLeftOpponent}
-          setTimeLeftPlayer={setTimeLeftPlayer}
-          setTimeLeftOpponent={setTimeLeftOpponent}
-          currentPlayer={currentPlayer}
-          turn={turn}
-          gameMode={gameMode}
-        />
-        {!boardIsDisabled && (
-          <GameButtons
-            placedTiles={placedTiles}
-            handleClickClearTiles={handleClickClearTiles}
-            handleClickShuffle={handleClickShuffle}
-            handleClickConfirmMove={handleClickConfirmMove}
-            handleClickResign={handleClickResign}
-            handleClickPass={handleClickPass}
-            handleClickExchangeTiles={handleClickExchangeTiles}
-          />
-        )}
-        {boardIsDisabled && (
-          <ExchangeTilesButtons
-            handleCancelExchange={handleCancelExchange}
-            handleConfirmExchange={handleConfirmExchange}
-          />
-        )}
-        {gameMode === "Online" && (
-          <Chat
-            gameId={gameData.gameId}
+    <Fade className="container__full-height" triggerOnce>
+      <div className="gameScreen__wrapper">
+        <div className="gameScreen__main">
+          <div className="gameScreen__board">
+            <Board
+              handleClickSquare={handleClickSquare}
+              handleClickPlacedTile={handleClickPlacedTile}
+              boardState={boardState}
+              isDisabled={boardIsDisabled}
+            />
+            <TileRack
+              selectedTile={selectedTile}
+              tilesToExchange={tilesToExchange}
+              playerRackTiles={playerRackTiles}
+              handleClickTile={handleClickTile}
+            />
+          </div>
+          <StatusBar
+            scores={scores}
+            user={user}
+            invitedPlayer={invitedPlayer}
+            setNotification={setNotification}
+            timeLeftPlayer={timeLeftPlayer}
+            timeLeftOpponent={timeLeftOpponent}
+            setTimeLeftPlayer={setTimeLeftPlayer}
+            setTimeLeftOpponent={setTimeLeftOpponent}
             currentPlayer={currentPlayer}
-            socket={socket}
+            turn={turn}
+            gameMode={gameMode}
+          />
+          {!boardIsDisabled && (
+            <GameButtons
+              placedTiles={placedTiles}
+              handleClickClearTiles={handleClickClearTiles}
+              handleClickShuffle={handleClickShuffle}
+              handleClickConfirmMove={handleClickConfirmMove}
+              handleClickResign={handleClickResign}
+              handleClickPass={handleClickPass}
+              handleClickExchangeTiles={handleClickExchangeTiles}
+            />
+          )}
+          {boardIsDisabled && (
+            <ExchangeTilesButtons
+              handleCancelExchange={handleCancelExchange}
+              handleConfirmExchange={handleConfirmExchange}
+            />
+          )}
+          {gameMode === "Online" && (
+            <Chat
+              gameId={gameData.gameId}
+              currentPlayer={currentPlayer}
+              socket={socket}
+            />
+          )}
+        </div>
+
+        {gameIsOver && (
+          <GameOverModal
+            scores={scores}
+            scoredWords={scoredWords}
+            exitGame={exitGame}
+          />
+        )}
+        {confirmMessage && (
+          <ConfirmModal
+            message={confirmMessage}
+            handleResign={handleResign}
+            handlePass={handlePass}
+            handleConfirmMove={handleConfirmMove}
+            closeModal={closeModal}
           />
         )}
       </div>
-
-      {gameIsOver && (
-        <GameOverModal
-          scores={scores}
-          scoredWords={scoredWords}
-          exitGame={exitGame}
-        />
-      )}
-      {confirmMessage && (
-        <ConfirmModal
-          message={confirmMessage}
-          handleResign={handleResign}
-          handlePass={handlePass}
-          handleConfirmMove={handleConfirmMove}
-          closeModal={closeModal}
-        />
-      )}
-    </div>
+    </Fade>
   );
 };
 

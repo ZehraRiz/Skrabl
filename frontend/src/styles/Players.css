@@ -6,6 +6,7 @@
   align-items: center;
   justify-content: center;
   min-height: calc(80vh - 75px);
+  opacity: 0;
 }
 
 .players__wrapper h3 {
@@ -13,6 +14,10 @@
 }
 
 .players__list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   margin-top: 2rem;
   list-style: none;
   width: 100%;
@@ -30,6 +35,25 @@
   -moz-border-radius: 5px;
   -ms-border-radius: 5px;
   -o-border-radius: 5px;
+  width: 250px;
+  text-align: center;
+  margin-bottom: 1em;
+}
+
+.players__player:last-of-type {
+  margin-bottom: 2em;
+}
+
+.player__invitations {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.player__invite-request p {
+  margin-bottom: 1em;
 }
 
 .players__player:hover {

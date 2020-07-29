@@ -7,7 +7,6 @@ import confirm from "../images/013-play.svg";
 import resign from "../images/003-stop.svg";
 
 const GameButtons = ({
-  handleClickClearTiles,
   handleClickShuffle,
   handleClickConfirmMove,
   handleClickResign,
@@ -19,7 +18,7 @@ const GameButtons = ({
   return (
     <div className="gameButtons__wrapper">
       <button onClick={handleClickShuffle}><div className="button__text"><img className="button__icon" src={shuffle} />Shuffle</div></button>
-      <button onClick={handleClickExchangeTiles}><div className="button__text"><img className="button__icon" src={exchange} />Exchange</div></button>
+      <button onClick={handleClickExchangeTiles}><div className="button__text"><img className="button__icon" src={exchange} />Swap</div></button>
       {numPlacedTiles === 0 && <button onClick={handleClickPass}><div className="button__text"><img className="button__icon" src={pass} />Pass</div></button>}
       {numPlacedTiles > 0 && (
         <button onClick={handleClickConfirmMove}><div className="button__text"><img className="button__icon" src={confirm} />Confirm</div></button>

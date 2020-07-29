@@ -4,6 +4,7 @@
     justify-content: center;
     width: 100%;
     height: calc(80vh - 75px);
+    opacity: 0;
 }
 
 .welcome__menu {

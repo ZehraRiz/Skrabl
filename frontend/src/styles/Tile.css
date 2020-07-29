@@ -15,7 +15,6 @@
 
 .tile__wrapper:hover {
   background: #fff652;
- 
 }
 
 .tile__wrapper--selected {
@@ -83,12 +82,18 @@
 
 @media (max-width: 500px) {
   .tile__points--sm {
-    
     bottom: 2px;
     right: 2px;
     font-size: 0.4rem;
   }
-  
+}
+
+@media (max-height: 750px) {
+  .tile__points--sm {
+    bottom: 1.8px;
+    right: 1.8px;
+    font-size: 0.36rem;
+  }
 }
 
 

@@ -24,10 +24,10 @@ const StatusBar = ({
             : "statusBar__player"
         }
       >
-        <div class="player__name">
+        <div className="player__name">
           {gameMode === "Computer" ? "Player" : user.name} {}
         </div>
-        <div class="player__time">
+        <div className="player__time">
           <Timer
             setNotification={setNotification}
             timeLeft={timeLeftPlayer}

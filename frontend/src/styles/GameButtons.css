@@ -51,6 +51,18 @@ button:active {
 	top:1px;
 }
 
+.gameButtons__wrapper button {
+	
+	margin: 2px;
+  }
+
+
+  @media (min-height: 720px ) {
+	.gameButtons__wrapper button {
+		height: 10vh;
+	}
+  }
+  
 
 @media (max-width: 1100px ) {
   button {
@@ -76,7 +88,7 @@ button:active {
 		height: 20%;
 		padding: 10px 15px;
 		margin: 5px 0px;
-		height: 20%;
+		height: 25%;
 	}
 
 	  

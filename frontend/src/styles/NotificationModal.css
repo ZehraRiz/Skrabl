@@ -8,6 +8,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  opacity: 0;
 }
 
 .notificationModal__content {
@@ -26,6 +27,7 @@
 .notificationModal__content button {
   margin-top: 2rem;
   font-size: 1.2rem;
+  max-width: 200px;
 }
 
 /* tablet */
