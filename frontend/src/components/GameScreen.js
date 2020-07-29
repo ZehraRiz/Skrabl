@@ -36,7 +36,6 @@ const GameScreen = ({
   const [boardState, setBoardState] = useState([]);
   const [timeLeftPlayer, setTimeLeftPlayer] = useState(null);
   const [timeLeftOpponent, setTimeLeftOpponent] = useState(null);
-  // const [scoredWords, setScoredWords] = useState({ 0: [], 1: [] });
   const [scores, setScores] = useState(null);
   const [turn, setTurn] = useState(null);
   const [tilesToExchange, setTilesToExchange] = useState([]);
@@ -45,6 +44,7 @@ const GameScreen = ({
   const [consecutivePasses, setConsecutivePasses] = useState(0);
   const [pouch, setPouch] = useState([]);
   const [computerRackTiles, setComputerRackTiles] = useState([]);
+
   const fillPouch = async () => {
     const res = await axios.get("http://localhost:4001/getPouch");
     setPouch(res.data);
@@ -67,17 +67,18 @@ const GameScreen = ({
     }
     if (gameMode === "Computer" && pouch.length > 0) {
       if (turn === 1) {
-        getComputerTiles();
-      }
-      if (turn === 1) {
         getTiles();
       }
     }
   }, [turn, gameMode]);
 
   useEffect(() => {
-    if (gameMode === "Computer" && turn === 0 && pouch.length === 100) {
-      getTiles();
+    console.log("POUCH HAS CHANGED");
+    console.log(pouch);
+    if (gameMode === "Computer") {
+      if (turn === 0 && pouch.length === 100) {
+        getTiles();
+      }
     }
   }, [pouch]);
 
@@ -152,8 +153,8 @@ const GameScreen = ({
               newScores[1] = newScores[1] + word.wordScore;
             });
             setBoardState(returnedBoardState);
-            nextPlayer();
             setScores(newScores);
+            nextPlayer();
             setComputerRackTiles(updatedComputerRackTiles);
           }, 5000);
         }
@@ -206,12 +207,6 @@ const GameScreen = ({
     getBoard();
   }, []);
 
-  // useEffect(() => {
-  //   if (scoredWords[0].length > 0 && scoredWords[1].length > 0) {
-  //     updateScores();
-  //   }
-  // }, [scoredWords]);
-
   useEffect(() => {
     placeTile();
   }, [selectedSquareIndex]);
@@ -261,6 +256,14 @@ const GameScreen = ({
         setConsecutivePasses(data.gameState.consecutivePasses);
       });
     }
+    if (gameMode === "Computer") {
+      if (turn === 1) {
+        console.log(
+          "Player rack tiles has changed and it's Alan's turn so shuold be ok now for himt o get tiles from pouch"
+        );
+        getComputerTiles();
+      }
+    }
   }, [playerRackTiles]);
 
   const getBoard = () => {
@@ -284,8 +287,8 @@ const GameScreen = ({
       const pouchCopy = [...pouch];
       pouchCopy.splice(0, numTilesNeeded);
       const newTiles = pouch.slice(0, numTilesNeeded);
-      setPlayerRackTiles([...playerRackTiles, ...newTiles]);
       setPouch([...pouchCopy]);
+      setPlayerRackTiles([...playerRackTiles, ...newTiles]);
     }
   };
 
