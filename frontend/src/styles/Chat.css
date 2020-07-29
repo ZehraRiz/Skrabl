@@ -4,10 +4,13 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  /* same as status bar height - to align with board (mobile view) */
-  
-  background: #333;
+  /*sameasstatusbarheight-toalignwithboard(mobileview)*/background: #333;
   color: white;
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
 }
 
 .chat__list {
@@ -44,7 +47,7 @@
   .chat__wrapper {
     grid-column: 3;
     grid-row: 1/3;
-    margin: 5px 0 0 0;
+    margin: 3% 0 3% 0;
   }
 }
 
