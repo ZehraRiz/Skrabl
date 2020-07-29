@@ -70,7 +70,7 @@ const GameScreen = ({
       if (turn === 1) {
         getComputerTiles();
       }
-      if (turn === 0) {
+      if (turn === 1) {
         getTiles();
       }
     }
@@ -91,23 +91,22 @@ const GameScreen = ({
 
   useEffect(() => {
     if (gameMode === "Computer" && turn === 1) {
-      setTimeout(() => {
-        computerMove();
-      }, 5000);
+      computerMove();
     }
   }, [computerRackTiles]);
 
   const computerMove = () => {
     axios
       .post("http://localhost:4001/computerMove/", {
-        rackLetters: computerRackTiles,
+        rackTiles: computerRackTiles,
         boardState,
       })
       .then((res) => {
         if (res.data.pass) {
           setNotification("The computer has decided to pass.");
+          nextPlayer();
         } else {
-          const lettersUsed = [...res.data.lettersUsed];
+          const lettersUsed = res.data.word.split("");
           let tilesUsed = [];
           const updatedComputerRackTiles = computerRackTiles.filter((tile) => {
             if (lettersUsed.includes(tile.letter)) {
@@ -122,8 +121,8 @@ const GameScreen = ({
           const returnedBoardState = JSON.parse(
             JSON.stringify(res.data.boardState)
           );
-          const updatedSquaresIndices = res.data.updatedSquaresIndices;
-          const lettersUsedAgain = [...res.data.lettersUsed];
+          const updatedSquaresIndices = res.data.updatedSquares;
+          const lettersUsedAgain = res.data.word.split("");
           let tilesUsedCopy = [...tilesUsed];
           for (let i = 0; i < returnedBoardState.length; i++) {
             if (
@@ -145,20 +144,20 @@ const GameScreen = ({
               );
             }
           }
-          const allWords = findWordsOnBoard(returnedBoardState, tilesUsed);
-          setWordsOnBoard(allWords);
-          var newWords = allWords.filter((word) => word.newWord === true);
-          var newScores = scores;
-          newWords.forEach((word) => {
-            newScores[1] = newScores[1] + word.wordScore;
-          });
-          setBoardState(returnedBoardState);
-          nextPlayer();
-          //in this order so doesn't call backend twice
-          setScores(newScores);
-          setComputerRackTiles(updatedComputerRackTiles);
+          setTimeout(() => {
+            const allWords = findWordsOnBoard(returnedBoardState, tilesUsed);
+            setWordsOnBoard(allWords);
+            const newWords = allWords.filter((word) => word.newWord === true);
+            const newScores = scores;
+            newWords.forEach((word) => {
+              newScores[1] = newScores[1] + word.wordScore;
+            });
+            setBoardState(returnedBoardState);
+            nextPlayer();
+            setScores(newScores);
+            setComputerRackTiles(updatedComputerRackTiles);
+          }, 5000);
         }
-        nextPlayer();
       });
   };
 
@@ -225,8 +224,10 @@ const GameScreen = ({
     ) {
       // game ends if players pass six turns in a row, or pass twice when there are no tiles left in pouch
       // end game
+      gameOver();
       console.log("END GAME");
     }
+    console.log(consecutivePasses);
   }, [consecutivePasses]);
 
   useEffect(() => {
@@ -300,7 +301,7 @@ const GameScreen = ({
         consecutivePasses: consecutivePasses + x,
         returnedTiles: tilesToExchange,
         currentPlayerTimeLeft: timeLeftPlayer,
-        opponentTimeLeft: timeLeftOpponent
+        opponentTimeLeft: timeLeftOpponent,
       });
     }
     if (gameMode === "Computer") {
@@ -359,7 +360,14 @@ const GameScreen = ({
   };
 
   const handleClickPlacedTile = (tileToRemove) => {
-    if (selectedTile === 0 || currentPlayer !== turn) return;
+    if (
+      selectedTile === 0 ||
+      currentPlayer !== turn ||
+      placedTiles.filter((tile) => tile.square !== tileToRemove.square)
+        .length === 0
+    )
+      return;
+
     if (tileToRemove.player === 0) {
       const updatedBoardState = boardState.map((square) => {
         if (square.tile && square.tile.square === tileToRemove.square) {
@@ -426,7 +434,8 @@ const GameScreen = ({
 
   const handlePass = () => {
     closeModal();
-    nextPlayer(1);
+    nextPlayer(1, scores);
+    setConsecutivePasses(consecutivePasses + 1);
   };
 
   const handleClickExchangeTiles = () => {
@@ -525,7 +534,7 @@ const GameScreen = ({
   };
 
   return (
-    <Fade triggerOnce>
+    <Fade className="container__full-height" triggerOnce>
       <div className="gameScreen__wrapper">
         <div className="gameScreen__main">
           <div className="gameScreen__board">
@@ -536,6 +545,7 @@ const GameScreen = ({
               isDisabled={boardIsDisabled}
             />
             <TileRack
+              selectedTile={selectedTile}
               tilesToExchange={tilesToExchange}
               playerRackTiles={playerRackTiles}
               handleClickTile={handleClickTile}

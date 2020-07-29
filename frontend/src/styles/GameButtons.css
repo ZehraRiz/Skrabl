@@ -51,6 +51,18 @@ button:active {
 	top:1px;
 }
 
+.gameButtons__wrapper button {
+	
+	margin: 2px;
+  }
+
+
+  @media (min-height: 720px ) {
+	.gameButtons__wrapper button {
+		height: 10vh;
+	}
+  }
+  
 
 @media (max-width: 1100px ) {
   button {

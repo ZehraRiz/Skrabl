@@ -23,9 +23,18 @@
   border-radius: 6px;
 }
 
+.gameOverModal__content h4 {
+  margin-bottom: 1em;
+}
+
+.gameOverModal__content p {
+  margin-bottom: 1em;
+}
+
 .gameOverModal__content button {
   margin-top: 2rem;
   font-size: 1.2rem;
+  max-width: 200px;
 }
 
 /* tablet */

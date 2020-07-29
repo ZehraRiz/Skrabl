@@ -16,6 +16,7 @@ const initializePouch = require("./constants/initializePouch");
 app.use(express.json());
 app.use(cors());
 app.use("/computerMove", computerRoute);
+const fs = require("fs");
 
 io.on("connection", (socket) => {
   require("./sockets/authSockets").listen(io, socket);
@@ -28,26 +29,15 @@ app.post("/verifyWord", async (req, res) => {
   //*words are objects with word key
   const words = req.body.words;
   const results = {};
-  for (const word of words) {
-    const uri =
-      "https://dictionaryapi.com/api/v3/references/collegiate/json/" +
-      word.word +
-      "?key=" +
-      process.env.DICTIONARY_KEY;
-    try {
-      const response = await axios.get(uri);
-      if (
-        response.data[0] &&
-        response.data[0].meta &&
-        response.data[0].fl !== "abbreviation"
-      ) {
-        results[word.word] = "true";
-      } else {
-        results[word.word] = "false";
-      }
-    } catch (err) {
-      console.log(err);
-      res.status(400).send({ err });
+  console.log("Words to verify");
+  console.log(words);
+  for (const wordObj in words) {
+    const fileContent = fs.readFileSync("./words.txt");
+    const regex = new RegExp("\\b" + wordObj.word + "\\b");
+    if (regex.test(fileContent)) {
+      results[wordObj.word] = "true";
+    } else {
+      results[wordObj.word] = "false";
     }
   }
   res.status(200).send(results);

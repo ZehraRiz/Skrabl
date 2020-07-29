@@ -186,7 +186,8 @@ module.exports.listen = function (io, socket) {
       scores,
       returnedTiles,
       currentPlayerTimeLeft,
-      opponentTimeLeft
+      opponentTimeLeft,
+      consecutivePasses
     }) => {
       const game = findGame(gameId);
       if (!game) {
@@ -195,6 +196,7 @@ module.exports.listen = function (io, socket) {
       } else {
         game.gameState.boardState = boardState;
         game.gameState.scores = scores;
+        game.gameState.consecutivePasses = consecutivePasses;
         if (player === 0) {
           game.gameState.player1Tiles = playerRackTiles;
           game.gameState.turn = 1;
