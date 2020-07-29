@@ -7,13 +7,13 @@ const GameOverModal = ({ scores, scoredWords, exitGame }) => {
   return (
     <div className="gameOverModal__wrapper">
       <div className="gameOverModal__content">
-        <h4>Scores:</h4>
+        <h3>Scores:</h3>
         <p>Player 0: {scores[0]}</p>
         <p>Player 1: {scores[1]}</p>
-        <h3>Highest scoring word:</h3>
+        <h4>Highest scoring word:</h4>
         {highestScoringWord && highestScoringWord.word} (
         {highestScoringWord && highestScoringWord.points} points)
-        <button onClick={exitGame}>Close</button>
+        <button onClick={exitGame}>OK</button>
       </div>
     </div>
   );

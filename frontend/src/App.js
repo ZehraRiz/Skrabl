@@ -7,6 +7,7 @@ import InviteScreen from "./components/InviteScreen";
 import UserBusy from "./components/UserBusy";
 import GameScreen from "./components/GameScreen";
 import NotificationModal from "./components/NotificationModal";
+import RulesModal from "./components/RulesModal";
 import "./styles/global.css";
 import WelcomeScreen from "./components/WelcomeScreen";
 
@@ -22,7 +23,7 @@ const App = () => {
 	const [ currentPlayer, setCurrentPlayer ] = useState(); // 0 means he was the host and his data is stored as player1 at the backend. 1 means he is player2
 	const [ socket, setSocket ] = useState(null);
 	const [ inviteSent, setInviteSent ] = useState(false);
-
+	const [viewRules, setViewRules] = useState(false);
 	useEffect(
 		() => {
 			if (gameMode === "Computer") {
@@ -50,9 +51,17 @@ const App = () => {
 		setGameMode("Online");
 	};
 
+	const handleClickRules = () => {
+		setViewRules(!viewRules);
+		console.log(viewRules);
+	};
+
+
+
+
 	return (
 		<div className="page">
-			<Header />
+			<Header handleClickRules={handleClickRules} />
 			{currentComponent === "WelcomeScreen" && (
 				<WelcomeScreen handleChooseOnline={handleChooseOnline} handleChooseComputer={handleChooseComputer} />
 			)}
@@ -118,6 +127,11 @@ const App = () => {
 					handleCloseNotificationModal={handleCloseNotificationModal}
 				/>
 			)}
+			{viewRules && (
+				<RulesModal
+					closeModal={handleClickRules}
+				/>
+        	)}
 		</div>
 	);
 };

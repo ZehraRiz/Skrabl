@@ -18,6 +18,7 @@
     "dev": "npm run player1 & npm run player2",
     "player1": "set PORT=3000 && react-scripts start",
     "player2": "set PORT=3002 && react-scripts start",
+    "player3": "set PORT=3003 && react-scripts start",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
