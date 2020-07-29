@@ -1,11 +1,13 @@
 .chat__wrapper {
   width: 100%;
-  border: 1px solid black;
+  border: 1px solid rgb(189, 189, 189);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  /*sameasstatusbarheight-toalignwithboard(mobileview)*/background: #333;
-  color: white;
+  /*sameasstatusbarheight-toalignwithboard(mobileview)*/
+  background: rgb(223, 222, 220);
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.5);
+  color: #222;
   border-radius: 3px;
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
