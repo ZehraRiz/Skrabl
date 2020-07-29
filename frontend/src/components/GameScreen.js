@@ -12,7 +12,6 @@ import { shuffle } from "../utils/shuffle";
 import { moveIsValid } from "../utils/moveIsValid";
 import { squaresAreOccupied } from "../utils/squaresAreOccupied";
 import { findWordsOnBoard } from "../utils/findWordsOnBoard";
-import { getScoresFromWords } from "../utils/getScoresFromWords";
 import { bonusSquareIndices } from "../assets/bonusSquareIndices";
 import { Fade } from "react-awesome-reveal";
 import axios from "axios";
@@ -37,7 +36,7 @@ const GameScreen = ({
   const [boardState, setBoardState] = useState([]);
   const [timeLeftPlayer, setTimeLeftPlayer] = useState(null);
   const [timeLeftOpponent, setTimeLeftOpponent] = useState(null);
-  const [scoredWords, setScoredWords] = useState({ 0: [], 1: [] });
+  // const [scoredWords, setScoredWords] = useState({ 0: [], 1: [] });
   const [scores, setScores] = useState(null);
   const [turn, setTurn] = useState(null);
   const [tilesToExchange, setTilesToExchange] = useState([]);
@@ -207,11 +206,11 @@ const GameScreen = ({
     getBoard();
   }, []);
 
-  useEffect(() => {
-    if (scoredWords[0].length > 0 && scoredWords[1].length > 0) {
-      updateScores();
-    }
-  }, [scoredWords]);
+  // useEffect(() => {
+  //   if (scoredWords[0].length > 0 && scoredWords[1].length > 0) {
+  //     updateScores();
+  //   }
+  // }, [scoredWords]);
 
   useEffect(() => {
     placeTile();
@@ -309,10 +308,10 @@ const GameScreen = ({
     }
   };
 
-  const updateScores = () => {
-    const updatedScores = getScoresFromWords(scoredWords);
-    setScores(updatedScores);
-  };
+  // const updateScores = () => {
+  //   const updatedScores = getScoresFromWords(scoredWords);
+  //   setScores(updatedScores);
+  // };
 
   const placeTile = () => {
     if (selectedSquareIndex !== null) {
@@ -593,7 +592,7 @@ const GameScreen = ({
         {gameIsOver && (
           <GameOverModal
             scores={scores}
-            scoredWords={scoredWords}
+            // scoredWords={scoredWords}
             exitGame={exitGame}
           />
         )}
