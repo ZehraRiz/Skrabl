@@ -29,7 +29,7 @@ const GameScreen = ({
   socket,
   gameMode,
   handleClickChat,
-  viewChat
+  viewChat,
 }) => {
   const [selectedTile, setSelectedTile] = useState(null);
   const [selectedSquareIndex, setSelectedSquareIndex] = useState(null);
@@ -49,8 +49,12 @@ const GameScreen = ({
   const [consecutivePasses, setConsecutivePasses] = useState(0);
   const [pouch, setPouch] = useState([]);
   const [computerRackTiles, setComputerRackTiles] = useState([]);
+  const [lang, setLang] = useState("tr");
   const fillPouch = async () => {
-    const res = await axios.get("http://localhost:4001/getPouch");
+    const res = await axios.post("http://localhost:4001/getPouch", {
+      lang,
+    });
+    console.log(res.data);
     setPouch(res.data);
   };
 
@@ -103,6 +107,7 @@ const GameScreen = ({
       .post("http://localhost:4001/computerMove/", {
         rackTiles: computerRackTiles,
         boardState,
+        lang,
       })
       .then((res) => {
         if (res.data.pass) {
@@ -273,6 +278,7 @@ const GameScreen = ({
   };
 
   const getTiles = () => {
+    console.log("GETTING TILES");
     const numTilesNeeded = 7 - playerRackTiles.length;
     if (numTilesNeeded <= 0) {
       return;
@@ -488,7 +494,10 @@ const GameScreen = ({
       setWordsOnBoard(allWords);
       var newWords = allWords.filter((word) => word.newWord === true);
       axios
-        .post("http://localhost:4001/verifyWord", { words: newWords })
+        .post("http://localhost:4001/verifyWord", {
+          words: newWords,
+          lang,
+        })
         .then((res) => {
           const results = res.data;
           if (Object.values(results).every((val) => val === "true")) {
@@ -539,13 +548,13 @@ const GameScreen = ({
   return (
     <Fade className="container__full-height" triggerOnce>
       <div className="gameScreen__wrapper">
-      {viewChat && (
-				<ChatModal
-          gameId={gameData.gameId}
-          currentPlayer={currentPlayer}
-          socket={socket}
-          closeModal={handleClickChat}
-				/>
+        {viewChat && (
+          <ChatModal
+            gameId={gameData.gameId}
+            currentPlayer={currentPlayer}
+            socket={socket}
+            closeModal={handleClickChat}
+          />
         )}
         <div className="gameScreen__main">
           <div className="gameScreen__board">
@@ -560,6 +569,7 @@ const GameScreen = ({
               tilesToExchange={tilesToExchange}
               playerRackTiles={playerRackTiles}
               handleClickTile={handleClickTile}
+              lang={lang}
             />
           </div>
           <StatusBar

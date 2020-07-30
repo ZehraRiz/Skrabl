@@ -1,10 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const fs = require("fs");
-const fileContent = fs.readFileSync("./wordsSmall.txt", "utf8");
 const getWordsOnBoard = require("./getWordsOnBoard");
 
-const findExtenderWords = (wordsOnBoardArrays, rackTiles) => {
+const findExtenderWords = (wordsOnBoardArrays, rackTiles, lang) => {
   const rackLetters = rackTiles.map((tile) => tile.letter);
   const extenderWords = [];
   wordsOnBoardArrays.forEach((wordOnBoard) => {
@@ -20,7 +19,14 @@ const findExtenderWords = (wordsOnBoardArrays, rackTiles) => {
     const wordString = wordOnBoard.map((square) => square.tile.letter).join("");
     const regexString = `.*${wordString}.*`;
     const regExp = new RegExp(regexString, "gi");
-    const longerWords = fileContent.match(regExp);
+    let wordListToUse;
+    if (lang === "en") {
+      wordListToUse = "./wordsSmall.txt";
+    } else if (lang === "tr") {
+      wordListToUse = "./turkish.txt";
+    }
+    const wordList = fs.readFileSync(wordListToUse, "utf8");
+    const longerWords = wordList.match(regExp);
     if (longerWords && longerWords.length > 0) {
       longerWords.forEach((longerWord) => {
         let canExtend = false;
@@ -111,19 +117,22 @@ const findExtenderWords = (wordsOnBoardArrays, rackTiles) => {
   return extenderWords;
 };
 
-const allWordsAreValid = async (boardState) => {
-  console.log("CHECKING WORDS ARE VALID");
+const allWordsAreValid = async (boardState, lang) => {
+  if (lang === "en") {
+    wordListToUse = "./wordsBig.txt";
+  } else if (lang === "tr") {
+    wordListToUse = "./turkish.txt";
+  }
   const allWords = getWordsOnBoard(boardState, false);
   const allWordsString = [];
   allWords.forEach((wordArr) => {
     const string = wordArr.map((square) => square.tile.letter).join("");
     allWordsString.push(string);
   });
-  console.log(allWordsString);
   for (let i = 0; i < allWordsString.length; i++) {
     const word = allWordsString[i];
-    const wordsBig = fs.readFileSync("./wordsBig.txt");
-    const regex = new RegExp("\\b" + word + "\\b");
+    const wordsBig = fs.readFileSync(wordListToUse);
+    const regex = new RegExp("\\n" + word + "\\n");
     if (regex.test(wordsBig)) {
     } else {
       return false;
@@ -145,7 +154,7 @@ const squaresAreOccupied = (indices, boardState) => {
   return false;
 };
 
-const tryToPlaceWord = async (words, boardState, rackTiles) => {
+const tryToPlaceWord = async (words, boardState, rackTiles, lang) => {
   const wordsOrderedByLength = words.sort(
     (a, b) => b.word.length - a.word.length
   );
@@ -175,7 +184,7 @@ const tryToPlaceWord = async (words, boardState, rackTiles) => {
       }
     });
     //check if move is valid
-    const moveIsValid = await allWordsAreValid(newBoardState);
+    const moveIsValid = await allWordsAreValid(newBoardState, lang);
     if (moveIsValid) {
       //confirm placement by sending back board state
       res.word = wordObj.word;
@@ -187,15 +196,15 @@ const tryToPlaceWord = async (words, boardState, rackTiles) => {
   return res;
 };
 
-const makeMove = async (rackTiles, boardState) => {
+const makeMove = async (rackTiles, boardState, lang) => {
   const wordsOnBoardArrays = getWordsOnBoard(boardState, true);
-  const possibleWords = findExtenderWords(wordsOnBoardArrays, rackTiles);
+  const possibleWords = findExtenderWords(wordsOnBoardArrays, rackTiles, lang);
   if (!possibleWords.length) {
     const res = { pass: true };
     return res;
   }
   try {
-    let res = await tryToPlaceWord(possibleWords, boardState, rackTiles);
+    let res = await tryToPlaceWord(possibleWords, boardState, rackTiles, lang);
     if (res.boardState) {
       return res;
     } else {
@@ -208,9 +217,9 @@ const makeMove = async (rackTiles, boardState) => {
 };
 
 router.post("/", async (req, res) => {
-  const { rackTiles, boardState } = req.body;
+  const { rackTiles, boardState, lang } = req.body;
   try {
-    const data = await makeMove(rackTiles, boardState);
+    const data = await makeMove(rackTiles, boardState, lang);
 
     res.status(200).send(data);
   } catch (err) {

@@ -27,25 +27,28 @@ server.listen(port, () => console.log(`Listening on port ${port}`));
 
 app.post("/verifyWord", async (req, res) => {
   //*words are objects with word key
-  const words = req.body.words;
+  const { words, lang } = req.body;
+  let wordListToUse;
+  if (lang === "en") {
+    wordListToUse = "./wordsBig.txt";
+  } else if (lang === "tr") {
+    wordListToUse = "./turkish.txt";
+  }
   const results = {};
-  console.log("Words to verify");
-  console.log(words);
   words.forEach((wordObj) => {
-    const fileContent = fs.readFileSync("./wordsBig.txt");
-    const regex = new RegExp("\\b" + wordObj.word + "\\b");
+    const fileContent = fs.readFileSync(wordListToUse);
+    const regex = new RegExp("\\n" + wordObj.word + "\\n");
     if (regex.test(fileContent)) {
       results[wordObj.word] = "true";
     } else {
       results[wordObj.word] = "false";
     }
   });
-  console.log("RESULTS");
-  console.log(results);
   res.status(200).send(results);
 });
 
-app.get("/getPouch", (req, res) => {
-  const pouch = initializePouch();
+app.post("/getPouch", (req, res) => {
+  const { lang } = req.body;
+  const pouch = initializePouch(lang);
   res.status(200).send(pouch);
 });

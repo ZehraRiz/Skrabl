@@ -1,12 +1,28 @@
 import React from "react";
 import "../styles/Tile.css";
 
-const Tile = ({ tile, handleClickTile, tilesToExchange, selectedTile }) => {
+const Tile = ({
+  tile,
+  handleClickTile,
+  tilesToExchange,
+  selectedTile,
+  lang,
+}) => {
   const tileSelected =
     tilesToExchange.filter((item) => item.id === tile.id).length > 0 ||
     selectedTile === tile
       ? true
       : false;
+
+  let letter;
+  if (lang === "tr") {
+    if (tile.letter === "i") {
+      letter = "İ";
+    }
+    if (tile.letter === "ı") {
+      letter = "I";
+    }
+  }
   return (
     <div
       className={
