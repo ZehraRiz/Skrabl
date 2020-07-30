@@ -23,6 +23,7 @@
   list-style: none;
   overflow-y: auto;
   padding: 0.5rem;
+  overflow-wrap: break-word;
 }
 
 .chat__wrapper form {
