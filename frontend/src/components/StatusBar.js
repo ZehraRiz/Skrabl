@@ -47,7 +47,7 @@ const StatusBar = ({
         }
       >
         <div className="player__name">
-          {gameMode === "Computer" && "ScrabbleBot"}
+          {gameMode === "Computer" && "SkrablBot"}
           {gameMode === "Online" && invitedPlayer && invitedPlayer.name}
         </div>
         <div className="player__time">

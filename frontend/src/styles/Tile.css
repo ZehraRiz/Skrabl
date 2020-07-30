@@ -6,8 +6,8 @@
   justify-content: center;
   width: 100%;
   height: 100%;
-  position: relative;
   background: #f3f2d2;
+  position: relative;
   border-radius: 4px;
   cursor: pointer;
   box-shadow: inset 0 -3px 3px rgba(0, 0, 0, 0.4);
@@ -22,10 +22,13 @@
 }
 
 .tile__letter {
+  /*height: auto;*/
   color: rgb(42, 102, 42);
   font-size: 1.5rem;
-  padding: 0.5rem 1rem;
+  /*padding: 0.5rem 1rem;*/
   text-shadow: 0 -1px 2px rgba(0, 0, 0, 0.9);
+  z-index: 0;
+  user-select: none;
 }
 
 .tile__points {
@@ -34,13 +37,14 @@
   bottom: 2px;
   right: 5px;
   font-size: 0.7rem;
+  user-select: none;
 }
 
 .tile__points--sm {
   color: rgb(42, 102, 42);
   position: absolute;
   bottom: 2px;
-  right: 5px;
+  right: 4px;
   font-size: 0.6rem;
 }
 
