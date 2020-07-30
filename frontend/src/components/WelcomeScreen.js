@@ -13,10 +13,10 @@ const WelcomeScreen = ({
         <div className="welcome__menu">
           <h2>Welcome to Skrabl!</h2>
             <button onClick={handleChooseComputer}>
-              Play against the Skrabl A.I
+              <span>Player</span><span className="vs">VS</span><span>SkrablBot</span>
             </button>
             <button onClick={handleChooseOnline}>
-              Play against someone online
+            <span>Player</span><span className="vs">VS</span><span>Player</span>
             </button>
         </div>
       </div>
