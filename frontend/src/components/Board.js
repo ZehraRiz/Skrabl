@@ -1,5 +1,4 @@
 import React from "react";
-import { removeDashes } from "../utils/removeDashes";
 import "../styles/Board.css";
 import Star from "../images/star.svg";
 
@@ -60,7 +59,20 @@ const Board = ({
   handleClickPlacedTile,
   boardState,
   isDisabled,
+  lang,
 }) => {
+  const getLetter = (tile) => {
+    let letter;
+    if (lang === "tr" && tile.letter === "i") {
+      letter = "İ";
+    } else if (lang === "tr" && tile.letter === "ı") {
+      letter = "I";
+    } else {
+      letter = tile.letter.toUpperCase();
+    }
+    return letter;
+  };
+
   return (
     <div className="board__wrapper">
       <div className={"board__board " + (isDisabled ? "disabled" : "")}>
@@ -75,7 +87,7 @@ const Board = ({
                   className="board__tile"
                   onClick={() => handleClickPlacedTile(square.tile)}
                 >
-                  <span>{square.tile.letter.toUpperCase()}</span>
+                  <span>{getLetter(square.tile)}</span>
                   <span className="tile__points--sm">{square.tile.points}</span>
                 </span>
               );

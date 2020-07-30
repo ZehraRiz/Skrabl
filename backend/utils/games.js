@@ -4,7 +4,7 @@ let games = [];
 //Join connection to player
 
 function gameJoin(gameId) {
-  const initialPouch = initializePouch();
+  const initialPouch = initializePouch("tr");
   const game = {
     gameId: gameId,
     player1: { playerId: "", isConnected: false },
@@ -96,13 +96,13 @@ function playerDisconnectFromGame(id) {
 
 function player2Accepted(gameId) {
   let newGame;
-  games.map(game => {
+  games.map((game) => {
     if (game.gameId === gameId) {
       game.player2.isConnected = true;
-      newGame = game
+      newGame = game;
     }
-  })
-  return newGame
+  });
+  return newGame;
 }
 
 function removeGame(id) {
@@ -126,6 +126,6 @@ module.exports = {
   isPlayerInGame,
   findGame,
   removeGame,
-  player2Accepted
+  player2Accepted,
   // getRoomUsers
 };
