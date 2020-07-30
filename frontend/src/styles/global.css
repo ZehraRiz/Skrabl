@@ -39,6 +39,7 @@ h1 {
 
 .container__full-height {
   height: 93vh;
+  align-items: center;
 }
 
 button:focus {
