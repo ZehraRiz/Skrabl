@@ -23,7 +23,8 @@ button {
 	box-shadow:inset 0px -1px 2px 0px rgba(0, 0, 0, 0.3), 0px 2px 5px rgba(0, 0, 0, 0.3);
   	text-shadow: 0px 0px 4px  rgba(0, 0, 0, 0.6);
   	white-space: nowrap;
-  	letter-spacing: .05em;
+	letter-spacing: .05em;
+	font-family: 'Acme', sans-serif;
 }
 
 .button__text {
@@ -33,6 +34,7 @@ button {
 	justify-content: center;
 	width: 100%;
 	font-size: 1em;
+
 }
 
 button img {
