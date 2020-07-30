@@ -6,8 +6,9 @@ const RulesModal = ({closeModal}) => {
   return (
     
       
-    <Fade triggerOnce className="rulesModal__wrapper">
+    <Fade triggerOnce className="rulesModal__wrapper" onClick={closeModal}>
         <div className="rulesModal__content">
+          <div className="rulesModal__text">
           <h1>Skrabl Rules</h1>
           <p>
             When playing Skrabl, anywhere from one to two players will enjoy
@@ -197,6 +198,7 @@ const RulesModal = ({closeModal}) => {
             for this is due to the fact that the word is spoken enough and is
             considered part of the English language.
           </p>
+          </div>
           <div className="rulesModal__buttons">
             <button onClick={closeModal}>Close</button>
           </div>

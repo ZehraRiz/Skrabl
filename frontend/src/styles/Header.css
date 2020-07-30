@@ -13,6 +13,7 @@
   font-family: scripts;
   letter-spacing: 5px;
   height: 40px;
+  z-index: 2;
 }
 
 .header__wrapper h1 {
