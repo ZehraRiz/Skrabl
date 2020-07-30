@@ -28,7 +28,7 @@ const startingTiles = {
       { letter: "v", points: 4 },
       { letter: "w", points: 4 },
       { letter: "y", points: 4 },
-      { letter: "blank", points: null },
+      { letter: "", points: null },
     ],
     1: [
       { letter: "k", points: 5 },
@@ -68,7 +68,7 @@ const startingTiles = {
       { letter: "ü", points: 3 },
       { letter: "c", points: 4 },
       { letter: "y", points: 3 },
-      { letter: "blank", points: null },
+      { letter: "", points: null },
       { letter: "z", points: 4 },
     ],
     1: [
@@ -107,7 +107,7 @@ const startingTiles = {
       { letter: "h", points: 4 },
       { letter: "f", points: 4 },
       { letter: "v", points: 4 },
-      { letter: "blank", points: null },
+      { letter: "", points: null },
     ],
     1: [
       { letter: "q", points: 8 },

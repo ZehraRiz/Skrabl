@@ -450,7 +450,9 @@ const GameScreen = ({
           [...tilesToExchange].filter((item) => item.id !== tile.id)
         );
       }
-    } else setSelectedTile(tile);
+    } else {
+      setSelectedTile(tile);
+    }
   };
 
   const handleResign = () => {

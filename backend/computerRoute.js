@@ -124,7 +124,7 @@ const allWordsAreValid = async (boardState, lang) => {
     wordListToUse = "./wordsBig.txt";
   } else if (lang === "tr") {
     wordListToUse = "./turkish.txt";
-  } else if (lang == "lang") {
+  } else if (lang == "fr") {
     wordListToUse = "./french.txt";
   }
   const allWords = getWordsOnBoard(boardState, false);
@@ -224,7 +224,6 @@ router.post("/", async (req, res) => {
   const { rackTiles, boardState, lang } = req.body;
   try {
     const data = await makeMove(rackTiles, boardState, lang);
-
     res.status(200).send(data);
   } catch (err) {
     console.log(err);

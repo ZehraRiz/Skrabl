@@ -4,7 +4,7 @@ let games = [];
 //Join connection to player
 
 function gameJoin(gameId) {
-  const initialPouch = initializePouch("tr");
+  const initialPouch = initializePouch("en");
   const game = {
     gameId: gameId,
     player1: { playerId: "", isConnected: false },

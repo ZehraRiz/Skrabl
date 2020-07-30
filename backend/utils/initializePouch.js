@@ -8,7 +8,8 @@ const initializePouch = (lang) => {
   Object.keys(tiles).forEach((key) =>
     tiles[key].forEach((tile) => {
       for (let i = 0; i < key; i++) {
-        initialPouch.push(tile);
+        const newTile = { ...tile, id: tile.letter + i };
+        initialPouch.push(newTile);
       }
     })
   );
