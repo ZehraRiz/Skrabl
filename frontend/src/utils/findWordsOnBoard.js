@@ -1,24 +1,20 @@
 export const findWordsOnBoard = (boardState, placedTiles) => {
   let wordStart = "",
-    wordScore = 0,
-    wordMultipliers = [],
     newWord = false,
     words = [],
     letters = [],
-    dirs = ["across", "down"];
+    dirs = ["across", "down"],
+    squares = [];
   const checkSquare = (dir, x, y) => {
     let [row, col] = dir === "across" ? [x, y] : [y, x];
     var currentSquare = boardState[col + row * 15];
     const addWord = () => {
-      wordMultipliers.forEach((wordMultiplier) => {
-        wordScore = wordScore * wordMultiplier;
-      });
       words.push({
         word: letters.join(""),
         start: wordStart,
         dir: dir,
         newWord: newWord,
-        wordScore: wordScore,
+        squares,
       });
       newWord = false;
     };
@@ -29,18 +25,16 @@ export const findWordsOnBoard = (boardState, placedTiles) => {
       wordStart = "";
       letters = [];
       newWord = false;
-      wordScore = 0;
+      squares = [];
     } else {
       letters.push(currentSquare.tile.letter);
-
+      squares.push(currentSquare);
       if (
         placedTiles.filter((item) => item.id === currentSquare.tile.id).length >
         0
       ) {
         newWord = true;
-        wordMultipliers.push(currentSquare.wordMultiplier);
-        wordScore += currentSquare.tile.points * currentSquare.letterMultiplier;
-      } else wordScore += currentSquare.tile.points;
+      }
       if (wordStart !== "" && col === 14) {
         addWord();
       } else if (wordStart == "") {

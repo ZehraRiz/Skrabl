@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const fs = require("fs");
-const fileContent = fs.readFileSync("./words.txt", "utf8");
+const fileContent = fs.readFileSync("./wordsSmall.txt", "utf8");
 const getWordsOnBoard = require("./getWordsOnBoard");
 
 const findExtenderWords = (wordsOnBoardArrays, rackTiles) => {
@@ -21,7 +21,7 @@ const findExtenderWords = (wordsOnBoardArrays, rackTiles) => {
     const regexString = `.*${wordString}.*`;
     const regExp = new RegExp(regexString, "gi");
     const longerWords = fileContent.match(regExp);
-    if (longerWords.length > 0) {
+    if (longerWords && longerWords.length > 0) {
       longerWords.forEach((longerWord) => {
         let canExtend = false;
         //loop over longer word and remove letters that are already on board
@@ -44,7 +44,7 @@ const findExtenderWords = (wordsOnBoardArrays, rackTiles) => {
         }
 
         dirs.forEach((dir) => {
-          const max = 15;
+          const max = 14;
           const min = 0;
           const propToCheck = dir === "x" ? "col" : "row";
           if (
@@ -112,15 +112,17 @@ const findExtenderWords = (wordsOnBoardArrays, rackTiles) => {
 };
 
 const allWordsAreValid = async (boardState) => {
+  console.log("CHECKING WORDS ARE VALID");
   const allWords = getWordsOnBoard(boardState, false);
   const allWordsString = [];
   allWords.forEach((wordArr) => {
     const string = wordArr.map((square) => square.tile.letter).join("");
     allWordsString.push(string);
   });
+  console.log(allWordsString);
   for (let i = 0; i < allWordsString.length; i++) {
     const word = allWordsString[i];
-    const wordsBig = fs.readFileSync("./words.txt");
+    const wordsBig = fs.readFileSync("./wordsBig.txt");
     const regex = new RegExp("\\b" + word + "\\b");
     if (regex.test(wordsBig)) {
     } else {
