@@ -376,7 +376,7 @@ const GameScreen = ({
     if (
       selectedTile === 0 ||
       currentPlayer !== turn ||
-      placedTiles.filter((tile) => tile.square !== tileToRemove.square)
+      placedTiles.filter((tile) => tile.square == tileToRemove.square)
         .length === 0
     )
       return;
