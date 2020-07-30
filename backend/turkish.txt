@@ -36827,6 +36827,7 @@ nankörlük
 nansuk
 napalm
 na-pesend
+nar
 nara
 narcıl
 nardenk
@@ -38503,6 +38504,7 @@ ovuşmak
 ovuşturma
 ovuşturmak
 ovül
+oy
 oya
 oyacı
 oyacılık
@@ -46437,6 +46439,7 @@ surinam
 suriye
 suriyeli
 surlar
+sus
 susak
 susaklık
 susalık
@@ -52278,6 +52281,7 @@ umutlanmak
 umutlu
 umutsuz
 umutsuzluk
+un
 una
 unanimisme
 unbiniliyum

@@ -30,6 +30,7 @@ const GameScreen = ({
   gameMode,
   handleClickChat,
   viewChat,
+  lang,
 }) => {
   const [selectedTile, setSelectedTile] = useState(null);
   const [selectedSquareIndex, setSelectedSquareIndex] = useState(null);
@@ -47,12 +48,11 @@ const GameScreen = ({
   const [consecutivePasses, setConsecutivePasses] = useState(0);
   const [pouch, setPouch] = useState([]);
   const [computerRackTiles, setComputerRackTiles] = useState([]);
-  const [lang, setLang] = useState("tr");
+
   const fillPouch = async () => {
     const res = await axios.post("http://localhost:4001/getPouch", {
       lang,
     });
-    console.log(res.data);
     setPouch(res.data);
   };
   const moment = require("moment");
@@ -237,9 +237,7 @@ const GameScreen = ({
       // game ends if players pass six turns in a row, or pass twice when there are no tiles left in pouch
       // end game
       gameOver();
-      console.log("END GAME");
     }
-    console.log(consecutivePasses);
   }, [consecutivePasses]);
 
   useEffect(() => {
@@ -250,9 +248,7 @@ const GameScreen = ({
       });
 
       socket.on("gameEnd", (data) => {
-        console.log(data);
         //redirect to players screen or show who won
-        console.log("the game has ended");
         exitGame();
       });
 
@@ -287,7 +283,6 @@ const GameScreen = ({
   };
 
   const getTiles = () => {
-    console.log("GETTING TILES");
     const numTilesNeeded = 7 - playerRackTiles.length;
     if (numTilesNeeded <= 0) {
       return;
@@ -579,6 +574,7 @@ const GameScreen = ({
               handleClickPlacedTile={handleClickPlacedTile}
               boardState={boardState}
               isDisabled={boardIsDisabled}
+              lang={lang}
             />
             <TileRack
               selectedTile={selectedTile}

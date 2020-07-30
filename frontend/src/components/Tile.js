@@ -14,15 +14,18 @@ const Tile = ({
       ? true
       : false;
 
-  let letter;
-  if (lang === "tr") {
-    if (tile.letter === "i") {
+  const getLetter = (tile) => {
+    let letter;
+    if (lang === "tr" && tile.letter === "i") {
       letter = "İ";
-    }
-    if (tile.letter === "ı") {
+    } else if (lang === "tr" && tile.letter === "ı") {
       letter = "I";
+    } else {
+      letter = tile.letter.toUpperCase();
     }
-  }
+    return letter;
+  };
+
   return (
     <div
       className={
@@ -30,7 +33,7 @@ const Tile = ({
       }
       onClick={() => handleClickTile(tile)}
     >
-      <span className="tile__letter">{tile.letter.toUpperCase()}</span>
+      <span className="tile__letter">{getLetter(tile)}</span>
       <span className="tile__points">{tile.points}</span>
     </div>
   );
