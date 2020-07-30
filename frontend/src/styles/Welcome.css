@@ -13,6 +13,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    margin-bottom: 5em;
 }
 
 .welcome__menu h2 {
@@ -52,6 +53,7 @@
     filter:  drop-shadow(0px 1px 3px rgba(0, 0, 0, 0.3));
     -webkit-filter:  drop-shadow(0px 1px 3px rgba(0, 0, 0, 0.3));
     transform: scale(1);
+    cursor: pointer;
 }
 
 .language__icon:hover {
