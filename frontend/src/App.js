@@ -64,7 +64,6 @@ const App = () => {
   };
 
   const setLangEn = () => {
-
     setLang("en");
   };
   const setLangFr = () => {
@@ -167,7 +166,7 @@ const App = () => {
           handleCloseNotificationModal={handleCloseNotificationModal}
         />
       )}
-      {viewRules && <RulesModal closeModal={handleClickRules} />}
+      {viewRules && <RulesModal lang={lang} closeModal={handleClickRules} />}
     </div>
   );
 };

@@ -11,7 +11,6 @@ const GameOverModal = ({
   gameMode
 }) => {
 
-  const highestScoringWord = getHighestScoringWord(scoredWords);
   let result = 0;
   const opponent = gameMode === "Online" ? invitedPlayer.id : "SkrablBot";
 
