@@ -3,8 +3,8 @@ import "../styles/Chat.css";
 const moment = require('moment');
 let now = moment();
 
-const Chat = ({ gameId, currentPlayer, socket }) => {
-	const [chatThread, setChatThread] = useState([{ playerFromBackend: 0, playerName: "ScrabbleBot", msg: "Welcome, you are now connected", date: now.format("h:mm:ss a") }]);
+const Chat = ({ gameId, currentPlayer, socket, mode }) => {
+	const [chatThread, setChatThread] = useState([{ playerFromBackend: 0, playerName: "SkrablBot", msg: "Welcome, you are now connected", date: now.format("h:mm:ss a") }]);
 	
  	socket.on("recieveMsg", (data) => {
       setChatThread([...chatThread, data]);
@@ -21,7 +21,7 @@ const Chat = ({ gameId, currentPlayer, socket }) => {
 
 
 	return (
-		<div className="chat__wrapper">
+		<div className={mode === 'modal' ? "chat__wrapper modal" : "chat__wrapper"}>
 			<ul className="chat__list">
 				{chatThread.map((message, index) => (
 					<li className="chat__message" key={index}>

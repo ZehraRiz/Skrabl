@@ -9,13 +9,14 @@
   background: rgb(62,61,60);
   background: radial-gradient(circle, rgba(62,61,60,1) 1%, rgba(47,46,45,1) 100%);
   padding: .5rem;
-  color:  #f0f6fa;
+  color:   #f3f2d2;
   font-family: scripts;
   letter-spacing: 5px;
+  height: 40px;
 }
 
 .header__wrapper h1 {
-  padding-left: 40px;
+  font-size: 1.5em;
   width: 100%;
   margin: 0;
   text-shadow: 3px 3px 0px rgba(0, 0, 0, .7);
@@ -29,7 +30,37 @@
   display: flex;
 }
 
+
+.header__chat, .header__rules {
+  width: 40px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .header__rules img {
+  width: 24px;
+  height: auto;
+}
+
+.header__chat img {
   width: 25px;
   height: auto;
+}
+
+@media (min-width: 750px) {
+  .header__chat {
+    visibility: hidden;
+  
+  }
+}
+
+@media (min-height: 770px) {
+  .header__wrapper {
+    height: 55px;
+  }
+  .header__wrapper h1 {
+    font-size: 2em;
+  }
 }

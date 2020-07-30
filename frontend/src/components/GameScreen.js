@@ -7,6 +7,7 @@ import GameButtons from "./GameButtons";
 import ExchangeTilesButtons from "./ExchangeTilesButtons";
 import ConfirmModal from "./ConfirmModal";
 import GameOverModal from "./GameOverModal";
+import ChatModal from "./ChatModal";
 import { generateBoardSquares } from "../utils/generateBoardSquares";
 import { shuffle } from "../utils/shuffle";
 import { moveIsValid } from "../utils/moveIsValid";
@@ -27,6 +28,8 @@ const GameScreen = ({
   gameData,
   socket,
   gameMode,
+  handleClickChat,
+  viewChat
 }) => {
   const [selectedTile, setSelectedTile] = useState(null);
   const [selectedSquareIndex, setSelectedSquareIndex] = useState(null);
@@ -533,6 +536,14 @@ const GameScreen = ({
   return (
     <Fade className="container__full-height" triggerOnce>
       <div className="gameScreen__wrapper">
+      {viewChat && (
+				<ChatModal
+          gameId={gameData.gameId}
+          currentPlayer={currentPlayer}
+          socket={socket}
+          closeModal={handleClickChat}
+				/>
+        )}
         <div className="gameScreen__main">
           <div className="gameScreen__board">
             <Board
@@ -589,6 +600,9 @@ const GameScreen = ({
 
         {gameIsOver && (
           <GameOverModal
+            user={user}
+            invitedPlayer={invitedPlayer}
+            currentPlayer={currentPlayer}
             scores={scores}
             // scoredWords={scoredWords}
             exitGame={exitGame}
