@@ -6,60 +6,59 @@ import Star from "../images/star.svg";
 const getBonusClassName = (square) => {
   let bonusClassName = "";
 
-  switch(square.letterMultiplier) {
-    case 2: 
+  switch (square.letterMultiplier) {
+    case 2:
       bonusClassName = "double-letter";
       break;
-    case 3: 
+    case 3:
       bonusClassName = "triple-letter";
       break;
     default:
       bonusClassName = bonusClassName;
   }
-  switch(square.wordMultiplier) {
-    case 2: 
+  switch (square.wordMultiplier) {
+    case 2:
       bonusClassName = "double-word";
       break;
-    case 3: 
+    case 3:
       bonusClassName = "triple-word";
       break;
     default:
       bonusClassName = bonusClassName;
   }
-  
+
   return bonusClassName;
 };
 
-
 const getBonusText = (square) => {
-  let bonusText = '';
-  switch(square.letterMultiplier) {
-    case 2: 
+  let bonusText = "";
+  switch (square.letterMultiplier) {
+    case 2:
       bonusText = "2L";
       break;
-    case 3: 
+    case 3:
       bonusText = "3L";
       break;
     default:
       bonusText = bonusText;
   }
-  switch(square.wordMultiplier) {
-    case 2: 
+  switch (square.wordMultiplier) {
+    case 2:
       bonusText = "2W";
       break;
-    case 3: 
+    case 3:
       bonusText = "3W";
       break;
     default:
       bonusText = bonusText;
   }
-  return bonusText
-} 
+  return bonusText;
+};
 
 const Board = ({
   handleClickSquare,
   handleClickPlacedTile,
-  boardState, 
+  boardState,
   isDisabled,
 }) => {
   return (
