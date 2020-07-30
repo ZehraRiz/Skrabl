@@ -44,7 +44,7 @@ const findExtenderWords = (wordsOnBoardArrays, rackTiles) => {
         }
 
         dirs.forEach((dir) => {
-          const max = 15;
+          const max = 14;
           const min = 0;
           const propToCheck = dir === "x" ? "col" : "row";
           if (
