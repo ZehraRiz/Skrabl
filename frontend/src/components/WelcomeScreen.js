@@ -9,7 +9,10 @@ import tr from "../images/tkflag.svg";
 const WelcomeScreen = ({
   handleChooseComputer,
   handleChooseOnline,
-  handleSetLang,
+  setLangEn,
+  setLangFr,
+  setLangDe,
+  setLangTr
 }) => {
   return (
     <Fade triggerOnce>
@@ -28,16 +31,16 @@ const WelcomeScreen = ({
           </button>
         </div>
         <div className="language__select">
-          <div /*onClick={handleSetLang("en")}*/ >
+          <div onClick={setLangEn} >
             <img className="language__icon" src={en} />
           </div>
-          <div /*onClick={handleSetLang("de")}*/ >
+          <div onClick={setLangDe} >
             <img className="language__icon" src={de} />
           </div>
-          <div /*onClick={handleSetLang("fr")} */>
+          <div onClick={setLangFr} >
             <img className="language__icon" src={fr} />
           </div>
-          <div /*onClick={handleSetLang("tr")} */>
+          <div onClick={setLangTr} >
             <img className="language__icon" src={tr} />
           </div>
         </div>

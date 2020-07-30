@@ -53,21 +53,35 @@ const App = () => {
 
   const handleClickRules = () => {
     setViewRules(!viewRules);
-    console.log(viewRules);
   };
 
   const handleClickChat = () => {
     setViewChat(!viewChat);
-    console.log(viewRules);
   };
 
   const handleStart = () => {
     setCurrentComponent("WelcomeScreen");
   };
 
-  const handleChooseLang = (lang) => {
-    setLang(lang);
-  };
+  const setLangEn = () => {
+	setLang("en");
+  }
+
+  const setLangFr = () => {
+	setLang("fr");
+  }
+
+  const setLangDe = () => {
+	setLang("de");
+  }
+
+  const setLangTr = () => {
+	setLang("tr");
+  }
+
+  useEffect(()=>{
+	console.log(lang);
+  }, [lang])
 
   return (
     <div className="page">
@@ -85,7 +99,10 @@ const App = () => {
         <WelcomeScreen
           handleChooseOnline={handleChooseOnline}
           handleChooseComputer={handleChooseComputer}
-          handleChooseLang={handleChooseLang}
+		  setLangEn={setLangEn}
+		  setLangFr={setLangFr}
+		  setLangDe={setLangDe}
+		  setLangTr={setLangTr}
         />
       )}
       {currentComponent === "Login" && (
