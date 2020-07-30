@@ -29,8 +29,8 @@ app.post("/verifyWord", async (req, res) => {
   //*words are objects with word key
   const words = req.body.words;
   const results = {};
-  console.log("Words to verify");
-  console.log(words);
+  // console.log("Words to verify");
+  // console.log(words);
   for (const wordObj in words) {
     const fileContent = fs.readFileSync("./words.txt");
     const regex = new RegExp("\\b" + wordObj.word + "\\b");

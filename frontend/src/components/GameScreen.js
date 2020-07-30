@@ -40,7 +40,6 @@ const GameScreen = ({
   const [turn, setTurn] = useState(null);
   const [tilesToExchange, setTilesToExchange] = useState([]);
   const [boardIsDisabled, setBoardIsDisabled] = useState(false);
-  const [wordsOnBoard, setWordsOnBoard] = useState([]);
   const [consecutivePasses, setConsecutivePasses] = useState(0);
   const [pouch, setPouch] = useState([]);
   const [computerRackTiles, setComputerRackTiles] = useState([]);
@@ -73,8 +72,6 @@ const GameScreen = ({
   }, [turn, gameMode]);
 
   useEffect(() => {
-    console.log("POUCH HAS CHANGED");
-    console.log(pouch);
     if (gameMode === "Computer") {
       if (turn === 0 && pouch.length === 100) {
         getTiles();
@@ -146,7 +143,6 @@ const GameScreen = ({
           }
           setTimeout(() => {
             const allWords = findWordsOnBoard(returnedBoardState, tilesUsed);
-            setWordsOnBoard(allWords);
             const newWords = allWords.filter((word) => word.newWord === true);
             const newScores = scores;
             newWords.forEach((word) => {
@@ -258,9 +254,6 @@ const GameScreen = ({
     }
     if (gameMode === "Computer") {
       if (turn === 1) {
-        console.log(
-          "Player rack tiles has changed and it's Alan's turn so shuold be ok now for himt o get tiles from pouch"
-        );
         getComputerTiles();
       }
     }
@@ -310,11 +303,6 @@ const GameScreen = ({
       setTurn(turn === 0 ? 1 : 0);
     }
   };
-
-  // const updateScores = () => {
-  //   const updatedScores = getScoresFromWords(scoredWords);
-  //   setScores(updatedScores);
-  // };
 
   const placeTile = () => {
     if (selectedSquareIndex !== null) {
@@ -484,7 +472,6 @@ const GameScreen = ({
     if (currentPlayer !== turn) return;
     if (moveIsValid(placedTiles, boardState)) {
       const allWords = findWordsOnBoard(boardState, placedTiles);
-      setWordsOnBoard(allWords);
       var newWords = allWords.filter((word) => word.newWord === true);
       axios
         .post("http://localhost:4001/verifyWord", { words: newWords })
