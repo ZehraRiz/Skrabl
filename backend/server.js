@@ -11,7 +11,7 @@ const cors = require("cors");
 const moment = require("moment");
 let now = moment();
 const computerRoute = require("./computerRoute");
-const initializePouch = require("./constants/initializePouch");
+const initializePouch = require("./utils/initializePouch");
 
 app.use(express.json());
 app.use(cors());
@@ -33,6 +33,8 @@ app.post("/verifyWord", async (req, res) => {
     wordListToUse = "./wordsBig.txt";
   } else if (lang === "tr") {
     wordListToUse = "./turkish.txt";
+  } else if (lang === "fr") {
+    wordListToUse = "./french.txt";
   }
   const results = {};
   words.forEach((wordObj) => {

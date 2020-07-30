@@ -1,17 +1,16 @@
 import React from "react";
-import { getHighestScoringWord } from "../utils/getHighestScoringWord";
 import "../styles/GameOverModal.css";
 import {Fade, Bounce} from "react-awesome-reveal";
 
 const GameOverModal = ({
   scores,
-  scoredWords,
   exitGame,
   currentPlayer,
   user,
   invitedPlayer,
   gameMode
 }) => {
+
   const highestScoringWord = getHighestScoringWord(scoredWords);
   let result = 0;
   const opponent = gameMode === "Online" ? invitedPlayer.id : "SkrablBot";
@@ -30,6 +29,7 @@ const GameOverModal = ({
       break;
   }
 
+
   return (
     <Fade className="gameOverModal__wrapper">
       <Bounce cascade damping={0.5} className="gameOverModal__content">
@@ -38,8 +38,7 @@ const GameOverModal = ({
         <p>Player 0: {scores[0]}</p>
         <p>Player 1: {scores[1]}</p>
         <h4>Highest scoring word:</h4>
-        {highestScoringWord && highestScoringWord.word} (
-        {highestScoringWord && highestScoringWord.points} points)
+
         <button onClick={exitGame}>OK</button>
       </Bounce>
     </Fade>
