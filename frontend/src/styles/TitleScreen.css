@@ -24,6 +24,7 @@
 }
 
 .title__main button {
+    font-size: 1em;
     margin-top: 2em;
     padding: .5em;
     width: 100px;

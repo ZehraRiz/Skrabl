@@ -14,8 +14,8 @@ const TitleScreen = ({ handleStart }) => {
           <h1>b</h1>
           <h1>l</h1>
         </Bounce>
-        <Bounce triggerOnce delay={2500}>
-          <button onClick={handleStart} className="button__confirm">
+        <Bounce triggerOnce delay={2000}>
+          <button onClick={handleStart} >
             Let's go!
           </button>
         </Bounce>
@@ -25,3 +25,4 @@ const TitleScreen = ({ handleStart }) => {
 };
 
 export default TitleScreen;
+
