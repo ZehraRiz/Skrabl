@@ -45,7 +45,7 @@ const getBonusText = (square) => {
   }
   switch(square.wordMultiplier) {
     case 2: 
-      bonusText = "3W";
+      bonusText = "2W";
       break;
     case 3: 
       bonusText = "3W";

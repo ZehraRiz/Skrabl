@@ -31,7 +31,7 @@ app.post("/verifyWord", async (req, res) => {
   const results = {};
   console.log("Words to verify");
   console.log(words);
-  for (const wordObj in words) {
+  words.forEach((wordObj) => {
     const fileContent = fs.readFileSync("./wordsBig.txt");
     const regex = new RegExp("\\b" + wordObj.word + "\\b");
     if (regex.test(fileContent)) {
@@ -39,7 +39,9 @@ app.post("/verifyWord", async (req, res) => {
     } else {
       results[wordObj.word] = "false";
     }
-  }
+  });
+  console.log("RESULTS");
+  console.log(results);
   res.status(200).send(results);
 });
 

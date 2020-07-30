@@ -2,33 +2,41 @@ import React from "react";
 import "../styles/ConfirmModal.css";
 import { Fade } from "react-awesome-reveal";
 
-const ConfirmModal = ({ message, handleResign, handlePass, handleConfirmMove, closeModal }) => {
+const ConfirmModal = ({
+  message,
+  handleResign,
+  handlePass,
+  handleConfirmMove,
+  closeModal,
+}) => {
   let confirmFunction;
   message.type === "resign"
     ? (confirmFunction = handleResign)
     : (confirmFunction = handlePass);
 
-  switch(message.type){
-    case "resign": 
+  switch (message.type) {
+    case "resign":
       confirmFunction = handleResign;
-      break
-    case "pass": 
+      break;
+    case "pass":
       confirmFunction = handlePass;
-      break
-    case "confirm": 
+      break;
+    case "confirm":
       confirmFunction = handleConfirmMove;
-      break
+      break;
   }
   return (
-    <Fade triggerOnce> 
-      <div className="confirmModal__wrapper">
-          <div className="confirmModal__content">
-            <p>{message.message}</p>
-            <div className="confirmModal__buttons">
-              <button onClick={closeModal}>Cancel</button>
-              <button onClick={confirmFunction}>Confirm</button>
-            </div>
-          </div>
+    <Fade triggerOnce className="confirmModal__wrapper">
+      <div className="confirmModal__content">
+        <p>{message.message}</p>
+        <div className="confirmModal__buttons">
+          <button className="button__confirm" onClick={confirmFunction}>
+            Confirm
+          </button>
+          <button className="button__cancel" onClick={closeModal}>
+            Cancel
+          </button>
+        </div>
       </div>
     </Fade>
   );
