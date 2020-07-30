@@ -28,15 +28,20 @@
   width: 40px;
   cursor: pointer;
   display: flex;
+  margin-left: -40px;
+  justify-content: center;
+  align-items: center;
 }
 
 
-.header__chat, .header__rules {
+
+.header__chat {
   width: 40px;
   cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-right: -40px;
 }
 
 .header__rules img {
