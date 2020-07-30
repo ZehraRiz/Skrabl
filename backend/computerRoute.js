@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const fs = require("fs");
-const fileContent = fs.readFileSync("./words.txt", "utf8");
+const fileContent = fs.readFileSync("./wordsBig.txt", "utf8");
 const getWordsOnBoard = require("./getWordsOnBoard");
 
 const findExtenderWords = (wordsOnBoardArrays, rackTiles) => {
@@ -120,7 +120,7 @@ const allWordsAreValid = async (boardState) => {
   });
   for (let i = 0; i < allWordsString.length; i++) {
     const word = allWordsString[i];
-    const wordsBig = fs.readFileSync("./words.txt");
+    const wordsBig = fs.readFileSync("./wordsBig.txt");
     const regex = new RegExp("\\b" + word + "\\b");
     if (regex.test(wordsBig)) {
     } else {
