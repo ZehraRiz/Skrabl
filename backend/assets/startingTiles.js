@@ -52,7 +52,6 @@ const startingTiles = {
       { letter: "t", points: 1 },
     ],
     4: [
-      { letter: "ç", points: 2 },
       { letter: "ı", points: 2 },
       { letter: "m", points: 2 },
     ],
@@ -62,6 +61,7 @@ const startingTiles = {
       { letter: "u", points: 2 },
     ],
     2: [
+      { letter: "ç", points: 2 },
       { letter: "b", points: 2 },
       { letter: "d", points: 3 },
       { letter: "ş", points: 4 },

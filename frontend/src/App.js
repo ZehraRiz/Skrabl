@@ -65,8 +65,18 @@ const App = () => {
     setCurrentComponent("WelcomeScreen");
   };
 
-  const handleChooseLang = (lang) => {
-    setLang(lang);
+  const setLangEn = () => {
+    setLang("en");
+  };
+  const setLangFr = () => {
+    setLang("fr");
+  };
+  const setLangDe = () => {
+    setLang("de");
+  };
+  const setLangTr = () => {
+    console.log("Setting lang to Turkish");
+    setLang("tr");
   };
 
   return (
@@ -85,7 +95,10 @@ const App = () => {
         <WelcomeScreen
           handleChooseOnline={handleChooseOnline}
           handleChooseComputer={handleChooseComputer}
-          handleChooseLang={handleChooseLang}
+          setLangEn={setLangEn}
+          setLangFr={setLangFr}
+          setLangDe={setLangDe}
+          setLangTr={setLangTr}
         />
       )}
       {currentComponent === "Login" && (

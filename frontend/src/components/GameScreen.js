@@ -48,7 +48,6 @@ const GameScreen = ({
   const [consecutivePasses, setConsecutivePasses] = useState(0);
   const [pouch, setPouch] = useState([]);
   const [computerRackTiles, setComputerRackTiles] = useState([]);
-
   const fillPouch = async () => {
     const res = await axios.post("http://localhost:4001/getPouch", {
       lang,
@@ -93,6 +92,10 @@ const GameScreen = ({
     //not sure best way to check that it's the start of the game
     //this solution is not ideal as each lang has diff num tiles
     if (gameMode === "Computer") {
+      console.log("Pouch has changed");
+      console.log("POUCH LENGTH: " + pouch.length);
+      console.log("POUCH");
+      console.log(pouch);
       if (lang === "en" || lang === "tr") {
         if (turn === 0 && pouch.length === 100) {
           getTiles();
