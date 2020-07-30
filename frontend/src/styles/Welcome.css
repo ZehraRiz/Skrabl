@@ -21,6 +21,17 @@
 
 .welcome__menu button {
     margin: 10px;
-    max-width: 300px;
+    width: 200px;
     height: 3em;
+    padding: 1em;
+    display: flex;
+    justify-content: space-around;
+}
+
+.welcome__menu span {
+   width: 33%;
+}
+
+.vs {
+    width: auto;
 }

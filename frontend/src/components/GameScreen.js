@@ -13,7 +13,7 @@ import { shuffle } from "../utils/shuffle";
 import { moveIsValid } from "../utils/moveIsValid";
 import { squaresAreOccupied } from "../utils/squaresAreOccupied";
 import { findWordsOnBoard } from "../utils/findWordsOnBoard";
-import { getScoresFromWords } from "../utils/getScoresFromWords";
+import { getTurnPoints } from "../utils/getTurnPoints";
 import { bonusSquareIndices } from "../assets/bonusSquareIndices";
 import { Fade } from "react-awesome-reveal";
 import axios from "axios";
@@ -40,12 +40,10 @@ const GameScreen = ({
   const [boardState, setBoardState] = useState([]);
   const [timeLeftPlayer, setTimeLeftPlayer] = useState(null);
   const [timeLeftOpponent, setTimeLeftOpponent] = useState(null);
-  const [scoredWords, setScoredWords] = useState({ 0: [], 1: [] });
   const [scores, setScores] = useState(null);
   const [turn, setTurn] = useState(null);
   const [tilesToExchange, setTilesToExchange] = useState([]);
   const [boardIsDisabled, setBoardIsDisabled] = useState(false);
-  const [wordsOnBoard, setWordsOnBoard] = useState([]);
   const [consecutivePasses, setConsecutivePasses] = useState(0);
   const [pouch, setPouch] = useState([]);
   const [computerRackTiles, setComputerRackTiles] = useState([]);
@@ -57,6 +55,16 @@ const GameScreen = ({
     console.log(res.data);
     setPouch(res.data);
   };
+  const moment = require("moment");
+  let now = moment();
+  const [chatThread, setChatThread] = useState([
+    {
+      playerFromBackend: 0,
+      playerName: "SkrablBot",
+      msg: "Welcome, you are now connected",
+      date: now.format("h:mm:ss a"),
+    },
+  ]);
 
   const getComputerTiles = () => {
     const numTilesNeeded = 7 - computerRackTiles.length;
@@ -75,17 +83,16 @@ const GameScreen = ({
     }
     if (gameMode === "Computer" && pouch.length > 0) {
       if (turn === 1) {
-        getComputerTiles();
-      }
-      if (turn === 1) {
         getTiles();
       }
     }
   }, [turn, gameMode]);
 
   useEffect(() => {
-    if (gameMode === "Computer" && turn === 0 && pouch.length === 100) {
-      getTiles();
+    if (gameMode === "Computer") {
+      if (turn === 0 && pouch.length === 100) {
+        getTiles();
+      }
     }
   }, [pouch]);
 
@@ -153,16 +160,19 @@ const GameScreen = ({
             }
           }
           setTimeout(() => {
-            const allWords = findWordsOnBoard(returnedBoardState, tilesUsed);
-            setWordsOnBoard(allWords);
-            const newWords = allWords.filter((word) => word.newWord === true);
-            const newScores = scores;
-            newWords.forEach((word) => {
-              newScores[1] = newScores[1] + word.wordScore;
-            });
+            const newWords = findWordsOnBoard(
+              returnedBoardState,
+              tilesUsed
+            ).filter((word) => word.newWord === true);
+            const turnPoints = getTurnPoints(newWords, tilesUsed);
+            const playerPreviousPoints = scores[turn];
+            const updatedScores = {
+              ...scores,
+              [turn]: playerPreviousPoints + turnPoints,
+            };
             setBoardState(returnedBoardState);
+            setScores(updatedScores);
             nextPlayer();
-            setScores(newScores);
             setComputerRackTiles(updatedComputerRackTiles);
           }, 5000);
         }
@@ -216,12 +226,6 @@ const GameScreen = ({
   }, []);
 
   useEffect(() => {
-    if (scoredWords[0].length > 0 && scoredWords[1].length > 0) {
-      updateScores();
-    }
-  }, [scoredWords]);
-
-  useEffect(() => {
     placeTile();
   }, [selectedSquareIndex]);
 
@@ -270,6 +274,11 @@ const GameScreen = ({
         setConsecutivePasses(data.gameState.consecutivePasses);
       });
     }
+    if (gameMode === "Computer") {
+      if (turn === 1) {
+        getComputerTiles();
+      }
+    }
   }, [playerRackTiles]);
 
   const getBoard = () => {
@@ -294,8 +303,8 @@ const GameScreen = ({
       const pouchCopy = [...pouch];
       pouchCopy.splice(0, numTilesNeeded);
       const newTiles = pouch.slice(0, numTilesNeeded);
-      setPlayerRackTiles([...playerRackTiles, ...newTiles]);
       setPouch([...pouchCopy]);
+      setPlayerRackTiles([...playerRackTiles, ...newTiles]);
     }
   };
 
@@ -316,11 +325,6 @@ const GameScreen = ({
     if (gameMode === "Computer") {
       setTurn(turn === 0 ? 1 : 0);
     }
-  };
-
-  const updateScores = () => {
-    const updatedScores = getScoresFromWords(scoredWords);
-    setScores(updatedScores);
   };
 
   const placeTile = () => {
@@ -372,7 +376,7 @@ const GameScreen = ({
     if (
       selectedTile === 0 ||
       currentPlayer !== turn ||
-      placedTiles.filter((tile) => tile.square !== tileToRemove.square)
+      placedTiles.filter((tile) => tile.square == tileToRemove.square)
         .length === 0
     )
       return;
@@ -395,10 +399,18 @@ const GameScreen = ({
 
   const handleClickPass = () => {
     if (currentPlayer !== turn) return;
-    setConfirmMessage({
-      type: "pass",
-      message: "Are you sure you want to pass?",
-    });
+    if (consecutivePasses === 5) {
+      setConfirmMessage({
+        type: "pass",
+        message:
+          "This will be the sixth consecutive pass, and will end the game!  Are you sure you want to pass?",
+      });
+    } else {
+      setConfirmMessage({
+        type: "pass",
+        message: "Are you sure you want to pass?",
+      });
+    }
   };
 
   const handleClickResign = () => {
@@ -490,9 +502,9 @@ const GameScreen = ({
   const handleClickConfirmMove = () => {
     if (currentPlayer !== turn) return;
     if (moveIsValid(placedTiles, boardState)) {
-      const allWords = findWordsOnBoard(boardState, placedTiles);
-      setWordsOnBoard(allWords);
-      var newWords = allWords.filter((word) => word.newWord === true);
+      const newWords = findWordsOnBoard(boardState, placedTiles).filter(
+        (word) => word.newWord === true
+      );
       axios
         .post("http://localhost:4001/verifyWord", {
           words: newWords,
@@ -501,12 +513,14 @@ const GameScreen = ({
         .then((res) => {
           const results = res.data;
           if (Object.values(results).every((val) => val === "true")) {
-            var newScores = scores;
-            newWords.forEach((word) => {
-              newScores[turn] = newScores[turn] + word.wordScore;
-            });
-            setScores(newScores);
-            nextPlayer(consecutivePasses * -1, newScores); // resets consecutivePasses by deducting it from itself
+            const turnPoints = getTurnPoints(newWords, placedTiles);
+            const playerPreviousPoints = scores[turn];
+            const updatedScores = {
+              ...scores,
+              [turn]: playerPreviousPoints + turnPoints,
+            };
+            setScores(updatedScores);
+            nextPlayer(consecutivePasses * -1);
             setPlacedTiles([]);
             return;
           } else {
@@ -554,6 +568,8 @@ const GameScreen = ({
             currentPlayer={currentPlayer}
             socket={socket}
             closeModal={handleClickChat}
+            chatThread={chatThread}
+            setChatThread={setChatThread}
           />
         )}
         <div className="gameScreen__main">
@@ -604,6 +620,8 @@ const GameScreen = ({
           )}
           {gameMode === "Online" && (
             <Chat
+              chatThread={chatThread}
+              setChatThread={setChatThread}
               gameId={gameData.gameId}
               currentPlayer={currentPlayer}
               socket={socket}
@@ -617,7 +635,7 @@ const GameScreen = ({
             invitedPlayer={invitedPlayer}
             currentPlayer={currentPlayer}
             scores={scores}
-            scoredWords={scoredWords}
+            // scoredWords={scoredWords}
             exitGame={exitGame}
           />
         )}
