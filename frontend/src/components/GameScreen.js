@@ -29,7 +29,8 @@ const GameScreen = ({
   socket,
   gameMode,
   handleClickChat,
-  viewChat
+  viewChat,
+  lang,
 }) => {
   const [selectedTile, setSelectedTile] = useState(null);
   const [selectedSquareIndex, setSelectedSquareIndex] = useState(null);
@@ -49,7 +50,9 @@ const GameScreen = ({
   const [computerRackTiles, setComputerRackTiles] = useState([]);
 
   const fillPouch = async () => {
-    const res = await axios.get("http://localhost:4001/getPouch");
+    const res = await axios.post("http://localhost:4001/getPouch", {
+      lang,
+    });
     setPouch(res.data);
   };
   const moment = require("moment");
@@ -62,7 +65,7 @@ const GameScreen = ({
       date: now.format("h:mm:ss a"),
     },
   ]);
-  
+
   const getComputerTiles = () => {
     const numTilesNeeded = 7 - computerRackTiles.length;
     const pouchCopy = [...pouch];
@@ -111,6 +114,7 @@ const GameScreen = ({
       .post("http://localhost:4001/computerMove/", {
         rackTiles: computerRackTiles,
         boardState,
+        lang,
       })
       .then((res) => {
         if (res.data.pass) {
@@ -233,9 +237,7 @@ const GameScreen = ({
       // game ends if players pass six turns in a row, or pass twice when there are no tiles left in pouch
       // end game
       gameOver();
-      console.log("END GAME");
     }
-    console.log(consecutivePasses);
   }, [consecutivePasses]);
 
   useEffect(() => {
@@ -246,9 +248,7 @@ const GameScreen = ({
       });
 
       socket.on("gameEnd", (data) => {
-        console.log(data);
         //redirect to players screen or show who won
-        console.log("the game has ended");
         exitGame();
       });
 
@@ -394,12 +394,13 @@ const GameScreen = ({
 
   const handleClickPass = () => {
     if (currentPlayer !== turn) return;
-    if ( consecutivePasses === 5 ) {
+    if (consecutivePasses === 5) {
       setConfirmMessage({
         type: "pass",
-        message: "This will be the sixth consecutive pass, and will end the game!  Are you sure you want to pass?",
+        message:
+          "This will be the sixth consecutive pass, and will end the game!  Are you sure you want to pass?",
       });
-    } else{
+    } else {
       setConfirmMessage({
         type: "pass",
         message: "Are you sure you want to pass?",
@@ -500,7 +501,10 @@ const GameScreen = ({
         (word) => word.newWord === true
       );
       axios
-        .post("http://localhost:4001/verifyWord", { words: newWords })
+        .post("http://localhost:4001/verifyWord", {
+          words: newWords,
+          lang,
+        })
         .then((res) => {
           const results = res.data;
           if (Object.values(results).every((val) => val === "true")) {
@@ -550,19 +554,18 @@ const GameScreen = ({
     setConfirmMessage(null);
   };
 
-
   return (
     <Fade className="container__full-height" triggerOnce>
       <div className="gameScreen__wrapper">
-      {viewChat && (
-				<ChatModal
-          gameId={gameData.gameId}
-          currentPlayer={currentPlayer}
-          socket={socket}
-          closeModal={handleClickChat}
-          chatThread={chatThread}
-          setChatThread={setChatThread}
-				/>
+        {viewChat && (
+          <ChatModal
+            gameId={gameData.gameId}
+            currentPlayer={currentPlayer}
+            socket={socket}
+            closeModal={handleClickChat}
+            chatThread={chatThread}
+            setChatThread={setChatThread}
+          />
         )}
         <div className="gameScreen__main">
           <div className="gameScreen__board">
@@ -571,12 +574,14 @@ const GameScreen = ({
               handleClickPlacedTile={handleClickPlacedTile}
               boardState={boardState}
               isDisabled={boardIsDisabled}
+              lang={lang}
             />
             <TileRack
               selectedTile={selectedTile}
               tilesToExchange={tilesToExchange}
               playerRackTiles={playerRackTiles}
               handleClickTile={handleClickTile}
+              lang={lang}
             />
           </div>
           <StatusBar

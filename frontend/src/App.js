@@ -26,15 +26,14 @@ const App = () => {
   const [inviteSent, setInviteSent] = useState(false);
   const [viewRules, setViewRules] = useState(false);
   const [viewChat, setViewChat] = useState(false);
+  const [lang, setLang] = useState("en");
+
   useEffect(() => {
     if (gameMode === "Computer") {
       setCurrentPlayer(0);
       setCurrentComponent("GameScreen");
     }
     if (gameMode === "Online") {
-      console.log(
-        "game mode has changed to 'online' so setting value of socket variable"
-      );
       setSocket(io("http://localhost:4001"));
       setCurrentComponent("Login");
     }
@@ -66,22 +65,27 @@ const App = () => {
     setCurrentComponent("WelcomeScreen");
   };
 
+  const handleChooseLang = (lang) => {
+    setLang(lang);
+  };
+
   return (
     <div className="page">
-      {currentComponent !== "TitleScreen" && <Header
-        handleClickRules={handleClickRules}
-        handleClickChat={handleClickChat}
-        gameMode={gameMode}
-      />}
-	  {currentComponent === "TitleScreen" && (
-        <TitleScreen
-          handleStart={handleStart}
+      {currentComponent !== "TitleScreen" && (
+        <Header
+          handleClickRules={handleClickRules}
+          handleClickChat={handleClickChat}
+          gameMode={gameMode}
         />
+      )}
+      {currentComponent === "TitleScreen" && (
+        <TitleScreen handleStart={handleStart} />
       )}
       {currentComponent === "WelcomeScreen" && (
         <WelcomeScreen
           handleChooseOnline={handleChooseOnline}
           handleChooseComputer={handleChooseComputer}
+          handleChooseLang={handleChooseLang}
         />
       )}
       {currentComponent === "Login" && (
@@ -128,7 +132,7 @@ const App = () => {
       )}
       {currentComponent === "GameScreen" && (
         <GameScreen
-		  handleClickChat={handleClickChat}
+          handleClickChat={handleClickChat}
           viewChat={viewChat}
           user={user}
           invitedPlayer={invitedPlayer} //basically, the opponent
@@ -139,6 +143,7 @@ const App = () => {
           gameData={gameData}
           socket={socket}
           gameMode={gameMode}
+          lang={lang}
         />
       )}
       {currentComponent === "UserBusy" && <UserBusy socket={socket} />}
