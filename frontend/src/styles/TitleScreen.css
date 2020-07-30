@@ -1,0 +1,30 @@
+.title__main {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    height: 90vh;
+    opacity: 0;
+}
+
+.title__content {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.title__content h1 {
+    font-size: 5em;
+    text-align: center;
+    margin-right: 2px;
+    text-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
+    color: #222;
+}
+
+.title__main button {
+    margin-top: 2em;
+    padding: .5em;
+    width: 100px;
+}

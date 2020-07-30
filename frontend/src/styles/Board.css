@@ -24,6 +24,7 @@
   -moz-border-radius: 4px;
   -ms-border-radius: 4px;
   -o-border-radius: 4px;
+  user-select: none;
 }
 
 .board__square {
