@@ -10,9 +10,10 @@ import NotificationModal from "./components/NotificationModal";
 import RulesModal from "./components/RulesModal";
 import "./styles/global.css";
 import WelcomeScreen from "./components/WelcomeScreen";
+import TitleScreen from "./components/TitleScreen";
 
 const App = () => {
-  const [currentComponent, setCurrentComponent] = useState("WelcomeScreen");
+  const [currentComponent, setCurrentComponent] = useState("TitleScreen");
   const [notification, setNotification] = useState(null);
   const [user, setUser] = useState("");
   const [players, setPlayers] = useState([]);
@@ -61,13 +62,22 @@ const App = () => {
     console.log(viewRules);
   };
 
+  const handleStart = () => {
+    setCurrentComponent("WelcomeScreen");
+  };
+
   return (
     <div className="page">
-      <Header
+      {currentComponent !== "TitleScreen" && <Header
         handleClickRules={handleClickRules}
         handleClickChat={handleClickChat}
         gameMode={gameMode}
-      />
+      />}
+	  {currentComponent === "TitleScreen" && (
+        <TitleScreen
+          handleStart={handleStart}
+        />
+      )}
       {currentComponent === "WelcomeScreen" && (
         <WelcomeScreen
           handleChooseOnline={handleChooseOnline}

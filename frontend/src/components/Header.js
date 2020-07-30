@@ -3,13 +3,18 @@ import "../styles/Header.css";
 import infoIcon from "../images/help.svg";
 import chatIcon from "../images/chat.svg";
 
-
-const Header = ({handleClickRules, handleClickChat, gameMode}) => {
+const Header = ({ handleClickRules, handleClickChat, gameMode }) => {
   return (
     <div className="header__wrapper">
-      {gameMode === "Online" && <div className="header__chat" onClick={handleClickChat} ><img src={chatIcon}/></div>}
+      {gameMode === "Online" && (
+        <div className="header__chat" onClick={handleClickChat}>
+          <img src={chatIcon} />
+        </div>
+      )}
       <h1>Skrabl</h1>
-      <div className="header__rules" onClick={handleClickRules} ><img src={infoIcon}/></div>
+      <div className="header__rules" onClick={handleClickRules}>
+        <img src={infoIcon} />
+      </div>
     </div>
   );
 };

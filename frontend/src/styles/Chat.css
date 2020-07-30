@@ -17,12 +17,7 @@
   display: none;
 }
 
-.modal {
-  width: 90%;
-  height: 80vh;
-  max-width: 100%;
-  display: flex;
-}
+
 
 .chat__list {
   list-style: none;
@@ -42,11 +37,13 @@
 .guest {
   color: red ;
   font-size: 8px;
+  margin-left: 1em;
 }
 
 .host {
   color: blue;
   font-size: 8px;
+  margin-left: 1em;
 }
 
 /* tablet */
