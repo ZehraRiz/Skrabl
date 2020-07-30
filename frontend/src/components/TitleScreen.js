@@ -14,11 +14,11 @@ const TitleScreen = ({ handleStart }) => {
           <h1>b</h1>
           <h1>l</h1>
         </Bounce>
-        <Fade triggerOnce delay={2000}>
+        <Bounce triggerOnce delay={2500}>
           <button onClick={handleStart} className="button__confirm">
             Let's go!
           </button>
-        </Fade>
+        </Bounce>
       </div>
     </Fade>
   );
