@@ -37,7 +37,7 @@ const StatusBar = ({
           />
         </div>
 
-        <div className="player__score">Score: {scores && scores[0]}</div>
+        <div className="player__score">Score:&nbsp;&nbsp;&nbsp; {scores && scores[0]}</div>
       </div>
       <div
         className={
@@ -59,7 +59,7 @@ const StatusBar = ({
             turn={turn}
           />
         </div>
-        <div className="player__score">Score: {scores && scores[1]}</div>
+        <div className="player__score">Score:&nbsp;&nbsp;&nbsp; {scores && scores[1]}</div>
       </div>
     </div>
   );

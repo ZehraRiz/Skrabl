@@ -1,0 +1,84 @@
+.chatModal__wrapper {
+    width: 100%;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 6;
+  }
+  
+  .chatModal__content {
+    width: 90%;
+    background-color: white;
+    padding: 1rem;
+    min-height: 200px;
+    border-radius: 6px;
+    max-height: 80vh;
+    overflow-y: scroll;
+    font-size: 1em;
+    opacity: 0;
+  }
+
+  .chatModal__content p {
+    padding-bottom: 1.5em;
+  }
+
+  .modal .chat__list {
+    font-size: 1.8em;
+  }
+  .modal .host, .modal .guest {
+    font-size: .6em;
+  }
+
+  .modal {
+    width: 90%;
+    height: 80vh;
+    max-width: 100%;
+    display: flex;
+    padding: 1em;
+  }
+
+  .modal form {
+      width: 100%;
+  }
+
+  .modal input {
+    width: 100%;
+  }
+
+  .modal form button {
+    height: 100%;
+    max-width: 200px;
+}
+
+  .chatModal__content h3, .chatModal__content h1 {
+    padding-bottom: .5em;
+  }
+
+  .chatModal__wrapper > button {
+    margin-top: 1em;
+    max-width: 200px;
+  }
+
+  .chatModal__buttons {
+      display: flex;
+      justify-content: center;
+  }
+
+  @media (min-width:750px) {
+    .chatModal__content {
+        width: 75%;
+        background-color: white;
+        padding: 2rem;
+        font-size: 1em;
+      }
+  }
+
+
+  
