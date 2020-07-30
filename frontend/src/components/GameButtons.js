@@ -1,10 +1,10 @@
 import React from "react";
 import "../styles/GameButtons.css";
-import shuffle from "../images/025-shuffle.svg";
-import exchange from "../images/006-loop-1.svg";
-import pass from "../images/032-forwards.svg";
-import confirm from "../images/013-play.svg";
-import resign from "../images/003-stop.svg";
+import shuffle from "../images/shuffle.svg";
+import exchange from "../images/swap.svg";
+import pass from "../images/pass.svg";
+import confirm from "../images/confirm.svg";
+import resign from "../images/stop.svg";
 
 const GameButtons = ({
   handleClickShuffle,
