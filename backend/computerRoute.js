@@ -24,6 +24,8 @@ const findExtenderWords = (wordsOnBoardArrays, rackTiles, lang) => {
       wordListToUse = "./wordsSmall.txt";
     } else if (lang === "tr") {
       wordListToUse = "./turkish.txt";
+    } else if (lang === "fr") {
+      wordListToUse = "./french.txt";
     }
     const wordList = fs.readFileSync(wordListToUse, "utf8");
     const longerWords = wordList.match(regExp);
@@ -122,6 +124,8 @@ const allWordsAreValid = async (boardState, lang) => {
     wordListToUse = "./wordsBig.txt";
   } else if (lang === "tr") {
     wordListToUse = "./turkish.txt";
+  } else if (lang == "lang") {
+    wordListToUse = "./french.txt";
   }
   const allWords = getWordsOnBoard(boardState, false);
   const allWordsString = [];

@@ -1,4 +1,4 @@
-const initializePouch = require("../constants/initializePouch");
+const initializePouch = require("../utils/initializePouch");
 let games = [];
 
 //Join connection to player

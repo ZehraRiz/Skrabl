@@ -89,9 +89,19 @@ const GameScreen = ({
   }, [turn, gameMode]);
 
   useEffect(() => {
+    //need to get tiles at start after pouch is ready
+    //not sure best way to check that it's the start of the game
+    //this solution is not ideal as each lang has diff num tiles
     if (gameMode === "Computer") {
-      if (turn === 0 && pouch.length === 100) {
-        getTiles();
+      if (lang === "en" || lang === "tr") {
+        if (turn === 0 && pouch.length === 100) {
+          getTiles();
+        }
+      }
+      if (lang === "fr") {
+        if (turn === 0 && pouch.length === 102) {
+          getTiles();
+        }
       }
     }
   }, [pouch]);
