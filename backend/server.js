@@ -29,17 +29,21 @@ app.post("/verifyWord", async (req, res) => {
   //*words are objects with word key
   const words = req.body.words;
   const results = {};
+
   console.log("Words to verify");
   console.log(words);
-  for (const wordObj in words) {
-    const fileContent = fs.readFileSync("./words.txt");
+  words.forEach((wordObj) => {
+    const fileContent = fs.readFileSync("./wordsBig.txt");
+
     const regex = new RegExp("\\b" + wordObj.word + "\\b");
     if (regex.test(fileContent)) {
       results[wordObj.word] = "true";
     } else {
       results[wordObj.word] = "false";
     }
-  }
+  });
+  console.log("RESULTS");
+  console.log(results);
   res.status(200).send(results);
 });
 
