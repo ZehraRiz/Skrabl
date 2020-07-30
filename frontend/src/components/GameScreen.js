@@ -12,6 +12,7 @@ import { shuffle } from "../utils/shuffle";
 import { moveIsValid } from "../utils/moveIsValid";
 import { squaresAreOccupied } from "../utils/squaresAreOccupied";
 import { findWordsOnBoard } from "../utils/findWordsOnBoard";
+import { getTurnPoints } from "../utils/getTurnPoints";
 import { bonusSquareIndices } from "../assets/bonusSquareIndices";
 import { Fade } from "react-awesome-reveal";
 import axios from "axios";
@@ -142,14 +143,18 @@ const GameScreen = ({
             }
           }
           setTimeout(() => {
-            const allWords = findWordsOnBoard(returnedBoardState, tilesUsed);
-            const newWords = allWords.filter((word) => word.newWord === true);
-            const newScores = scores;
-            newWords.forEach((word) => {
-              newScores[1] = newScores[1] + word.wordScore;
-            });
+            const newWords = findWordsOnBoard(
+              returnedBoardState,
+              tilesUsed
+            ).filter((word) => word.newWord === true);
+            const turnPoints = getTurnPoints(newWords, tilesUsed);
+            const playerPreviousPoints = scores[turn];
+            const updatedScores = {
+              ...scores,
+              [turn]: playerPreviousPoints + turnPoints,
+            };
             setBoardState(returnedBoardState);
-            setScores(newScores);
+            setScores(updatedScores);
             nextPlayer();
             setComputerRackTiles(updatedComputerRackTiles);
           }, 5000);
@@ -471,19 +476,22 @@ const GameScreen = ({
   const handleClickConfirmMove = () => {
     if (currentPlayer !== turn) return;
     if (moveIsValid(placedTiles, boardState)) {
-      const allWords = findWordsOnBoard(boardState, placedTiles);
-      var newWords = allWords.filter((word) => word.newWord === true);
+      const newWords = findWordsOnBoard(boardState, placedTiles).filter(
+        (word) => word.newWord === true
+      );
       axios
         .post("http://localhost:4001/verifyWord", { words: newWords })
         .then((res) => {
           const results = res.data;
           if (Object.values(results).every((val) => val === "true")) {
-            var newScores = scores;
-            newWords.forEach((word) => {
-              newScores[turn] = newScores[turn] + word.wordScore;
-            });
-            setScores(newScores);
-            nextPlayer(consecutivePasses * -1, newScores); // resets consecutivePasses by deducting it from itself
+            const turnPoints = getTurnPoints(newWords, placedTiles);
+            const playerPreviousPoints = scores[turn];
+            const updatedScores = {
+              ...scores,
+              [turn]: playerPreviousPoints + turnPoints,
+            };
+            setScores(updatedScores);
+            nextPlayer(consecutivePasses * -1);
             setPlacedTiles([]);
             return;
           } else {
