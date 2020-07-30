@@ -1,9 +1,10 @@
 .welcome__main {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     width: 100%;
-    height: calc(80vh - 75px);
+    height: 90vh;
     opacity: 0;
 }
 
@@ -34,4 +35,29 @@
 
 .vs {
     width: auto;
+}
+
+.language__select {
+    display: flex;
+    width: auto;
+    position: absolute;
+    top: 90vh;
+
+}
+ 
+.language__icon {
+    margin: .3em;
+    width: 2.5em;
+    height: auto;
+    filter:  drop-shadow(0px 1px 3px rgba(0, 0, 0, 0.3));
+    -webkit-filter:  drop-shadow(0px 1px 3px rgba(0, 0, 0, 0.3));
+    transform: scale(1);
+}
+
+.language__icon:hover {
+    transform: scale(1.07);
+    -webkit-transform: scale(1.07);
+    -moz-transform: scale(1.07);
+    -ms-transform: scale(1.07);
+    -o-transform: scale(1.07);
 }

@@ -6,8 +6,9 @@ const RulesModal = ({closeModal}) => {
   return (
     
       
-    <Fade triggerOnce className="rulesModal__wrapper">
+    <Fade triggerOnce className="rulesModal__wrapper" onClick={closeModal}>
         <div className="rulesModal__content">
+          <div className="rulesModal__text">
           <h1>Skrabl Rules</h1>
           <p>
             When playing Skrabl, anywhere from one to two players will enjoy
@@ -122,9 +123,8 @@ const RulesModal = ({closeModal}) => {
 
           <p>
             Players can choose to pass at any time. They will forfeit that turn
-            and hope to be able to play the next time. If any player passes two
-            times in a row, the game will end and the one with the highest score
-            will win.
+            and hope to be able to play the next time. If six consecutive passes are made (three each player), the game will end and the one with the highest score
+            will win.  If there are no tiles left in the Skrabl pouch, then the game will end after two consecutive passes.
           </p>
 
           <h3>The First Word Score</h3>
@@ -136,13 +136,9 @@ const RulesModal = ({closeModal}) => {
             the board.
           </p>
 
-          <p>
-            Play continues in a clockwise direction around the Skrabl board.
-          </p>
-
           <h3>Replacing Skrabl Tiles</h3>
           <p>
-            Once tiles are played on the board, players will draw new tiles to
+            Once tiles are played on the board, players will be given new tiles from the pouch to
             replace those. Players will always have seven tiles during the game.
           </p>
 
@@ -202,6 +198,7 @@ const RulesModal = ({closeModal}) => {
             for this is due to the fact that the word is spoken enough and is
             considered part of the English language.
           </p>
+          </div>
           <div className="rulesModal__buttons">
             <button onClick={closeModal}>Close</button>
           </div>
