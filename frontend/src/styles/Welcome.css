@@ -61,3 +61,9 @@
     -ms-transform: scale(1.07);
     -o-transform: scale(1.07);
 }
+
+@media (min-width: 1100px ) {
+	.welcome__menu button {
+        width: 250px;
+    }
+}

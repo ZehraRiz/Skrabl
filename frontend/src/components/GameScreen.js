@@ -626,6 +626,7 @@ const GameScreen = ({
             invitedPlayer={invitedPlayer}
             currentPlayer={currentPlayer}
             scores={scores}
+            gameMode={gameMode}
             // scoredWords={scoredWords}
             exitGame={exitGame}
           />
