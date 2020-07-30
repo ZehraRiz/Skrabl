@@ -8,7 +8,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  opacity: 0;
 }
 
 .confirmModal__content {
@@ -18,13 +17,12 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 1rem;
+  padding: 2rem;
   font-size: 1.5rem;
   min-height: 200px;
   border-radius: 6px;
-
+  opacity: 0;
 }
-
 
 .confirmModal__content p {
   text-align: center;
@@ -33,6 +31,21 @@
 .confirmModal__content button {
   margin-top: 2rem;
   font-size: 1.2rem;
+  
+}
+
+.button__confirm {
+  color: rgb(112, 243, 112);
+  text-shadow: none;
+  font-family: 'Acme', sans-serif;
+  font-size: 1rem;
+}
+
+.button__cancel {
+  color: rgb(250, 145, 103);
+  text-shadow: none;
+  font-family: 'Acme', sans-serif;
+  font-size: 1rem;
 }
 
 /* tablet */
