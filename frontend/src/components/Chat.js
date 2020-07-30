@@ -1,9 +1,14 @@
 import React, { useState, useEffect } from "react";
 import "../styles/Chat.css";
 
-
-const Chat = ({ gameId, currentPlayer, socket, mode, chatThread, setChatThread }) => {
- 
+const Chat = ({
+  gameId,
+  currentPlayer,
+  socket,
+  mode,
+  chatThread,
+  setChatThread,
+}) => {
   socket.on("recieveMsg", (data) => {
     setChatThread([...chatThread, data]);
   });

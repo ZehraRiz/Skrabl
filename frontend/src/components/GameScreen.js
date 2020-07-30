@@ -399,10 +399,17 @@ const GameScreen = ({
 
   const handleClickPass = () => {
     if (currentPlayer !== turn) return;
-    setConfirmMessage({
-      type: "pass",
-      message: "Are you sure you want to pass?",
-    });
+    if ( consecutivePasses === 5 ) {
+      setConfirmMessage({
+        type: "pass",
+        message: "This will be the sixth consecutive pass, and will end the game!  Are you sure you want to pass?",
+      });
+    } else{
+      setConfirmMessage({
+        type: "pass",
+        message: "Are you sure you want to pass?",
+      });
+    }
   };
 
   const handleClickResign = () => {

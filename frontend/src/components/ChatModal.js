@@ -3,7 +3,14 @@ import "../styles/ChatModal.css";
 import { Fade } from "react-awesome-reveal";
 import Chat from "./Chat";
 
-const ChatModal = ({ closeModal, gameId, currentPlayer, socket, chatThread, setChatThread }) => {
+const ChatModal = ({
+  closeModal,
+  gameId,
+  currentPlayer,
+  socket,
+  chatThread,
+  setChatThread,
+}) => {
   return (
     <Fade triggerOnce className="chatModal__wrapper">
       <Chat
