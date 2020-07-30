@@ -21,7 +21,7 @@
 }
 
 .tileRack__tile {
-  width: 13.8%;
+  width: 13.75%;
   max-width: 100px;
   margin: 0 1px;
 }
@@ -39,7 +39,7 @@
     justify-content: flex-start;
   }
   .tileRack__tile {
-    width: 14%;
+    width: 13.6%;
     max-width: 100px;
     margin: 0 2px;
   }

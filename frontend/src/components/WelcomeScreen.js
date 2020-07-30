@@ -41,6 +41,7 @@ const WelcomeScreen = ({
             <img className="language__icon" src={fr} />
           </div>
           <div onClick={setLangTr}>
+
             <img className="language__icon" src={tr} />
           </div>
         </div>

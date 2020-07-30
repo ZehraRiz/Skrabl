@@ -53,12 +53,10 @@ const App = () => {
 
   const handleClickRules = () => {
     setViewRules(!viewRules);
-    console.log(viewRules);
   };
 
   const handleClickChat = () => {
     setViewChat(!viewChat);
-    console.log(viewRules);
   };
 
   const handleStart = () => {
@@ -66,6 +64,7 @@ const App = () => {
   };
 
   const setLangEn = () => {
+
     setLang("en");
   };
   const setLangFr = () => {
@@ -78,6 +77,7 @@ const App = () => {
     console.log("Setting lang to Turkish");
     setLang("tr");
   };
+
 
   return (
     <div className="page">
@@ -99,6 +99,7 @@ const App = () => {
           setLangFr={setLangFr}
           setLangDe={setLangDe}
           setLangTr={setLangTr}
+
         />
       )}
       {currentComponent === "Login" && (
