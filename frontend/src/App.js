@@ -64,24 +64,20 @@ const App = () => {
   };
 
   const setLangEn = () => {
-	setLang("en");
-  }
 
+    setLang("en");
+  };
   const setLangFr = () => {
-	setLang("fr");
-  }
-
+    setLang("fr");
+  };
   const setLangDe = () => {
-	setLang("de");
-  }
-
+    setLang("de");
+  };
   const setLangTr = () => {
-	setLang("tr");
-  }
+    console.log("Setting lang to Turkish");
+    setLang("tr");
+  };
 
-  useEffect(()=>{
-	console.log(lang);
-  }, [lang])
 
   return (
     <div className="page">
@@ -99,10 +95,11 @@ const App = () => {
         <WelcomeScreen
           handleChooseOnline={handleChooseOnline}
           handleChooseComputer={handleChooseComputer}
-		  setLangEn={setLangEn}
-		  setLangFr={setLangFr}
-		  setLangDe={setLangDe}
-		  setLangTr={setLangTr}
+          setLangEn={setLangEn}
+          setLangFr={setLangFr}
+          setLangDe={setLangDe}
+          setLangTr={setLangTr}
+
         />
       )}
       {currentComponent === "Login" && (

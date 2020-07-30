@@ -12,7 +12,7 @@ const WelcomeScreen = ({
   setLangEn,
   setLangFr,
   setLangDe,
-  setLangTr
+  setLangTr,
 }) => {
   return (
     <Fade triggerOnce>
@@ -31,16 +31,17 @@ const WelcomeScreen = ({
           </button>
         </div>
         <div className="language__select">
-          <div onClick={setLangEn} >
+          <div onClick={setLangEn}>
             <img className="language__icon" src={en} />
           </div>
-          <div onClick={setLangDe} >
+          <div onClick={setLangDe}>
             <img className="language__icon" src={de} />
           </div>
-          <div onClick={setLangFr} >
+          <div onClick={setLangFr}>
             <img className="language__icon" src={fr} />
           </div>
-          <div onClick={setLangTr} >
+          <div onClick={setLangTr}>
+
             <img className="language__icon" src={tr} />
           </div>
         </div>
