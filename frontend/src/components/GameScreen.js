@@ -53,7 +53,17 @@ const GameScreen = ({
     const res = await axios.get("http://localhost:4001/getPouch");
     setPouch(res.data);
   };
-
+  const moment = require("moment");
+  let now = moment();
+  const [chatThread, setChatThread] = useState([
+    {
+      playerFromBackend: 0,
+      playerName: "SkrablBot",
+      msg: "Welcome, you are now connected",
+      date: now.format("h:mm:ss a"),
+    },
+  ]);
+  
   const getComputerTiles = () => {
     const numTilesNeeded = 7 - computerRackTiles.length;
     const pouchCopy = [...pouch];
@@ -536,6 +546,7 @@ const GameScreen = ({
     setConfirmMessage(null);
   };
 
+
   return (
     <Fade className="container__full-height" triggerOnce>
       <div className="gameScreen__wrapper">
@@ -545,6 +556,8 @@ const GameScreen = ({
           currentPlayer={currentPlayer}
           socket={socket}
           closeModal={handleClickChat}
+          chatThread={chatThread}
+          setChatThread={setChatThread}
 				/>
         )}
         <div className="gameScreen__main">
@@ -594,6 +607,8 @@ const GameScreen = ({
           )}
           {gameMode === "Online" && (
             <Chat
+              chatThread={chatThread}
+              setChatThread={setChatThread}
               gameId={gameData.gameId}
               currentPlayer={currentPlayer}
               socket={socket}
