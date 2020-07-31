@@ -15,6 +15,7 @@
   justify-content: space-between;
   padding: 10px;
   min-height: 600px;
+  perspective: 2000px;
 }
 
 .gameScreen__board {
