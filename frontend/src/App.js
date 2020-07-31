@@ -26,15 +26,14 @@ const App = () => {
   const [inviteSent, setInviteSent] = useState(false);
   const [viewRules, setViewRules] = useState(false);
   const [viewChat, setViewChat] = useState(false);
+  const [lang, setLang] = useState("en");
+
   useEffect(() => {
     if (gameMode === "Computer") {
       setCurrentPlayer(0);
       setCurrentComponent("GameScreen");
     }
     if (gameMode === "Online") {
-      console.log(
-        "game mode has changed to 'online' so setting value of socket variable"
-      );
       setSocket(io("http://localhost:4001"));
       setCurrentComponent("Login");
     }
@@ -54,34 +53,52 @@ const App = () => {
 
   const handleClickRules = () => {
     setViewRules(!viewRules);
-    console.log(viewRules);
   };
 
   const handleClickChat = () => {
     setViewChat(!viewChat);
-    console.log(viewRules);
   };
 
   const handleStart = () => {
     setCurrentComponent("WelcomeScreen");
   };
 
+  const setLangEn = () => {
+    setLang("en");
+  };
+  const setLangFr = () => {
+    setLang("fr");
+  };
+  const setLangDe = () => {
+    setLang("de");
+  };
+  const setLangTr = () => {
+    console.log("Setting lang to Turkish");
+    setLang("tr");
+  };
+
+
   return (
     <div className="page">
-      {currentComponent !== "TitleScreen" && <Header
-        handleClickRules={handleClickRules}
-        handleClickChat={handleClickChat}
-        gameMode={gameMode}
-      />}
-	  {currentComponent === "TitleScreen" && (
-        <TitleScreen
-          handleStart={handleStart}
+      {currentComponent !== "TitleScreen" && (
+        <Header
+          handleClickRules={handleClickRules}
+          handleClickChat={handleClickChat}
+          gameMode={gameMode}
         />
+      )}
+      {currentComponent === "TitleScreen" && (
+        <TitleScreen handleStart={handleStart} />
       )}
       {currentComponent === "WelcomeScreen" && (
         <WelcomeScreen
           handleChooseOnline={handleChooseOnline}
           handleChooseComputer={handleChooseComputer}
+          setLangEn={setLangEn}
+          setLangFr={setLangFr}
+          setLangDe={setLangDe}
+          setLangTr={setLangTr}
+
         />
       )}
       {currentComponent === "Login" && (
@@ -128,7 +145,7 @@ const App = () => {
       )}
       {currentComponent === "GameScreen" && (
         <GameScreen
-		  handleClickChat={handleClickChat}
+          handleClickChat={handleClickChat}
           viewChat={viewChat}
           user={user}
           invitedPlayer={invitedPlayer} //basically, the opponent
@@ -139,6 +156,7 @@ const App = () => {
           gameData={gameData}
           socket={socket}
           gameMode={gameMode}
+          lang={lang}
         />
       )}
       {currentComponent === "UserBusy" && <UserBusy socket={socket} />}
@@ -148,7 +166,7 @@ const App = () => {
           handleCloseNotificationModal={handleCloseNotificationModal}
         />
       )}
-      {viewRules && <RulesModal closeModal={handleClickRules} />}
+      {viewRules && <RulesModal lang={lang} closeModal={handleClickRules} />}
     </div>
   );
 };

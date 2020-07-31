@@ -18,13 +18,19 @@ const ConfirmModal = ({
     case "resign":
       confirmFunction = handleResign;
       break;
+
     case "pass":
       confirmFunction = handlePass;
       break;
+
     case "confirm":
       confirmFunction = handleConfirmMove;
       break;
+
+    default:
+      return;
   }
+  
   return (
     <Fade triggerOnce className="confirmModal__wrapper">
       <div className="confirmModal__content">

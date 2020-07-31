@@ -29,7 +29,8 @@ const GameScreen = ({
   socket,
   gameMode,
   handleClickChat,
-  viewChat
+  viewChat,
+  lang,
 }) => {
   const [selectedTile, setSelectedTile] = useState(null);
   const [selectedSquareIndex, setSelectedSquareIndex] = useState(null);
@@ -41,15 +42,17 @@ const GameScreen = ({
   const [timeLeftPlayer, setTimeLeftPlayer] = useState(null);
   const [timeLeftOpponent, setTimeLeftOpponent] = useState(null);
   const [scores, setScores] = useState(null);
+  const [highestScoringWord, setHighestScoringWord] = useState({word: '', points: 0});
   const [turn, setTurn] = useState(null);
   const [tilesToExchange, setTilesToExchange] = useState([]);
   const [boardIsDisabled, setBoardIsDisabled] = useState(false);
   const [consecutivePasses, setConsecutivePasses] = useState(0);
   const [pouch, setPouch] = useState([]);
   const [computerRackTiles, setComputerRackTiles] = useState([]);
-
   const fillPouch = async () => {
-    const res = await axios.get("http://localhost:4001/getPouch");
+    const res = await axios.post("http://localhost:4001/getPouch", {
+      lang,
+    });
     setPouch(res.data);
   };
   const moment = require("moment");
@@ -62,7 +65,7 @@ const GameScreen = ({
       date: now.format("h:mm:ss a"),
     },
   ]);
-  
+
   const getComputerTiles = () => {
     const numTilesNeeded = 7 - computerRackTiles.length;
     const pouchCopy = [...pouch];
@@ -86,9 +89,19 @@ const GameScreen = ({
   }, [turn, gameMode]);
 
   useEffect(() => {
+    //need to get tiles at start after pouch is ready
+    //not sure best way to check that it's the start of the game
+    //this solution is not ideal as each lang has diff num tiles
     if (gameMode === "Computer") {
-      if (turn === 0 && pouch.length === 100) {
-        getTiles();
+      if (lang === "en" || lang === "tr") {
+        if (turn === 0 && pouch.length === 100) {
+          getTiles();
+        }
+      }
+      if (lang === "fr") {
+        if (turn === 0 && pouch.length === 102) {
+          getTiles();
+        }
       }
     }
   }, [pouch]);
@@ -111,6 +124,7 @@ const GameScreen = ({
       .post("http://localhost:4001/computerMove/", {
         rackTiles: computerRackTiles,
         boardState,
+        lang,
       })
       .then((res) => {
         if (res.data.pass) {
@@ -129,9 +143,7 @@ const GameScreen = ({
               return true;
             }
           });
-          const returnedBoardState = JSON.parse(
-            JSON.stringify(res.data.boardState)
-          );
+          const returnedBoardState = res.data.boardState;
           const updatedSquaresIndices = res.data.updatedSquares;
           const lettersUsedAgain = res.data.word.split("");
           let tilesUsedCopy = [...tilesUsed];
@@ -233,10 +245,13 @@ const GameScreen = ({
       // game ends if players pass six turns in a row, or pass twice when there are no tiles left in pouch
       // end game
       gameOver();
-      console.log("END GAME");
     }
-    console.log(consecutivePasses);
   }, [consecutivePasses]);
+
+  useEffect(() => {
+    console.log('highestScoringWord:');
+    console.log(highestScoringWord);
+  },[highestScoringWord])
 
   useEffect(() => {
     if (gameMode === "Online") {
@@ -246,9 +261,7 @@ const GameScreen = ({
       });
 
       socket.on("gameEnd", (data) => {
-        console.log(data);
         //redirect to players screen or show who won
-        console.log("the game has ended");
         exitGame();
       });
 
@@ -399,12 +412,13 @@ const GameScreen = ({
 
   const handleClickPass = () => {
     if (currentPlayer !== turn) return;
-    if ( consecutivePasses === 5 ) {
+    if (consecutivePasses === 5) {
       setConfirmMessage({
         type: "pass",
-        message: "This will be the sixth consecutive pass, and will end the game!  Are you sure you want to pass?",
+        message:
+          "This will be the sixth consecutive pass, and will end the game!  Are you sure you want to pass?",
       });
-    } else{
+    } else {
       setConfirmMessage({
         type: "pass",
         message: "Are you sure you want to pass?",
@@ -444,7 +458,9 @@ const GameScreen = ({
           [...tilesToExchange].filter((item) => item.id !== tile.id)
         );
       }
-    } else setSelectedTile(tile);
+    } else {
+      setSelectedTile(tile);
+    }
   };
 
   const handleResign = () => {
@@ -505,11 +521,18 @@ const GameScreen = ({
         (word) => word.newWord === true
       );
       axios
-        .post("http://localhost:4001/verifyWord", { words: newWords })
+        .post("http://localhost:4001/verifyWord", {
+          words: newWords,
+          lang,
+        }) 
         .then((res) => {
           const results = res.data;
           if (Object.values(results).every((val) => val === "true")) {
-            const turnPoints = getTurnPoints(newWords, placedTiles);
+            const [turnPoints, turnHighScore] = getTurnPoints(newWords, placedTiles);
+            if (turnHighScore.points > highestScoringWord.points) {
+              setHighestScoringWord(turnHighScore);
+            }
+            
             const playerPreviousPoints = scores[turn];
             const updatedScores = {
               ...scores,
@@ -555,19 +578,18 @@ const GameScreen = ({
     setConfirmMessage(null);
   };
 
-
   return (
     <Fade className="container__full-height" triggerOnce>
       <div className="gameScreen__wrapper">
-      {viewChat && (
-				<ChatModal
-          gameId={gameData.gameId}
-          currentPlayer={currentPlayer}
-          socket={socket}
-          closeModal={handleClickChat}
-          chatThread={chatThread}
-          setChatThread={setChatThread}
-				/>
+        {viewChat && (
+          <ChatModal
+            gameId={gameData.gameId}
+            currentPlayer={currentPlayer}
+            socket={socket}
+            closeModal={handleClickChat}
+            chatThread={chatThread}
+            setChatThread={setChatThread}
+          />
         )}
         <div className="gameScreen__main">
           <div className="gameScreen__board">
@@ -576,12 +598,14 @@ const GameScreen = ({
               handleClickPlacedTile={handleClickPlacedTile}
               boardState={boardState}
               isDisabled={boardIsDisabled}
+              lang={lang}
             />
             <TileRack
               selectedTile={selectedTile}
               tilesToExchange={tilesToExchange}
               playerRackTiles={playerRackTiles}
               handleClickTile={handleClickTile}
+              lang={lang}
             />
           </div>
           <StatusBar
@@ -631,6 +655,8 @@ const GameScreen = ({
             invitedPlayer={invitedPlayer}
             currentPlayer={currentPlayer}
             scores={scores}
+            highestScoringWord={highestScoringWord}
+            gameMode={gameMode}
             // scoredWords={scoredWords}
             exitGame={exitGame}
           />

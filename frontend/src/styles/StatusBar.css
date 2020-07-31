@@ -51,7 +51,7 @@
 }
 
 .player__active {
-  background: rgb(47, 85, 123);
+  background: rgb(140 150 160); /* rgb(47, 85, 123); */
   color: white;
 }
 
@@ -82,7 +82,7 @@
 }
 
 /* large tablet */
-@media (min-width: 750px) {
+@media (min-width: 850px) {
 
   .statusBar__wrapper {
     order: auto;

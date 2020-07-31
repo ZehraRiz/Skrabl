@@ -7,6 +7,7 @@ const TileRack = ({
   handleClickTile,
   tilesToExchange,
   selectedTile,
+  lang,
 }) => {
   return (
     <div className="tileRack__wrapper">
@@ -19,6 +20,7 @@ const TileRack = ({
               handleClickTile={handleClickTile}
               tilesToExchange={tilesToExchange}
               selectedTile={selectedTile}
+              lang={lang}
             />
           </div>
         ))}

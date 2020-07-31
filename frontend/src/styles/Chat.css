@@ -23,6 +23,7 @@
   list-style: none;
   overflow-y: auto;
   padding: 0.5rem;
+  overflow-wrap: break-word;
 }
 
 .chat__wrapper form {
@@ -51,7 +52,7 @@
 }
 
 /* large tablet */
-@media (min-width: 750px) {
+@media (min-width: 850px) {
   .chat__wrapper {
     position: relative;
     grid-column: 3;
