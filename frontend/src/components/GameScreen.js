@@ -528,7 +528,7 @@ const GameScreen = ({
         }) 
         .then((res) => {
           const results = res.data;
-          /*if (Object.values(results).every((val) => val === "true")) {*/
+          if (Object.values(results).every((val) => val === "true")) {
             const [turnPoints, turnHighScore] = getTurnPoints(newWords, placedTiles);
             if (turnHighScore.points > highestScoringWord.points) {
               setHighestScoringWord(turnHighScore);
@@ -543,10 +543,10 @@ const GameScreen = ({
             nextPlayer(consecutivePasses * -1);
             setPlacedTiles([]);
             return;
-          /*} else {
+          } else {
             setNotification("Don't make up words!");
             return;
-          } */
+          }
         });
       return;
     } else {
