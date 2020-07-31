@@ -481,7 +481,9 @@ const GameScreen = ({
   };
 
   const handleClickExchangeTiles = () => {
-    setBoardIsDisabled(!boardIsDisabled);
+    if (currentPlayer === turn) {
+      setBoardIsDisabled(!boardIsDisabled);
+    }
   };
 
   const handleCancelExchange = () => {
@@ -622,6 +624,7 @@ const GameScreen = ({
             />
           </div>
           <StatusBar
+            pouch={pouch}
             scores={scores}
             user={user}
             invitedPlayer={invitedPlayer}
