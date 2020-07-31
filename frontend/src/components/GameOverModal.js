@@ -37,8 +37,8 @@ const GameOverModal = ({
       <Bounce cascade damping={0.5} className="gameOverModal__content">
         <h2>{result}</h2>
         <h3>Scores</h3>
-        <p>{player}: &nbsp;&nbsp;{scores[0]}pts</p>
-        <p>{opponent}: &nbsp;&nbsp;{scores[1]}pts</p>
+        <p>{player}: &nbsp;&nbsp;{scores[currentPlayer == 1 ? 1 : 0]}pts</p>
+        <p>{opponent}: &nbsp;&nbsp;{scores[currentPlayer == 1 ? 0 : 1]}pts</p>
         <h4>Highest scoring word</h4>
         <p>'{hsw}': &nbsp;&nbsp; {highestScoringWord.points}pts </p>
         <button onClick={exitGame}>OK</button>

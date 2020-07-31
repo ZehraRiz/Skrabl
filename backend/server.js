@@ -27,6 +27,7 @@ server.listen(port, () => console.log(`Listening on port ${port}`));
 
 app.post("/verifyWord", async (req, res) => {
   //*words are objects with word key
+
   const { words, lang } = req.body;
   let wordListToUse;
   if (lang === "en") {
