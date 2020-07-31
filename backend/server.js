@@ -27,6 +27,7 @@ server.listen(port, () => console.log(`Listening on port ${port}`));
 
 app.post("/verifyWord", async (req, res) => {
   //*words are objects with word key
+  
   const { words, lang } = req.body;
   let wordListToUse;
   if (lang === "en") {
@@ -37,9 +38,9 @@ app.post("/verifyWord", async (req, res) => {
     wordListToUse = "./french.txt";
   }
   const results = {};
-  words.forEach((wordObj) => {
+  words.forEach((wordObj) => { 
     const fileContent = fs.readFileSync(wordListToUse);
-    const regex = new RegExp("\\n" + wordObj.word + "\\n");
+    const regex = new RegExp("\\W" + wordObj.word + "\\W");
     if (regex.test(fileContent)) {
       results[wordObj.word] = "true";
     } else {
