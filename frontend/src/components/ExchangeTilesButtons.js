@@ -7,11 +7,17 @@ const ExchangeTilesButtons = ({
 }) => {
   return (
     <div className="gameButtons__wrapper">
-      <button className="button__cancel" onClick={handleCancelExchange}>
-        Cancel
+      <button
+        className="button__cancel"
+        onClick={handleCancelExchange}
+      >
+        <div className="button__text">Cancel</div>
       </button>
-      <button className="button__confirm" onClick={handleConfirmExchange}>
-        Confirm
+      <button
+        className="button__confirm"
+        onClick={handleConfirmExchange}
+      >
+        <div className="button__text">Confirm</div>
       </button>
     </div>
   );
