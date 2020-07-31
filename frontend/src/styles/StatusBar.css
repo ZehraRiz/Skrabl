@@ -1,11 +1,14 @@
 /* mobile */
 
-.statusBar__wrapper {  
+.statusBar__frame {
   order: -1;
+}
+
+.statusBar__wrapper {
   display: flex;
   align-items: center;
-  font-size: .8em;
-  padding: 0.5em .5em;
+  font-size: 0.8em;
+  padding: 0.5em 0.5em;
   justify-content: space-around;
   flex-direction: column;
   background: rgb(223, 222, 220);
@@ -15,8 +18,44 @@
   -ms-border-radius: 3px;
   -o-border-radius: 3px;
   width: 100%;
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.5);
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3),
+    inset 0 -2px 2px rgba(0, 0, 0, 0.3);
   color: #222;
+  transform: rotateY(0.01deg);
+  transform-style: preserve-3d;
+  transition: transform 0.5s ease, box-shadow 0.5s ease;
+  -webkit-transition: transform 0.5s ease, box-shadow 0.5s ease;
+  -moz-transition: transform 0.5s ease, box-shadow 0.5s ease;
+  -ms-transition: transform 0.5s ease, box-shadow 0.5s ease;
+  -o-transition: transform 0.5s ease, box-shadow 0.5s ease;
+  position: relative;
+  -webkit-transform: rotateY(0.01deg);
+  -moz-transform: rotateY(0.01deg);
+  -ms-transform: rotateY(0.01deg);
+  -o-transform: rotateY(0.01deg);
+}
+
+.statusBar__reverse {
+  display: flex;
+  align-items: center;
+  font-size: 0.8em;
+  padding: 0.5em 0.5em;
+  justify-content: space-around;
+  flex-direction: column;
+  content: "";
+  background: rgb(240, 240, 240);
+  transform: rotateX(180deg);
+  -webkit-transform: rotateX(180deg);
+  -moz-transform: rotateX(180deg);
+  -ms-transform: rotateX(180deg);
+  -o-transform: rotateX(180deg);
+  position: absolute;
+  border-radius: 3px;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  box-shadow: inset 0 -2px 2px rgba(0, 0, 0, 0.3);
 }
 
 .statusBar__wrapper button {
@@ -35,19 +74,20 @@
   width: 100%;
   padding: 10px;
   height: 50%;
+
+  /*box-shadow: inset 0 0px 8px rgba(0,0,0,0.1);
+  */
 }
 
 .player__name {
   min-width: 100px;
 }
 
-
 .player__time {
   min-width: 100px;
 }
 
 .timer__wrapper {
- 
 }
 
 .player__active {
@@ -60,43 +100,63 @@
   color: white;
 }
 
+.pouchInfo {
+  display: flex;
+  justify-content: center;
+}
 
+.pouchIcon {
+  margin: -0.5em 0 0 1em;
+  width: 2.5em;
+  height: auto;
+  filter: drop-shadow( 0 2px 2px rgba(0, 0, 0, 0.2));
+  -webkit-filter: drop-shadow( 0 2px 2px rgba(0, 0, 0, 0.2));
+}
+
+.statusBar__frame:hover .statusBar__wrapper {
+  transform: rotateX(-180deg);
+  -webkit-transform: rotateX(-180deg);
+  -moz-transform: rotateX(-180deg);
+  -ms-transform: rotateX(-180deg);
+  -o-transform: rotateX(-180deg);
+  box-shadow: 0px -2px 5px rgba(0, 0, 0, 0.3),
+    inset 0 -2px 2px rgba(0, 0, 0, 0.3);
+}
 
 /* tablet */
 @media (min-height: 750px) {
-  
-  .statusBar__wrapper{
+  .statusBar__wrapper {
     font-size: 1em;
-    padding: 0.5em .5em;
+    padding: 0.5em 0.5em;
   }
- 
 }
 
 @media (min-height: 800px) {
-  
-  .statusBar__wrapper{
+  .statusBar__wrapper {
     font-size: 1.2em;
-    
   }
- 
 }
 
 /* large tablet */
 @media (min-width: 850px) {
+  .statusBar__frame {
+    order: -1;
+    grid-row: 1/3;
+    grid-column: 1;
+  }
 
   .statusBar__wrapper {
     order: auto;
-    grid-row: 1/3;
-    grid-column: 1;
     align-self: flex-start;
     height: 39%;
     margin-top: 3%;
     font-size: 1em;
-    padding: 0.5em .5em;
+    padding: 0.5em 0.5em;
   }
   .statusBar__player {
     flex-direction: column;
     padding-bottom: 20px;
+    padding-left: 1em;
   }
 
   .player__name {
@@ -104,10 +164,54 @@
     font-size: 1.5em;
   }
 
-  .player__time, .player__score {
+  .player__time,
+  .player__score {
     margin-left: 1em;
   }
 
+  .statusBar__frame:hover .statusBar__wrapper {
+    transform: rotateY(-180deg);
+    -webkit-transform: rotateY(-180deg);
+    -moz-transform: rotateY(-180deg);
+    -ms-transform: rotateY(-180deg);
+    -o-transform: rotateY(-180deg);
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3),
+      inset 0 0px 2px rgba(0, 0, 0, 0.3);
+  }
+
+  .statusBar__reverse {
+    transform: rotateY(180deg);
+    -webkit-transform: rotateY(180deg);
+    -moz-transform: rotateY(180deg);
+    -ms-transform: rotateY(180deg);
+    -o-transform: rotateY(180deg);
+    position: absolute;
+    border-radius: 3px;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    box-shadow: inset 0 -2px 2px rgba(0, 0, 0, 0.3);
+  }
+
+  .pouchInfo {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    max-width: 6em;
+  }
+
+  .pouchInfo h2 {
+    text-align: center;
+  }
+  
+  .pouchIcon {
+    margin: 1em 0;
+    width: 2.5em;
+    height: auto;
+    filter: drop-shadow( 0 2px 2px rgba(0, 0, 0, 0.2));
+    -webkit-filter: drop-shadow( 0 2px 2px rgba(0, 0, 0, 0.2));
+  }
 }
 
 /* laptop */

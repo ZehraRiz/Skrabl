@@ -260,11 +260,6 @@ const GameScreen = ({
   }, [consecutivePasses]);
 
   useEffect(() => {
-    console.log("highestScoringWord:");
-    console.log(highestScoringWord);
-  }, [highestScoringWord]);
-
-  useEffect(() => {
     if (gameMode === "Online") {
       socket.on("sendingTiles", (data) => {
         setPlayerRackTiles([...playerRackTiles, ...data]);
@@ -481,7 +476,9 @@ const GameScreen = ({
   };
 
   const handleClickExchangeTiles = () => {
-    setBoardIsDisabled(!boardIsDisabled);
+    if (currentPlayer === turn) {
+      setBoardIsDisabled(!boardIsDisabled);
+    }
   };
 
   const handleCancelExchange = () => {
@@ -533,8 +530,6 @@ const GameScreen = ({
         })
         .then((res) => {
           const results = res.data;
-          console.log('res.data');
-          console.log(res.data, lang);
           if (Object.values(results).every((val) => val === "true")) {
             const [turnPoints, turnHighScore] = getTurnPoints(
               newWords,
@@ -619,9 +614,11 @@ const GameScreen = ({
               playerRackTiles={playerRackTiles}
               handleClickTile={handleClickTile}
               lang={lang}
+              turn={turn}
             />
           </div>
           <StatusBar
+            pouch={pouch}
             scores={scores}
             user={user}
             invitedPlayer={invitedPlayer}

@@ -2,7 +2,7 @@ import React from "react";
 import "../styles/Tile.css";
 
 const Tile = React.memo(
-  ({ tile, handleClickTile, tilesToExchange, selectedTile, lang }) => {
+  ({ tile, handleClickTile, tilesToExchange, selectedTile, lang, turn }) => {
     const tileSelected =
       tilesToExchange.filter((item) => item.id === tile.id).length > 0 ||
       selectedTile === tile
@@ -36,7 +36,10 @@ const Tile = React.memo(
     );
   },
   (prevProps, nextProps) => {
-    if (prevProps.tile.id === nextProps.tile.id) {
+    if (
+      prevProps.tile.id === nextProps.tile.id &&
+      prevProps.turn === nextProps.turn
+    ) {
       return true; // props are equal
     }
     return false; // props are not equal -> update the component
