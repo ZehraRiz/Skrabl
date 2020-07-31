@@ -217,8 +217,8 @@ const GameScreen = ({
       setGameIsOver(false);
       setPlayerRackTiles([]);
       setBoardState([]);
-      setTimeLeftPlayer(null);
-      setTimeLeftOpponent(null);
+      setTimeLeftPlayer(20);
+      setTimeLeftOpponent(20);
       setScores({ 0: 0, 1: 0 });
       setTurn(0);
       setConsecutivePasses(null);
