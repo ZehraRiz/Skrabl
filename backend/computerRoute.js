@@ -200,7 +200,18 @@ router.post("/", (req, res) => {
     isFirstMove = true;
     //if first word, place one tile from rack in middle so rest of code can function like normal
     firstRackTile = rackTiles[0];
-    wordsOnBoard = [[{ index: 112, row: 7, col: 7, tile: firstRackTile }]];
+    wordsOnBoard = [
+      [
+        {
+          index: 112,
+          row: 7,
+          col: 7,
+          letterMultiplier: 1,
+          wordMultiplier: 1,
+          tile: firstRackTile,
+        },
+      ],
+    ];
   }
   const possibleWords = generateWords(
     wordsOnBoard,
