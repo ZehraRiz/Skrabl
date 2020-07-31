@@ -17,7 +17,7 @@ const generateWords = (wordsOnBoard, rackTiles, lang, boardState) => {
       dirs = ["x"];
     }
     const wordString = wordArray.map((square) => square.tile.letter).join("");
-    const regexString = `.*${wordString}.*`;
+    const regexString = `(?<=,)[^,]*${wordString}[^,]*(?=,)`;
     const regExp = new RegExp(regexString, "gi");
     let wordListToUse;
     if (lang === "en") {
@@ -120,11 +120,11 @@ const generateWords = (wordsOnBoard, rackTiles, lang, boardState) => {
             placement[squareIndex] = lettersAfter[i];
           }
           canFit = true;
-          //check whether placement will result in any non-valid words on the board
           const rackTilesCopy = [...rackTiles];
-          //place tiles in temporary board array
+          //create new version of board state with tiles of word inserted
           const newBoardState = boardState.map((square) => {
             if (squaresToUseIndices.includes(square.index)) {
+              //get first tile with same letter from rack and insert
               const index = rackTilesCopy.findIndex(
                 (tile) => tile.letter === placement[square.index]
               );
@@ -169,7 +169,7 @@ const allWordsAreValid = (boardState, lang) => {
   for (let i = 0; i < allWordsString.length; i++) {
     const word = allWordsString[i];
     const wordsBig = fs.readFileSync(wordListToUse);
-    const regex = new RegExp("\\n" + word + "\\n");
+    const regex = new RegExp("," + word + ",");
     if (regex.test(wordsBig)) {
     } else {
       return false;
@@ -191,15 +191,17 @@ const squaresAreOccupied = (indices, boardState) => {
 };
 
 router.post("/", (req, res) => {
-  const { rackTiles, boardState, lang } = req.body;
+  let { rackTiles, boardState, lang, level } = req.body;
   let wordsOnBoard;
   let isFirstMove;
   let firstRackTile;
+  let wordToPlay;
   wordsOnBoard = getWordsOnBoard(boardState, true);
   if (!wordsOnBoard.length) {
     isFirstMove = true;
-    //if first word, place one tile from rack in middle so rest of code can function like normal
+    //if first word, take one tile from rack and place on centre square so rest of code can function same as usual
     firstRackTile = rackTiles[0];
+    rackTiles.splice(0, 1);
     wordsOnBoard = [
       [
         {
@@ -219,26 +221,34 @@ router.post("/", (req, res) => {
     lang,
     boardState
   );
-
   if (!possibleWords.length) {
-    const res = { pass: true };
-    return res;
+    res.status(200).send({ pass: true });
   } else {
-    const longestWord = possibleWords.sort(
-      (a, b) => b.word.length - a.word.length
-    )[0];
+    const possibleWordsOrdered = possibleWords.sort(
+      (a, b) => a.word.length - b.word.length
+    );
+    if (level === "easy") {
+      const lowIndex = Math.floor(possibleWordsOrdered.length / 4);
+      wordToPlay = possibleWordsOrdered[lowIndex];
+    } else if (level === "normal") {
+      const middleIndex = Math.floor(possibleWordsOrdered.length / 2);
+      wordToPlay = possibleWordsOrdered[middleIndex];
+    } else {
+      wordToPlay = possibleWordsOrdered[possibleWordsOrdered.length - 1];
+    }
+
     //make sure tile on centre square is actually a part of the new word
     if (isFirstMove) {
-      longestWord.boardState = longestWord.boardState.map((square) => {
+      wordToPlay.boardState = wordToPlay.boardState.map((square) => {
         if (square.index === 112) {
           return { ...square, tile: firstRackTile };
         } else {
           return square;
         }
       });
-      longestWord.updatedSquares.push(112);
+      wordToPlay.updatedSquares.push(112);
     }
-    res.status(200).send(longestWord);
+    res.status(200).send(wordToPlay);
   }
 });
 
