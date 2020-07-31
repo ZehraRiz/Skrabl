@@ -3,42 +3,42 @@ const router = express.Router();
 const fs = require("fs");
 const getWordsOnBoard = require("./getWordsOnBoard");
 
-const findExtenderWords = (wordsOnBoardArrays, rackTiles, lang) => {
+const generateWords = (wordsOnBoard, rackTiles, lang, boardState) => {
   const rackLetters = rackTiles.map((tile) => tile.letter);
-  const extenderWords = [];
-  wordsOnBoardArrays.forEach((wordOnBoard) => {
+  const possibleWords = [];
+  wordsOnBoard.forEach((wordArray) => {
     let dirs;
     //if only one square
-    if (!wordOnBoard[1]) {
+    if (!wordArray[1]) {
       dirs = ["x", "y"];
-    } else if (wordOnBoard[0].row < wordOnBoard[1].row) {
+    } else if (wordArray[0].row < wordArray[1].row) {
       dirs = ["y"];
     } else {
       dirs = ["x"];
     }
-    const wordString = wordOnBoard.map((square) => square.tile.letter).join("");
+    const wordString = wordArray.map((square) => square.tile.letter).join("");
     const regexString = `.*${wordString}.*`;
     const regExp = new RegExp(regexString, "gi");
     let wordListToUse;
     if (lang === "en") {
-      wordListToUse = "./wordsSmall.txt";
+      wordListToUse = "./englishSmall.txt";
     } else if (lang === "tr") {
       wordListToUse = "./turkish.txt";
     } else if (lang === "fr") {
       wordListToUse = "./french.txt";
     }
     const wordList = fs.readFileSync(wordListToUse, "utf8");
-    const longerWords = wordList.match(regExp);
-    if (longerWords && longerWords.length > 0) {
-      longerWords.forEach((longerWord) => {
-        let canExtend = false;
-        //loop over longer word and remove letters that are already on board
-        const index = longerWord.search(wordString);
-        const lettersBefore = longerWord.substr(0, index);
-        const lettersAfter = longerWord.substr(index + wordString.length);
+    const words = wordList.match(regExp);
+    if (words && words.length > 0) {
+      words.forEach((word) => {
+        let canFit = false;
+        //loop over word and remove letters that are already on board
+        const index = word.search(wordString);
+        const lettersBefore = word.substr(0, index);
+        const lettersAfter = word.substr(index + wordString.length);
         const remainingLetters = lettersBefore + lettersAfter;
         if (!remainingLetters.length) return;
-        //check if you have the required letters to create the longer word
+        //check if you have the required letters to create the word
         rackLettersToCheck = [...rackLetters];
         for (let i = 0; i < remainingLetters.length; i++) {
           if (!rackLettersToCheck.includes(remainingLetters[i])) {
@@ -50,22 +50,22 @@ const findExtenderWords = (wordsOnBoardArrays, rackTiles, lang) => {
             );
           }
         }
-
         dirs.forEach((dir) => {
           const max = 14;
           const min = 0;
           const propToCheck = dir === "x" ? "col" : "row";
           if (
-            lettersAfter.length +
-              wordOnBoard[wordOnBoard.length - 1][propToCheck] >
+            lettersAfter.length + wordArray[wordArray.length - 1][propToCheck] >
               max ||
-            wordOnBoard[0][propToCheck] - lettersBefore.length < min
+            wordArray[0][propToCheck] - lettersBefore.length < min
           ) {
-            canExtend = false;
+            canFit = false;
             return;
           }
+
           //get placement info (which letters need to go on which squares)
           const placement = {};
+          const squaresToUseIndices = [];
           let step;
           dir === "x" ? (step = 1) : (step = 15);
           //first part of word
@@ -79,11 +79,18 @@ const findExtenderWords = (wordsOnBoardArrays, rackTiles, lang) => {
               toSubtract = lettersBefore.length * toSubtract;
               toSubtract = toSubtract - i * 15;
             }
-            const squareIndex = wordOnBoard[0].index - toSubtract;
+            const squareIndex = wordArray[0].index - toSubtract;
             if (squareIndex < 0) {
-              canExtend = false;
+              canFit = false;
               return;
             }
+            //check if square is unoccupied
+            const isOccupied = squaresAreOccupied([squareIndex], boardState);
+            if (isOccupied) {
+              canFit = false;
+              return;
+            }
+            squaresToUseIndices.push(squareIndex);
             placement[squareIndex] = lettersBefore[i];
           }
           //second part of word
@@ -98,30 +105,56 @@ const findExtenderWords = (wordsOnBoardArrays, rackTiles, lang) => {
               iPlusOne = i + 1;
               toAdd = toAdd * iPlusOne;
             }
-            const squareIndex =
-              wordOnBoard[wordOnBoard.length - 1].index + toAdd;
+            const squareIndex = wordArray[wordArray.length - 1].index + toAdd;
             if (squareIndex > 224) {
-              canExtend = false;
+              canFit = false;
               return;
             }
+            //check if square is unoccupied
+            const isOccupied = squaresAreOccupied([squareIndex], boardState);
+            if (isOccupied) {
+              canFit = false;
+              return;
+            }
+            squaresToUseIndices.push(squareIndex);
             placement[squareIndex] = lettersAfter[i];
           }
-          canExtend = true;
-          const extenderWord = {
-            word: longerWord,
-            placement,
-          };
-          extenderWords.push(extenderWord);
+          canFit = true;
+          //check whether placement will result in any non-valid words on the board
+          const rackTilesCopy = [...rackTiles];
+          //place tiles in temporary board array
+          const newBoardState = boardState.map((square) => {
+            if (squaresToUseIndices.includes(square.index)) {
+              const index = rackTilesCopy.findIndex(
+                (tile) => tile.letter === placement[square.index]
+              );
+              const tileToPlace = rackTilesCopy[index];
+              rackTilesCopy.splice(index, 1);
+              return { ...square, tile: tileToPlace };
+            } else {
+              return square;
+            }
+          });
+          //check all words on updated board
+          const moveIsValid = allWordsAreValid(newBoardState, lang);
+          if (moveIsValid) {
+            const possibleWord = {
+              word,
+              boardState: newBoardState,
+              updatedSquares: squaresToUseIndices,
+            };
+            possibleWords.push(possibleWord);
+          }
         });
       });
     }
   });
-  return extenderWords;
+  return possibleWords;
 };
 
 const allWordsAreValid = async (boardState, lang) => {
   if (lang === "en") {
-    wordListToUse = "./wordsBig.txt";
+    wordListToUse = "./englishBig.txt";
   } else if (lang === "tr") {
     wordListToUse = "./turkish.txt";
   } else if (lang == "fr") {
@@ -142,7 +175,6 @@ const allWordsAreValid = async (boardState, lang) => {
       return false;
     }
   }
-
   return true;
 };
 
@@ -158,65 +190,23 @@ const squaresAreOccupied = (indices, boardState) => {
   return false;
 };
 
-const tryToPlaceWord = async (words, boardState, rackTiles, lang) => {
-  const wordsOrderedByLength = words.sort(
-    (a, b) => b.word.length - a.word.length
-  );
-  let res = {};
-  for (let i = 0; i < wordsOrderedByLength.length; i++) {
-    const wordObj = wordsOrderedByLength[i];
-    const squaresToUseIndices = Object.keys(wordObj.placement).map((num) =>
-      Number(num)
-    );
-    //check if required squares are free
-    const areOccupied = squaresAreOccupied(squaresToUseIndices, boardState);
-    if (areOccupied) {
-      continue;
-    }
-    const rackTilesCopy = [...rackTiles];
-    //place tiles in temporary board array
-    newBoardState = boardState.map((square) => {
-      if (squaresToUseIndices.includes(square.index)) {
-        const index = rackTilesCopy.findIndex(
-          (tile) => tile.letter === wordObj.placement[square.index]
-        );
-        const tileToPlace = rackTilesCopy[index];
-        rackTilesCopy.splice(index, 1);
-        return { ...square, tile: tileToPlace };
-      } else {
-        return square;
-      }
-    });
-    //check if move is valid
-    const moveIsValid = await allWordsAreValid(newBoardState, lang);
-    if (moveIsValid) {
-      //confirm placement by sending back board state
-      res.word = wordObj.word;
-      res.boardState = newBoardState;
-      res.updatedSquares = squaresToUseIndices;
-      return res;
-    }
-  }
-  return res;
-};
-
 const makeMove = async (rackTiles, boardState, lang) => {
-  const wordsOnBoardArrays = getWordsOnBoard(boardState, true);
-  const possibleWords = findExtenderWords(wordsOnBoardArrays, rackTiles, lang);
+  const wordsOnBoard = getWordsOnBoard(boardState, true);
+  const possibleWords = generateWords(
+    wordsOnBoard,
+    rackTiles,
+    lang,
+    boardState
+  );
   if (!possibleWords.length) {
     const res = { pass: true };
     return res;
-  }
-  try {
-    let res = await tryToPlaceWord(possibleWords, boardState, rackTiles, lang);
-    if (res.boardState) {
-      return res;
-    } else {
-      const res = { pass: true };
-      return res;
-    }
-  } catch (err) {
-    console.log(err);
+  } else {
+    const wordsOrderedByLength = possibleWords.sort(
+      (a, b) => b.word.length - a.word.length
+    );
+    const longestWord = wordsOrderedByLength[0];
+    return longestWord;
   }
 };
 
