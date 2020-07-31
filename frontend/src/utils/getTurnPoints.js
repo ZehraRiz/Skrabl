@@ -1,6 +1,6 @@
 export const getTurnPoints = (newWords, placedTiles) => {
   let newPoints = 0;
-  let turnHighScore = {word: '', points: 0};
+  let turnHighScore = { word: "", points: 0 };
   newWords.forEach((wordObj) => {
     let wordMultipliers = [];
     let wordPoints = wordObj.squares.reduce((total, square) => {
@@ -19,12 +19,11 @@ export const getTurnPoints = (newWords, placedTiles) => {
       });
     }
     if (wordPoints > turnHighScore.points) {
-      turnHighScore = {word: wordObj.word, points: wordPoints}
-      console.log('wordObj.word:');
+      turnHighScore = { word: wordObj.word, points: wordPoints };
+      console.log("wordObj.word:");
       console.log(wordObj.word);
-    } 
+    }
     newPoints += wordPoints;
   });
   return [newPoints, turnHighScore];
 };
- 

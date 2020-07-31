@@ -42,7 +42,10 @@ const GameScreen = ({
   const [timeLeftPlayer, setTimeLeftPlayer] = useState(null);
   const [timeLeftOpponent, setTimeLeftOpponent] = useState(null);
   const [scores, setScores] = useState(null);
-  const [highestScoringWord, setHighestScoringWord] = useState({word: '', points: 0});
+  const [highestScoringWord, setHighestScoringWord] = useState({
+    word: "",
+    points: 0,
+  });
   const [turn, setTurn] = useState(null);
   const [tilesToExchange, setTilesToExchange] = useState([]);
   const [boardIsDisabled, setBoardIsDisabled] = useState(false);
@@ -249,9 +252,9 @@ const GameScreen = ({
   }, [consecutivePasses]);
 
   useEffect(() => {
-    console.log('highestScoringWord:');
+    console.log("highestScoringWord:");
     console.log(highestScoringWord);
-  },[highestScoringWord])
+  }, [highestScoringWord]);
 
   useEffect(() => {
     if (gameMode === "Online") {
@@ -519,15 +522,18 @@ const GameScreen = ({
         .post("http://localhost:4001/verifyWord", {
           words: newWords,
           lang,
-        }) 
+        })
         .then((res) => {
           const results = res.data;
           if (Object.values(results).every((val) => val === "true")) {
-            const [turnPoints, turnHighScore] = getTurnPoints(newWords, placedTiles);
+            const [turnPoints, turnHighScore] = getTurnPoints(
+              newWords,
+              placedTiles
+            );
             if (turnHighScore.points > highestScoringWord.points) {
               setHighestScoringWord(turnHighScore);
             }
-            
+
             const playerPreviousPoints = scores[turn];
             const updatedScores = {
               ...scores,
