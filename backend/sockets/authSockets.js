@@ -1,37 +1,29 @@
-const {
-  gameJoin,
-  setGamePlayer1,
-  setGamePlayer2,
-  getAllGames,
-  playerDisconnectFromGame,
-  removeGame,
-  isPlayerInGame,
-  findGame,
-  getPlayerNumber,
-} = require("../utils/games.js");
+const { findGame} = require("../store/games.js");
 const { findRegisteredUser, setRegisteredUser, getAllRegisteredUsers, addUserSession, deleteSocket, switchGameSocket } = require("../store/registeredUsers");
-const ONLINE_SOCKETS = "onlineSockets"
-
-
+const {userLoginSocketSetup} = require("../utils/rooms.js")
+const ONLINE_SOCKETS = "ONLINE_SOCKETs"
+const EN_ROOM = "EN_ROOM"
+const DE_ROOM = "DE_ROOM"
+const FR_ROOM = "FR_ROOM"
+const TR_ROOM = "TR_ROOM"
 
 module.exports.listen = function (io, socket) {
   
 //USER LOGIN WITH A USERNAME
-	socket.on("username", (username) => {
-		if (username === "") {
+	socket.on("username", ({name, lang}) => {
+		if (name === "") {
 			//validation needs to be improved
 			socket.emit("usernameError", "please enter a valid username");
     } else {
-			const registeredUser = setRegisteredUser(Math.random(1 - 100), username, [socket.id]);
-			socket.join(ONLINE_SOCKETS);
+			const registeredUser = setRegisteredUser(Math.random(1 - 100), name, [socket.id], lang);
 			socket.emit("usernameRegistered", {
 				token: registeredUser.token,
 				msg: "you are a registered player now",
 				user: registeredUser,
 				allOnlineUsers: getAllRegisteredUsers()
 			});
-			console.log(`${registeredUser.name} has joined the lobby`);
-			socket.broadcast.to(ONLINE_SOCKETS).emit("welcomeNewUser", registeredUser);
+			userLoginSocketSetup(socket, registeredUser)
+			console.log(`${registeredUser.name} has joined the ${registeredUser.lang} lobby`);
 		}
   });
   

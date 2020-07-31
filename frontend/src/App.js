@@ -113,6 +113,7 @@ const App = () => {
           setInviteSent={setInviteSent}
           setCurrentPlayer={setCurrentPlayer}
           setGameData={setGameData}
+          lang= {lang}
         />
       )}
       {currentComponent === "Players" && (

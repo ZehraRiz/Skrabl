@@ -1,5 +1,20 @@
 const registeredUsers = [];
 
+
+function setRegisteredUser(token, name, currentSessions, lang = "en") {
+	const registeredUser = {
+		token: token,
+		name: name,
+		currentSessions: currentSessions,
+		socketWithGame: "",
+		gameId: "",
+		lang: lang
+	};
+	registeredUsers.push(registeredUser);
+	return registeredUser;
+}
+
+
 function findRegisteredUser(token) {
 	return registeredUsers.find((user) => user.token == token);
 }
@@ -37,23 +52,10 @@ function setUserGame(token, gameId) {
 	return userToUpdate
 }
 
-
-
 function getAllRegisteredUsers() {
 	return registeredUsers;
 }
 
-function setRegisteredUser(token, name, currentSessions) {
-	const registeredUser = {
-		token: token,
-		name: name,
-		currentSessions: currentSessions,
-		socketWithGame: "",
-		gameId: ""
-	};
-	registeredUsers.push(registeredUser);
-	return registeredUser;
-}
 
 function setGameSocket(token, socketId) {
 	let updatedUser;

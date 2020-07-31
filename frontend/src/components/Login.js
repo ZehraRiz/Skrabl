@@ -12,6 +12,7 @@ const Login = ({
   setInviteSent,
   setCurrentPlayer,
   setGameData,
+  lang
 }) => {
   useEffect(() => {
     const userIdFromLS = localStorage.getItem("token");
@@ -62,7 +63,7 @@ const Login = ({
   const handleLogin = (e) => {
     e.preventDefault();
     const name = e.target.name.value;
-    socket.emit("username", name);
+    socket.emit("username", {name, lang});
     socket.on("usernameError", (data) => {
       console.log(data);
       return;

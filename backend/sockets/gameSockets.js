@@ -1,10 +1,4 @@
 const {
-  userJoin,
-  getCurrentUser,
-  userLeave,
-  getRoomUsers,
-} = require("../utils/users.js");
-const {
   gameJoin,
   setGamePlayer1,
   setGamePlayer2,
@@ -15,7 +9,7 @@ const {
   findGame,
   player2Accepted,
   getPlayerNumber,
-} = require("../utils/games.js");
+} = require("../store/games.js");
 const {
   findRegisteredUser,
   setUserGame,
