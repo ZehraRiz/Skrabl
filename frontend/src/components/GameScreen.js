@@ -93,6 +93,10 @@ const GameScreen = ({
     //not sure best way to check that it's the start of the game
     //this solution is not ideal as each lang has diff num tiles
     if (gameMode === "Computer") {
+      console.log("Pouch has changed");
+      console.log("POUCH LENGTH: " + pouch.length);
+      console.log("POUCH");
+      console.log(pouch);
       if (lang === "en" || lang === "tr") {
         if (turn === 0 && pouch.length === 100) {
           getTiles();
@@ -143,7 +147,9 @@ const GameScreen = ({
               return true;
             }
           });
-          const returnedBoardState = res.data.boardState;
+          const returnedBoardState = JSON.parse(
+            JSON.stringify(res.data.boardState)
+          );
           const updatedSquaresIndices = res.data.updatedSquares;
           const lettersUsedAgain = res.data.word.split("");
           let tilesUsedCopy = [...tilesUsed];
@@ -172,7 +178,7 @@ const GameScreen = ({
               returnedBoardState,
               tilesUsed
             ).filter((word) => word.newWord === true);
-            const turnPoints = getTurnPoints(newWords, tilesUsed);
+            const [turnPoints, turnHighScore] = getTurnPoints(newWords, tilesUsed);
             const playerPreviousPoints = scores[turn];
             const updatedScores = {
               ...scores,
@@ -522,7 +528,7 @@ const GameScreen = ({
         }) 
         .then((res) => {
           const results = res.data;
-          if (Object.values(results).every((val) => val === "true")) {
+          //if (Object.values(results).every((val) => val === "true")) {
             const [turnPoints, turnHighScore] = getTurnPoints(newWords, placedTiles);
             if (turnHighScore.points > highestScoringWord.points) {
               setHighestScoringWord(turnHighScore);
@@ -537,10 +543,10 @@ const GameScreen = ({
             nextPlayer(consecutivePasses * -1);
             setPlacedTiles([]);
             return;
-          } else {
-            setNotification("Don't make up words!");
-            return;
-          }
+          //} else {
+           // setNotification("Don't make up words!");
+           // return;
+          //}
         });
       return;
     } else {
