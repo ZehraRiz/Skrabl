@@ -282,7 +282,7 @@ const GameScreen = ({
         getComputerTiles();
       }
     }
-  }, [playerRackTiles]);
+  }, [playerRackTiles, confirmMessage]);
 
   const getBoard = () => {
     const squares = generateBoardSquares(bonusSquareIndices);
