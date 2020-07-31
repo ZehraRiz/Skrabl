@@ -27,6 +27,7 @@ const App = () => {
   const [viewRules, setViewRules] = useState(false);
   const [viewChat, setViewChat] = useState(false);
   const [lang, setLang] = useState("en");
+  const [level, setLevel] = useState("easy");
 
   useEffect(() => {
     if (gameMode === "Computer") {
@@ -77,7 +78,6 @@ const App = () => {
     setLang("tr");
   };
 
-
   return (
     <div className="page">
       {currentComponent !== "TitleScreen" && (
@@ -98,7 +98,6 @@ const App = () => {
           setLangFr={setLangFr}
           setLangDe={setLangDe}
           setLangTr={setLangTr}
-
         />
       )}
       {currentComponent === "Login" && (
@@ -158,6 +157,8 @@ const App = () => {
           socket={socket}
           gameMode={gameMode}
           lang={lang}
+          level={level}
+          setGameMode={setGameMode}
         />
       )}
       {currentComponent === "UserBusy" && <UserBusy socket={socket} />}

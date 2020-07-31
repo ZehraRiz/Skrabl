@@ -31,6 +31,8 @@ const GameScreen = ({
   handleClickChat,
   viewChat,
   lang,
+  setGameMode,
+  level,
 }) => {
   const [selectedTile, setSelectedTile] = useState(null);
   const [selectedSquareIndex, setSelectedSquareIndex] = useState(null);
@@ -96,10 +98,6 @@ const GameScreen = ({
     //not sure best way to check that it's the start of the game
     //this solution is not ideal as each lang has diff num tiles
     if (gameMode === "Computer") {
-      console.log("Pouch has changed");
-      console.log("POUCH LENGTH: " + pouch.length);
-      console.log("POUCH");
-      console.log(pouch);
       if (lang === "en" || lang === "tr") {
         if (turn === 0 && pouch.length === 100) {
           getTiles();
@@ -132,6 +130,7 @@ const GameScreen = ({
         rackTiles: computerRackTiles,
         boardState,
         lang,
+        level,
       })
       .then((res) => {
         if (res.data.pass) {
@@ -181,7 +180,10 @@ const GameScreen = ({
               returnedBoardState,
               tilesUsed
             ).filter((word) => word.newWord === true);
-            const [turnPoints, turnHighScore] = getTurnPoints(newWords, tilesUsed);
+            const [turnPoints, turnHighScore] = getTurnPoints(
+              newWords,
+              tilesUsed
+            );
             const playerPreviousPoints = scores[turn];
             const updatedScores = {
               ...scores,
@@ -585,6 +587,7 @@ const GameScreen = ({
       setCurrentComponent("Players");
     }
     if (gameMode === "Computer") {
+      setGameMode(null);
       setCurrentComponent("WelcomeScreen");
     }
   };
