@@ -5,7 +5,7 @@
     right: 0;
     bottom: 0;
     left: 0;
-    background-color:var(--bg-modal-wrap);
+    background-color: rgba(0, 0, 0, 0.8);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -16,7 +16,6 @@
   .chatModal__content {
     width: 90%;
     background-color: white;
-    background: var(--bg-modal);
     padding: 1rem;
     min-height: 200px;
     border-radius: 6px;
@@ -76,6 +75,7 @@
   @media (min-width:750px) {
     .chatModal__content {
         width: 75%;
+        background-color: white;
         padding: 2rem;
         font-size: 1em;
       }
