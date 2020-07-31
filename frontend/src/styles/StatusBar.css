@@ -141,7 +141,7 @@
 
 .aiRack {
   display: flex;
-
+  min-height: 2.2em;
 }
 
 .statusBar__frame:hover .statusBar__wrapper {

@@ -19,7 +19,7 @@ const StatusBar = ({
   gameMode,
 }) => {
   const aiTiles = computerRackTiles.map(tile => {
-    return <div className="aiTile">{tile.letter.toUpperCase()}</div>
+    return <div key={tile.id} className="aiTile">{tile.letter.toUpperCase()}</div>
   });
   return (
     <div className="statusBar__frame">
