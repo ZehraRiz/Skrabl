@@ -152,7 +152,7 @@ const generateWords = (wordsOnBoard, rackTiles, lang, boardState) => {
   return possibleWords;
 };
 
-const allWordsAreValid = async (boardState, lang) => {
+const allWordsAreValid = (boardState, lang) => {
   if (lang === "en") {
     wordListToUse = "./englishBig.txt";
   } else if (lang === "tr") {
@@ -190,34 +190,55 @@ const squaresAreOccupied = (indices, boardState) => {
   return false;
 };
 
-const makeMove = async (rackTiles, boardState, lang) => {
-  const wordsOnBoard = getWordsOnBoard(boardState, true);
+router.post("/", (req, res) => {
+  const { rackTiles, boardState, lang } = req.body;
+  let wordsOnBoard;
+  let isFirstMove;
+  let firstRackTile;
+  wordsOnBoard = getWordsOnBoard(boardState, true);
+  if (!wordsOnBoard.length) {
+    isFirstMove = true;
+    //if first word, place one tile from rack in middle so rest of code can function like normal
+    firstRackTile = rackTiles[0];
+    wordsOnBoard = [
+      [
+        {
+          index: 112,
+          row: 7,
+          col: 7,
+          letterMultiplier: 1,
+          wordMultiplier: 1,
+          tile: firstRackTile,
+        },
+      ],
+    ];
+  }
   const possibleWords = generateWords(
     wordsOnBoard,
     rackTiles,
     lang,
     boardState
   );
+
   if (!possibleWords.length) {
     const res = { pass: true };
     return res;
   } else {
-    const wordsOrderedByLength = possibleWords.sort(
+    const longestWord = possibleWords.sort(
       (a, b) => b.word.length - a.word.length
-    );
-    const longestWord = wordsOrderedByLength[0];
-    return longestWord;
-  }
-};
-
-router.post("/", async (req, res) => {
-  const { rackTiles, boardState, lang } = req.body;
-  try {
-    const data = await makeMove(rackTiles, boardState, lang);
-    res.status(200).send(data);
-  } catch (err) {
-    console.log(err);
-    res.status(400).send(err);
+    )[0];
+    //make sure tile on centre square is actually a part of the new word
+    if (isFirstMove) {
+      longestWord.boardState = longestWord.boardState.map((square) => {
+        if (square.index === 112) {
+          return { ...square, tile: firstRackTile };
+        } else {
+          return square;
+        }
+      });
+      longestWord.updatedSquares.push(112);
+    }
+    res.status(200).send(longestWord);
   }
 });
 
