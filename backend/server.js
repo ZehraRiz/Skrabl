@@ -30,7 +30,7 @@ app.post("/verifyWord", async (req, res) => {
   const { words, lang } = req.body;
   let wordListToUse;
   if (lang === "en") {
-    wordListToUse = "./wordsBig.txt";
+    wordListToUse = "./englishBig.txt";
   } else if (lang === "tr") {
     wordListToUse = "./turkish.txt";
   } else if (lang === "fr") {
