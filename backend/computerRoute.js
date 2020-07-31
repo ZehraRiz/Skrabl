@@ -17,7 +17,7 @@ const generateWords = (wordsOnBoard, rackTiles, lang, boardState) => {
       dirs = ["x"];
     }
     const wordString = wordArray.map((square) => square.tile.letter).join("");
-    const regexString = `.*${wordString}.*`;
+    const regexString = `(?<=,)[^,]*${wordString}[^,]*(?=,)`;
     const regExp = new RegExp(regexString, "gi");
     let wordListToUse;
     if (lang === "en") {
@@ -169,7 +169,7 @@ const allWordsAreValid = (boardState, lang) => {
   for (let i = 0; i < allWordsString.length; i++) {
     const word = allWordsString[i];
     const wordsBig = fs.readFileSync(wordListToUse);
-    const regex = new RegExp("\\n" + word + "\\n");
+    const regex = new RegExp("," + word + ",");
     if (regex.test(wordsBig)) {
     } else {
       return false;
