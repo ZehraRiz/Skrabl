@@ -38,7 +38,7 @@ const StatusBar = ({
         </div>
 
         <div className="player__score">
-          Score:&nbsp;&nbsp;&nbsp; {scores && scores[0]}
+          Score:&nbsp;&nbsp;&nbsp; {scores && scores[currentPlayer == 1 ? 1 : 0]}
         </div>
       </div>
       <div
@@ -62,7 +62,7 @@ const StatusBar = ({
           />
         </div>
         <div className="player__score">
-          Score:&nbsp;&nbsp;&nbsp; {scores && scores[1]}
+          Score:&nbsp;&nbsp;&nbsp; {scores && scores[currentPlayer == 1 ? 0 : 1]}
         </div>
       </div>
     </div>

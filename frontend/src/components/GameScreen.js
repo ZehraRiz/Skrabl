@@ -503,7 +503,7 @@ const GameScreen = ({
     if (gameMode === "Computer") {
       setPouch([...pouch, ...tilesToExchange]);
     }
-    nextPlayer();
+    nextPlayer(0, scores);
   };
 
   const handleClickClearTiles = () => {
@@ -536,6 +536,8 @@ const GameScreen = ({
         })
         .then((res) => {
           const results = res.data;
+          console.log('res.data');
+          console.log(res.data, lang);
           if (Object.values(results).every((val) => val === "true")) {
             const [turnPoints, turnHighScore] = getTurnPoints(
               newWords,
@@ -551,7 +553,7 @@ const GameScreen = ({
               [turn]: playerPreviousPoints + turnPoints,
             };
             setScores(updatedScores);
-            nextPlayer(consecutivePasses * -1);
+            nextPlayer(consecutivePasses * -1, updatedScores);
             setPlacedTiles([]);
             return;
           } else {
@@ -570,6 +572,7 @@ const GameScreen = ({
 
   const gameOver = () => {
     if (gameMode === "Online") {
+      setGameIsOver(true);
       socket.emit("gameOver", gameData.gameId);
     }
     if (gameMode === "Computer") {
