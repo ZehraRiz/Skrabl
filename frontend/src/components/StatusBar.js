@@ -21,7 +21,6 @@ const StatusBar = ({
   const aiTiles = computerRackTiles.map(tile => {
     return <div className="aiTile">{tile.letter.toUpperCase()}</div>
   });
-  console.log(computerRackTiles);
   return (
     <div className="statusBar__frame">
       <div className="statusBar__wrapper">
