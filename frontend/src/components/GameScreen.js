@@ -32,6 +32,7 @@ const GameScreen = ({
   viewChat,
   lang,
   setGameMode,
+  level,
 }) => {
   const [selectedTile, setSelectedTile] = useState(null);
   const [selectedSquareIndex, setSelectedSquareIndex] = useState(null);
@@ -133,6 +134,7 @@ const GameScreen = ({
         rackTiles: computerRackTiles,
         boardState,
         lang,
+        level,
       })
       .then((res) => {
         if (res.data.pass) {

@@ -27,6 +27,7 @@ const App = () => {
   const [viewRules, setViewRules] = useState(false);
   const [viewChat, setViewChat] = useState(false);
   const [lang, setLang] = useState("en");
+  const [level, setLevel] = useState("easy");
 
   useEffect(() => {
     if (gameMode === "Computer") {
@@ -155,6 +156,7 @@ const App = () => {
           socket={socket}
           gameMode={gameMode}
           lang={lang}
+          level={level}
           setGameMode={setGameMode}
         />
       )}
