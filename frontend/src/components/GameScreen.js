@@ -567,6 +567,7 @@ const GameScreen = ({
 
   const gameOver = () => {
     if (gameMode === "Online") {
+      setGameIsOver(true);
       socket.emit("gameOver", gameData.gameId);
     }
     if (gameMode === "Computer") {
