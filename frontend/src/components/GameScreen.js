@@ -42,6 +42,7 @@ const GameScreen = ({
   const [timeLeftPlayer, setTimeLeftPlayer] = useState(null);
   const [timeLeftOpponent, setTimeLeftOpponent] = useState(null);
   const [scores, setScores] = useState(null);
+  const [highestScoringWord, setHighestScoringWord] = useState({word: '', points: 0});
   const [turn, setTurn] = useState(null);
   const [tilesToExchange, setTilesToExchange] = useState([]);
   const [boardIsDisabled, setBoardIsDisabled] = useState(false);
@@ -252,6 +253,11 @@ const GameScreen = ({
       gameOver();
     }
   }, [consecutivePasses]);
+
+  useEffect(() => {
+    console.log('highestScoringWord:');
+    console.log(highestScoringWord);
+  },[highestScoringWord])
 
   useEffect(() => {
     if (gameMode === "Online") {
@@ -519,11 +525,15 @@ const GameScreen = ({
         .post("http://localhost:4001/verifyWord", {
           words: newWords,
           lang,
-        })
+        }) 
         .then((res) => {
           const results = res.data;
-          if (Object.values(results).every((val) => val === "true")) {
-            const turnPoints = getTurnPoints(newWords, placedTiles);
+          /*if (Object.values(results).every((val) => val === "true")) {*/
+            const [turnPoints, turnHighScore] = getTurnPoints(newWords, placedTiles);
+            if (turnHighScore.points > highestScoringWord.points) {
+              setHighestScoringWord(turnHighScore);
+            }
+            
             const playerPreviousPoints = scores[turn];
             const updatedScores = {
               ...scores,
@@ -533,10 +543,10 @@ const GameScreen = ({
             nextPlayer(consecutivePasses * -1);
             setPlacedTiles([]);
             return;
-          } else {
+          /*} else {
             setNotification("Don't make up words!");
             return;
-          }
+          } */
         });
       return;
     } else {
@@ -646,6 +656,7 @@ const GameScreen = ({
             invitedPlayer={invitedPlayer}
             currentPlayer={currentPlayer}
             scores={scores}
+            highestScoringWord={highestScoringWord}
             gameMode={gameMode}
             // scoredWords={scoredWords}
             exitGame={exitGame}

@@ -60,7 +60,7 @@ button:active {
   margin: 2px;
 }
 
-@media (min-width: 400px) {
+@media (min-width: 450px) {
   button img {
     width: 20px;
     margin-bottom: 0;
