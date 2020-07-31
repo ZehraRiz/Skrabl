@@ -31,6 +31,7 @@ const GameScreen = ({
   handleClickChat,
   viewChat,
   lang,
+  setGameMode,
 }) => {
   const [selectedTile, setSelectedTile] = useState(null);
   const [selectedSquareIndex, setSelectedSquareIndex] = useState(null);
@@ -181,7 +182,10 @@ const GameScreen = ({
               returnedBoardState,
               tilesUsed
             ).filter((word) => word.newWord === true);
-            const [turnPoints, turnHighScore] = getTurnPoints(newWords, tilesUsed);
+            const [turnPoints, turnHighScore] = getTurnPoints(
+              newWords,
+              tilesUsed
+            );
             const playerPreviousPoints = scores[turn];
             const updatedScores = {
               ...scores,
@@ -577,6 +581,7 @@ const GameScreen = ({
       setCurrentComponent("Players");
     }
     if (gameMode === "Computer") {
+      setGameMode(null);
       setCurrentComponent("WelcomeScreen");
     }
   };

@@ -39,7 +39,7 @@ app.post("/verifyWord", async (req, res) => {
   const results = {};
   words.forEach((wordObj) => {
     const fileContent = fs.readFileSync(wordListToUse);
-    const regex = new RegExp("\\n" + wordObj.word + "\\n");
+    const regex = new RegExp(`\\n${wordObj.word}\\n`);
     if (regex.test(fileContent)) {
       results[wordObj.word] = "true";
     } else {

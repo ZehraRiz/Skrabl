@@ -77,7 +77,6 @@ const App = () => {
     setLang("tr");
   };
 
-
   return (
     <div className="page">
       {currentComponent !== "TitleScreen" && (
@@ -98,7 +97,6 @@ const App = () => {
           setLangFr={setLangFr}
           setLangDe={setLangDe}
           setLangTr={setLangTr}
-
         />
       )}
       {currentComponent === "Login" && (
@@ -157,6 +155,7 @@ const App = () => {
           socket={socket}
           gameMode={gameMode}
           lang={lang}
+          setGameMode={setGameMode}
         />
       )}
       {currentComponent === "UserBusy" && <UserBusy socket={socket} />}
