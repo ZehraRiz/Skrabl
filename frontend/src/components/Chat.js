@@ -12,9 +12,7 @@ const Chat = React.memo(
             <li className="chat__message" key={index}>
               <h5>{message.playerName}: </h5>
               <p
-                className={
-                  message.playerFromBackend === currentPlayer ? "host" : "guest"
-                }
+                className="timeStamp"
               >
                 {message.date}
               </p>

@@ -31,6 +31,7 @@ const GameScreen = ({
   handleClickChat,
   viewChat,
   handleNewChatMsg,
+  resetChatMsg,
   lang,
   setGameMode,
   level,
@@ -75,10 +76,13 @@ const GameScreen = ({
   
 
   useEffect(() => {
-    socket.on("recieveMsg", (data) => {
-      setNewMessage(data);
-    });
-    socket.on("chatError", (data) => console.log(data));
+    if (gameMode === "Online") {
+      socket.on("recieveMsg", (data) => {
+        setNewMessage(data);
+        handleNewChatMsg();
+      });
+      socket.on("chatError", (data) => console.log(data));
+    }
   }, []);
 
   useEffect(() => {
@@ -635,8 +639,11 @@ const GameScreen = ({
     }
   };
 
-  const returnToPlayerScreen = () => {
-    setCurrentComponent("Players");
+  const returnToHomeScreen = () => {
+    if (gameMode === "Online") {
+      resetChatMsg();
+      setCurrentComponent("Players");
+    } else setCurrentComponent("WelcomeScreen");
   };
 
   const closeModal = () => {
@@ -727,7 +734,7 @@ const GameScreen = ({
             gameMode={gameMode}
             // scoredWords={scoredWords}
             socket={socket}
-            returnToPlayerScreen={returnToPlayerScreen}
+            returnToHomeScreen={returnToHomeScreen}
           />
         )}
         {confirmMessage && (

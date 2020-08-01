@@ -92,7 +92,14 @@
   }
 }
 
-@media (max-height: 750px) {
+@media (max-height: 850px) {
+
+  .tile__points {
+    font-size: .7em;
+    bottom: .3em;
+    right: .3em;
+  }
+ 
   .tile__points--sm {
     bottom: 1.8px;
     right: 1.8px;

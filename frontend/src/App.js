@@ -66,6 +66,10 @@ const App = () => {
     setNewChatMsg(true);
   }
 
+  const resetChatMsg = () => {
+    setNewChatMsg(false);
+  }
+
   const handleStart = () => {
     setCurrentComponent("WelcomeScreen");
   };
@@ -87,6 +91,7 @@ const App = () => {
     <div className="page">
       {currentComponent !== "TitleScreen" && (
         <Header
+          currentComponent={currentComponent}
           newChatMsg={newChatMsg}
           handleStart={handleStart}
           handleClickRules={handleClickRules}
@@ -154,6 +159,7 @@ const App = () => {
       )}
       {currentComponent === "GameScreen" && (
         <GameScreen
+          resetChatMsg={resetChatMsg}
           handleNewChatMsg={handleNewChatMsg}
           handleClickChat={handleClickChat}
           viewChat={viewChat}
