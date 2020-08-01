@@ -668,6 +668,7 @@ const GameScreen = ({
               handleClickTile={handleClickTile}
               lang={lang}
               turn={turn}
+              boardIsDisabled={boardIsDisabled}
             />
           </div>
           <StatusBar
