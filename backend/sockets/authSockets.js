@@ -1,6 +1,6 @@
 const { findGame} = require("../store/games.js");
 const { findRegisteredUser, setRegisteredUser, getAllRegisteredUsers, addUserSession, deleteSocket, switchGameSocket } = require("../store/registeredUsers");
-const {userLoginSocketSetup} = require("../utils/rooms.js")
+const {userRoomSocketSetup, userBroadcastToRoom, userLeftBroadcastToRoom} = require("../utils/rooms.js")
 const ONLINE_SOCKETS = "ONLINE_SOCKETs"
 const EN_ROOM = "EN_ROOM"
 const DE_ROOM = "DE_ROOM"
@@ -20,16 +20,17 @@ module.exports.listen = function (io, socket) {
 				token: registeredUser.token,
 				msg: "you are a registered player now",
 				user: registeredUser,
-				allOnlineUsers: getAllRegisteredUsers()
+				allOnlineUsers: getAllRegisteredUsers(registeredUser.lang)
 			});
-			userLoginSocketSetup(socket, registeredUser)
+			userRoomSocketSetup(socket, registeredUser)
+			userBroadcastToRoom(socket, registeredUser)
 			console.log(`${registeredUser.name} has joined the ${registeredUser.lang} lobby`);
 		}
   });
   
 
 //USER LOGIN USING TOKEN IN LS 
-	socket.on("retriveUser", (token) => {
+	socket.on("retriveUser", ({token, lang}) => {
 		if (token === "") {
 			socket.emit("tokenError", "We have no saved sessions");
 			return;
@@ -39,8 +40,9 @@ module.exports.listen = function (io, socket) {
 			socket.emit("tokenError", "We have no saved sessions");
 			return;
 		}
-		socket.join(ONLINE_SOCKETS);
-		const updatedUser = addUserSession(token, socket.id)
+		userRoomSocketSetup(socket, user)
+		const updatedUser = addUserSession(token, socket.id, lang)
+		//update language room 
 
 		let game;
 		let invitedPlayer;
@@ -64,34 +66,33 @@ module.exports.listen = function (io, socket) {
 		}
 		socket.emit("retrievdUser", {
 			user: updatedUser,
-			allOnlineUsers: getAllRegisteredUsers(),//send all currently online users
+			allOnlineUsers: getAllRegisteredUsers(updatedUser.lang),//send all currently online users
 			inGame: (gameSocket === "") ? false : true,
 			setGameOnSocket: (gameSocket === 0) ? true : false,
 			game: game,
 			currentPlayer:currentPlayer,
 			invitedPlayer: invitedPlayer //oppponent player
 		});
-		if(updatedUser.currentSessions.length <= 1){ socket.broadcast.to(ONLINE_SOCKETS).emit("welcomeNewUser", updatedUser)};
+		if(updatedUser.currentSessions.length <= 1){ userBroadcastToRoom(socket, updatedUser)};
 	});
 
 	//USER DISCONNECTS
 	socket.on("disconnect", () => {
 		console.log("A connection left");
 		const user = deleteSocket(socket.id);
-	
-		if (!user) return; 
+		if (!user) return;
 		if (user.socketWithGame === socket.id) {
 			const gameId = switchGameSocket(user)
 			//gameId will be returned if there are more sockets available
 			// null will be returned if not more sockets available
-		
 			//emit game to new socket and join
 			//send them on extra screen
 			const newSetSocket = findRegisteredUser(user.token).socketWithGame
-			
 			io.to(newSetSocket).emit('retrivedGame', gameId);
 		}
-		if(!user.currentSessions.length){ socket.broadcast.to(ONLINE_SOCKETS).emit("userLeft", user)}; //should be sent to the game as well
+		if (!user.currentSessions.length) {
+			userLeftBroadcastToRoom(socket, user)
+		}; //should be sent to the game as well
 		
 	});
 };

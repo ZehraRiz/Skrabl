@@ -3,8 +3,8 @@ let games = [];
 
 //Join connection to player
 
-function gameJoin(gameId) {
-  const initialPouch = initializePouch("en");
+function gameJoin(gameId, lang) {
+  const initialPouch = initializePouch(lang);
   const game = {
     gameId: gameId,
     player1: { playerId: "", isConnected: false },

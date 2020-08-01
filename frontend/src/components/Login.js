@@ -17,7 +17,7 @@ const Login = ({
   useEffect(() => {
     const userIdFromLS = localStorage.getItem("token");
     if (userIdFromLS) {
-      socket.emit("retriveUser", userIdFromLS);
+      socket.emit("retriveUser", { token: userIdFromLS, lang: lang});
       //backend does not recognize the token
       socket.on("tokenError", (data) => {
         setCurrentComponent("Login");
@@ -69,6 +69,7 @@ const Login = ({
       return;
     });
     socket.on("usernameRegistered", (data) => {
+      console.log(data)
       const user = data.user;
       localStorage.setItem("token", data.token);
       setUser(user);

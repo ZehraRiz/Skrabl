@@ -25,9 +25,9 @@ const games = getAllGames();
 
 module.exports.listen = function (io, socket) {
   //create a game
-  socket.on("createGame", (userToken) => {
+  socket.on("createGame", ({userToken, lang}) => {
     const gameId = Math.floor(Math.random() * 10000).toString();
-    gameJoin(gameId);
+    gameJoin(gameId, lang);
     removeGameSocket(userToken);
     socket.emit("gameCreateResponse", gameId);
   });
@@ -53,7 +53,7 @@ module.exports.listen = function (io, socket) {
   });
 
   //creator joins game
-  socket.on("joinGame", ({ token, gameId, time }) => {
+  socket.on("joinGame", ({ token, gameId, time}) => {
     if (!findRegisteredUser(token)) {
       socket.emit("joinGameError", "please register before joining a game");
       return;

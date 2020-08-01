@@ -74,7 +74,6 @@ const App = () => {
     setLang("de");
   };
   const setLangTr = () => {
-    console.log("Setting lang to Turkish");
     setLang("tr");
   };
 
@@ -127,6 +126,7 @@ const App = () => {
           setGameData={setGameData}
           setNotification={setNotification}
           setCurrentPlayer={setCurrentPlayer}
+          lang={lang}
         />
       )}
       {currentComponent === "InviteScreen" && (
@@ -141,6 +141,7 @@ const App = () => {
           setCurrentPlayer={setCurrentPlayer}
           inviteSent={inviteSent}
           setInviteSent={setInviteSent}
+          
         />
       )}
       {currentComponent === "GameScreen" && (
