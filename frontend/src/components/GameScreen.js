@@ -31,6 +31,7 @@ const GameScreen = ({
   handleClickChat,
   viewChat,
   handleNewChatMsg,
+  resetChatMsg,
   lang,
   setGameMode,
   level,
@@ -638,8 +639,9 @@ const GameScreen = ({
     }
   };
 
-  const returnToPlayerScreen = () => {
+  const returnToHomeScreen = () => {
     if (gameMode === "Online") {
+      resetChatMsg();
       setCurrentComponent("Players");
     } else setCurrentComponent("WelcomeScreen");
   };
@@ -732,7 +734,7 @@ const GameScreen = ({
             gameMode={gameMode}
             // scoredWords={scoredWords}
             socket={socket}
-            returnToPlayerScreen={returnToPlayerScreen}
+            returnToHomeScreen={returnToHomeScreen}
           />
         )}
         {confirmMessage && (
