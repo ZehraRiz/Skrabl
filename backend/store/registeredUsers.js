@@ -31,11 +31,14 @@ function addUserSession(token, socketId, lang) {
 	return updatedUser;
 }
 
-function removeGameFromUser(token, gameId) {
+function removeGameFromUser(token) {
 	let userToUpdate;
 	registeredUsers.map(user => {
 		if (user.token == token) {
+			console.log(`removing ${user.gameId} from ${user.name}`)
 			user.gameId = "";
+			user.socketWithGame = ""
+			
 			userToUpdate = user
 		}
 	})

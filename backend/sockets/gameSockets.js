@@ -217,6 +217,8 @@ module.exports.listen = function (io, socket) {
       socket.emit("gameEnded", "The game has ended");
       return;
     } else {
+      removeGameFromUser(game.player1.playerId, gameId)
+      removeGameFromUser(game.player2.playerId, gameId)
       game.gameState.isOver = true;
       removeGame(gameId);
       io.in(gameId).emit("gameEnd", game);
