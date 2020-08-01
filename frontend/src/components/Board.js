@@ -78,8 +78,8 @@ const Board = ({
       <div className={"board__board " + (isDisabled ? "disabled" : "")}>
         {boardState &&
           boardState.length > 0 &&
-          boardState.map((square, index) => {
-            const bonusClassName = getBonusClassName(square);
+          boardState.map((square, index) => { 
+            const bonusClassName = getBonusClassName(square); 
             let placedTile;
             if (square.tile) {
               placedTile = (

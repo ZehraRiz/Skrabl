@@ -1,25 +1,44 @@
 const registeredUsers = [];
 
+
+function setRegisteredUser(token, name, currentSessions, lang = "en") {
+	const registeredUser = {
+		token: token,
+		name: name,
+		currentSessions: currentSessions,
+		socketWithGame: "",
+		gameId: "",
+		lang: lang
+	};
+	registeredUsers.push(registeredUser);
+	return registeredUser;
+}
+
+
 function findRegisteredUser(token) {
 	return registeredUsers.find((user) => user.token == token);
 }
 
-function addUserSession(token, socketId) {
+function addUserSession(token, socketId, lang) {
 	let updatedUser;
 	registeredUsers.map((user) => {
 		if (user.token == token) {
 			user.currentSessions.push(socketId);
+			user.lang = lang
 			updatedUser = user;
 		}
 	});
 	return updatedUser;
 }
 
-function removeGameFromUser(token, gameId) {
+function removeGameFromUser(token) {
 	let userToUpdate;
 	registeredUsers.map(user => {
 		if (user.token == token) {
+			console.log(`removing ${user.gameId} from ${user.name}`)
 			user.gameId = "";
+			user.socketWithGame = ""
+			
 			userToUpdate = user
 		}
 	})
@@ -37,23 +56,11 @@ function setUserGame(token, gameId) {
 	return userToUpdate
 }
 
-
-
-function getAllRegisteredUsers() {
-	return registeredUsers;
+function getAllRegisteredUsers(lang) {
+	let arr = registeredUsers.filter(user => user.lang=== lang)
+	return arr;
 }
 
-function setRegisteredUser(token, name, currentSessions) {
-	const registeredUser = {
-		token: token,
-		name: name,
-		currentSessions: currentSessions,
-		socketWithGame: "",
-		gameId: ""
-	};
-	registeredUsers.push(registeredUser);
-	return registeredUser;
-}
 
 function setGameSocket(token, socketId) {
 	let updatedUser;
