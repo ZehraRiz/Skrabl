@@ -87,6 +87,7 @@ const App = () => {
     <div className="page">
       {currentComponent !== "TitleScreen" && (
         <Header
+          currentComponent={currentComponent}
           newChatMsg={newChatMsg}
           handleStart={handleStart}
           handleClickRules={handleClickRules}

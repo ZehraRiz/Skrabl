@@ -75,10 +75,13 @@ const GameScreen = ({
   
 
   useEffect(() => {
-    socket.on("recieveMsg", (data) => {
-      setNewMessage(data);
-    });
-    socket.on("chatError", (data) => console.log(data));
+    if (gameMode === "Online") {
+      socket.on("recieveMsg", (data) => {
+        setNewMessage(data);
+        handleNewChatMsg();
+      });
+      socket.on("chatError", (data) => console.log(data));
+    }
   }, []);
 
   useEffect(() => {
@@ -636,7 +639,9 @@ const GameScreen = ({
   };
 
   const returnToPlayerScreen = () => {
-    setCurrentComponent("Players");
+    if (gameMode === "Online") {
+      setCurrentComponent("Players");
+    } else setCurrentComponent("WelcomeScreen");
   };
 
   const closeModal = () => {
