@@ -1,27 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import "../styles/Chat.css";
 
 const Chat = React.memo(
-  ({ gameId, currentPlayer, socket, mode, chatThread, setChatThread }) => {
-    socket.on("recieveMsg", (data) => {
-      setChatThread([...chatThread, data]);
-    });
-    socket.on("chatError", (data) => console.log(data));
-
-    const handleSendMessage = (e) => {
-      e.preventDefault();
-      const token = localStorage.getItem("token");
-      const newMessage = e.target.message.value;
-      socket.emit("sendMsg", { token, gameId, currentPlayer, newMessage });
-      e.target.reset();
-    };
-
-    useEffect(() => {
-      return () => {
-        socket.off("recieveMsg");
-      };
-    }, []);
-
+  ({ currentPlayer, mode, chatThread, handleSendMessage }) => {
     return (
       <div
         className={mode === "modal" ? "chat__wrapper modal" : "chat__wrapper"}

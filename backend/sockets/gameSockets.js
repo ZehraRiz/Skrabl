@@ -25,7 +25,7 @@ const games = getAllGames();
 
 module.exports.listen = function (io, socket) {
   //create a game
-  socket.on("createGame", ({userToken, lang}) => {
+  socket.on("createGame", ({ userToken, lang }) => {
     const gameId = Math.floor(Math.random() * 10000).toString();
     gameJoin(gameId, lang);
     removeGameSocket(userToken);
@@ -53,7 +53,7 @@ module.exports.listen = function (io, socket) {
   });
 
   //creator joins game
-  socket.on("joinGame", ({ token, gameId, time}) => {
+  socket.on("joinGame", ({ token, gameId, time }) => {
     if (!findRegisteredUser(token)) {
       socket.emit("joinGameError", "please register before joining a game");
       return;
@@ -205,7 +205,6 @@ module.exports.listen = function (io, socket) {
         if (returnedTiles && returnedTiles.length > 0) {
           game.gameState.pouch = [...game.gameState.pouch, ...returnedTiles];
         }
-        console.log(game)
         io.in(gameId).emit("gameUpdated", game);
       }
     }
@@ -217,8 +216,8 @@ module.exports.listen = function (io, socket) {
       socket.emit("gameEnded", "The game has ended");
       return;
     } else {
-      removeGameFromUser(game.player1.playerId, gameId)
-      removeGameFromUser(game.player2.playerId, gameId)
+      removeGameFromUser(game.player1.playerId, gameId);
+      removeGameFromUser(game.player2.playerId, gameId);
       game.gameState.isOver = true;
       removeGame(gameId);
       io.in(gameId).emit("gameEnd", game);

@@ -1,25 +1,21 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import "../styles/ChatModal.css";
 import { Fade } from "react-awesome-reveal";
 import Chat from "./Chat";
 
 const ChatModal = ({
   closeModal,
-  gameId,
   currentPlayer,
-  socket,
   chatThread,
-  setChatThread,
+  handleSendMessage,
 }) => {
   return (
     <Fade triggerOnce className="chatModal__wrapper">
       <Chat
         mode={"modal"}
-        gameId={gameId}
         currentPlayer={currentPlayer}
-        socket={socket}
         chatThread={chatThread}
-        setChatThread={setChatThread}
+        handleSendMessage={handleSendMessage}
       />
       <button className="button__cancel" onClick={closeModal}>
         Close
