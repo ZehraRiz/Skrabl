@@ -25,5 +25,8 @@ export const getTurnPoints = (newWords, placedTiles) => {
     }
     newPoints += wordPoints;
   });
+  if (placedTiles.length === 7) {
+    newPoints +=50;
+  }
   return [newPoints, turnHighScore];
 };

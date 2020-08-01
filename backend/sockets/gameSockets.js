@@ -182,15 +182,19 @@ module.exports.listen = function (io, socket) {
       currentPlayerTimeLeft,
       opponentTimeLeft,
       consecutivePasses,
+      highestScoringWord
     }) => {
       const game = findGame(gameId);
       if (!game) {
         socket.emit("gameEnded", "The game has ended");
         return;
       } else {
+        console.log('198 SocketUpdate');
+        console.log(highestScoringWord);
         game.gameState.boardState = boardState;
         game.gameState.scores = scores;
         game.gameState.consecutivePasses = consecutivePasses;
+        game.gameState.highestScoringWord = highestScoringWord;
         if (player === 0) {
           game.gameState.player1Tiles = playerRackTiles;
           game.gameState.turn = 1;
