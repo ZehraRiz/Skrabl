@@ -34,6 +34,7 @@ export const bonusSquareIndices = {
     56,
     64,
     70,
+    112,
     154,
     160,
     168,

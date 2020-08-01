@@ -4,6 +4,7 @@ import "../styles/StatusBar.css";
 import Pouch from "../images/pouch.svg";
 
 const StatusBar = ({
+  highestScoringWord,
   computerRackTiles,
   pouch,
   user,
@@ -18,21 +19,39 @@ const StatusBar = ({
   turn,
   gameMode,
 }) => {
-  const aiTiles = computerRackTiles.map(tile => {
-    return <div key={tile.id} className="aiTile">{tile.letter.toUpperCase()}</div>
+  const aiTiles = computerRackTiles.map((tile) => {
+    return (
+      <div key={tile.id} className="aiTile">
+        {tile.letter.toUpperCase()}
+      </div>
+    );
   });
   return (
     <div className="statusBar__frame">
       <div className="statusBar__wrapper">
         <div className="statusBar__reverse">
           <div className="pouchInfo">
-            <h3>{pouch.length} tiles remaining in pouch</h3>
-            <img className="pouchIcon" src={Pouch} />
+            <div className="pouch">
+              <img className="pouchIcon" src={Pouch} />
+              <div className="tileCounter">
+                    {pouch.length}
+              </div>
+            </div>
           </div>
-          <div className="rackInfo">
-          <h3>SkrablBot tiles</h3>
-            <div className="aiRack">{aiTiles}</div> 
-          </div>
+          {gameMode === "Computer" && (
+            <div className="rackInfo">
+              <h3>SkrablBot tiles</h3>
+              <div className="aiRack">{aiTiles}</div>
+            </div>
+          )}
+          {gameMode === "Online" && (
+            <div className="rackInfo">
+              <h3>Highest scoring word</h3>
+              {highestScoringWord.word.length > 0 && <div className="hiScore">{`'${highestScoringWord.word.toUpperCase()}' - ${highestScoringWord.points}pts`}</div>}
+              {highestScoringWord.word.length === 0 && <div className="hiScore">{`...`}</div>}
+            </div>
+          )}
+
         </div>
         <div
           className={
