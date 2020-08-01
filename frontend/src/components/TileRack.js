@@ -8,6 +8,7 @@ const TileRack = ({
   tilesToExchange,
   selectedTile,
   lang,
+  turn,
 }) => {
   return (
     <div className="tileRack__wrapper">
@@ -21,6 +22,7 @@ const TileRack = ({
               tilesToExchange={tilesToExchange}
               selectedTile={selectedTile}
               lang={lang}
+              turn={turn}
             />
           </div>
         ))}
