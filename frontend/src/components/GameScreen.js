@@ -30,6 +30,7 @@ const GameScreen = ({
   gameMode,
   handleClickChat,
   viewChat,
+  handleNewChatMsg,
   lang,
   setGameMode,
   level,
@@ -70,6 +71,7 @@ const GameScreen = ({
       date: now.format("h:mm:ss a"),
     },
   ]);
+  
 
   const getComputerTiles = () => {
     const numTilesNeeded = 7 - computerRackTiles.length;
@@ -135,7 +137,7 @@ const GameScreen = ({
       .then((res) => {
         if (res.data.pass) {
           setNotification("The computer has decided to pass.");
-          nextPlayer();
+          nextPlayer(1, scores, highestScoringWord);
         } else {
           const lettersUsed = res.data.word.split("");
           let tilesUsed = [];
