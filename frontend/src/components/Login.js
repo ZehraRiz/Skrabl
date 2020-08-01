@@ -12,11 +12,12 @@ const Login = ({
   setInviteSent,
   setCurrentPlayer,
   setGameData,
+  lang
 }) => {
   useEffect(() => {
     const userIdFromLS = localStorage.getItem("token");
     if (userIdFromLS) {
-      socket.emit("retriveUser", userIdFromLS);
+      socket.emit("retriveUser", { token: userIdFromLS, lang: lang});
       //backend does not recognize the token
       socket.on("tokenError", (data) => {
         setCurrentComponent("Login");
@@ -62,12 +63,13 @@ const Login = ({
   const handleLogin = (e) => {
     e.preventDefault();
     const name = e.target.name.value;
-    socket.emit("username", name);
+    socket.emit("username", {name, lang});
     socket.on("usernameError", (data) => {
       console.log(data);
       return;
     });
     socket.on("usernameRegistered", (data) => {
+      console.log(data)
       const user = data.user;
       localStorage.setItem("token", data.token);
       setUser(user);
