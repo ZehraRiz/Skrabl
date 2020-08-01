@@ -54,6 +54,7 @@ const GameScreen = ({
   const [consecutivePasses, setConsecutivePasses] = useState(0);
   const [pouch, setPouch] = useState([]);
   const [computerRackTiles, setComputerRackTiles] = useState([]);
+  const [newMessage, setNewMessage] = useState();
   const fillPouch = async () => {
     const res = await axios.post("http://localhost:4001/getPouch", {
       lang,
@@ -70,6 +71,36 @@ const GameScreen = ({
       date: now.format("h:mm:ss a"),
     },
   ]);
+
+  useEffect(() => {
+    socket.on("recieveMsg", (data) => {
+      setNewMessage(data);
+    });
+    socket.on("chatError", (data) => console.log(data));
+  }, []);
+
+  useEffect(() => {
+    if (newMessage) {
+      setChatThread([...chatThread, newMessage]);
+      setNewMessage(null);
+    }
+  }, [newMessage]);
+
+  const handleSendMessage = (e) => {
+    console.log("HANDLE SEND MESSAGE");
+    e.preventDefault();
+    const token = localStorage.getItem("token");
+    const newMessage = e.target.message.value;
+    console.log("NEW MESSAGE");
+    console.log(newMessage);
+    socket.emit("sendMsg", {
+      token,
+      gameId: gameData.gameId,
+      currentPlayer,
+      newMessage,
+    });
+    e.target.reset();
+  };
 
   const getComputerTiles = () => {
     const numTilesNeeded = 7 - computerRackTiles.length;
@@ -227,7 +258,7 @@ const GameScreen = ({
       setTurn(gameData.gameState.turn);
       setConsecutivePasses(gameData.gameState.consecutivePasses);
       setPouch(gameData.gameState.pouch);
-      setHighestScoringWord({word: '', points: 0});
+      setHighestScoringWord({ word: "", points: 0 });
     }
     if (gameMode === "Computer") {
       setGameIsOver(false);
@@ -238,7 +269,7 @@ const GameScreen = ({
       setScores({ 0: 0, 1: 0 });
       setTurn(0);
       setConsecutivePasses(null);
-      setHighestScoringWord({word: '', points: 0});
+      setHighestScoringWord({ word: "", points: 0 });
     }
   }, [gameMode]);
 
@@ -263,11 +294,6 @@ const GameScreen = ({
       gameOver();
     }
   }, [consecutivePasses]);
-
-  useEffect(() => {
-    console.log("highestScoringWord:");
-    console.log(highestScoringWord);
-  }, [highestScoringWord]);
 
   useEffect(() => {
     if (gameMode === "Online") {
@@ -297,13 +323,10 @@ const GameScreen = ({
         setScores(data.gameState.scores);
         setTurn(data.gameState.turn);
         setConsecutivePasses(data.gameState.consecutivePasses);
-        console.log('300 GS');
+        console.log("300 GS");
         console.log(data.gameState.highestScoringWord);
         setHighestScoringWord(data.gameState.highestScoringWord);
       });
-      console.log("from retrived")
-      console.log(timeLeftPlayer)
-      console.log(timeLeftOpponent)
     }
     if (gameMode === "Computer") {
       if (turn === 1) {
@@ -338,9 +361,13 @@ const GameScreen = ({
     }
   };
 
-  const nextPlayer = (x = 0, newScores = { 0: 0, 0: 0 }, highestScoringWord = highestScoringWord) => {
+  const nextPlayer = (
+    x = 0,
+    newScores = { 0: 0, 0: 0 },
+    highestScoringWord = highestScoringWord
+  ) => {
     if (gameMode === "Online") {
-      console.log('340 NxtPlyr');
+      console.log("340 NxtPlyr");
       console.log(highestScoringWord);
       socket.emit("updateGameState", {
         gameId: gameData.gameId,
@@ -549,8 +576,6 @@ const GameScreen = ({
         })
         .then((res) => {
           const results = res.data;
-          console.log('res.data');
-          console.log(res.data, lang);
           if (Object.values(results).every((val) => val === "true")) {
             const [turnPoints, turnHighScore] = getTurnPoints(
               newWords,
@@ -561,13 +586,18 @@ const GameScreen = ({
               ...scores,
               [turn]: playerPreviousPoints + turnPoints,
             };
-           
+
             setScores(updatedScores);
             if (turnHighScore.points > highestScoringWord.points) {
               setHighestScoringWord(turnHighScore);
-              nextPlayer(consecutivePasses * -1, updatedScores, turnHighScore);  
-            } else nextPlayer(consecutivePasses * -1, updatedScores, highestScoringWord);  
-             
+              nextPlayer(consecutivePasses * -1, updatedScores, turnHighScore);
+            } else
+              nextPlayer(
+                consecutivePasses * -1,
+                updatedScores,
+                highestScoringWord
+              );
+
             setPlacedTiles([]);
             return;
           } else {
@@ -605,7 +635,7 @@ const GameScreen = ({
 
   const returnToPlayerScreen = () => {
     setCurrentComponent("Players");
-  }
+  };
 
   const closeModal = () => {
     setConfirmMessage(null);
@@ -616,12 +646,10 @@ const GameScreen = ({
       <div className="gameScreen__wrapper">
         {viewChat && (
           <ChatModal
-            gameId={gameData.gameId}
             currentPlayer={currentPlayer}
-            socket={socket}
             closeModal={handleClickChat}
             chatThread={chatThread}
-            setChatThread={setChatThread}
+            handleSendMessage={handleSendMessage}
           />
         )}
         <div className="gameScreen__main">
@@ -639,6 +667,7 @@ const GameScreen = ({
               playerRackTiles={playerRackTiles}
               handleClickTile={handleClickTile}
               lang={lang}
+              turn={turn}
             />
           </div>
           <StatusBar
@@ -681,6 +710,7 @@ const GameScreen = ({
               gameId={gameData.gameId}
               currentPlayer={currentPlayer}
               socket={socket}
+              handleSendMessage={handleSendMessage}
             />
           )}
         </div>
