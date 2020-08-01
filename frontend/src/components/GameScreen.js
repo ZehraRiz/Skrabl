@@ -30,6 +30,7 @@ const GameScreen = ({
   gameMode,
   handleClickChat,
   viewChat,
+  handleNewChatMsg,
   lang,
   setGameMode,
   level,
@@ -71,6 +72,7 @@ const GameScreen = ({
       date: now.format("h:mm:ss a"),
     },
   ]);
+  
 
   useEffect(() => {
     socket.on("recieveMsg", (data) => {
@@ -166,7 +168,7 @@ const GameScreen = ({
       .then((res) => {
         if (res.data.pass) {
           setNotification("The computer has decided to pass.");
-          nextPlayer();
+          nextPlayer(1, scores, highestScoringWord);
         } else {
           const lettersUsed = res.data.word.split("");
           let tilesUsed = [];

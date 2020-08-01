@@ -11,7 +11,6 @@ const GameOverModal = ({
   invitedPlayer,
   gameMode
 }) => {
-  console.log(invitedPlayer);
   let result = 0;
   const opponent = gameMode === "Online" ? invitedPlayer.name : "SkrablBot";
   const player = gameMode === "Online" ? user.name : "Player";
