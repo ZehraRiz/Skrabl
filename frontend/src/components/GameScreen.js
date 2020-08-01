@@ -624,6 +624,7 @@ const GameScreen = ({
             />
           </div>
           <StatusBar
+            computerRackTiles={computerRackTiles}
             pouch={pouch}
             scores={scores}
             user={user}
