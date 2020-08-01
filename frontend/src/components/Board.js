@@ -51,6 +51,9 @@ const getBonusText = (square) => {
     default:
       bonusText = bonusText;
   }
+  if (square.index === 112) {
+    bonusText = '';
+  }
   return bonusText;
 };
 

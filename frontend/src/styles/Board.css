@@ -109,7 +109,7 @@
   pointer-events: none;
 }
 
-.board__centre {
+.board__square.board__centre {
   background: rgb(251, 244, 30);
 }
 

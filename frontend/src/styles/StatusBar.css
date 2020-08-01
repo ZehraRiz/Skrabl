@@ -92,11 +92,18 @@
 .player__active {
   background: rgb(140 150 160); /* rgb(47, 85, 123); */
   color: white;
+  border: 1px solid white;
 }
 
 .opponent__active {
   background: rgb(125, 47, 27);
   color: white;
+  border: 1px solid white;
+}
+
+
+.pouch {
+  position: relative;
 }
 
 .pouchInfo {
@@ -106,9 +113,31 @@
   align-items: center;
 }
 
+.tileCounter {
+  position: absolute;
+  left: 60%;
+  top: 60%;
+  display: flex;
+  justify-content:center;
+  align-items: center;
+  width: 1.2em;
+  height: 1.2em;
+  padding: 0.8em;
+  background: #fffcb9;
+  box-shadow: 0 0 0px 1px black, inset 0 -1px 2px rgba(0, 0, 0, 0.5);
+  color: rgb(42, 102, 42);
+  //margin: 1em .1em 0;
+  font-size: 1em;
+  border-radius:3px;
+  -webkit-border-radius:3px;
+  -moz-border-radius:3px;
+  -ms-border-radius:3px;
+  -o-border-radius:3px;
+}
+
 .pouchIcon {
-  margin: .5em .1em 0;
-  width: 2em;
+  margin: 0 .1em 0;
+  width: 3.2em;
   height: auto;
   filter: drop-shadow( 0 2px 2px rgba(0, 0, 0, 0.2));
   -webkit-filter: drop-shadow( 0 2px 2px rgba(0, 0, 0, 0.2));
@@ -142,6 +171,12 @@
 .aiRack {
   display: flex;
   min-height: 2.2em;
+  text-align: center;
+}
+
+.hiScore {
+  min-height: 2.2em;
+  text-align: center;
 }
 
 .statusBar__frame:hover .statusBar__wrapper {
