@@ -4,6 +4,8 @@
   width: 100%;
   height: 100%;
   opacity: 0;
+  display: flex;
+  justify-content: center;
 }
 
 .gameScreen__main {
@@ -16,12 +18,13 @@
   padding: 10px;
   min-height: 600px;
   perspective: 2000px;
+  max-width: 650px;
 }
 
 .gameScreen__board {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-evenly;
   perspective: 1000px;
 }
 
@@ -44,12 +47,13 @@
     grid-template-rows: auto 1fr auto;
     grid-gap: 10px;
     padding: 10px;
+    max-width: 100%;
   }
   
   .gameScreen__board {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     grid-column: 2;
     grid-row: 1/3;
   }

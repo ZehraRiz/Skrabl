@@ -1,7 +1,9 @@
 /* mobile */
 
 .tileRack__wrapper {
-  width: 99%;
+  width: 95vw;
+  height: 14vw;
+  min-width: 350px;
   align-self: center;
   display: flex;
   background: rgb(47, 46, 45);
@@ -18,30 +20,39 @@
   -o-transform: rotateX(5deg);
   margin: 10px 0 5px;
   min-height: 55px;
+  max-width: 510px;
+  max-height: 65px
 }
 
 .tileRack__tile {
-  width: 13.75%;
+  width: 13.8%;
   max-width: 100px;
   margin: 0 1px;
 }
 
 /* tablet */
-@media (min-width: 500px) {
+@media (min-width: 510px) {
+  
+.tileRack__wrapper {
+  max-height: 75px
+}
+
 }
 
 /* large tablet */
-@media (min-width: 750px) {
+@media (min-width: 850px) {
   .tileRack__wrapper {
-    width: 100%;
+    width: 70vh;
     margin-top: 10px;
-    height: 95px;
+    height: 10vh;
     justify-content: flex-start;
+    max-width: 70vh;
+    max-height: 10vh;
   }
   .tileRack__tile {
-    width: 13.6%;
+    width: 13.9%;
     max-width: 100px;
-    margin: 0 2px;
+    margin: 0 1px;
   }
 }
 
