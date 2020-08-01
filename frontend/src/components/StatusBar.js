@@ -4,6 +4,7 @@ import "../styles/StatusBar.css";
 import Pouch from "../images/pouch.svg";
 
 const StatusBar = ({
+  computerRackTiles,
   pouch,
   user,
   invitedPlayer,
@@ -17,13 +18,20 @@ const StatusBar = ({
   turn,
   gameMode,
 }) => {
+  const aiTiles = computerRackTiles.map(tile => {
+    return <div key={tile.id} className="aiTile">{tile.letter.toUpperCase()}</div>
+  });
   return (
     <div className="statusBar__frame">
       <div className="statusBar__wrapper">
         <div className="statusBar__reverse">
           <div className="pouchInfo">
-            <h2>{pouch.length} tiles remaining in pouch.</h2>
+            <h3>{pouch.length} tiles remaining in pouch</h3>
             <img className="pouchIcon" src={Pouch} />
+          </div>
+          <div className="rackInfo">
+          <h3>SkrablBot tiles</h3>
+            <div className="aiRack">{aiTiles}</div> 
           </div>
         </div>
         <div

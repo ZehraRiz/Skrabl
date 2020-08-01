@@ -38,10 +38,9 @@
 .statusBar__reverse {
   display: flex;
   align-items: center;
-  font-size: 0.8em;
+  font-size: 0.7em;
   padding: 0.5em 0.5em;
   justify-content: space-around;
-  flex-direction: column;
   content: "";
   background: rgb(240, 240, 240);
   transform: rotateX(180deg);
@@ -102,15 +101,47 @@
 
 .pouchInfo {
   display: flex;
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
 }
 
 .pouchIcon {
-  margin: -0.5em 0 0 1em;
-  width: 2.5em;
+  margin: .5em .1em 0;
+  width: 2em;
   height: auto;
   filter: drop-shadow( 0 2px 2px rgba(0, 0, 0, 0.2));
   -webkit-filter: drop-shadow( 0 2px 2px rgba(0, 0, 0, 0.2));
+}
+
+.rackInfo {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.aiTile {
+  display: flex;
+  justify-content:center;
+  align-items: center;
+  width: 1.2em;
+  height: 1.2em;
+  background: #fffcb9;
+  box-shadow: 0 0 0px 1px black, inset 0 -1px 2px rgba(0, 0, 0, 0.5);
+  color: rgb(42, 102, 42);
+  margin: 1em .1em 0;
+  border-radius:3px;
+  -webkit-border-radius:3px;
+  -moz-border-radius:3px;
+  -ms-border-radius:3px;
+  -o-border-radius:3px;
+  
+} 
+
+.aiRack {
+  display: flex;
+  min-height: 2.2em;
 }
 
 .statusBar__frame:hover .statusBar__wrapper {
@@ -187,21 +218,23 @@
     -o-transform: rotateY(180deg);
     position: absolute;
     border-radius: 3px;
+    flex-direction: column;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     box-shadow: inset 0 -2px 2px rgba(0, 0, 0, 0.3);
+    font-size: 1em;
   }
 
   .pouchInfo {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    max-width: 6em;
+    max-width: 9em;
   }
 
-  .pouchInfo h2 {
+  .pouchInfo h3 {
     text-align: center;
   }
   

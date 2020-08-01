@@ -288,6 +288,9 @@ const GameScreen = ({
         setTurn(data.gameState.turn);
         setConsecutivePasses(data.gameState.consecutivePasses);
       });
+      console.log("from retrived")
+      console.log(timeLeftPlayer)
+      console.log(timeLeftOpponent)
     }
     if (gameMode === "Computer") {
       if (turn === 1) {
@@ -323,6 +326,8 @@ const GameScreen = ({
   };
 
   const nextPlayer = (x = 0, newScores = { 0: 0, 0: 0 }) => {
+    console.log("player time: " + timeLeftPlayer)
+    console.log("opponent time " +timeLeftOpponent)
     if (gameMode === "Online") {
       socket.emit("updateGameState", {
         gameId: gameData.gameId,
@@ -618,6 +623,7 @@ const GameScreen = ({
             />
           </div>
           <StatusBar
+            computerRackTiles={computerRackTiles}
             pouch={pouch}
             scores={scores}
             user={user}
