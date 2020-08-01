@@ -338,13 +338,7 @@ const GameScreen = ({
     }
   };
 
-<<<<<<< HEAD
   const nextPlayer = (x = 0, newScores = { 0: 0, 0: 0 }, highestScoringWord = highestScoringWord) => {
-=======
-  const nextPlayer = (x = 0, newScores = { 0: 0, 0: 0 }) => {
-    console.log("player time: " + timeLeftPlayer)
-    console.log("opponent time " +timeLeftOpponent)
->>>>>>> 7df309cdb58249703664e473f2ede12db483ed13
     if (gameMode === "Online") {
       console.log('340 NxtPlyr');
       console.log(highestScoringWord);
@@ -562,10 +556,6 @@ const GameScreen = ({
               newWords,
               placedTiles
             );
-            if (turnHighScore.points > highestScoringWord.points) {
-              setHighestScoringWord(turnHighScore);
-            }
-
             const playerPreviousPoints = scores[turn];
             const updatedScores = {
               ...scores,
@@ -573,7 +563,11 @@ const GameScreen = ({
             };
            
             setScores(updatedScores);
-            nextPlayer(consecutivePasses * -1, updatedScores, turnHighScore);   
+            if (turnHighScore.points > highestScoringWord.points) {
+              setHighestScoringWord(turnHighScore);
+              nextPlayer(consecutivePasses * -1, updatedScores, turnHighScore);  
+            } else nextPlayer(consecutivePasses * -1, updatedScores, highestScoringWord);  
+             
             setPlacedTiles([]);
             return;
           } else {
@@ -592,7 +586,6 @@ const GameScreen = ({
 
   const gameOver = () => {
     if (gameMode === "Online") {
-      setGameIsOver(true);
       socket.emit("gameOver", gameData.gameId);
     }
     if (gameMode === "Computer") {
@@ -602,13 +595,17 @@ const GameScreen = ({
 
   const exitGame = () => {
     if (gameMode === "Online") {
-      setCurrentComponent("Players");
+      setGameIsOver(true);
     }
     if (gameMode === "Computer") {
       setGameMode(null);
       setCurrentComponent("WelcomeScreen");
     }
   };
+
+  const returnToPlayerScreen = () => {
+    setCurrentComponent("Players");
+  }
 
   const closeModal = () => {
     setConfirmMessage(null);
@@ -697,7 +694,8 @@ const GameScreen = ({
             highestScoringWord={highestScoringWord}
             gameMode={gameMode}
             // scoredWords={scoredWords}
-            exitGame={exitGame}
+            socket={socket}
+            returnToPlayerScreen={returnToPlayerScreen}
           />
         )}
         {confirmMessage && (

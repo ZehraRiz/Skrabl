@@ -176,6 +176,7 @@
 .hiScore {
   min-height: 2.2em;
   text-align: center;
+  padding-top: 1em;
 }
 
 .statusBar__frame:hover .statusBar__wrapper {
