@@ -301,6 +301,9 @@ const GameScreen = ({
         console.log(data.gameState.highestScoringWord);
         setHighestScoringWord(data.gameState.highestScoringWord);
       });
+      console.log("from retrived")
+      console.log(timeLeftPlayer)
+      console.log(timeLeftOpponent)
     }
     if (gameMode === "Computer") {
       if (turn === 1) {
@@ -335,7 +338,13 @@ const GameScreen = ({
     }
   };
 
+<<<<<<< HEAD
   const nextPlayer = (x = 0, newScores = { 0: 0, 0: 0 }, highestScoringWord = highestScoringWord) => {
+=======
+  const nextPlayer = (x = 0, newScores = { 0: 0, 0: 0 }) => {
+    console.log("player time: " + timeLeftPlayer)
+    console.log("opponent time " +timeLeftOpponent)
+>>>>>>> 7df309cdb58249703664e473f2ede12db483ed13
     if (gameMode === "Online") {
       console.log('340 NxtPlyr');
       console.log(highestScoringWord);

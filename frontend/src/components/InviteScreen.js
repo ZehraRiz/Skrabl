@@ -12,7 +12,7 @@ const InviteScreen = ({
   socket,
   setCurrentPlayer,
   inviteSent, 
-  setInviteSent
+  setInviteSent,
 }) => {
   const [timeInput, setTimeInput] = useState(20);
   

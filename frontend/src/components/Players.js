@@ -13,6 +13,7 @@ const Players = ({
   setNotification,
   setGameData,
   setCurrentPlayer,
+  lang
 }) => {
   let [invite, setInvite] = useState("");
   socket.on("invite", (data) => {
@@ -41,6 +42,7 @@ const Players = ({
   });
 
   socket.on("userLeft", (user) => {
+    console.log("a user left" + user)
     setPlayers(players.filter((u) => u.token != user.token));
   });
 
@@ -52,7 +54,7 @@ const Players = ({
         setNotification("Player is in another game");
         return;
       } else {
-        socket.emit("createGame", user.token);
+        socket.emit("createGame", {userToken: user.token, lang: lang});
         //invalid userId on create game
         socket.on("createGameError", (data) => {
           console.log(data);

@@ -2,6 +2,7 @@ const startingTiles = require("../assets/startingTiles");
 const shuffle = require("../utils/shuffle");
 
 const initializePouch = (lang) => {
+  console.log(lang)
   let initialPouch = [];
   let i;
   const tiles = startingTiles[lang];
