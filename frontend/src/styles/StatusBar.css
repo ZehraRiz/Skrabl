@@ -126,7 +126,6 @@
   background: #fffcb9;
   box-shadow: 0 0 0px 1px black, inset 0 -1px 2px rgba(0, 0, 0, 0.5);
   color: rgb(42, 102, 42);
-  //margin: 1em .1em 0;
   font-size: 1em;
   border-radius:3px;
   -webkit-border-radius:3px;
@@ -165,13 +164,13 @@
   -moz-border-radius:3px;
   -ms-border-radius:3px;
   -o-border-radius:3px;
-  
 } 
 
 .aiRack {
   display: flex;
   min-height: 2.2em;
   text-align: center;
+  justify-content: center;
 }
 
 .hiScore {
