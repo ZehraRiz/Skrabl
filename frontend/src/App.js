@@ -114,6 +114,7 @@ const App = () => {
       )}
       {currentComponent === "Login" && (
         <Login
+          handleStart={handleStart}
           setCurrentComponent={setCurrentComponent}
           setUser={setUser}
           socket={socket}
@@ -129,6 +130,7 @@ const App = () => {
       )}
       {currentComponent === "Players" && (
         <Players
+          handleStart={handleStart}
           players={players}
           setPlayers={setPlayers}
           socket={socket}
