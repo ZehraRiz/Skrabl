@@ -20,13 +20,11 @@ export const getTurnPoints = (newWords, placedTiles) => {
     }
     if (wordPoints > turnHighScore.points) {
       turnHighScore = { word: wordObj.word, points: wordPoints };
-      console.log("wordObj.word:");
-      console.log(wordObj.word);
     }
     newPoints += wordPoints;
   });
   if (placedTiles.length === 7) {
-    newPoints +=50;
+    newPoints += 50;
   }
   return [newPoints, turnHighScore];
 };

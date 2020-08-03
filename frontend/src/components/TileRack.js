@@ -9,6 +9,7 @@ const TileRack = ({
   selectedTile,
   lang,
   turn,
+  boardIsDisabled,
 }) => {
   return (
     <div className="tileRack__wrapper">
@@ -23,6 +24,7 @@ const TileRack = ({
               selectedTile={selectedTile}
               lang={lang}
               turn={turn}
+              boardIsDisabled={boardIsDisabled}
             />
           </div>
         ))}
