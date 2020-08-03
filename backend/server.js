@@ -32,7 +32,7 @@ app.post("/verifyWord", async (req, res) => {
   if (lang === "en") {
     wordListToUse = "./dictionaries/englishBig.txt";
   } else if (lang === "tr") {
-    wordListToUse = "./dictionaries/turkish.txt";
+    wordListToUse = "./dictionaries/turkishBig.txt";
   } else if (lang === "fr") {
     wordListToUse = "./dictionaries/french.txt";
   }
