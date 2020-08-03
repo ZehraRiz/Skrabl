@@ -60,10 +60,6 @@ const GameScreen = ({
   const [computerRackTiles, setComputerRackTiles] = useState([]);
   const [newMessage, setNewMessage] = useState();
 
-  useEffect(() => {
-    console.log(consecutivePasses);
-  }, [consecutivePasses]);
-
   const fillPouch = async () => {
     const res = await axios.post("http://localhost:4001/getPouch", {
       lang,

@@ -48,6 +48,8 @@ const getMove = (longerWord, wordOnBoard, rackTiles, boardState) => {
         }
       }
     } else {
+      if (longerWord === "keep") {
+      }
       const indexToRemove = rackLettersAvailable.findIndex(
         (rackLetter) => rackLetter === letter
       );
@@ -130,6 +132,8 @@ const getMove = (longerWord, wordOnBoard, rackTiles, boardState) => {
     }
   }
   if (moveFound) {
+    //one flaw here is that, a horizontal placement might be returned from here but might not pass validate test in findWord
+    //if that happens, the loop goes to the next word in the list - never checking vertical alignment
     return {
       word: longerWord,
       placement,

@@ -29,10 +29,7 @@ router.post("/", (req, res) => {
     ];
   }
   //try to create a new word first (using just one tile from board), then try extending existing word if not possible
-  const boardFragmentsSorted = boardFragments.sort(
-    (a, b) => a.length - b.length
-  );
-  const newMove = findWord(boardFragmentsSorted, rackTiles, boardState, lang);
+  const newMove = findWord(boardFragments, rackTiles, boardState, lang);
   if (newMove) {
     //if was first move, include first rack tile that was placed on centre square as part of move
     if (isFirstMove) {
