@@ -37,7 +37,7 @@ export const findWordsOnBoard = (boardState, placedTiles) => {
       ) {
         newWord = true;
       }
-      if (wordStart !== "" && col === 14) {
+      if ((dir == 'across' && wordStart !== "" && col === 14) || (dir == 'down' && wordStart !== "" && row === 14)) {
         addWord();
         wordStart = "";
         letters = [];
