@@ -29,6 +29,7 @@ const startingTiles = {
       { letter: "w", points: 4 },
       { letter: "y", points: 4 },
       { letter: "", points: null },
+      ,
     ],
     1: [
       { letter: "k", points: 5 },

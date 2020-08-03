@@ -28,7 +28,7 @@ const App = () => {
   const [viewChat, setViewChat] = useState(false);
   const [newChatMsg, setNewChatMsg] = useState(false);
   const [lang, setLang] = useState("en");
-  const [level, setLevel] = useState("easy");
+  const [level, setLevel] = useState("normal");
 
   useEffect(() => {
     if (gameMode === "Computer") {
@@ -125,7 +125,7 @@ const App = () => {
           setInviteSent={setInviteSent}
           setCurrentPlayer={setCurrentPlayer}
           setGameData={setGameData}
-          lang= {lang}
+          lang={lang}
         />
       )}
       {currentComponent === "Players" && (
@@ -156,7 +156,6 @@ const App = () => {
           setCurrentPlayer={setCurrentPlayer}
           inviteSent={inviteSent}
           setInviteSent={setInviteSent}
-          
         />
       )}
       {currentComponent === "GameScreen" && (

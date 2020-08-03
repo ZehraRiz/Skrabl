@@ -182,14 +182,14 @@ module.exports.listen = function (io, socket) {
       currentPlayerTimeLeft,
       opponentTimeLeft,
       consecutivePasses,
-      highestScoringWord
+      highestScoringWord,
     }) => {
       const game = findGame(gameId);
       if (!game) {
         socket.emit("gameEnded", "The game has ended");
         return;
       } else {
-        console.log('198 SocketUpdate');
+        console.log("198 SocketUpdate");
         console.log(highestScoringWord);
         game.gameState.boardState = boardState;
         game.gameState.scores = scores;
@@ -246,6 +246,6 @@ module.exports.listen = function (io, socket) {
       msg: newMessage,
       date: now.format("h:mm:ss a"),
     };
-    io.in(gameId).emit("recieveMsg", msgObject); //also return time here
+    io.in(gameId).emit("receiveMsg", msgObject); //also return time here
   });
 };

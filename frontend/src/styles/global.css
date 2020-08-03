@@ -1,15 +1,15 @@
-@import url('https://fonts.googleapis.com/css2?family=Acme&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Ranchers&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Acme&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Ranchers&display=swap");
 
 * {
   margin: 0;
   margin-block-start: 0;
-    margin-block-end: 0;
-    margin-inline-start: 0;
-    margin-inline-end: 0;
+  margin-block-end: 0;
+  margin-inline-start: 0;
+  margin-inline-end: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Acme', sans-serif;;
+  font-family: "Acme", sans-serif;
 }
 
 html {
@@ -17,20 +17,26 @@ html {
   min-width: 375px;
   min-height: 650px;
 
-  --bg-modal-wrap:  rgba(0, 0, 0, 0.8);
-  --bg-modal: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(240,240,240,1) 100%);
+  --bg-modal-wrap: rgba(0, 0, 0, 0.8);
+  --bg-modal: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(240, 240, 240, 1) 100%
+  );
   --shadow-h2: 2px 2px 1px rgb(177, 177, 177);
-  --shadow-confirm-text: 0px 0px 2px  rgba(0, 0, 0, 0.5);
+  --shadow-confirm-text: 0px 0px 2px rgba(0, 0, 0, 0.5);
 }
-
 
 body {
-  
-  background: rgb(231,225,214);
-  background: radial-gradient(circle, rgb(221, 218, 211) 1%, rgb(164, 160, 151) 100%) fixed;
+  background: rgb(231, 225, 214);
+  background: radial-gradient(
+      circle,
+      rgb(221, 218, 211) 1%,
+      rgb(164, 160, 151) 100%
+    )
+    fixed;
   color: #1b1b1b;
 }
-
 
 .page {
   //min-height: 100vh;
@@ -42,7 +48,7 @@ body {
 
 h1 {
   font-size: 2em;
-  font-family: 'Ranchers', cursive;
+  font-family: "Ranchers", cursive;
 }
 
 .container__full-height {
@@ -61,10 +67,10 @@ button:focus {
   .page {
     display: flex;
     flex-direction: column;
-     align-items: center;
+    align-items: center;
     justify-content: center;
   }
-  
+
   h1 {
     font-size: 2em;
   }
