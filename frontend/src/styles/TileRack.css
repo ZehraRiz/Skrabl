@@ -48,6 +48,8 @@
     justify-content: flex-start;
     max-width: 70vh;
     max-height: 10vh;
+    min-width: 475px;
+    min-height: 70px;
   }
   .tileRack__tile {
     width: 13.9%;
