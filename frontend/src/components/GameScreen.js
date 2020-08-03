@@ -45,6 +45,7 @@ const GameScreen = ({
   const [boardState, setBoardState] = useState([]);
   const [timeLeftPlayer, setTimeLeftPlayer] = useState(null);
   const [timeLeftOpponent, setTimeLeftOpponent] = useState(null);
+  const [wordsOnBoard, setWordsOnBoard] = useState(null);
   const [scores, setScores] = useState(null);
   const [highestScoringWord, setHighestScoringWord] = useState({
     word: "",
@@ -549,7 +550,7 @@ const GameScreen = ({
     if (gameMode === "Computer") {
       setPouch([...pouch, ...tilesToExchange]);
     }
-    nextPlayer(0, scores);
+    nextPlayer(0, scores, highestScoringWord);
   };
 
   const handleClickClearTiles = () => {
@@ -569,12 +570,27 @@ const GameScreen = ({
     setPlacedTiles([]);
   };
 
+
+  useEffect(() => {
+    if (placedTiles.length > 0) {
+      getWordsOnBoard();
+    }
+  }, [placedTiles]);
+
+  useEffect(() => {
+    console.log('wordsOnBoard');
+      console.log(wordsOnBoard);
+  }, [wordsOnBoard]);
+
+  const getWordsOnBoard = () => {
+    const words = findWordsOnBoard(boardState, placedTiles);
+    setWordsOnBoard(words);
+  };
+
   const handleClickConfirmMove = () => {
     if (currentPlayer !== turn) return;
     if (moveIsValid(placedTiles, boardState)) {
-      const newWords = findWordsOnBoard(boardState, placedTiles).filter(
-        (word) => word.newWord === true
-      );
+      var newWords = wordsOnBoard.filter((word) => word.newWord === true);  
       axios
         .post("http://localhost:4001/verifyWord", {
           words: newWords,
