@@ -83,7 +83,7 @@ button:active {
 
 @media (min-width: 1100px) {
   button {
-    font-size: 1em;
+    //font-size: 1em;
   }
 }
 
@@ -102,8 +102,7 @@ button:active {
   }
 
   .gameButtons__wrapper button {
-    height: 20%;
-    padding: 10px 15px;
+
     margin: 5px 0px;
     height: 25%;
   }
@@ -113,29 +112,34 @@ button:active {
     align-items: center;
     justify-content: flex-start;
     width: 100%;
-    font-size: 1.5em;
+    font-size: 1.7em;
   }
 
   button img {
-    width: 40px;
+    width: 35px;
     height: auto;
     opacity: 0.9;
-    margin-right: 1em;
+    margin: 0 .8em;
   }
 }
 
 
-@media (max-height: 720px) {
+@media (max-height: 850px) {
 	.gameButtons__wrapper button {
 	  font-size: .8em;
 	}
+  button img {
+
+    
+  }
 	
-	button img {
-		width: 30px;
-		height: auto;
-		opacity: 0.9;
-		margin-right: 1em;
-		margin-left: 1em;
-	  }
   }
 
+  
+
+@media (max-height: 650px) {
+	.gameButtons__wrapper button {
+	  font-size: .6em;
+  }
+  
+}

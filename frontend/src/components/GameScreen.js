@@ -30,6 +30,8 @@ const GameScreen = ({
   gameMode,
   handleClickChat,
   viewChat,
+  handleNewChatMsg,
+  resetChatMsg,
   lang,
   setGameMode,
   level,
@@ -76,8 +78,9 @@ const GameScreen = ({
 
   useEffect(() => {
     if (gameMode === "Online") {
-      socket.on("receiveMsg", (data) => {
+      socket.on("recieveMsg", (data) => {
         setNewMessage(data);
+        handleNewChatMsg();
       });
       socket.on("chatError", (data) => console.log(data));
     }
@@ -155,7 +158,7 @@ const GameScreen = ({
         } else if (res.data.pass || (res.data.exchange && !pouch.length)) {
           setComputerConsecutivePasses(computerConsecutivePasses + 1);
           setNotification("SkrablBot has decided to pass.");
-          nextPlayer();
+          nextPlayer(1, scores, highestScoringWord);
         } else {
           setComputerConsecutivePasses(0);
           const newWords = findWordsOnBoard(
@@ -583,8 +586,11 @@ const GameScreen = ({
     }
   };
 
-  const returnToPlayerScreen = () => {
-    setCurrentComponent("Players");
+  const returnToHomeScreen = () => {
+    if (gameMode === "Online") {
+      resetChatMsg();
+      setCurrentComponent("Players");
+    } else setCurrentComponent("WelcomeScreen");
   };
 
   const closeModal = () => {
@@ -676,7 +682,7 @@ const GameScreen = ({
             gameMode={gameMode}
             // scoredWords={scoredWords}
             socket={socket}
-            returnToPlayerScreen={returnToPlayerScreen}
+            returnToHomeScreen={returnToHomeScreen}
           />
         )}
         {confirmMessage && (

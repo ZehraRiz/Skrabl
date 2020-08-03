@@ -5,13 +5,12 @@ import {Fade, Bounce} from "react-awesome-reveal";
 const GameOverModal = ({
   scores,
   highestScoringWord,
-  returnToPlayerScreen,
+  returnToHomeScreen,
   currentPlayer,
   user,
   invitedPlayer,
   gameMode
 }) => {
-  console.log(invitedPlayer);
   let result = 0;
   const opponent = gameMode === "Online" ? invitedPlayer.name : "SkrablBot";
   const player = gameMode === "Online" ? user.name : "Player";
@@ -41,7 +40,7 @@ const GameOverModal = ({
         <p>{opponent}: &nbsp;&nbsp;{scores[currentPlayer == 1 ? 0 : 1]}pts</p>
         <h4>Highest scoring word</h4>
         <p>'{hsw}': &nbsp;&nbsp; {highestScoringWord.points}pts </p>
-        <button onClick={returnToPlayerScreen}>OK</button>
+        <button onClick={returnToHomeScreen}>OK</button>
       </Bounce>
     </Fade>
   );

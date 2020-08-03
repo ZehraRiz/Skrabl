@@ -26,6 +26,7 @@ const App = () => {
   const [inviteSent, setInviteSent] = useState(false);
   const [viewRules, setViewRules] = useState(false);
   const [viewChat, setViewChat] = useState(false);
+  const [newChatMsg, setNewChatMsg] = useState(false);
   const [lang, setLang] = useState("en");
   const [level, setLevel] = useState("normal");
 
@@ -58,7 +59,16 @@ const App = () => {
 
   const handleClickChat = () => {
     setViewChat(!viewChat);
+    setNewChatMsg(false);
   };
+
+  const handleNewChatMsg = () => {
+    setNewChatMsg(true);
+  }
+
+  const resetChatMsg = () => {
+    setNewChatMsg(false);
+  }
 
   const handleStart = () => {
     setCurrentComponent("WelcomeScreen");
@@ -81,6 +91,8 @@ const App = () => {
     <div className="page">
       {currentComponent !== "TitleScreen" && (
         <Header
+          currentComponent={currentComponent}
+          newChatMsg={newChatMsg}
           handleStart={handleStart}
           handleClickRules={handleClickRules}
           handleClickChat={handleClickChat}
@@ -146,6 +158,8 @@ const App = () => {
       )}
       {currentComponent === "GameScreen" && (
         <GameScreen
+          resetChatMsg={resetChatMsg}
+          handleNewChatMsg={handleNewChatMsg}
           handleClickChat={handleClickChat}
           viewChat={viewChat}
           user={user}

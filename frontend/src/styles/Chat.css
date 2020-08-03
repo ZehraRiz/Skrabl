@@ -35,16 +35,22 @@
   margin: 0.2rem 0;
 }
 
+.timeStamp {
+  color: rgb(99, 99, 99);
+  font-size: .5em;
+  padding: 0 0;
+}
+
 .guest {
   color: red ;
   font-size: 8px;
-  margin-left: 1em;
+  padding: 0 1em;
 }
 
 .host {
   color: blue;
   font-size: 8px;
-  margin-left: 1em;
+  padding: 0 1em;
 }
 
 /* tablet */
@@ -63,7 +69,7 @@
   .chat__list {
     font-size: 1.5em;
   }
-  .host, .guest {
+  .host, .guest, .timeStamp {
     font-size: .5em;
   }
 }
