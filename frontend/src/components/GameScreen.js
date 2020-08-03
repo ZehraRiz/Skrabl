@@ -553,7 +553,7 @@ const GameScreen = ({
     if (gameMode === "Computer") {
       setPouch([...pouch, ...tilesToExchange]);
     }
-    nextPlayer(0, scores);
+    nextPlayer(0, scores, highestScoringWord);
   };
 
   const handleClickClearTiles = () => {

@@ -24,7 +24,7 @@ const Tile = React.memo(
     return (
       <div
         className={
-          tileSelected
+          tileSelected 
             ? "tile__wrapper tile__wrapper--selected"
             : "tile__wrapper"
         }
