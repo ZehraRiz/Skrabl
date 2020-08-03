@@ -12,6 +12,7 @@ const Login = ({
   setInviteSent,
   setCurrentPlayer,
   setGameData,
+  handleStart,
   lang
 }) => {
   useEffect(() => {
@@ -84,15 +85,18 @@ const Login = ({
     e.target.reset();
   };
   return (
-    <Fade triggerOnce>
+    <Fade className="login__container" triggerOnce>
       <div className="login__wrapper">
         <h2>Login</h2>
-        <form onSubmit={handleLogin}>
+        <form className="login__form" onSubmit={handleLogin}>
           <label htmlFor="name">Your name:</label>
           <input type="text" id="name" maxLength="12" />
-          <button type="submit">Go</button>
+          <button type="submit">Login</button>
+          <button className="" onClick={handleStart}>Back</button>
         </form>
+        
       </div>
+      
     </Fade>
   );
 };

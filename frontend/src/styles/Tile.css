@@ -73,15 +73,7 @@
 }
 
 /* laptop */
-@media (min-width: 1000px) {
-  .tile__letter {
-    padding: 1.5rem 1.5rem;
-    font-size: 2.5rem;
-  }
-  .tile__points {
-    font-size: 1rem;
-  }
-}
+
 
 
 @media (max-width: 500px) {
@@ -109,5 +101,8 @@
 
 
 /* desktop */
-@media (min-width: 1250px) {
+@media (min-width: 850px) {
+  .tile__points--sm {
+    font-size: 0.6rem;
+  }
 }
