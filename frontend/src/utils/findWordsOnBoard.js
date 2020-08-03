@@ -3,15 +3,19 @@ export const findWordsOnBoard = (boardState, placedTiles) => {
     newWord = false,
     words = [],
     letters = [],
-    dirs = ["down", "across"],
+    dirs = ["across", "down"],
     squares = [];
   console.log('placedTiles:');
   console.log(placedTiles);
+  //console.log('BoardState:');
+  //console.log(boardState);
   const checkSquare = (dir, x, y) => {
     if (y === 14) {
       console.log('');
     }
     let [row, col] = dir === "across" ? [x, y] : [y, x];
+    //console.log('row / col');
+    //console.log(row, col);
     var currentSquare = boardState[col + (row * 15)];
     const addWord = () => {
       words.push({
@@ -48,8 +52,13 @@ export const findWordsOnBoard = (boardState, placedTiles) => {
         letters = [];
         newWord = false;
         squares = [];
-      } else if (wordStart == "" && col !== 14) {
-        wordStart = `${row}-${col}`;    
+      } else {
+        if (dir == 'across' && wordStart == "" && col !== 14) {
+          wordStart = `${row}-${col}`;    
+        }
+        if (dir == 'down' && wordStart == "" && row !== 14) {
+          wordStart = `${row}-${col}`;    
+        }
       }
     }
   };
@@ -58,6 +67,10 @@ export const findWordsOnBoard = (boardState, placedTiles) => {
     for (var x = 0; x < 15; x++) {
       for (var y = 0; y < 15; y++) {
         checkSquare(dir, x, y);
+        //console.log('checkSquare ' + dir);
+        //console.log(x, y);
+        //console.log(letters);
+        //console.log(wordStart);
       }
     }
   });
