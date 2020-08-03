@@ -12,7 +12,14 @@ export const moveIsValid = (placedTiles, boardState) => {
   const colsAreSame = occupiedSquares.every(
     (square) => square.col === occupiedSquares[0].col
   );
-  if (!rowsAreSame && !colsAreSame) return false;
+  if (!rowsAreSame && !colsAreSame) {
+    console.log("PLACED TILES");
+    console.log(placedTiles);
+    console.log("OCCUPIED SQUARES");
+    console.log(occupiedSquares);
+    console.log("NOT ALL IN SAME LINE!");
+    return false;
+  }
   //must be no gap between the first and last placed tiles
   const sortedSquares = occupiedSquares.sort((a, b) => a.index < b.index);
   const firstSquare = sortedSquares[0];
@@ -35,6 +42,13 @@ export const moveIsValid = (placedTiles, boardState) => {
     )
     .map((square) => square.index);
   if (!squaresAreOccupied(indicesToCheck, boardState)) {
+    console.log("PLACED TILES");
+    console.log(placedTiles);
+    console.log("OCCUPIED SQUARES");
+    console.log(occupiedSquares);
+    console.log("SQUARES THAT MUST BE OCCUPIED");
+    console.log(indicesToCheck);
+    console.log("MUST BE NO GAP!");
     return false;
   }
   const tilesOnBoard = boardState.filter((square) => square.tile);
@@ -71,6 +85,15 @@ export const moveIsValid = (placedTiles, boardState) => {
         (square) => square.tile
       );
       if (occupiedAdjacentSquares.length === 0) {
+        console.log("PLACED TILES");
+        console.log(placedTiles);
+        console.log("OCCUPIED SQUARES");
+        console.log(occupiedSquares);
+        console.log("ALL ADJACENT SQUARES");
+        console.log(adjacentSquares);
+        console.log("OCCUPIED ADJACENT SQUARES");
+        console.log(occupiedAdjacentSquares);
+        console.log("MUST BE CONNECTED TO ANOTHER TILE!");
         return false;
       }
     }

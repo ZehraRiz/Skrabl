@@ -9,7 +9,6 @@ require("dotenv").config();
 const axios = require("axios");
 const cors = require("cors");
 const moment = require("moment");
-let now = moment();
 const computerRoute = require("./computerRoute");
 const initializePouch = require("./utils/initializePouch");
 
@@ -31,11 +30,11 @@ app.post("/verifyWord", async (req, res) => {
   const { words, lang } = req.body;
   let wordListToUse;
   if (lang === "en") {
-    wordListToUse = "./englishBig.txt";
+    wordListToUse = "./dictionaries/englishBig.txt";
   } else if (lang === "tr") {
-    wordListToUse = "./turkish.txt";
+    wordListToUse = "./dictionaries/turkish.txt";
   } else if (lang === "fr") {
-    wordListToUse = "./french.txt";
+    wordListToUse = "./dictionaries/french.txt";
   }
   const results = {};
   words.forEach((wordObj) => {
