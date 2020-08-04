@@ -183,6 +183,7 @@ module.exports.listen = function (io, socket) {
       opponentTimeLeft,
       consecutivePasses,
       highestScoringWord,
+      outcome
     }) => {
       const game = findGame(gameId);
       if (!game) {
@@ -195,6 +196,7 @@ module.exports.listen = function (io, socket) {
         game.gameState.scores = scores;
         game.gameState.consecutivePasses = consecutivePasses;
         game.gameState.highestScoringWord = highestScoringWord;
+        game.gameState.outcome = outcome;
         if (player === 0) {
           game.gameState.player1Tiles = playerRackTiles;
           game.gameState.turn = 1;
@@ -214,7 +216,7 @@ module.exports.listen = function (io, socket) {
     }
   );
 
-  socket.on("gameOver", (gameId) => {
+  socket.on("gameOver", (gameId, outcome) => {
     const game = findGame(gameId);
     if (!game) {
       socket.emit("gameEnded", "The game has ended");
@@ -222,6 +224,7 @@ module.exports.listen = function (io, socket) {
     } else {
       removeGameFromUser(game.player1.playerId, gameId);
       removeGameFromUser(game.player2.playerId, gameId);
+      if (outcome) game.gameState.outcome = outcome;
       game.gameState.isOver = true;
       removeGame(gameId);
       io.in(gameId).emit("gameEnd", game);

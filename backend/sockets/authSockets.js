@@ -13,7 +13,7 @@ module.exports.listen = function (io, socket) {
 	socket.on("username", ({name, lang}) => {
 		if (name === "") {
 			//validation needs to be improved
-			socket.emit("usernameError", "please enter a valid username");
+			socket.emit("usernameError", "Please enter a valid username");
     } else {
 			const registeredUser = setRegisteredUser(Math.random(1 - 100), name, [socket.id], lang);
 			socket.emit("usernameRegistered", {
