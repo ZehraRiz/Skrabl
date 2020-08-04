@@ -55,6 +55,7 @@ h1 {
   height: 93vh;
   display: flex;
   align-items: center;
+  justify-content: center;
 }
 
 button:focus {

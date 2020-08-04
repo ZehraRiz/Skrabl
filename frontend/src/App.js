@@ -11,6 +11,7 @@ import RulesModal from "./components/RulesModal";
 import "./styles/global.css";
 import WelcomeScreen from "./components/WelcomeScreen";
 import TitleScreen from "./components/TitleScreen";
+import LevelSelectScreen from "./components/LevelSelectScreen";
 
 const App = () => {
   const [currentComponent, setCurrentComponent] = useState("TitleScreen");
@@ -29,11 +30,12 @@ const App = () => {
   const [newChatMsg, setNewChatMsg] = useState(false);
   const [lang, setLang] = useState("en");
   const [level, setLevel] = useState("normal");
+  const [difficulty, setDifficulty] = useState("normal");
 
   useEffect(() => {
     if (gameMode === "Computer") {
       setCurrentPlayer(0);
-      setCurrentComponent("GameScreen");
+      setCurrentComponent("LevelSelectScreen");
     }
     if (gameMode === "Online") {
       setSocket(io("http://localhost:4001"));
@@ -71,6 +73,7 @@ const App = () => {
   }
 
   const handleStart = () => {
+    setGameMode(null);
     setCurrentComponent("WelcomeScreen");
   };
 
@@ -87,6 +90,25 @@ const App = () => {
     setLang("tr");
   };
 
+  const handleChooseEasy = () => {
+    setDifficulty("easy");
+    setCurrentComponent("GameScreen");
+  };
+
+  const handleChooseNormal = () => {
+    setDifficulty("normal");
+    setCurrentComponent("GameScreen");
+  };
+
+  const handleChooseHard = () => {
+    setDifficulty("hard");
+    setCurrentComponent("GameScreen");
+  };
+
+  useEffect(() => {
+    console.log(difficulty);
+  }, [difficulty])
+ 
   return (
     <div className="page">
       {currentComponent !== "TitleScreen" && (
@@ -110,6 +132,14 @@ const App = () => {
           setLangFr={setLangFr}
           setLangDe={setLangDe}
           setLangTr={setLangTr}
+        />
+      )}
+      {currentComponent === "LevelSelectScreen" && (
+        <LevelSelectScreen
+          handleStart={handleStart}
+          handleChooseEasy={handleChooseEasy}
+          handleChooseNormal={handleChooseNormal}
+          handleChooseHard={handleChooseHard}
         />
       )}
       {currentComponent === "Login" && (
