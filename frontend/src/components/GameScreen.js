@@ -14,6 +14,7 @@ import { moveIsValid } from "../utils/moveIsValid";
 import { squaresAreOccupied } from "../utils/squaresAreOccupied";
 import { findWordsOnBoard } from "../utils/findWordsOnBoard";
 import { getTurnPoints } from "../utils/getTurnPoints";
+import { handleBlankTiles } from "../utils/handleBlankTiles"
 import { bonusSquareIndices } from "../assets/bonusSquareIndices";
 import { Fade } from "react-awesome-reveal";
 import axios from "axios";
@@ -59,6 +60,7 @@ const GameScreen = ({
   const [pouch, setPouch] = useState([]);
   const [computerRackTiles, setComputerRackTiles] = useState([]);
   const [newMessage, setNewMessage] = useState();
+  const [turnWords, setTurnWords] = useState([])
 
   const fillPouch = async () => {
     const res = await axios.post("http://localhost:4001/getPouch", {
@@ -535,41 +537,42 @@ const GameScreen = ({
     if (currentPlayer !== turn) return;
     if (moveIsValid(placedTiles, boardState)) {
       var newWords = wordsOnBoard.filter((word) => word.newWord === true);
-      axios
-        .post("http://localhost:4001/verifyWord", {
-          words: newWords,
-          lang,
-        })
-        .then((res) => {
-          const results = res.data;
-          if (Object.values(results).every((val) => val === "true")) {
-            const [turnPoints, turnHighScore] = getTurnPoints(
-              newWords,
-              placedTiles
-            );
-            const playerPreviousPoints = scores[turn];
-            const updatedScores = {
-              ...scores,
-              [turn]: playerPreviousPoints + turnPoints,
-            };
-            setScores(updatedScores);
-            if (turnHighScore.points > highestScoringWord.points) {
-              setHighestScoringWord(turnHighScore);
-              nextPlayer(consecutivePasses * -1, updatedScores, turnHighScore);
-            } else
-              nextPlayer(
-                consecutivePasses * -1,
-                updatedScores,
-                highestScoringWord
-              );
-            setPlacedTiles([]);
-            return;
-          } else {
-            setNotification("Don't make up words!");
-            return;
-          }
-        });
-      return;
+      handleBlankTiles(newWords, setConfirmMessage, setTurnWords )
+      // axios
+      //   .post("http://localhost:4001/verifyWord", {
+      //     words: newWords,
+      //     lang,
+      //   })
+      //   .then((res) => {
+      //     const results = res.data;
+      //     if (Object.values(results).every((val) => val === "true")) {
+      //       const [turnPoints, turnHighScore] = getTurnPoints(
+      //         newWords,
+      //         placedTiles
+      //       );
+      //       const playerPreviousPoints = scores[turn];
+      //       const updatedScores = {
+      //         ...scores,
+      //         [turn]: playerPreviousPoints + turnPoints,
+      //       };
+      //       setScores(updatedScores);
+      //       if (turnHighScore.points > highestScoringWord.points) {
+      //         setHighestScoringWord(turnHighScore);
+      //         nextPlayer(consecutivePasses * -1, updatedScores, turnHighScore);
+      //       } else
+      //         nextPlayer(
+      //           consecutivePasses * -1,
+      //           updatedScores,
+      //           highestScoringWord
+      //         );
+      //       setPlacedTiles([]);
+      //       return;
+      //     } else {
+      //       setNotification("Don't make up words!");
+      //       return;
+      //     }
+      //   });
+      // return;
     } else {
       setNotification("move is not valid");
       return;

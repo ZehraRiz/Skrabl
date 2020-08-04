@@ -26,15 +26,26 @@ const ConfirmModal = ({
     case "confirm":
       confirmFunction = handleConfirmMove;
       break;
+    
+    case "blankTile":
+      confirmFunction = closeModal;
+      break;
 
     default:
       return;
+  }
+
+  constSetBlankTileValue = () => {
+    
   }
   
   return (
     <Fade triggerOnce className="confirmModal__wrapper">
       <div className="confirmModal__content">
         <p>{message.message}</p>
+        {message.type === "blankTile" &&
+        <input></input>
+      }
         <div className="confirmModal__buttons">
           <button className="button__confirm" onClick={confirmFunction}>
             Confirm
