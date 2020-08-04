@@ -1,4 +1,4 @@
-export const getTurnPoints = (newWords, placedTiles) => {
+export const getTurnPoints = (newWords, placedTiles, turn) => {
   let newPoints = 0;
   let turnHighScore = { word: "", points: 0 };
   newWords.forEach((wordObj) => {
@@ -19,7 +19,7 @@ export const getTurnPoints = (newWords, placedTiles) => {
       });
     }
     if (wordPoints > turnHighScore.points) {
-      turnHighScore = { word: wordObj.word, points: wordPoints };
+      turnHighScore = { word: wordObj.word, points: wordPoints, player: turn };
     }
     newPoints += wordPoints;
   });

@@ -51,6 +51,7 @@ const GameScreen = ({
   const [highestScoringWord, setHighestScoringWord] = useState({
     word: "",
     points: 0,
+    player: null,
   });
   const [turn, setTurn] = useState(null);
   const [outcome, setOutcome] = useState(null);
@@ -175,7 +176,8 @@ const GameScreen = ({
           ).filter((word) => word.newWord === true);
           const [turnPoints, turnHighScore] = getTurnPoints(
             newWords,
-            res.data.tilesUsed
+            res.data.tilesUsed,
+            turn
           );
           if (turnHighScore.points > highestScoringWord.points) {
             setHighestScoringWord(turnHighScore);
@@ -219,7 +221,7 @@ const GameScreen = ({
       setTurn(gameData.gameState.turn);
       setConsecutivePasses(gameData.gameState.consecutivePasses);
       setPouch(gameData.gameState.pouch);
-      setHighestScoringWord({ word: "", points: 0 });
+      setHighestScoringWord({ word: "", points: 0, player: null });
       setOutcome(null);
     }
     if (gameMode === "Computer") {
@@ -563,7 +565,8 @@ const GameScreen = ({
           if (Object.values(results).every((val) => val === "true")) {
             const [turnPoints, turnHighScore] = getTurnPoints(
               newWords,
-              placedTiles
+              placedTiles,
+              turn
             );
             const playerPreviousPoints = scores[turn];
             const updatedScores = {
