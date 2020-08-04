@@ -345,8 +345,12 @@ const GameScreen = ({
       });
     }
     if (gameMode === "Computer") {
-      setTurn(turn === 0 ? 1 : 0);
-      setConsecutivePasses(consecutivePasses + x);
+      if (!pouch.length && consecutivePasses > 1) {
+        return;
+      } else {
+        setTurn(turn === 0 ? 1 : 0);
+        setConsecutivePasses(consecutivePasses + x);
+      }
     }
   };
 
@@ -591,24 +595,22 @@ const GameScreen = ({
     }
     if (gameMode === "Computer") {
       setGameIsOver(true);
+      exitGame();
     }
   };
 
   const exitGame = () => {
-    if (gameMode === "Online") {
-      setGameIsOver(true);
-    }
-    if (gameMode === "Computer") {
-      setGameMode(null);
-      setCurrentComponent("WelcomeScreen");
-    }
+    setGameIsOver(true);
   };
 
   const returnToHomeScreen = () => {
     if (gameMode === "Online") {
       resetChatMsg();
       setCurrentComponent("Players");
-    } else setCurrentComponent("WelcomeScreen");
+    } else {
+      setCurrentComponent("WelcomeScreen");
+      setGameMode(null);
+    }
   };
 
   const closeModal = () => {

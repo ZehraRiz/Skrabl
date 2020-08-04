@@ -6,7 +6,7 @@ const appDir = path.dirname(require.main.filename);
 const allWordsAreValid = (boardState, newTileIds, lang) => {
   let wordListToUse;
   if (lang === "en") {
-    wordListToUse = appDir + "/dictionaries/englishSmall.txt";
+    wordListToUse = appDir + "/dictionaries/englishNormal.txt";
   } else if (lang === "tr") {
     wordListToUse = appDir + "/dictionaries/turkishSmall.txt";
   }

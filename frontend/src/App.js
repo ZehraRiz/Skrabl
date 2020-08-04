@@ -29,7 +29,7 @@ const App = () => {
   const [viewChat, setViewChat] = useState(false);
   const [newChatMsg, setNewChatMsg] = useState(false);
   const [lang, setLang] = useState("en");
-  const [level, setLevel] = useState("normal");
+  const [level, setLevel] = useState("hard");
   const [difficulty, setDifficulty] = useState("normal");
 
   useEffect(() => {
@@ -66,11 +66,11 @@ const App = () => {
 
   const handleNewChatMsg = () => {
     setNewChatMsg(true);
-  }
+  };
 
   const resetChatMsg = () => {
     setNewChatMsg(false);
-  }
+  };
 
   const handleStart = () => {
     setGameMode(null);
