@@ -33,9 +33,7 @@ const StatusBar = ({
           <div className="pouchInfo">
             <div className="pouch">
               <img className="pouchIcon" src={Pouch} />
-              <div className="tileCounter">
-                    {pouch.length}
-              </div>
+              <div className="tileCounter">{pouch.length}</div>
             </div>
           </div>
           {gameMode === "Computer" && (
@@ -47,11 +45,16 @@ const StatusBar = ({
           {gameMode === "Online" && (
             <div className="rackInfo">
               <h3>Highest scoring word</h3>
-              {highestScoringWord.word.length > 0 && <div className="hiScore">{`'${highestScoringWord.word.toUpperCase()}' - ${highestScoringWord.points}pts`}</div>}
-              {highestScoringWord.word.length === 0 && <div className="hiScore">{`...`}</div>}
+              {highestScoringWord.word.length > 0 && (
+                <div className="hiScore">{`'${highestScoringWord.word.toUpperCase()}' - ${
+                  highestScoringWord.points
+                }pts`}</div>
+              )}
+              {highestScoringWord.word.length === 0 && (
+                <div className="hiScore">{`...`}</div>
+              )}
             </div>
           )}
-
         </div>
         <div
           className={

@@ -12,6 +12,7 @@ const Login = ({
   setInviteSent,
   setCurrentPlayer,
   setGameData,
+  setNotification,
   handleStart,
   lang
 }) => {
@@ -65,8 +66,9 @@ const Login = ({
     e.preventDefault();
     const name = e.target.name.value;
     socket.emit("username", {name, lang});
-    socket.on("usernameError", (data) => {
+    socket.on("usernameError", (data) => { 
       console.log(data);
+      setNotification(data);
       return;
     });
     socket.on("usernameRegistered", (data) => {

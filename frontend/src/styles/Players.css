@@ -52,6 +52,12 @@
   justify-content: center;
 }
 
+.players__wrapper button {
+  max-width: 200px;
+  margin-top: 1em;
+  padding: .5em;
+}
+
 .player__invite-request p {
   margin-bottom: 1em;
 }

@@ -1,14 +1,14 @@
 const squaresAreOccupied = require("./utils/squaresAreOccupied");
+const allWordsAreValid = require("./utils/allWordsAreValid");
 
-const getMove = (longerWord, wordOnBoard, rackTiles, boardState) => {
+const getMove = (longerWord, wordOnBoard, rackTiles, boardState, lang) => {
   let rackLettersAvailable = rackTiles.map((tile) => tile.letter);
   const blanksAvailable = rackTiles.filter((tile) => tile.letter === "");
   const wordOnBoardStr = wordOnBoard
     .map((square) => square.tile.letter)
     .join("");
-  const tilesUsed = [];
+  let tilesUsed = [];
   let moveFound = false;
-
   let dirs;
   //if only one square
   if (wordOnBoard.length < 2) {
@@ -18,12 +18,14 @@ const getMove = (longerWord, wordOnBoard, rackTiles, boardState) => {
   } else {
     dirs = ["x"];
   }
+  //could check if letter on board appears multiple times in word from dictionary
+  //could try all positionings in that case rather than just one
   const index = longerWord.search(wordOnBoardStr);
   const lettersBefore = longerWord.substr(0, index);
   const lettersAfter = longerWord.substr(index + wordOnBoardStr.length);
   const remainingLetters = lettersBefore + lettersAfter;
   const squaresToUseIndices = [];
-  const placement = {};
+  let placement = {};
   if (remainingLetters.length === 0) {
     return null;
   }
@@ -56,8 +58,10 @@ const getMove = (longerWord, wordOnBoard, rackTiles, boardState) => {
       rackLettersAvailable.splice(indexToRemove, 1);
     }
   }
-
   for (let i = 0; i < dirs.length; i++) {
+    //reset placement and tiles used when trying diff direction
+    placement = {};
+    tilesUsed = [];
     const dir = dirs[i];
     const max = 14;
     const min = 0;
@@ -127,23 +131,39 @@ const getMove = (longerWord, wordOnBoard, rackTiles, boardState) => {
       tilesUsed.push(tileToUse);
     }
     if (tilesUsed.length === remainingLetters.length) {
-      moveFound = true;
-      break;
+      //move has been found
+      const newBoardState = boardState.map((square) => {
+        if (squaresToUseIndices.includes(square.index)) {
+          //get first tile with same letter from rack and insert
+          const index = rackTiles.findIndex(
+            (tile) => tile.letter === placement[square.index]
+          );
+          const tileToPlace = rackTiles[index];
+          return { ...square, tile: tileToPlace };
+        } else {
+          return square;
+        }
+      });
+      const usedTileIds = tilesUsed.map((tile) => tile.id);
+      const newRackTiles = rackTiles.filter(
+        (tile) => !usedTileIds.includes(tile.id)
+      );
+      const moveIsValid = allWordsAreValid(newBoardState, usedTileIds, lang);
+
+      if (moveIsValid) {
+        return {
+          word: longerWord,
+          placement,
+          newBoardState,
+          newRackTiles,
+          tilesUsed,
+        };
+      }
+      //if move isn't valid, check next dir (if there is one)
     }
   }
-  if (moveFound) {
-    //one flaw here is that, a horizontal placement might be returned from here but might not pass validate test in findWord
-    //if that happens, the loop goes to the next word in the list - never checking vertical alignment
-    return {
-      word: longerWord,
-      placement,
-      updatedSquares: squaresToUseIndices,
-      updatedRackTiles: rackTiles,
-      tilesUsed,
-    };
-  } else {
-    return null;
-  }
+  //if loops over both dirs and no move is possible
+  return null;
 };
 
 module.exports = getMove;

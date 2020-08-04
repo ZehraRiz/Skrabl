@@ -17,6 +17,7 @@ import { getTurnPoints } from "../utils/getTurnPoints";
 import { handleBlankTiles } from "../utils/handleBlankTiles"
 import { bonusSquareIndices } from "../assets/bonusSquareIndices";
 import { Fade } from "react-awesome-reveal";
+import { useBeforeunload } from 'react-beforeunload';
 import axios from "axios";
 import "../styles/GameScreen.css";
 
@@ -78,6 +79,8 @@ const GameScreen = ({
     },
   ]);
   const [turnWords, setTurnWords] = useState([])
+
+  useBeforeunload(() => "Are you sure you want to leave the game?");
 
   useEffect(() => {
     if (gameMode === "Online") {
@@ -344,8 +347,12 @@ const GameScreen = ({
       });
     }
     if (gameMode === "Computer") {
-      setTurn(turn === 0 ? 1 : 0);
-      setConsecutivePasses(consecutivePasses + x);
+      if (!pouch.length && consecutivePasses > 1) {
+        return;
+      } else {
+        setTurn(turn === 0 ? 1 : 0);
+        setConsecutivePasses(consecutivePasses + x);
+      }
     }
   };
 
@@ -592,24 +599,22 @@ const GameScreen = ({
     }
     if (gameMode === "Computer") {
       setGameIsOver(true);
+      exitGame();
     }
   };
 
   const exitGame = () => {
-    if (gameMode === "Online") {
-      setGameIsOver(true);
-    }
-    if (gameMode === "Computer") {
-      setGameMode(null);
-      setCurrentComponent("WelcomeScreen");
-    }
+    setGameIsOver(true);
   };
 
   const returnToHomeScreen = () => {
     if (gameMode === "Online") {
       resetChatMsg();
       setCurrentComponent("Players");
-    } else setCurrentComponent("WelcomeScreen");
+    } else {
+      setCurrentComponent("WelcomeScreen");
+      setGameMode(null);
+    }
   };
 
   const closeModal = () => {

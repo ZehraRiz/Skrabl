@@ -1,15 +1,24 @@
 const findDictionaryMatches = require("./findDictionaryMatches");
 const getMove = require("./getMove");
-const getNewBoardState = require("./getNewBoardState");
-const allWordsAreValid = require("./utils/allWordsAreValid");
 
-const findWord = (fragments, rackTiles, boardState, lang) => {
+const findWord = (fragments, rackTiles, boardState, lang, level) => {
   //for each word/tile on board, get words that can be created by extending it
   for (let i = 0; i < fragments.length; i++) {
-    const longerWords = findDictionaryMatches(fragments[i], lang);
+    const longerWords = findDictionaryMatches(fragments[i], lang, level);
     if (longerWords) {
       //sort longest to shortest
-      const longerWordsSorted = longerWords.sort((a, b) => b.length - a.length);
+      let longerWordsSorted;
+      if (level === "easy") {
+        //shortest to longest
+        longerWordsSorted = longerWords.sort((a, b) => a.length - b.length);
+      } else if (level === "normal") {
+        //random
+        longerWordsSorted = longerWords;
+      } else {
+        //longest to shortest
+        longerWordsSorted = longerWords.sort((a, b) => b.length - a.length);
+      }
+      console.log("LONGER WORDS NUM: " + longerWordsSorted.length);
       //loop over the longer words and go for the first that's possible
       const rackTilesCopy = [...rackTiles];
       for (let j = 0; j < longerWordsSorted.length; j++) {
@@ -17,29 +26,11 @@ const findWord = (fragments, rackTiles, boardState, lang) => {
           longerWordsSorted[j],
           fragments[i],
           rackTilesCopy,
-          boardState
+          boardState,
+          lang
         );
         if (moveData) {
-          const usedTileIds = moveData.tilesUsed.map((tile) => tile.id);
-          const newRackTiles = rackTiles.filter(
-            (tile) => !usedTileIds.includes(tile.id)
-          );
-          const { boardState: newBoardState } = getNewBoardState(
-            moveData,
-            boardState
-          );
-          const moveIsValid = allWordsAreValid(
-            newBoardState,
-            usedTileIds,
-            lang
-          );
-          if (moveIsValid) {
-            return {
-              newBoardState,
-              newRackTiles,
-              tilesUsed: moveData.tilesUsed,
-            };
-          }
+          return moveData;
         }
       }
     } else {
