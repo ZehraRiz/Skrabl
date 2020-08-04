@@ -3,16 +3,18 @@ const getMove = require("./getMove");
 const getNewBoardState = require("./getNewBoardState");
 const allWordsAreValid = require("./utils/allWordsAreValid");
 
-const findWord = (fragments, rackTiles, boardState) => {
+const findWord = (fragments, rackTiles, boardState, lang) => {
   //for each word/tile on board, get words that can be created by extending it
   for (let i = 0; i < fragments.length; i++) {
-    const longerWords = findDictionaryMatches(fragments[i]);
+    const longerWords = findDictionaryMatches(fragments[i], lang);
     if (longerWords) {
+      //sort longest to shortest
+      const longerWordsSorted = longerWords.sort((a, b) => b.length - a.length);
       //loop over the longer words and go for the first that's possible
       const rackTilesCopy = [...rackTiles];
-      for (let j = 0; j < longerWords.length; j++) {
+      for (let j = 0; j < longerWordsSorted.length; j++) {
         const moveData = getMove(
-          longerWords[j],
+          longerWordsSorted[j],
           fragments[i],
           rackTilesCopy,
           boardState
@@ -26,7 +28,11 @@ const findWord = (fragments, rackTiles, boardState) => {
             moveData,
             boardState
           );
-          const moveIsValid = allWordsAreValid(newBoardState, usedTileIds);
+          const moveIsValid = allWordsAreValid(
+            newBoardState,
+            usedTileIds,
+            lang
+          );
           if (moveIsValid) {
             return {
               newBoardState,
