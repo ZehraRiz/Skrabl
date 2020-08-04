@@ -583,8 +583,19 @@ const GameScreen = ({
             setPlacedTiles([]);
             return;
           } else {
-            setNotification("Don't make up words!");
-            return;
+            const checkedWords = Object.keys(results);
+            const invalidWords = [];
+            checkedWords.forEach((word) => {
+              if (results[word] === "false") {
+                invalidWords.push(word);
+              } else {
+                return;
+              }
+            });
+            //just showing first for simplicity
+            setNotification(
+              `The word "${invalidWords[0]}" was not found in the dictionary.`
+            );
           }
         });
       return;
