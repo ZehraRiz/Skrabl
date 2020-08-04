@@ -80,7 +80,7 @@ const GameScreen = ({
 
   useEffect(() => {
     if (gameMode === "Online") {
-      socket.on("recieveMsg", (data) => {
+      socket.on("receiveMsg", (data) => {
         setNewMessage(data);
         handleNewChatMsg();
       });
@@ -109,26 +109,27 @@ const GameScreen = ({
   };
 
   useEffect(() => {
-    if (gameMode === "Online") {
-      if (turn === 1) {
-        getTiles();
-      }
-    }
-    if (gameMode === "Computer") {
+    if (turn !== null) {
       getTiles();
     }
   }, [turn]);
 
   useEffect(() => {
     //fill racks at start of game (after pouch is ready)
-    if (pouch.length && !playerRackTiles.length && !computerRackTiles.length) {
-      const pouchCopy = [...pouch];
-      const newTilesHuman = pouchCopy.slice(0, 7);
-      const newTilesComputer = pouchCopy.slice(7, 14);
-      pouchCopy.splice(0, 14);
-      setPouch([...pouchCopy]);
-      setPlayerRackTiles([...newTilesHuman]);
-      setComputerRackTiles([...newTilesComputer]);
+    if (gameMode === "Computer") {
+      if (
+        pouch.length &&
+        !playerRackTiles.length &&
+        !computerRackTiles.length
+      ) {
+        const pouchCopy = [...pouch];
+        const newTilesHuman = pouchCopy.slice(0, 7);
+        const newTilesComputer = pouchCopy.slice(7, 14);
+        pouchCopy.splice(0, 14);
+        setPouch([...pouchCopy]);
+        setPlayerRackTiles([...newTilesHuman]);
+        setComputerRackTiles([...newTilesComputer]);
+      }
     }
   }, [pouch]);
 
@@ -284,7 +285,7 @@ const GameScreen = ({
         setOutcome(data.gameState.outcome);
       });
     }
-  }, []);
+  }, [playerRackTiles]);
 
   const getBoard = () => {
     const squares = generateBoardSquares(bonusSquareIndices);
@@ -292,7 +293,7 @@ const GameScreen = ({
   };
 
   const getTiles = () => {
-    if (gameMode === "Online") {
+    if (gameMode === "Online" && turn !== currentPlayer) {
       const numTilesNeeded = 7 - playerRackTiles.length;
       if (numTilesNeeded <= 0) {
         return;
