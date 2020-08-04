@@ -11,11 +11,11 @@ const InviteScreen = ({
   setGameData,
   socket,
   setCurrentPlayer,
-  inviteSent, 
+  inviteSent,
   setInviteSent,
 }) => {
   const [timeInput, setTimeInput] = useState(20);
-  
+
   let [invite, setInvite] = useState("");
 
   const handleTimeChange = (e) => {
@@ -25,33 +25,30 @@ const InviteScreen = ({
   const handleClose = () => {
     socket.emit("removeGame", gameId);
     socket.on("removedGame", (data) => {
-      console.log(data)
+      console.log(data);
       setInvitedPlayer("");
       setCurrentComponent("Players");
     });
   };
 
   socket.on("gameJoined2", (data) => {
-    if(invite===""){
-        setCurrentPlayer(0);
-        setGameData(data.game);
-        setCurrentComponent("GameScreen");
-    }
-    else {
+    if (invite === "") {
+      setCurrentPlayer(0);
+      setGameData(data.game);
+      setCurrentComponent("GameScreen");
+    } else {
       setCurrentPlayer(1);
       setGameData(data.game);
-      setInvitedPlayer(invite.host)
+      setInvitedPlayer(invite.host);
       setCurrentComponent("GameScreen");
     }
   });
-
-  
 
   socket.on("invite", (data) => {
     setInvite(data);
   });
   const acceptInvite = () => {
-    setInvite("")
+    setInvite("");
     socket.emit("inviteAccepted", {
       token: user.token,
       gameId: invite.game.gameId,
@@ -63,7 +60,7 @@ const InviteScreen = ({
       console.log(data);
       setCurrentPlayer(1);
       setGameData(data.game);
-      setInvitedPlayer(invite.host)
+      setInvitedPlayer(invite.host);
       setCurrentComponent("GameScreen");
     });
   };
@@ -112,15 +109,17 @@ const InviteScreen = ({
       <div className="inviteScreen__wrapper">
         <h3>You are inviting: {invitedPlayer.name}</h3>
         <div className="inviteScreen__list">
-          <div className="inviteScreen__option">
-            <label htmlFor="time">Time per player per game (mins):</label>
-            <input
-              type="number"
-              id="time"
-              value={timeInput}
-              onChange={handleTimeChange}
-            />
-          </div>
+          {!inviteSent && (
+            <div className="inviteScreen__option">
+              <label htmlFor="time">Time per player per game (mins):</label>
+              <input
+                type="number"
+                id="time"
+                value={timeInput}
+                onChange={handleTimeChange}
+              />
+            </div>
+          )}
         </div>
         <div className="inviteScreen__buttons">
           <button type="button" onClick={handleClose}>
@@ -133,9 +132,7 @@ const InviteScreen = ({
             </button>
           )}
 
-          {inviteSent && (
-            <p>Waiting for player to accept invite</p>
-          )}
+          {inviteSent && <p>Waiting for player to accept invite</p>}
           {invite !== "" && (
             <div>
               <p>{invite.host.name} sent you a game request</p>
