@@ -162,7 +162,7 @@ const GameScreen = ({
           setPouch([...pouch, ...computerRackTilesCopy]);
           setComputerRackTiles([]);
           //computer rack tiles might not be updated by the time getTiles is called
-          nextPlayer();
+          nextPlayer(0, scores, highestScoringWord);
         } else if (res.data.pass || (res.data.exchange && !pouch.length)) {
           setComputerConsecutivePasses(computerConsecutivePasses + 1);
           setNotification("SkrablBot has decided to pass.");

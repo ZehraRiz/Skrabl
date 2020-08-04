@@ -11,7 +11,11 @@ const findDictionaryMatches = (word, lang, level) => {
       wordList = "./dictionaries/englishHard.txt";
     }
   } else if (lang === "tr") {
-    wordList = "./dictionaries/turkishSmall.txt";
+    if (level === "easy") {
+      wordList = "./dictionaries/turkishEasy.txt";
+    } else {
+      wordList = "./dictionaries/turkishHard.txt";
+    }
   } else if (lang === "fr") {
     wordList = "./dictionaries/french.txt";
   }
