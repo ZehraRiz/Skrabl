@@ -52,14 +52,13 @@ const GameScreen = ({
     points: 0,
   });
   const [turn, setTurn] = useState(null);
+  const [outcome, setOutcome] = useState(null);
   const [tilesToExchange, setTilesToExchange] = useState([]);
   const [boardIsDisabled, setBoardIsDisabled] = useState(false);
   const [consecutivePasses, setConsecutivePasses] = useState(0);
   const [computerConsecutivePasses, setComputerConsecutivePasses] = useState(0);
   const [pouch, setPouch] = useState([]);
   const [computerRackTiles, setComputerRackTiles] = useState([]);
-  const [newMessage, setNewMessage] = useState();
-
   const fillPouch = async () => {
     const res = await axios.post("http://localhost:4001/getPouch", {
       lang,
@@ -68,6 +67,7 @@ const GameScreen = ({
   };
   const moment = require("moment");
   let now = moment();
+  const [newMessage, setNewMessage] = useState();
   const [chatThread, setChatThread] = useState([
     {
       playerFromBackend: 0,
@@ -214,6 +214,7 @@ const GameScreen = ({
       setConsecutivePasses(gameData.gameState.consecutivePasses);
       setPouch(gameData.gameState.pouch);
       setHighestScoringWord({ word: "", points: 0 });
+      setOutcome(null);
     }
     if (gameMode === "Computer") {
       fillPouch();
@@ -280,6 +281,7 @@ const GameScreen = ({
         setTurn(data.gameState.turn);
         setConsecutivePasses(data.gameState.consecutivePasses);
         setHighestScoringWord(data.gameState.highestScoringWord);
+        setOutcome(data.gameState.outcome);
       });
     }
   }, [playerRackTiles]);
@@ -324,7 +326,7 @@ const GameScreen = ({
     }
   };
 
-  const nextPlayer = (x = 0, newScores = { 0: 0, 0: 0 }) => {
+  const nextPlayer = (x = 0, newScores = { 0: 0, 0: 0 }, highestScoringWord = highestScoringWord) => {
     if (gameMode === "Online") {
       socket.emit("updateGameState", {
         gameId: gameData.gameId,
@@ -470,7 +472,8 @@ const GameScreen = ({
 
   const handleResign = () => {
     closeModal();
-    gameOver();
+    setOutcome('Resign');
+    gameOver('Resign');
   };
 
   const handlePass = () => {
@@ -579,9 +582,9 @@ const GameScreen = ({
 
   //OTHER
 
-  const gameOver = () => {
+  const gameOver = (outcome) => {
     if (gameMode === "Online") {
-      socket.emit("gameOver", gameData.gameId);
+      socket.emit("gameOver", gameData.gameId, outcome);
     }
     if (gameMode === "Computer") {
       setGameIsOver(true);
@@ -690,6 +693,7 @@ const GameScreen = ({
             invitedPlayer={invitedPlayer}
             currentPlayer={currentPlayer}
             scores={scores}
+            outcome={outcome}
             highestScoringWord={highestScoringWord}
             gameMode={gameMode}
             // scoredWords={scoredWords}

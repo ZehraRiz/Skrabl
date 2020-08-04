@@ -9,35 +9,53 @@ const GameOverModal = ({
   currentPlayer,
   user,
   invitedPlayer,
-  gameMode
+  gameMode,
+  outcome
 }) => {
-  let result = 0;
-  const opponent = gameMode === "Online" ? invitedPlayer.name : "SkrablBot";
-  const player = gameMode === "Online" ? user.name : "Player";
+  let result = '';
+  const opponentName = gameMode === "Online" ? invitedPlayer.name : "SkrablBot";
+  const playerName = gameMode === "Online" ? user.name : "Player";
   const hsw = highestScoringWord.word.toUpperCase();
-
+  
+  if (currentPlayer == 0) {
+    var playerScore = scores[0];
+    var opponentScore = scores[1];
+    // playerScore = scores[currentPlayer];
+  } else {
+    var playerScore = scores[1];
+    var opponentScore = scores[0];
+  }
+  
   switch(true) {
-    case (scores[0] > scores[1]):
-      result = `${player} wins!`;
+    case (outcome === 'Resign'):
+      result = `${opponentName} wins by default!`;
       break;
 
-    case (scores[0] < scores[1]):
-     result = `${opponent} wins!`
+    case (outcome === 'TimeOut'):
+      result = `${playerName} ran out of time!`;
+      break;
+
+    case (playerScore > opponentScore):
+      result = `${playerName} wins!`;
+      break;
+
+    case (playerScore < opponentScore):
+     result = `${opponentName} wins!`
       break;
 
     default:
       result = "It's a draw!";
       break;
   }
-
+  
 
   return (
     <Fade className="gameOverModal__wrapper">
       <Bounce cascade damping={0.5} className="gameOverModal__content">
         <h2>{result}</h2>
         <h3>Scores</h3>
-        <p>{player}: &nbsp;&nbsp;{scores[currentPlayer == 1 ? 1 : 0]}pts</p>
-        <p>{opponent}: &nbsp;&nbsp;{scores[currentPlayer == 1 ? 0 : 1]}pts</p>
+        <p>{playerName}: &nbsp;&nbsp;{playerScore}pts</p>
+        <p>{opponentName}: &nbsp;&nbsp;{opponentScore}pts</p>
         <h4>Highest scoring word</h4>
         <p>'{hsw}': &nbsp;&nbsp; {highestScoringWord.points}pts </p>
         <button onClick={returnToHomeScreen}>OK</button>
@@ -47,3 +65,8 @@ const GameOverModal = ({
 };
 
 export default GameOverModal;
+/*<p>CurrentPlayer: {currentPlayer}</p>
+        <p>playerName: {playerName}</p>
+        <p>playerScore: {playerScore}</p>
+        <p>opponentName: {opponentName}</p>
+        <p>opponentScore: {opponentScore}</p>*/
