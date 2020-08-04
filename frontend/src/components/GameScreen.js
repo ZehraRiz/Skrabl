@@ -53,15 +53,13 @@ const GameScreen = ({
     points: 0,
   });
   const [turn, setTurn] = useState(null);
+  const [outcome, setOutcome] = useState(null);
   const [tilesToExchange, setTilesToExchange] = useState([]);
   const [boardIsDisabled, setBoardIsDisabled] = useState(false);
   const [consecutivePasses, setConsecutivePasses] = useState(0);
   const [computerConsecutivePasses, setComputerConsecutivePasses] = useState(0);
   const [pouch, setPouch] = useState([]);
   const [computerRackTiles, setComputerRackTiles] = useState([]);
-  const [newMessage, setNewMessage] = useState();
-  const [turnWords, setTurnWords] = useState([])
-
   const fillPouch = async () => {
     const res = await axios.post("http://localhost:4001/getPouch", {
       lang,
@@ -70,6 +68,7 @@ const GameScreen = ({
   };
   const moment = require("moment");
   let now = moment();
+  const [newMessage, setNewMessage] = useState();
   const [chatThread, setChatThread] = useState([
     {
       playerFromBackend: 0,
@@ -81,7 +80,7 @@ const GameScreen = ({
 
   useEffect(() => {
     if (gameMode === "Online") {
-      socket.on("recieveMsg", (data) => {
+      socket.on("receiveMsg", (data) => {
         setNewMessage(data);
         handleNewChatMsg();
       });
@@ -110,26 +109,27 @@ const GameScreen = ({
   };
 
   useEffect(() => {
-    if (gameMode === "Online") {
-      if (turn === 1) {
-        getTiles();
-      }
-    }
-    if (gameMode === "Computer") {
+    if (turn !== null) {
       getTiles();
     }
   }, [turn]);
 
   useEffect(() => {
     //fill racks at start of game (after pouch is ready)
-    if (pouch.length && !playerRackTiles.length && !computerRackTiles.length) {
-      const pouchCopy = [...pouch];
-      const newTilesHuman = pouchCopy.slice(0, 7);
-      const newTilesComputer = pouchCopy.slice(7, 14);
-      pouchCopy.splice(0, 14);
-      setPouch([...pouchCopy]);
-      setPlayerRackTiles([...newTilesHuman]);
-      setComputerRackTiles([...newTilesComputer]);
+    if (gameMode === "Computer") {
+      if (
+        pouch.length &&
+        !playerRackTiles.length &&
+        !computerRackTiles.length
+      ) {
+        const pouchCopy = [...pouch];
+        const newTilesHuman = pouchCopy.slice(0, 7);
+        const newTilesComputer = pouchCopy.slice(7, 14);
+        pouchCopy.splice(0, 14);
+        setPouch([...pouchCopy]);
+        setPlayerRackTiles([...newTilesHuman]);
+        setComputerRackTiles([...newTilesComputer]);
+      }
     }
   }, [pouch]);
 
@@ -215,6 +215,7 @@ const GameScreen = ({
       setConsecutivePasses(gameData.gameState.consecutivePasses);
       setPouch(gameData.gameState.pouch);
       setHighestScoringWord({ word: "", points: 0 });
+      setOutcome(null);
     }
     if (gameMode === "Computer") {
       fillPouch();
@@ -281,9 +282,10 @@ const GameScreen = ({
         setTurn(data.gameState.turn);
         setConsecutivePasses(data.gameState.consecutivePasses);
         setHighestScoringWord(data.gameState.highestScoringWord);
+        setOutcome(data.gameState.outcome);
       });
     }
-  }, []);
+  }, [playerRackTiles]);
 
   const getBoard = () => {
     const squares = generateBoardSquares(bonusSquareIndices);
@@ -291,7 +293,7 @@ const GameScreen = ({
   };
 
   const getTiles = () => {
-    if (gameMode === "Online") {
+    if (gameMode === "Online" && turn !== currentPlayer) {
       const numTilesNeeded = 7 - playerRackTiles.length;
       if (numTilesNeeded <= 0) {
         return;
@@ -325,7 +327,7 @@ const GameScreen = ({
     }
   };
 
-  const nextPlayer = (x = 0, newScores = { 0: 0, 0: 0 }) => {
+  const nextPlayer = (x = 0, newScores = { 0: 0, 0: 0 }, highestScoringWord = highestScoringWord) => {
     if (gameMode === "Online") {
       socket.emit("updateGameState", {
         gameId: gameData.gameId,
@@ -471,7 +473,8 @@ const GameScreen = ({
 
   const handleResign = () => {
     closeModal();
-    gameOver();
+    setOutcome('Resign');
+    gameOver('Resign');
   };
 
   const handlePass = () => {
@@ -581,9 +584,9 @@ const GameScreen = ({
 
   //OTHER
 
-  const gameOver = () => {
+  const gameOver = (outcome) => {
     if (gameMode === "Online") {
-      socket.emit("gameOver", gameData.gameId);
+      socket.emit("gameOver", gameData.gameId, outcome);
     }
     if (gameMode === "Computer") {
       setGameIsOver(true);
@@ -692,6 +695,7 @@ const GameScreen = ({
             invitedPlayer={invitedPlayer}
             currentPlayer={currentPlayer}
             scores={scores}
+            outcome={outcome}
             highestScoringWord={highestScoringWord}
             gameMode={gameMode}
             // scoredWords={scoredWords}

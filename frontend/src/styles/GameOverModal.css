@@ -34,6 +34,7 @@
   margin: 1em;
   text-shadow: 0 0 2px rgb(250, 204, 76);
   text-shadow: 2px 2px 1px rgb(177, 177, 177);
+  text-align: center;
 }
 
 .gameOverModal__content h4 {
