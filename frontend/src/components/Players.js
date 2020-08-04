@@ -13,6 +13,7 @@ const Players = ({
   setNotification,
   setGameData,
   setCurrentPlayer,
+  handleStart,
   lang
 }) => {
   let [invite, setInvite] = useState("");
@@ -91,13 +92,15 @@ const Players = ({
             );
           })}
         </ul>
-        {players.length < 1 && <p>No one's online at the moment.</p>}
+        {players.length < 1 && (<><p>No one's online at the moment.</p>
+        <button className="return__button" onClick={handleStart}>Return to main menu</button></>)}
         {invite !== "" && (
           <div className="player__invitations">
             <h3>Incoming Invitations</h3>
             <div className="player__invite-request">
               <p>{invite.host.name} sent you a game request</p>
               <button onClick={acceptInvite}>Click to accept</button>
+              <button className="return__button" onClick={handleStart}>Return to main menu</button>
             </div>
           </div>
         )}
