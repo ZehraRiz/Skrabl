@@ -600,8 +600,20 @@ const GameScreen = ({
         });
       return;
     } else {
-      setNotification("move is not valid");
-      return;
+      const placedTilesIndices = placedTiles.map((tile) => tile.square);
+      if (
+        scores[0] === 0 &&
+        scores[1] === 0 &&
+        placedTilesIndices.indexOf(112) === -1
+      ) {
+        setNotification(
+          "The first word on the board must use the centre square."
+        );
+        return;
+      } else {
+        setNotification("The move is not valid.");
+        return;
+      }
     }
   };
 
