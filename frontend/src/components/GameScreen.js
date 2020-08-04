@@ -16,7 +16,7 @@ import { findWordsOnBoard } from "../utils/findWordsOnBoard";
 import { getTurnPoints } from "../utils/getTurnPoints";
 import { bonusSquareIndices } from "../assets/bonusSquareIndices";
 import { Fade } from "react-awesome-reveal";
-import { useBeforeunload } from 'react-beforeunload';
+import { useBeforeunload } from "react-beforeunload";
 import axios from "axios";
 import "../styles/GameScreen.css";
 
@@ -143,6 +143,9 @@ const GameScreen = ({
   }, [boardIsDisabled]);
 
   const computerMove = () => {
+    console.log("CALLING COMPUTER MOVE");
+    console.log("LANG: " + lang);
+    console.log("LEVEL: " + level);
     axios
       .post("http://localhost:4001/computerMove/", {
         rackTiles: computerRackTiles,
@@ -329,7 +332,11 @@ const GameScreen = ({
     }
   };
 
-  const nextPlayer = (x = 0, newScores = { 0: 0, 0: 0 }, highestScoringWord = highestScoringWord) => {
+  const nextPlayer = (
+    x = 0,
+    newScores = { 0: 0, 0: 0 },
+    highestScoringWord = highestScoringWord
+  ) => {
     if (gameMode === "Online") {
       socket.emit("updateGameState", {
         gameId: gameData.gameId,
@@ -479,8 +486,8 @@ const GameScreen = ({
 
   const handleResign = () => {
     closeModal();
-    setOutcome('Resign');
-    gameOver('Resign');
+    setOutcome("Resign");
+    gameOver("Resign");
   };
 
   const handlePass = () => {

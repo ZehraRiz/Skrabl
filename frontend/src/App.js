@@ -29,8 +29,7 @@ const App = () => {
   const [viewChat, setViewChat] = useState(false);
   const [newChatMsg, setNewChatMsg] = useState(false);
   const [lang, setLang] = useState("en");
-  const [level, setLevel] = useState("hard");
-  const [difficulty, setDifficulty] = useState("normal");
+  const [level, setLevel] = useState("normal");
 
   useEffect(() => {
     if (gameMode === "Computer") {
@@ -91,24 +90,20 @@ const App = () => {
   };
 
   const handleChooseEasy = () => {
-    setDifficulty("easy");
+    setLevel("easy");
     setCurrentComponent("GameScreen");
   };
 
   const handleChooseNormal = () => {
-    setDifficulty("normal");
+    setLevel("normal");
     setCurrentComponent("GameScreen");
   };
 
   const handleChooseHard = () => {
-    setDifficulty("hard");
+    setLevel("hard");
     setCurrentComponent("GameScreen");
   };
 
-  useEffect(() => {
-    console.log(difficulty);
-  }, [difficulty])
- 
   return (
     <div className="page">
       {currentComponent !== "TitleScreen" && (
