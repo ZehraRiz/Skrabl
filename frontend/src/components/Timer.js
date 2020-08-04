@@ -10,26 +10,31 @@ const Timer = ({
   turn
 }) => {
   let interval;
+  const[playerTime, setPlayerTime] =useState(timeLeft)
 
    useEffect(() => {
     if (currentPlayer === turn) {
       interval = setInterval(() => {
-        setTimeLeft(timeLeft - 1/60);
+        setPlayerTime(playerTime- 1/60);
       }, 1000);
-
       return () => clearInterval(interval);
     }
-  }, [timeLeft, turn]);
+   }, [turn, playerTime]);
+  
+  useEffect(() => {
+    setTimeLeft(playerTime)
+  },[turn])
 
   useEffect(() => {
-    if (timeLeft === 0) {
+    if (playerTime=== 0) {
       clearInterval(interval);
       setNotification("Time's up");
     }
-  }, [timeLeft]);
+  }, [playerTime]);
+
   return (
     <div className="timer__wrapper">
-      Time:&nbsp;&nbsp;&nbsp;&nbsp; {formatMilliseconds(timeLeft*60*1000)}
+      Time:&nbsp;&nbsp;&nbsp;&nbsp; {formatMilliseconds(playerTime*60*1000)}
     </div>
   );
 };
