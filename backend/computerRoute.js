@@ -45,6 +45,7 @@ router.post("/", (req, res) => {
       });
     }
     res.status(200).send({
+      word: newMove.word,
       newBoardState: newMove.newBoardState,
       newRackTiles: newMove.newRackTiles,
       tilesUsed: newMove.tilesUsed,
