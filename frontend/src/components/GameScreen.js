@@ -14,6 +14,7 @@ import { moveIsValid } from "../utils/moveIsValid";
 import { squaresAreOccupied } from "../utils/squaresAreOccupied";
 import { findWordsOnBoard } from "../utils/findWordsOnBoard";
 import { getTurnPoints } from "../utils/getTurnPoints";
+import { handleBlankTiles } from "../utils/handleBlankTiles";
 import { bonusSquareIndices } from "../assets/bonusSquareIndices";
 import { Fade } from "react-awesome-reveal";
 import { useBeforeunload } from "react-beforeunload";
@@ -78,6 +79,7 @@ const GameScreen = ({
       date: now.format("h:mm:ss a"),
     },
   ]);
+  const [turnWords, setTurnWords] = useState([]);
 
   useBeforeunload(() => "Are you sure you want to leave the game?");
 
@@ -144,9 +146,6 @@ const GameScreen = ({
   }, [boardIsDisabled]);
 
   const computerMove = () => {
-    console.log("CALLING COMPUTER MOVE");
-    console.log("LANG: " + lang);
-    console.log("LEVEL: " + level);
     axios
       .post("http://localhost:4001/computerMove/", {
         rackTiles: computerRackTiles,
@@ -555,6 +554,8 @@ const GameScreen = ({
     if (currentPlayer !== turn) return;
     if (moveIsValid(placedTiles, boardState)) {
       var newWords = wordsOnBoard.filter((word) => word.newWord === true);
+      setTurnWords(newWords);
+      handleBlankTiles(newWords, setConfirmMessage);
       axios
         .post("http://localhost:4001/verifyWord", {
           words: newWords,
@@ -746,6 +747,8 @@ const GameScreen = ({
             handlePass={handlePass}
             handleConfirmMove={handleConfirmMove}
             closeModal={closeModal}
+            turnWords={turnWords}
+            setTurnWords={setTurnWords}
           />
         )}
       </div>
