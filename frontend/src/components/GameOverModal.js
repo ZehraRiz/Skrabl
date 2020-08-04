@@ -17,17 +17,14 @@ const GameOverModal = ({
   const playerName = gameMode === "Online" ? user.name : "Player";
   const hsw = highestScoringWord.word.toUpperCase();
   
-
-
-    if (currentPlayer == 0) {
-      var playerScore = scores[0];
-      var opponentScore = scores[1];
-      // playerScore = scores[currentPlayer];
-    } else {
-      var playerScore = scores[1];
-      var opponentScore = scores[0];
-    }
-
+  if (currentPlayer == 0) {
+    var playerScore = scores[0];
+    var opponentScore = scores[1];
+    // playerScore = scores[currentPlayer];
+  } else {
+    var playerScore = scores[1];
+    var opponentScore = scores[0];
+  }
   
   switch(true) {
     case (outcome === 'Resign'):
@@ -62,15 +59,14 @@ const GameOverModal = ({
         <h4>Highest scoring word</h4>
         <p>'{hsw}': &nbsp;&nbsp; {highestScoringWord.points}pts </p>
         <button onClick={returnToHomeScreen}>OK</button>
-        <p>CurrentPlayer: {currentPlayer}</p>
-        <p>playerName: {playerName}</p>
-        <p>playerScore: {playerScore}</p>
-        <p>opponentName: {opponentName}</p>
-        <p>opponentScore: {opponentScore}</p>
-
       </Bounce>
     </Fade>
   );
 };
 
 export default GameOverModal;
+/*<p>CurrentPlayer: {currentPlayer}</p>
+        <p>playerName: {playerName}</p>
+        <p>playerScore: {playerScore}</p>
+        <p>opponentName: {opponentName}</p>
+        <p>opponentScore: {opponentScore}</p>*/
