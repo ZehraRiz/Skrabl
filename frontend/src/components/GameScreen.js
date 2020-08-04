@@ -59,7 +59,6 @@ const GameScreen = ({
   const [computerConsecutivePasses, setComputerConsecutivePasses] = useState(0);
   const [pouch, setPouch] = useState([]);
   const [computerRackTiles, setComputerRackTiles] = useState([]);
-  const [newMessage, setNewMessage] = useState();
   const fillPouch = async () => {
     const res = await axios.post("http://localhost:4001/getPouch", {
       lang,
@@ -327,7 +326,7 @@ const GameScreen = ({
     }
   };
 
-  const nextPlayer = (x = 0, newScores = { 0: 0, 0: 0 }) => {
+  const nextPlayer = (x = 0, newScores = { 0: 0, 0: 0 }, highestScoringWord = highestScoringWord) => {
     if (gameMode === "Online") {
       socket.emit("updateGameState", {
         gameId: gameData.gameId,
