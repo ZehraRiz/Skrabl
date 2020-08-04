@@ -9,7 +9,8 @@ const GameOverModal = ({
   currentPlayer,
   user,
   invitedPlayer,
-  gameMode
+  gameMode,
+  outcome
 }) => {
   let result = 0;
   const opponent = gameMode === "Online" ? invitedPlayer.name : "SkrablBot";
@@ -17,6 +18,14 @@ const GameOverModal = ({
   const hsw = highestScoringWord.word.toUpperCase();
 
   switch(true) {
+    case (outcome === 'Resign'):
+      result = `${player} resigned!`;
+      break;
+
+    case (outcome === 'TimeOut'):
+      result = `${player} ran out of time!`;
+      break;
+
     case (scores[0] > scores[1]):
       result = `${player} wins!`;
       break;
