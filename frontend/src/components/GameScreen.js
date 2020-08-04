@@ -16,6 +16,7 @@ import { findWordsOnBoard } from "../utils/findWordsOnBoard";
 import { getTurnPoints } from "../utils/getTurnPoints";
 import { bonusSquareIndices } from "../assets/bonusSquareIndices";
 import { Fade } from "react-awesome-reveal";
+import { useBeforeunload } from 'react-beforeunload';
 import axios from "axios";
 import "../styles/GameScreen.css";
 
@@ -76,6 +77,8 @@ const GameScreen = ({
       date: now.format("h:mm:ss a"),
     },
   ]);
+
+  useBeforeunload(() => "Are you sure you want to leave the game?");
 
   useEffect(() => {
     if (gameMode === "Online") {
