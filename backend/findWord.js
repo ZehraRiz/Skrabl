@@ -18,7 +18,6 @@ const findWord = (fragments, rackTiles, boardState, lang, level) => {
         //longest to shortest
         longerWordsSorted = longerWords.sort((a, b) => b.length - a.length);
       }
-      console.log("LONGER WORDS NUM: " + longerWordsSorted.length);
       //loop over the longer words and go for the first that's possible
       const rackTilesCopy = [...rackTiles];
       for (let j = 0; j < longerWordsSorted.length; j++) {
