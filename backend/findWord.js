@@ -1,29 +1,29 @@
 const findDictionaryMatches = require("./findDictionaryMatches");
 const getMove = require("./getMove");
 
-const findWord = (fragments, rackTiles, boardState) => {
+const findWord = (fragments, rackTiles, boardState, lang, level) => {
   //for each word/tile on board, get words that can be created by extending it
   for (let i = 0; i < fragments.length; i++) {
-    console.log("FRAGMENT " + i);
-    const longerWords = findDictionaryMatches(fragments[i]);
-    console.log("LONGER WORDS NUM: " + longerWords.length);
+    const longerWords = findDictionaryMatches(fragments[i], lang, level);
     if (longerWords) {
+      //sort longest to shortest
+      const longerWordsSorted = longerWords.sort((a, b) => b.length - a.length);
+      console.log("LONGER WORDS NUM: " + longerWordsSorted.length);
       //loop over the longer words and go for the first that's possible
       const rackTilesCopy = [...rackTiles];
-      for (let j = 0; j < longerWords.length; j++) {
-        console.log("GETTING MOVE DATA FOR LONGER WORD " + i);
+      for (let j = 0; j < longerWordsSorted.length; j++) {
         const moveData = getMove(
-          longerWords[j],
+          longerWordsSorted[j],
           fragments[i],
           rackTilesCopy,
-          boardState
+          boardState,
+          lang
         );
         if (moveData) {
           return moveData;
         }
       }
     } else {
-      console.log("NO WORDS IN DICTIONARY");
       return null;
     }
   }

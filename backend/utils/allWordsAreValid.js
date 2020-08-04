@@ -3,8 +3,14 @@ const fs = require("fs");
 const path = require("path");
 const appDir = path.dirname(require.main.filename);
 
-const allWordsAreValid = (boardState, newTileIds) => {
-  const wordListToUse = appDir + "/dictionaries/englishSmall.txt";
+const allWordsAreValid = (boardState, newTileIds, lang) => {
+  let wordListToUse;
+  if (lang === "en") {
+    wordListToUse = appDir + "/dictionaries/englishNormal.txt";
+  } else if (lang === "tr") {
+    wordListToUse = appDir + "/dictionaries/turkishSmall.txt";
+  }
+
   const allWords = getWordsOnBoard(boardState, false);
   const allWordsNew = allWords.filter((arr) =>
     arr.some((square) => newTileIds.includes(square.tile.id))
@@ -14,6 +20,8 @@ const allWordsAreValid = (boardState, newTileIds) => {
     const string = wordArr.map((square) => square.tile.letter).join("");
     allWordsNewString.push(string);
   });
+  console.log("CHECKING IF THESE WORDS ARE VALID");
+  console.log(allWordsNewString);
   for (let i = 0; i < allWordsNewString.length; i++) {
     const word = allWordsNewString[i];
     const wordsSmall = fs.readFileSync(wordListToUse);

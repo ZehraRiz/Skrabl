@@ -238,14 +238,14 @@ const GameScreen = ({
 
   useEffect(() => {
     //called here to make sure pouch and player rack have finished updating first
-    if (turn === 1) {
+    if (gameMode === "Computer" && turn === 1) {
       computerMove();
     }
   }, [playerRackTiles]);
 
   useEffect(() => {
     //if human passes or exchanges tiles, the above useEffect won't work so just call computerMove when turn changes
-    if (turn === 1 && playerRackTiles.length === 7) {
+    if (gameMode === "Computer" && turn === 1 && playerRackTiles.length === 7) {
       computerMove();
     }
   }, [turn]);
@@ -339,7 +339,12 @@ const GameScreen = ({
       });
     }
     if (gameMode === "Computer") {
-      setTurn(turn === 0 ? 1 : 0);
+      if (!pouch.length && consecutivePasses > 1) {
+        return;
+      } else {
+        setTurn(turn === 0 ? 1 : 0);
+        setConsecutivePasses(consecutivePasses + x);
+      }
     }
   };
 
@@ -519,17 +524,11 @@ const GameScreen = ({
     setPlacedTiles([]);
   };
 
-
   useEffect(() => {
     if (placedTiles.length > 0) {
       getWordsOnBoard();
     }
   }, [placedTiles]);
-
-  useEffect(() => {
-    console.log('wordsOnBoard');
-      console.log(wordsOnBoard);
-  }, [wordsOnBoard]);
 
   const getWordsOnBoard = () => {
     const words = findWordsOnBoard(boardState, placedTiles);
@@ -539,7 +538,7 @@ const GameScreen = ({
   const handleClickConfirmMove = () => {
     if (currentPlayer !== turn) return;
     if (moveIsValid(placedTiles, boardState)) {
-      var newWords = wordsOnBoard.filter((word) => word.newWord === true);  
+      var newWords = wordsOnBoard.filter((word) => word.newWord === true);
       axios
         .post("http://localhost:4001/verifyWord", {
           words: newWords,

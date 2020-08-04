@@ -4,7 +4,13 @@ const getWordsOnBoard = require("./getWordsOnBoard");
 const findWord = require("./findWord");
 
 router.post("/", (req, res) => {
-  let { rackTiles, boardState, computerConsecutivePasses } = req.body;
+  let {
+    rackTiles,
+    boardState,
+    computerConsecutivePasses,
+    lang,
+    level,
+  } = req.body;
   //get all existing full words AND tiles of those words that can be used for new words
   let boardFragments = getWordsOnBoard(boardState, true);
   let isFirstMove;
@@ -27,12 +33,24 @@ router.post("/", (req, res) => {
         },
       ],
     ];
+    //also update the board state with this new tile so later the allWordsAreValid function will work properly
+    boardState = boardState.map((square) => {
+      if (square.index === 112) {
+        return { ...square, tile: anchorTile };
+      } else {
+        return square;
+      }
+    });
   }
   //try to create a new word first (using just one tile from board), then try extending existing word if not possible
-  const boardFragmentsSorted = boardFragments.sort(
-    (a, b) => a.length - b.length
+  let boardFragmentsSorted = boardFragments.sort((a, b) => a.length - b.length);
+  const newMove = findWord(
+    boardFragmentsSorted,
+    rackTiles,
+    boardState,
+    lang,
+    level
   );
-  const newMove = findWord(boardFragmentsSorted, rackTiles, boardState);
   if (newMove) {
     //if was first move, include first rack tile that was placed on centre square as part of move
     if (isFirstMove) {
