@@ -545,6 +545,7 @@ const GameScreen = ({
   };
 
   const handleClickConfirmMove = () => {
+    
     if (currentPlayer !== turn) return;
     if (moveIsValid(placedTiles, boardState)) {
       var newWords = wordsOnBoard.filter((word) => word.newWord === true);

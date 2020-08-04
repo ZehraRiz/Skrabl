@@ -11,11 +11,6 @@ export const handleBlankTiles = (newWords, setConfirmMessage) => {
             }
         })
     })
-    return (
-        <div>
-
-        </div>
-    )
 }
 
 
