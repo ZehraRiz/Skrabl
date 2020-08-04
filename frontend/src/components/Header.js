@@ -7,7 +7,7 @@ import {HeartBeat} from "react-awesome-reveal";
 const Header = ({ handleClickRules, handleClickChat, gameMode, handleStart, newChatMsg, currentComponent }) => {
   return (
     <div className="header__wrapper">
-      {gameMode === "Online" && (
+      {gameMode === "Online" && currentComponent === "GameScreen" && (
         <div className="header__chat" onClick={handleClickChat}>
           {newChatMsg && <HeartBeat triggerOnce><div className="newMsg"></div></HeartBeat>}
           <img src={chatIcon} />

@@ -13,11 +13,13 @@
 }
 
 .login__wrapper button {
-  margin: 1rem 0;
+    margin: 1em 0;
+    padding: .5em;
 }
 
 .login__wrapper input {
   width: 100%;
+  margin-bottom: 1em;
 }
 
 @media (min-width: 320px) {
