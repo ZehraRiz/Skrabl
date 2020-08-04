@@ -14,7 +14,7 @@ import { moveIsValid } from "../utils/moveIsValid";
 import { squaresAreOccupied } from "../utils/squaresAreOccupied";
 import { findWordsOnBoard } from "../utils/findWordsOnBoard";
 import { getTurnPoints } from "../utils/getTurnPoints";
-import { handleBlankTiles } from "../utils/handleBlankTiles"
+import { handleBlankTiles } from "../utils/handleBlankTiles";
 import { bonusSquareIndices } from "../assets/bonusSquareIndices";
 import { Fade } from "react-awesome-reveal";
 import { useBeforeunload } from "react-beforeunload";
@@ -52,6 +52,7 @@ const GameScreen = ({
   const [highestScoringWord, setHighestScoringWord] = useState({
     word: "",
     points: 0,
+    player: null,
   });
   const [turn, setTurn] = useState(null);
   const [outcome, setOutcome] = useState(null);
@@ -78,7 +79,7 @@ const GameScreen = ({
       date: now.format("h:mm:ss a"),
     },
   ]);
-  const [turnWords, setTurnWords] = useState([])
+  const [turnWords, setTurnWords] = useState([]);
 
   useBeforeunload(() => "Are you sure you want to leave the game?");
 
@@ -145,9 +146,6 @@ const GameScreen = ({
   }, [boardIsDisabled]);
 
   const computerMove = () => {
-    console.log("CALLING COMPUTER MOVE");
-    console.log("LANG: " + lang);
-    console.log("LEVEL: " + level);
     axios
       .post("http://localhost:4001/computerMove/", {
         rackTiles: computerRackTiles,
@@ -177,7 +175,8 @@ const GameScreen = ({
           ).filter((word) => word.newWord === true);
           const [turnPoints, turnHighScore] = getTurnPoints(
             newWords,
-            res.data.tilesUsed
+            res.data.tilesUsed,
+            turn
           );
           if (turnHighScore.points > highestScoringWord.points) {
             setHighestScoringWord(turnHighScore);
@@ -221,7 +220,7 @@ const GameScreen = ({
       setTurn(gameData.gameState.turn);
       setConsecutivePasses(gameData.gameState.consecutivePasses);
       setPouch(gameData.gameState.pouch);
-      setHighestScoringWord({ word: "", points: 0 });
+      setHighestScoringWord({ word: "", points: 0, player: null });
       setOutcome(null);
     }
     if (gameMode === "Computer") {
@@ -552,12 +551,11 @@ const GameScreen = ({
   };
 
   const handleClickConfirmMove = () => {
-    
     if (currentPlayer !== turn) return;
     if (moveIsValid(placedTiles, boardState)) {
       var newWords = wordsOnBoard.filter((word) => word.newWord === true);
-      setTurnWords(newWords)
-      handleBlankTiles(newWords, setConfirmMessage)
+      setTurnWords(newWords);
+      handleBlankTiles(newWords, setConfirmMessage);
       axios
         .post("http://localhost:4001/verifyWord", {
           words: newWords,
@@ -568,7 +566,8 @@ const GameScreen = ({
           if (Object.values(results).every((val) => val === "true")) {
             const [turnPoints, turnHighScore] = getTurnPoints(
               newWords,
-              placedTiles
+              placedTiles,
+              turn
             );
             const playerPreviousPoints = scores[turn];
             const updatedScores = {
@@ -588,14 +587,37 @@ const GameScreen = ({
             setPlacedTiles([]);
             return;
           } else {
-            setNotification("Don't make up words!");
-            return;
+            const checkedWords = Object.keys(results);
+            const invalidWords = [];
+            checkedWords.forEach((word) => {
+              if (results[word] === "false") {
+                invalidWords.push(word);
+              } else {
+                return;
+              }
+            });
+            //just showing first for simplicity
+            setNotification(
+              `The word "${invalidWords[0]}" was not found in the dictionary.`
+            );
           }
         });
       return;
     } else {
-      setNotification("move is not valid");
-      return;
+      const placedTilesIndices = placedTiles.map((tile) => tile.square);
+      if (
+        scores[0] === 0 &&
+        scores[1] === 0 &&
+        placedTilesIndices.indexOf(112) === -1
+      ) {
+        setNotification(
+          "The first word on the board must use the centre square."
+        );
+        return;
+      } else {
+        setNotification("The move is not valid.");
+        return;
+      }
     }
   };
 
