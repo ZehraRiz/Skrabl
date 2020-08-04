@@ -77,6 +77,7 @@ const GameScreen = ({
       date: now.format("h:mm:ss a"),
     },
   ]);
+  const [turnWords, setTurnWords] = useState([])
 
   useEffect(() => {
     if (gameMode === "Online") {
@@ -540,42 +541,43 @@ const GameScreen = ({
     if (currentPlayer !== turn) return;
     if (moveIsValid(placedTiles, boardState)) {
       var newWords = wordsOnBoard.filter((word) => word.newWord === true);
-      handleBlankTiles(newWords, setConfirmMessage, setTurnWords )
-      // axios
-      //   .post("http://localhost:4001/verifyWord", {
-      //     words: newWords,
-      //     lang,
-      //   })
-      //   .then((res) => {
-      //     const results = res.data;
-      //     if (Object.values(results).every((val) => val === "true")) {
-      //       const [turnPoints, turnHighScore] = getTurnPoints(
-      //         newWords,
-      //         placedTiles
-      //       );
-      //       const playerPreviousPoints = scores[turn];
-      //       const updatedScores = {
-      //         ...scores,
-      //         [turn]: playerPreviousPoints + turnPoints,
-      //       };
-      //       setScores(updatedScores);
-      //       if (turnHighScore.points > highestScoringWord.points) {
-      //         setHighestScoringWord(turnHighScore);
-      //         nextPlayer(consecutivePasses * -1, updatedScores, turnHighScore);
-      //       } else
-      //         nextPlayer(
-      //           consecutivePasses * -1,
-      //           updatedScores,
-      //           highestScoringWord
-      //         );
-      //       setPlacedTiles([]);
-      //       return;
-      //     } else {
-      //       setNotification("Don't make up words!");
-      //       return;
-      //     }
-      //   });
-      // return;
+      setTurnWords(newWords)
+      handleBlankTiles(newWords, setConfirmMessage)
+      axios
+        .post("http://localhost:4001/verifyWord", {
+          words: newWords,
+          lang,
+        })
+        .then((res) => {
+          const results = res.data;
+          if (Object.values(results).every((val) => val === "true")) {
+            const [turnPoints, turnHighScore] = getTurnPoints(
+              newWords,
+              placedTiles
+            );
+            const playerPreviousPoints = scores[turn];
+            const updatedScores = {
+              ...scores,
+              [turn]: playerPreviousPoints + turnPoints,
+            };
+            setScores(updatedScores);
+            if (turnHighScore.points > highestScoringWord.points) {
+              setHighestScoringWord(turnHighScore);
+              nextPlayer(consecutivePasses * -1, updatedScores, turnHighScore);
+            } else
+              nextPlayer(
+                consecutivePasses * -1,
+                updatedScores,
+                highestScoringWord
+              );
+            setPlacedTiles([]);
+            return;
+          } else {
+            setNotification("Don't make up words!");
+            return;
+          }
+        });
+      return;
     } else {
       setNotification("move is not valid");
       return;
@@ -710,6 +712,8 @@ const GameScreen = ({
             handlePass={handlePass}
             handleConfirmMove={handleConfirmMove}
             closeModal={closeModal}
+            turnWords={turnWords}
+            setTurnWords={setTurnWords}
           />
         )}
       </div>

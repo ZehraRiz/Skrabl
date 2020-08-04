@@ -1,6 +1,7 @@
 import React from "react";
 import "../styles/ConfirmModal.css";
 import { Fade } from "react-awesome-reveal";
+import {printWordWithBlankTiles} from "../utils/printWordWithBlankTiles"
 
 const ConfirmModal = ({
   message,
@@ -8,8 +9,11 @@ const ConfirmModal = ({
   handlePass,
   handleConfirmMove,
   closeModal,
+  turnWords,
+  setTurnWords
 }) => {
   let confirmFunction;
+  let words= []
   message.type === "resign"
     ? (confirmFunction = handleResign)
     : (confirmFunction = handlePass);
@@ -28,6 +32,7 @@ const ConfirmModal = ({
       break;
     
     case "blankTile":
+      words = printWordWithBlankTiles(turnWords)
       confirmFunction = closeModal;
       break;
 
@@ -35,16 +40,15 @@ const ConfirmModal = ({
       return;
   }
 
-  constSetBlankTileValue = () => {
-    
-  }
+  printWordWithBlankTiles(turnWords)
   
   return (
     <Fade triggerOnce className="confirmModal__wrapper">
       <div className="confirmModal__content">
         <p>{message.message}</p>
         {message.type === "blankTile" &&
-        <input></input>
+          words.map((word, index) => <p key={index} >{word}</p>)
+  
       }
         <div className="confirmModal__buttons">
           <button className="button__confirm" onClick={confirmFunction}>
