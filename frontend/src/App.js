@@ -124,6 +124,7 @@ const App = () => {
           setInvitedPlayer={setInvitedPlayer}
           setInviteSent={setInviteSent}
           setCurrentPlayer={setCurrentPlayer}
+          setNotification={setNotification}
           setGameData={setGameData}
           lang={lang}
         />
