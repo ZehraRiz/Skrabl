@@ -7,7 +7,17 @@ const findWord = (fragments, rackTiles, boardState, lang, level) => {
     const longerWords = findDictionaryMatches(fragments[i], lang, level);
     if (longerWords) {
       //sort longest to shortest
-      const longerWordsSorted = longerWords.sort((a, b) => b.length - a.length);
+      let longerWordsSorted;
+      if (level === "easy") {
+        //shortest to longest
+        longerWordsSorted = longerWords.sort((a, b) => a.length - b.length);
+      } else if (level === "normal") {
+        //random
+        longerWordsSorted = longerWords;
+      } else {
+        //longest to shortest
+        longerWordsSorted = longerWords.sort((a, b) => b.length - a.length);
+      }
       console.log("LONGER WORDS NUM: " + longerWordsSorted.length);
       //loop over the longer words and go for the first that's possible
       const rackTilesCopy = [...rackTiles];

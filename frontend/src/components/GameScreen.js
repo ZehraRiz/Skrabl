@@ -588,24 +588,22 @@ const GameScreen = ({
     }
     if (gameMode === "Computer") {
       setGameIsOver(true);
+      exitGame();
     }
   };
 
   const exitGame = () => {
-    if (gameMode === "Online") {
-      setGameIsOver(true);
-    }
-    if (gameMode === "Computer") {
-      setGameMode(null);
-      setCurrentComponent("WelcomeScreen");
-    }
+    setGameIsOver(true);
   };
 
   const returnToHomeScreen = () => {
     if (gameMode === "Online") {
       resetChatMsg();
       setCurrentComponent("Players");
-    } else setCurrentComponent("WelcomeScreen");
+    } else {
+      setCurrentComponent("WelcomeScreen");
+      setGameMode(null);
+    }
   };
 
   const closeModal = () => {

@@ -20,8 +20,6 @@ const allWordsAreValid = (boardState, newTileIds, lang) => {
     const string = wordArr.map((square) => square.tile.letter).join("");
     allWordsNewString.push(string);
   });
-  console.log("CHECKING IF THESE WORDS ARE VALID");
-  console.log(allWordsNewString);
   for (let i = 0; i < allWordsNewString.length; i++) {
     const word = allWordsNewString[i];
     const wordsSmall = fs.readFileSync(wordListToUse);

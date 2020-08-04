@@ -58,15 +58,11 @@ const getMove = (longerWord, wordOnBoard, rackTiles, boardState, lang) => {
       rackLettersAvailable.splice(indexToRemove, 1);
     }
   }
-
-  console.log("FIRS WORD HAVE TILES FOR: " + longerWord);
-
   for (let i = 0; i < dirs.length; i++) {
     //reset placement and tiles used when trying diff direction
     placement = {};
     tilesUsed = [];
     const dir = dirs[i];
-    console.log("DIR: " + dir);
     const max = 14;
     const min = 0;
     const propToCheck = dir === "x" ? "col" : "row";
@@ -81,7 +77,6 @@ const getMove = (longerWord, wordOnBoard, rackTiles, boardState, lang) => {
     let step;
     dir === "x" ? (step = 1) : (step = 15);
     //first part of word
-    console.log("FIRS PART OF WORD");
     for (let i = 0; i < lettersBefore.length; i++) {
       let toSubtract;
       if (dir === "x") {
@@ -94,12 +89,10 @@ const getMove = (longerWord, wordOnBoard, rackTiles, boardState, lang) => {
       }
       const squareIndex = wordOnBoard[0].index - toSubtract;
       if (squareIndex < 0) {
-        console.log("CAN'T FIT");
         break;
       }
       const isOccupied = squaresAreOccupied([squareIndex], boardState);
       if (isOccupied) {
-        console.log("OCCUPIED");
         break;
       }
       squaresToUseIndices.push(squareIndex);
@@ -111,8 +104,6 @@ const getMove = (longerWord, wordOnBoard, rackTiles, boardState, lang) => {
       tilesUsed.push(tileToUse);
     }
     //second part of word
-    console.log("SECOND PART OF WORD");
-
     for (let i = 0; i < lettersAfter.length; i++) {
       let toAdd;
       if (dir === "x") {
@@ -126,12 +117,10 @@ const getMove = (longerWord, wordOnBoard, rackTiles, boardState, lang) => {
       }
       const squareIndex = wordOnBoard[wordOnBoard.length - 1].index + toAdd;
       if (squareIndex > 224) {
-        console.log("CAN'T FIT");
         break;
       }
       const isOccupied = squaresAreOccupied([squareIndex], boardState);
       if (isOccupied) {
-        console.log("OCCUPIED");
         break;
       }
       squaresToUseIndices.push(squareIndex);
@@ -141,7 +130,6 @@ const getMove = (longerWord, wordOnBoard, rackTiles, boardState, lang) => {
       )[0];
       tilesUsed.push(tileToUse);
     }
-    console.log("MOVE FOUND");
     if (tilesUsed.length === remainingLetters.length) {
       //move has been found
       const newBoardState = boardState.map((square) => {
@@ -160,10 +148,8 @@ const getMove = (longerWord, wordOnBoard, rackTiles, boardState, lang) => {
       const newRackTiles = rackTiles.filter(
         (tile) => !usedTileIds.includes(tile.id)
       );
-      console.log("TILES THAT WOULD BE USED FOR THIS WORD");
-      console.log(usedTileIds);
       const moveIsValid = allWordsAreValid(newBoardState, usedTileIds, lang);
-      console.log("INVALID WORDS WOULD RESULT");
+
       if (moveIsValid) {
         return {
           word: longerWord,

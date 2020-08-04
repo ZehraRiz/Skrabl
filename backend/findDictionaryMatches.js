@@ -7,9 +7,13 @@ const findDictionaryMatches = (word, lang, level) => {
       wordList = "./dictionaries/englishEasy.txt";
     } else if (level === "normal") {
       wordList = "./dictionaries/englishNormal.txt";
+    } else {
+      wordList = "./dictionaries/englishHard.txt";
     }
   } else if (lang === "tr") {
     wordList = "./dictionaries/turkishSmall.txt";
+  } else if (lang === "fr") {
+    wordList = "./dictionaries/french.txt";
   }
   const wordStr = word.map((square) => square.tile.letter).join("");
   const regexString = `(?<=,)[^,]*${wordStr}[^,]*(?=,)`;
