@@ -8,7 +8,11 @@ const allWordsAreValid = (boardState, newTileIds, lang) => {
   if (lang === "en") {
     wordListToUse = appDir + "/dictionaries/englishNormal.txt";
   } else if (lang === "tr") {
-    wordListToUse = appDir + "/dictionaries/turkishHard.txt";
+    wordListToUse = appDir + "/dictionaries/turkishNormal.txt";
+  } else if (lang === "fr") {
+    wordListToUse = appDir + "/dictionaries/frenchNormal.txt";
+  } else if (lang === "de") {
+    wordListToUse = appDir + "/dictionaries/germanNormal.txt";
   }
 
   const allWords = getWordsOnBoard(boardState, false);

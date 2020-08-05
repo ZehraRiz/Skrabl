@@ -13,12 +13,29 @@ const findDictionaryMatches = (word, lang, level) => {
   } else if (lang === "tr") {
     if (level === "easy") {
       wordList = "./dictionaries/turkishEasy.txt";
+    } else if (level === "normal") {
+      wordList = "./dictionaries/turkishNormal.txt";
     } else {
       wordList = "./dictionaries/turkishHard.txt";
     }
   } else if (lang === "fr") {
-    wordList = "./dictionaries/french.txt";
+    if (level === "easy") {
+      wordList = "./dictionaries/frenchEasy.txt";
+    } else if (level === "normal") {
+      wordList = "./dictionaries/frenchNormal.txt";
+    } else {
+      wordList = "./dictionaries/frenchHard.txt";
+    }
+  } else if (lang === "de") {
+    if (level === "easy") {
+      wordList = "./dictionaries/germanEasy.txt";
+    } else if (level === "normal") {
+      wordList = "./dictionaries/germanNormal.txt";
+    } else {
+      wordList = "./dictionaries/germanHard.txt";
+    }
   }
+
   const wordStr = word.map((square) => square.tile.letter).join("");
   const regexString = `(?<=,)[^,]*${wordStr}[^,]*(?=,)`;
   const regExp = new RegExp(regexString, "gi");
