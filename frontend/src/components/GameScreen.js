@@ -20,6 +20,11 @@ import { Fade } from "react-awesome-reveal";
 import { useBeforeunload } from "react-beforeunload";
 import axios from "axios";
 import "../styles/GameScreen.css";
+import shuffleSound from "../assets/shuffle.wav";
+import placeTileSound from "../assets/placeTile.wav";
+import removeTileSound from "../assets/removeTile.wav";
+import correctSound from "../assets/correct.wav";
+import invalidSound from "../assets/invalid.wav";
 
 const GameScreen = ({
   user,
@@ -83,7 +88,6 @@ const GameScreen = ({
   const [timeOut, setTimeout] = useState(false);
   const [timeWarning, setTimeWarning] = useState(false);
   const [endedBy, setEndedBy] = useState(null);
-
 
   useBeforeunload(() => "Are you sure you want to leave the game?");
 
@@ -272,11 +276,11 @@ const GameScreen = ({
 
       socket.on("gameEnd", (data) => {
         //redirect to players screen or show who won
-        console.log(data.gameEndedBy)// player 0 or player 1
-        console.log(data.game.gameState.outcome)//the outcome 
+        console.log(data.gameEndedBy); // player 0 or player 1
+        console.log(data.game.gameState.outcome); //the outcome
         setOutcome(data.game.gameState.outcome);
         setEndedBy(data.gameEndedBy);
-        console.log()
+        console.log();
         exitGame();
       });
 
@@ -380,6 +384,8 @@ const GameScreen = ({
       if (squareIsOccupied) {
         return;
       }
+      playSound(placeTileSound);
+
       const tileToAdd = {
         ...selectedTile,
         square: selectedSquareIndex,
@@ -392,6 +398,7 @@ const GameScreen = ({
           return square;
         }
       });
+
       setBoardState(updatedBoardState);
       setPlacedTiles([
         ...placedTiles,
@@ -426,6 +433,8 @@ const GameScreen = ({
       return;
 
     if (tileToRemove.player === 0) {
+      playSound(removeTileSound);
+
       const updatedBoardState = boardState.map((square) => {
         if (square.tile && square.tile.square === tileToRemove.square) {
           return { ...square, tile: null };
@@ -472,7 +481,13 @@ const GameScreen = ({
     });
   };
 
+  const playSound = (audioFile) => {
+    const audio = new Audio(audioFile);
+    audio.play();
+  };
+
   const handleClickShuffle = () => {
+    playSound(shuffleSound);
     const shuffled = shuffle([...playerRackTiles]);
     setPlayerRackTiles([...shuffled]);
   };
@@ -592,6 +607,7 @@ const GameScreen = ({
               ...scores,
               [turn]: playerPreviousPoints + turnPoints,
             };
+            playSound(correctSound);
             setScores(updatedScores);
             if (turnHighScore.points > highestScoringWord.points) {
               setHighestScoringWord(turnHighScore);
@@ -615,6 +631,7 @@ const GameScreen = ({
               }
             });
             //just showing first for simplicity
+            playSound(invalidSound);
             setNotification(
               `The word "${invalidWords[0]}" was not found in the dictionary.`
             );
@@ -622,6 +639,7 @@ const GameScreen = ({
         });
       return;
     } else {
+      playSound(invalidSound);
       const placedTilesIndices = placedTiles.map((tile) => tile.square);
       if (
         scores[0] === 0 &&
