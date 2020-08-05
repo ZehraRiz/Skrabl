@@ -80,9 +80,8 @@ const GameScreen = ({
     },
   ]);
   const [turnWords, setTurnWords] = useState([]);
-  const [timeOut, setTimeout] = useState(false);
   const [timeWarning, setTimeWarning] = useState(false);
-  const [endedBy, setEndedBy] = useState(null);
+  const [endedBy, setEndedBy] = useState(0);
 
 
   useBeforeunload(() => "Are you sure you want to leave the game?");
@@ -276,7 +275,6 @@ const GameScreen = ({
         console.log(data.game.gameState.outcome)//the outcome 
         setOutcome(data.game.gameState.outcome);
         setEndedBy(data.gameEndedBy);
-        console.log()
         exitGame();
       });
 
@@ -658,7 +656,7 @@ const GameScreen = ({
   const returnToHomeScreen = () => {
     if (gameMode === "Online") {
       resetChatMsg();
-      setCurrentComponent("Players");
+      setCurrentComponent("Login");
     } else {
       setCurrentComponent("WelcomeScreen");
       setGameMode(null);
@@ -714,7 +712,6 @@ const GameScreen = ({
             currentPlayer={currentPlayer}
             turn={turn}
             gameMode={gameMode}
-            timeOut={timeOut}
             handleTimeOut={handleTimeOut}
             timeWarning={timeWarning}
             handleTimeWarning={handleTimeWarning}
