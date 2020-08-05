@@ -268,6 +268,9 @@ const GameScreen = ({
 
       socket.on("gameEnd", (data) => {
         //redirect to players screen or show who won
+        console.log(data.gameEndedBy)// player 0 or player 1
+        console.log(data.game.gameState.outcome)//the outcome 
+        console.log()
         exitGame();
       });
 
@@ -625,7 +628,7 @@ const GameScreen = ({
 
   const gameOver = (outcome) => {
     if (gameMode === "Online") {
-      socket.emit("gameOver", gameData.gameId, outcome);
+      socket.emit("gameOver", gameData.gameId, outcome, currentPlayer);
     }
     if (gameMode === "Computer") {
       setGameIsOver(true);
