@@ -11,8 +11,17 @@ const GameOverModal = ({
   invitedPlayer,
   gameMode,
   outcome,
-  endedBy,
+  endedBy
 }) => {
+  console.log(scores,
+    highestScoringWord,
+    returnToHomeScreen,
+    currentPlayer,
+    user,
+    invitedPlayer,
+    gameMode,
+    outcome,
+    endedBy);
   let result = "";
   const opponentName = gameMode === "Online" ? invitedPlayer.name : "SkrablBot";
   const playerName = gameMode === "Online" ? user.name : "Player";
@@ -62,15 +71,14 @@ const GameOverModal = ({
   }
 
   return (
-    <Fade triggerOnce className="gameOverModal__wrapper">
+    <Fade className="gameOverModal__wrapper">
       <Bounce
-        triggerOnce
         cascade
         damping={0.5}
         className="gameOverModal__content"
       >
         <h2>{result}</h2>
-        {outcome === "TimeOut" && <p>(-50pts)</p>}
+        <p>{outcome === "TimeOut" && "(-50pts)"}</p>
         <h3>Scores</h3>
         <p>
           {playerName}: &nbsp;&nbsp;{playerScore}pts
