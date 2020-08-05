@@ -8,15 +8,21 @@ const ConfirmModal = ({
   handlePass,
   handleConfirmMove,
   closeModal,
+  setBlankTileLetter
 }) => {
   let confirmFunction;
 
-  const {letter, setLetter}= useState("")
+  const [letter, setLetter]= useState("")
 
   // message.type === "resign"
   //   ? (confirmFunction = handleResign)
   //   : (confirmFunction = handlePass);
 
+  const handleBlankTile = () => {
+    if (letter === "") return;
+    setBlankTileLetter(letter)
+    closeModal();
+  }
 
 
   switch (message.type) {
@@ -33,13 +39,13 @@ const ConfirmModal = ({
       break;
     
     case "blankTile":
-      console.log(letter)
-      confirmFunction = closeModal;
+      confirmFunction = handleBlankTile;
       break;
     
     default:
       return;
   }
+
 
   
   return (
@@ -47,7 +53,7 @@ const ConfirmModal = ({
       <div className="confirmModal__content">
         <p>{message.message}</p>
         {message.type === "blankTile" && 
-        <input maxLength={1} onChange={ e => setLetter(e.target.value)}></input>
+        <input maxLength={1} onChange={(e) => setLetter(e.target.value)}></input>
         }
         <div className="confirmModal__buttons">
           <button className="button__confirm" onClick={confirmFunction}>

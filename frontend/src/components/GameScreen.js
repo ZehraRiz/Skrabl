@@ -19,12 +19,13 @@ import { bonusSquareIndices } from "../assets/bonusSquareIndices";
 import { Fade } from "react-awesome-reveal";
 import { useBeforeunload } from "react-beforeunload";
 import axios from "axios";
-import "../styles/GameScreen.css";
 import shuffleSound from "../assets/shuffle.wav";
 import placeTileSound from "../assets/placeTile.wav";
 import removeTileSound from "../assets/removeTile.wav";
 import correctSound from "../assets/correct.wav";
 import invalidSound from "../assets/invalid.wav";
+import { notifications } from "../assets/notifications";
+import "../styles/GameScreen.css";
 
 const GameScreen = ({
   user,
@@ -80,14 +81,17 @@ const GameScreen = ({
     {
       playerFromBackend: 0,
       playerName: "SkrablBot",
-      msg: "Welcome, you are now connected",
+      msg: notifications["Welcome, you are now connected."][lang],
       date: now.format("h:mm:ss a"),
     },
   ]);
+  const [turnWords, setTurnWords] = useState([]);
   const [timeWarning, setTimeWarning] = useState(false);
   const [endedBy, setEndedBy] = useState(0);
 
-  useBeforeunload(() => "Are you sure you want to leave the game?");
+  useBeforeunload(
+    () => notifications["Are you sure you want to leave the game?"][lang]
+  );
 
   useEffect(() => {
     if (gameMode === "Online") {
@@ -163,7 +167,9 @@ const GameScreen = ({
       .then((res) => {
         if (res.data.exchange && pouch.length > 0) {
           setComputerConsecutivePasses(0);
-          setNotification("SkrablBot has exchanged his tiles.");
+          setNotification(
+            notifications["SkrablBot has exchanged his tiles."][lang]
+          );
           const computerRackTilesCopy = [...computerRackTiles];
           setPouch([...pouch, ...computerRackTilesCopy]);
           setComputerRackTiles([]);
@@ -171,7 +177,9 @@ const GameScreen = ({
           nextPlayer(0, scores, highestScoringWord);
         } else if (res.data.pass || (res.data.exchange && !pouch.length)) {
           setComputerConsecutivePasses(computerConsecutivePasses + 1);
-          setNotification("SkrablBot has decided to pass.");
+          setNotification(
+            notifications["SkrablBot has decided to pass."][lang]
+          );
           nextPlayer(1, scores, highestScoringWord);
         } else {
           setComputerConsecutivePasses(0);
@@ -383,23 +391,11 @@ const GameScreen = ({
       }
       playSound(placeTileSound);
 
-      if (selectedTile.letter === "") {
-        //confirmation modal call
-        setConfirmMessage({
-          type: "blankTile",
-          message: "What alphabet do you want to assign?"
-        })
-      }
-
       const tileToAdd = {
         ...selectedTile,
         square: selectedSquareIndex,
         player: 0,
       };
-
-      console.log(selectedTile)
-
-    
       const updatedBoardState = boardState.map((square) => {
         if (square.index === selectedSquareIndex) {
           return { ...square, tile: tileToAdd };
@@ -465,12 +461,14 @@ const GameScreen = ({
       setConfirmMessage({
         type: "pass",
         message:
-          "This will be the sixth consecutive pass, and will end the game!  Are you sure you want to pass?",
+          notifications[
+            "This will be the sixth consecutive pass, and will end the game!  Are you sure you want to pass?"
+          ][lang],
       });
     } else {
       setConfirmMessage({
         type: "pass",
-        message: "Are you sure you want to pass?",
+        message: notifications["Are you sure you want to pass?"][lang],
       });
     }
   };
@@ -478,15 +476,7 @@ const GameScreen = ({
   const handleClickResign = () => {
     setConfirmMessage({
       type: "resign",
-      message: "Are you sure you want to resign?",
-    });
-  };
-
-  const handleConfirmMove = () => {
-    if (currentPlayer !== turn) return;
-    setConfirmMessage({
-      type: "confirm",
-      message: "Confirm move end?",
+      message: notifications["Are you sure you want to resign?"][lang],
     });
   };
 
@@ -596,6 +586,8 @@ const GameScreen = ({
     if (currentPlayer !== turn) return;
     if (moveIsValid(placedTiles, boardState)) {
       var newWords = wordsOnBoard.filter((word) => word.newWord === true);
+      setTurnWords(newWords);
+      handleBlankTiles(newWords, setConfirmMessage);
       axios
         .post("http://localhost:4001/verifyWord", {
           words: newWords,
@@ -640,7 +632,7 @@ const GameScreen = ({
             //just showing first for simplicity
             playSound(invalidSound);
             setNotification(
-              `The word "${invalidWords[0]}" was not found in the dictionary.`
+              `${notifications["The following word was not found in the dictionary:"][lang]} ${invalidWords[0]}`
             );
           }
         });
@@ -654,11 +646,13 @@ const GameScreen = ({
         placedTilesIndices.indexOf(112) === -1
       ) {
         setNotification(
-          "The first word on the board must use the centre square."
+          notifications[
+            "The first word on the board must use the centre square."
+          ][lang]
         );
         return;
       } else {
-        setNotification("The move is not valid.");
+        setNotification(notifications["The move is not valid."][lang]);
         return;
       }
     }
@@ -703,6 +697,7 @@ const GameScreen = ({
             closeModal={handleClickChat}
             chatThread={chatThread}
             handleSendMessage={handleSendMessage}
+            lang={lang}
           />
         )}
         <div className="gameScreen__main">
@@ -742,6 +737,7 @@ const GameScreen = ({
             handleTimeOut={handleTimeOut}
             timeWarning={timeWarning}
             handleTimeWarning={handleTimeWarning}
+            lang={lang}
           />
           {!boardIsDisabled && (
             <GameButtons
@@ -752,12 +748,14 @@ const GameScreen = ({
               handleClickResign={handleClickResign}
               handleClickPass={handleClickPass}
               handleClickExchangeTiles={handleClickExchangeTiles}
+              lang={lang}
             />
           )}
           {boardIsDisabled && (
             <ExchangeTilesButtons
               handleCancelExchange={handleCancelExchange}
               handleConfirmExchange={handleConfirmExchange}
+              lang={lang}
             />
           )}
           {gameMode === "Online" && (
@@ -768,6 +766,7 @@ const GameScreen = ({
               currentPlayer={currentPlayer}
               socket={socket}
               handleSendMessage={handleSendMessage}
+              lang={lang}
             />
           )}
         </div>
@@ -782,9 +781,9 @@ const GameScreen = ({
             endedBy={endedBy}
             highestScoringWord={highestScoringWord}
             gameMode={gameMode}
-            // scoredWords={scoredWords}
             socket={socket}
             returnToHomeScreen={returnToHomeScreen}
+            lang={lang}
           />
         )}
         {confirmMessage && (
@@ -792,8 +791,10 @@ const GameScreen = ({
             message={confirmMessage}
             handleResign={handleResign}
             handlePass={handlePass}
-            handleConfirmMove={handleConfirmMove}
             closeModal={closeModal}
+            turnWords={turnWords}
+            setTurnWords={setTurnWords}
+            lang={lang}
           />
         )}
       </div>
