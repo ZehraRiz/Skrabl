@@ -7,7 +7,8 @@ const ConfirmModal = ({
   handleResign,
   handlePass,
   closeModal,
-  setBlankTileLetter
+  setBlankTileLetter,
+  lang
 }) => {
   let confirmFunction;
 
