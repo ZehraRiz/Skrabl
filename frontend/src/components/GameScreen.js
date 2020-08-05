@@ -88,6 +88,7 @@ const GameScreen = ({
   const [turnWords, setTurnWords] = useState([]);
   const [timeWarning, setTimeWarning] = useState(false);
   const [endedBy, setEndedBy] = useState(0);
+  const [blankTileLetter, setBlankTileLetter]= useState("")
 
   useBeforeunload(
     () => notifications["Are you sure you want to leave the game?"][lang]
@@ -274,6 +275,16 @@ const GameScreen = ({
   }, [turn]);
 
   useEffect(() => {
+    if (selectedTile) {
+      const tile = selectedTile;
+      tile.letter = blankTileLetter
+      tile.wasBlank = true
+    setSelectedTile(tile)
+    placeTile2();
+    }
+  }, [blankTileLetter])
+
+  useEffect(() => {
     if (gameMode === "Online") {
       socket.on("sendingTiles", (data) => {
         setPlayerRackTiles([...playerRackTiles, ...data]);
@@ -391,7 +402,25 @@ const GameScreen = ({
       }
       playSound(placeTileSound);
 
-      const tileToAdd = {
+      if (selectedTile.letter === "") {
+      
+        setConfirmMessage({
+          type: "blankTile",
+          message: "What letter would you like to assign to the blank tile?"
+        })
+        return;
+      }
+      else {
+        const tile = selectedTile;
+        tile.wasBlank = false
+        setSelectedTile(tile)
+        placeTile2()
+      }
+    };
+  }
+    
+    const placeTile2 = () => {
+              const tileToAdd = {
         ...selectedTile,
         square: selectedSquareIndex,
         player: 0,
@@ -415,7 +444,7 @@ const GameScreen = ({
       setSelectedTile(null);
       setSelectedSquareIndex(null);
     }
-  };
+    
 
   //EVENT HANDLERS
 
@@ -439,7 +468,6 @@ const GameScreen = ({
 
     if (tileToRemove.player === 0) {
       playSound(removeTileSound);
-
       const updatedBoardState = boardState.map((square) => {
         if (square.tile && square.tile.square === tileToRemove.square) {
           return { ...square, tile: null };
@@ -451,6 +479,7 @@ const GameScreen = ({
       setPlacedTiles(
         placedTiles.filter((tile) => tile.square !== tileToRemove.square)
       );
+      if (tileToRemove.wasBlank) tileToRemove.letter = "";
       setPlayerRackTiles([...playerRackTiles, tileToRemove]);
     }
   };
@@ -794,6 +823,7 @@ const GameScreen = ({
             closeModal={closeModal}
             turnWords={turnWords}
             setTurnWords={setTurnWords}
+            setBlankTileLetter={setBlankTileLetter}
             lang={lang}
           />
         )}

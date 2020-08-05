@@ -1,21 +1,29 @@
-import React from "react";
+import React, {useState} from "react";
 import "../styles/ConfirmModal.css";
 import { Fade } from "react-awesome-reveal";
-import { printWordWithBlankTiles } from "../utils/printWordWithBlankTiles";
 
 const ConfirmModal = ({
   message,
   handleResign,
   handlePass,
   closeModal,
-  turnWords,
-  lang,
+  setBlankTileLetter,
+  lang
 }) => {
   let confirmFunction;
-  let words = [];
-  message.type === "resign"
-    ? (confirmFunction = handleResign)
-    : (confirmFunction = handlePass);
+
+  const [letter, setLetter]= useState("")
+
+  // message.type === "resign"
+  //   ? (confirmFunction = handleResign)
+  //   : (confirmFunction = handlePass);
+
+  const handleBlankTile = () => {
+    if (letter === "") return;
+    setBlankTileLetter(letter)
+    closeModal();
+  }
+
 
   switch (message.type) {
     case "resign":
@@ -27,22 +35,22 @@ const ConfirmModal = ({
       break;
 
     case "blankTile":
-      words = printWordWithBlankTiles(turnWords);
-      confirmFunction = closeModal;
+      confirmFunction = handleBlankTile;
       break;
-
+    
     default:
       return;
   }
 
-  printWordWithBlankTiles(turnWords);
 
+  
   return (
     <Fade triggerOnce className="confirmModal__wrapper">
       <div className="confirmModal__content">
         <p>{message.message}</p>
-        {message.type === "blankTile" &&
-          words.map((word, index) => <p key={index}>{word}</p>)}
+        {message.type === "blankTile" && 
+        <input maxLength={1} onChange={(e) => setLetter(e.target.value)}></input>
+        }
         <div className="confirmModal__buttons">
           <button className="button__confirm" onClick={confirmFunction}>
             {lang === "en" && "Confirm"}
