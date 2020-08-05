@@ -80,6 +80,7 @@ const GameScreen = ({
     },
   ]);
   const [turnWords, setTurnWords] = useState([]);
+  const [endedBy, setEndedBy] = useState(null);
 
   useBeforeunload(() => "Are you sure you want to leave the game?");
 
@@ -270,6 +271,8 @@ const GameScreen = ({
         //redirect to players screen or show who won
         console.log(data.gameEndedBy)// player 0 or player 1
         console.log(data.game.gameState.outcome)//the outcome 
+        setOutcome(data.game.gameState.outcome);
+        setEndedBy(data.gameEndedBy);
         console.log()
         exitGame();
       });
@@ -736,6 +739,7 @@ const GameScreen = ({
             currentPlayer={currentPlayer}
             scores={scores}
             outcome={outcome}
+            endedBy={endedBy}
             highestScoringWord={highestScoringWord}
             gameMode={gameMode}
             // scoredWords={scoredWords}

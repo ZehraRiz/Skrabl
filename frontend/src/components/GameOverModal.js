@@ -11,6 +11,7 @@ const GameOverModal = ({
   invitedPlayer,
   gameMode,
   outcome,
+  endedBy
 }) => {
   let result = "";
   const opponentName = gameMode === "Online" ? invitedPlayer.name : "SkrablBot";
@@ -28,7 +29,7 @@ const GameOverModal = ({
 
   switch (true) {
     case outcome === "Resign":
-      result = `${opponentName} wins by default!`;
+      result = endedBy === currentPlayer ? `${opponentName} wins by default!` : `${playerName} wins by default!`;
       break;
 
     case outcome === "TimeOut":
@@ -74,6 +75,7 @@ const GameOverModal = ({
 
 export default GameOverModal;
 /*<p>CurrentPlayer: {currentPlayer}</p>
+        <p>Outcome: {outcome}</p>
         <p>playerName: {playerName}</p>
         <p>playerScore: {playerScore}</p>
         <p>opponentName: {opponentName}</p>
