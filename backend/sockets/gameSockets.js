@@ -216,7 +216,7 @@ module.exports.listen = function (io, socket) {
     }
   );
 
-  socket.on("gameOver", (gameId, outcome) => {
+  socket.on("gameOver", (gameId, outcome, currentPlayer) => {
     const game = findGame(gameId);
     if (!game) {
       socket.emit("gameEnded", "The game has ended");
@@ -227,7 +227,7 @@ module.exports.listen = function (io, socket) {
       if (outcome) game.gameState.outcome = outcome;
       game.gameState.isOver = true;
       removeGame(gameId);
-      io.in(gameId).emit("gameEnd", game);
+      io.in(gameId).emit("gameEnd", {game: game, gameEndedBy: currentPlayer});
     }
   });
 

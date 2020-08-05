@@ -9,7 +9,7 @@ button {
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  background: rgb(135, 131, 128);
+  background: rgb(140, 140, 140);
   border-radius: 3px;
   border: 1px solid #6f6f6e;
   display: inline-block;
@@ -20,12 +20,16 @@ button {
   padding: 5px 7px;
   width: 100%;
   text-decoration: none;
-  box-shadow: inset 0 -2px 2px rgba(0,0,0,0.3),
-    0px 2px 5px rgba(0, 0, 0, 0.3);
+  box-shadow: inset 0 -2px 2px rgba(0,0,0,0.3),    0px 2px 5px rgba(0, 0, 0, 0.3);
   text-shadow: 0px 0px 4px rgba(0, 0, 0, 0.6);
   white-space: nowrap;
   letter-spacing: 0.05em;
   font-family: "Acme", sans-serif;
+  transform:  rotateY(0.001deg) translateY(0px);
+  -webkit-transform:  rotateY(0.001deg) translateY(0px);
+  -moz-transform:  rotateY(0.001deg) translateY(0px);
+  -ms-transform:  rotateY(0.001deg) translateY(0px);
+  -o-transform:  rotateY(0.001deg) translateY(0px);
 }
 
 .button__text {
@@ -33,6 +37,12 @@ button {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  width: 100%;
+  font-size: 1em;
+  padding: 0.5em;
+}
+
+.button__exchange {
   width: 100%;
   font-size: 1em;
   padding: 0.5em;
@@ -48,12 +58,17 @@ button img {
 }
 
 button:hover {
-  background: rgb(159, 156, 154);
+  background: rgb(160, 160, 160);
 }
 
 button:active {
   position: relative;
-  top: 1px;
+  transform:  rotateY(0.001deg) translateY(1px);
+  box-shadow: inset 0 -2px 2px rgba(0,0,0,0.3), 0px 1px 5px rgba(0, 0, 0, 0.3);
+  -webkit-transform:  rotateY(0.001deg) translateY(1px);
+  -moz-transform:  rotateY(0.001deg) translateY(1px);
+  -ms-transform:  rotateY(0.001deg) translateY(1px);
+  -o-transform:  rotateY(0.001deg) translateY(1px);
 }
 
 .gameButtons__wrapper button {
@@ -102,7 +117,6 @@ button:active {
   }
 
   .gameButtons__wrapper button {
-
     margin: 5px 0px;
     height: 25%;
   }
@@ -115,6 +129,10 @@ button:active {
     font-size: 1.7em;
   }
 
+  .button__exchange {
+    font-size: 1.5em;
+  }
+
   button img {
     width: 35px;
     height: auto;
@@ -125,15 +143,10 @@ button:active {
 
 
 @media (max-height: 850px) {
-	.gameButtons__wrapper button {
+	.gameButtons__wrapper button:not(.button__exchange) {
 	  font-size: .8em;
 	}
-  button img {
-
-    
-  }
-	
-  }
+}
 
   
 
@@ -141,5 +154,4 @@ button:active {
 	.gameButtons__wrapper button {
 	  font-size: .6em;
   }
-  
 }

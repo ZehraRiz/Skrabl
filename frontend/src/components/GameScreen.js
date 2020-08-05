@@ -80,6 +80,10 @@ const GameScreen = ({
     },
   ]);
   const [turnWords, setTurnWords] = useState([]);
+  const [timeOut, setTimeout] = useState(false);
+  const [timeWarning, setTimeWarning] = useState(false);
+  const [endedBy, setEndedBy] = useState(null);
+
 
   useBeforeunload(() => "Are you sure you want to leave the game?");
 
@@ -189,7 +193,7 @@ const GameScreen = ({
           setBoardState(res.data.newBoardState);
           setComputerRackTiles(res.data.newRackTiles);
           setScores(updatedScores);
-          nextPlayer(0, updatedScores, highestScoringWord);
+          nextPlayer(consecutivePasses * -1, updatedScores, highestScoringWord);
         }
       });
   };
@@ -268,6 +272,11 @@ const GameScreen = ({
 
       socket.on("gameEnd", (data) => {
         //redirect to players screen or show who won
+        console.log(data.gameEndedBy)// player 0 or player 1
+        console.log(data.game.gameState.outcome)//the outcome 
+        setOutcome(data.game.gameState.outcome);
+        setEndedBy(data.gameEndedBy);
+        console.log()
         exitGame();
       });
 
@@ -497,6 +506,15 @@ const GameScreen = ({
     setConsecutivePasses(consecutivePasses + 1);
   };
 
+  const handleTimeOut = () => {
+    setOutcome("TimeOut");
+    gameOver("TimeOut");
+  };
+
+  const handleTimeWarning = () => {
+    setTimeWarning(true);
+  };
+
   const handleClickExchangeTiles = () => {
     if (currentPlayer === turn) {
       setBoardIsDisabled(!boardIsDisabled);
@@ -519,7 +537,7 @@ const GameScreen = ({
     if (gameMode === "Computer") {
       setPouch([...pouch, ...tilesToExchange]);
     }
-    nextPlayer(0, scores, highestScoringWord);
+    nextPlayer(consecutivePasses * -1, scores, highestScoringWord);
   };
 
   const handleClickClearTiles = () => {
@@ -625,7 +643,7 @@ const GameScreen = ({
 
   const gameOver = (outcome) => {
     if (gameMode === "Online") {
-      socket.emit("gameOver", gameData.gameId, outcome);
+      socket.emit("gameOver", gameData.gameId, outcome, currentPlayer);
     }
     if (gameMode === "Computer") {
       setGameIsOver(true);
@@ -696,6 +714,10 @@ const GameScreen = ({
             currentPlayer={currentPlayer}
             turn={turn}
             gameMode={gameMode}
+            timeOut={timeOut}
+            handleTimeOut={handleTimeOut}
+            timeWarning={timeWarning}
+            handleTimeWarning={handleTimeWarning}
           />
           {!boardIsDisabled && (
             <GameButtons
@@ -733,6 +755,7 @@ const GameScreen = ({
             currentPlayer={currentPlayer}
             scores={scores}
             outcome={outcome}
+            endedBy={endedBy}
             highestScoringWord={highestScoringWord}
             gameMode={gameMode}
             // scoredWords={scoredWords}
