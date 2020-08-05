@@ -11,7 +11,7 @@ const GameOverModal = ({
   invitedPlayer,
   gameMode,
   outcome,
-  endedBy
+  endedBy,
 }) => {
   let result = "";
   const opponentName = gameMode === "Online" ? invitedPlayer.name : "SkrablBot";
@@ -21,7 +21,6 @@ const GameOverModal = ({
   if (currentPlayer == 0) {
     var playerScore = scores[0];
     var opponentScore = scores[1];
-    // playerScore = scores[currentPlayer];
   } else {
     var playerScore = scores[1];
     var opponentScore = scores[0];
@@ -63,11 +62,7 @@ const GameOverModal = ({
 
   return (
     <Fade className="gameOverModal__wrapper">
-      <Bounce
-        cascade
-        damping={0.5}
-        className="gameOverModal__content"
-      >
+      <Bounce cascade damping={0.5} className="gameOverModal__content">
         <h2>{result}</h2>
         <p>{outcome === "TimeOut" && "(-50pts)"}</p>
         <h3>Scores</h3>
@@ -91,9 +86,3 @@ const GameOverModal = ({
 };
 
 export default GameOverModal;
-/*<p>CurrentPlayer: {currentPlayer}</p>
-        <p>Outcome: {outcome}</p>
-        <p>playerName: {playerName}</p>
-        <p>playerScore: {playerScore}</p>
-        <p>opponentName: {opponentName}</p>
-        <p>opponentScore: {opponentScore}</p>*/
