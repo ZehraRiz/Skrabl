@@ -1,6 +1,7 @@
 import React from "react";
 import "../styles/GameOverModal.css";
 import { Fade, Bounce } from "react-awesome-reveal";
+import { notifications } from "../assets/notifications";
 
 const GameOverModal = ({
   scores,
@@ -12,10 +13,21 @@ const GameOverModal = ({
   gameMode,
   outcome,
   endedBy,
+  lang,
 }) => {
+  let playerText;
+  if (lang === "en") {
+    playerText = "Player";
+  } else if (lang === "tr") {
+    playerText = "Oyuncu";
+  } else if (lang === "fr") {
+    playerText = "joueur";
+  } else if (lang === "de") {
+    playerText = "Spieler";
+  }
   let result = "";
   const opponentName = gameMode === "Online" ? invitedPlayer.name : "SkrablBot";
-  const playerName = gameMode === "Online" ? user.name : "Player";
+  const playerName = gameMode === "Online" ? user.name : playerText;
   const hsw = highestScoringWord.word.toUpperCase();
 
   if (currentPlayer == 0) {
@@ -36,27 +48,27 @@ const GameOverModal = ({
     case outcome === "Resign":
       result =
         endedBy === currentPlayer
-          ? `${opponentName} wins by default!`
-          : `${playerName} wins by default!`;
+          ? `${opponentName} ${notifications["wins by default!"][lang]}`
+          : `${playerName} ${notifications["wins by default!"][lang]}`;
       break;
 
     case outcome === "TimeOut":
       result =
         endedBy === currentPlayer
-          ? `${playerName} ran out of time!`
-          : `${opponentName} ran out of time!`;
+          ? `${playerName} ${notifications["ran out of time!"][lang]}`
+          : `${opponentName} ${notifications["ran out of time!"][lang]}`;
       break;
 
     case playerScore > opponentScore:
-      result = `${playerName} wins!`;
+      result = `${playerName} ${notifications["wins!"][lang]}`;
       break;
 
     case playerScore < opponentScore:
-      result = `${opponentName} wins!`;
+      result = `${opponentName} ${notifications["wins!"][lang]}`;
       break;
 
     default:
-      result = "It's a draw!";
+      result = notifications["It's a draw!"][lang];
       break;
   }
 
@@ -65,16 +77,30 @@ const GameOverModal = ({
       <Bounce cascade damping={0.5} className="gameOverModal__content">
         <h2>{result}</h2>
         <p>{outcome === "TimeOut" && "(-50pts)"}</p>
-        <h3>Scores</h3>
+        <h3>
+          {lang === "en" && "Scores"}
+          {lang === "tr" && "Skorlar"}
+          {lang === "fr" && "Scores"}
+          {lang === "de" && "Punktestand"}
+        </h3>
         <p>
           {playerName}: &nbsp;&nbsp;{playerScore}pts
         </p>
         <p>
           {opponentName}: &nbsp;&nbsp;{opponentScore}pts
         </p>
-        <h4>Highest scoring word</h4>
+        <h4>
+          {lang === "en" && "Highest scoring word"}
+          {lang === "tr" && "En yüksek puan alan kelime"}
+          {lang === "fr" && "Mot ayant obtenu le meilleur score"}
+          {lang === "de" && "Wort mit der höchsten Punktzahl"}
+        </h4>
         <p>
-          '{hsw}': &nbsp;&nbsp; {highestScoringWord.points}pts{" "}
+          '{hsw}': &nbsp;&nbsp; {highestScoringWord.points}{" "}
+          {lang === "en" && "points"}
+          {lang === "tr" && "puan"}
+          {lang === "fr" && "points"}
+          {lang === "de" && "Punkte"}{" "}
         </p>
         <p>{`(${
           highestScoringWord.player === 0 ? playerName : opponentName

@@ -127,6 +127,7 @@ const App = () => {
           setLangFr={setLangFr}
           setLangDe={setLangDe}
           setLangTr={setLangTr}
+          lang={lang}
         />
       )}
       {currentComponent === "LevelSelectScreen" && (
@@ -135,6 +136,7 @@ const App = () => {
           handleChooseEasy={handleChooseEasy}
           handleChooseNormal={handleChooseNormal}
           handleChooseHard={handleChooseHard}
+          lang={lang}
         />
       )}
       {currentComponent === "Login" && (
@@ -181,6 +183,7 @@ const App = () => {
           setCurrentPlayer={setCurrentPlayer}
           inviteSent={inviteSent}
           setInviteSent={setInviteSent}
+          lang={lang}
         />
       )}
       {currentComponent === "GameScreen" && (
@@ -203,11 +206,14 @@ const App = () => {
           setGameMode={setGameMode}
         />
       )}
-      {currentComponent === "UserBusy" && <UserBusy socket={socket} />}
+      {currentComponent === "UserBusy" && (
+        <UserBusy socket={socket} lang={lang} />
+      )}
       {notification && (
         <NotificationModal
           notification={notification}
           handleCloseNotificationModal={handleCloseNotificationModal}
+          lang={lang}
         />
       )}
       {viewRules && <RulesModal lang={lang} closeModal={handleClickRules} />}

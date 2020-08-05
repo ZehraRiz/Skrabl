@@ -3,37 +3,36 @@ import { formatMilliseconds } from "../utils/formatMilliseconds";
 import "../styles/Timer.css";
 
 const Timer = ({
-  setNotification,
   timeLeft,
   setTimeLeft,
   currentPlayer,
   turn,
   handleTimeOut,
   handleTimeWarning,
-  timeWarning
+  timeWarning,
+  lang,
 }) => {
   let interval;
-  const [playerTime, setPlayerTime] = useState(timeLeft)
+  const [playerTime, setPlayerTime] = useState(timeLeft);
 
-   useEffect(() => {
+  useEffect(() => {
     if (currentPlayer === turn) {
       interval = setInterval(() => {
-        setPlayerTime(playerTime- 1/60);
+        setPlayerTime(playerTime - 1 / 60);
       }, 1000);
       return () => clearInterval(interval);
     }
-   }, [turn, playerTime]);
-  
+  }, [turn, playerTime]);
+
   useEffect(() => {
-    setTimeLeft(playerTime)
-  },[turn])
+    setTimeLeft(playerTime);
+  }, [turn]);
 
   useEffect(() => {
     if (playerTime < 0.01) {
       handleTimeOut();
-      console.log('timeOut');
+      console.log("timeOut");
       clearInterval(interval);
-      //setNotification("Time's up");
     }
     if (playerTime < 1) {
       handleTimeWarning();
@@ -42,7 +41,13 @@ const Timer = ({
 
   return (
     <div className="timer__wrapper">
-      Time:&nbsp;&nbsp;&nbsp;&nbsp; <div className={timeWarning ? "timer__time warning" : "timer__time"}>{formatMilliseconds(playerTime*60*1000)}</div>
+      {lang === "en" && "Time:"}
+      {lang === "tr" && "Süre:"}
+      {lang === "fr" && "Temps:"}
+      {lang === "de" && "Zeit:"}&nbsp;&nbsp;&nbsp;&nbsp;
+      <div className={timeWarning ? "timer__time warning" : "timer__time"}>
+        {formatMilliseconds(playerTime * 60 * 1000)}
+      </div>
     </div>
   );
 };

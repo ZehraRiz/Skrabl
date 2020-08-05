@@ -1,19 +1,18 @@
 import React from "react";
 import "../styles/ConfirmModal.css";
 import { Fade } from "react-awesome-reveal";
-import {printWordWithBlankTiles} from "../utils/printWordWithBlankTiles"
+import { printWordWithBlankTiles } from "../utils/printWordWithBlankTiles";
 
 const ConfirmModal = ({
   message,
   handleResign,
   handlePass,
-  handleConfirmMove,
   closeModal,
   turnWords,
-  setTurnWords
+  lang,
 }) => {
   let confirmFunction;
-  let words= []
+  let words = [];
   message.type === "resign"
     ? (confirmFunction = handleResign)
     : (confirmFunction = handlePass);
@@ -27,12 +26,8 @@ const ConfirmModal = ({
       confirmFunction = handlePass;
       break;
 
-    case "confirm":
-      confirmFunction = handleConfirmMove;
-      break;
-    
     case "blankTile":
-      words = printWordWithBlankTiles(turnWords)
+      words = printWordWithBlankTiles(turnWords);
       confirmFunction = closeModal;
       break;
 
@@ -40,22 +35,26 @@ const ConfirmModal = ({
       return;
   }
 
-  printWordWithBlankTiles(turnWords)
-  
+  printWordWithBlankTiles(turnWords);
+
   return (
     <Fade triggerOnce className="confirmModal__wrapper">
       <div className="confirmModal__content">
         <p>{message.message}</p>
         {message.type === "blankTile" &&
-          words.map((word, index) => <p key={index} >{word}</p>)
-  
-      }
+          words.map((word, index) => <p key={index}>{word}</p>)}
         <div className="confirmModal__buttons">
           <button className="button__confirm" onClick={confirmFunction}>
-            Confirm
+            {lang === "en" && "Confirm"}
+            {lang === "tr" && "Onayla"}
+            {lang === "fr" && "Confirmer"}
+            {lang === "de" && "Bestätigen "}
           </button>
           <button className="button__cancel" onClick={closeModal}>
-            Cancel
+            {lang === "en" && "Cancel"}
+            {lang === "tr" && "Iptal"}
+            {lang === "fr" && "Annuler"}
+            {lang === "de" && "Stornieren "}
           </button>
         </div>
       </div>
