@@ -18,6 +18,10 @@ const StatusBar = ({
   currentPlayer,
   turn,
   gameMode,
+  timeOut,
+  handleTimeOut,
+  timeWarning,
+  handleTimeWarning
 }) => {
   const aiTiles = computerRackTiles.map((tile) => {
     return (
@@ -26,6 +30,8 @@ const StatusBar = ({
       </div>
     );
   });
+
+  console.log(timeLeftPlayer);
   return (
     <div className="statusBar__frame">
       <div className="statusBar__wrapper">
@@ -66,13 +72,17 @@ const StatusBar = ({
           <div className="player__name">
             {gameMode === "Computer" ? "Player" : user.name} {}
           </div>
-          <div className="player__time">
+          <div className="player__time" >
             <Timer
               setNotification={setNotification}
               timeLeft={timeLeftPlayer}
               setTimeLeft={setTimeLeftPlayer}
               currentPlayer={currentPlayer}
               turn={turn}
+              timeOut={timeOut}
+              handleTimeOut={handleTimeOut}
+              handleTimeWarning={handleTimeWarning}
+              timeWarning={timeWarning}
             />
           </div>
 
