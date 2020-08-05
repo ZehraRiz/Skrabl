@@ -50,7 +50,6 @@ const Players = ({
   const sendInvite = (player) => {
     socket.emit("playerInGame", player);
     socket.on("playerUnavailable", (data) => {
-      console.log(data);
       if (data === true) {
         setNotification("Player is in another game");
         return;

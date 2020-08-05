@@ -29,7 +29,6 @@ const Timer = ({
   },[turn])
 
   useEffect(() => {
-    console.log(playerTime);
     if (playerTime < 0.01) {
       handleTimeOut();
       console.log('timeOut');

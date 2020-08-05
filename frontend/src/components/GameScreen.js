@@ -505,6 +505,60 @@ const GameScreen = ({
     nextPlayer(1, scores, highestScoringWord);
     setConsecutivePasses(consecutivePasses + 1);
   };
+  
+  const handleBlankTilefromConfirmModal = (completeWord) => {
+    console.log(completeWord)
+    closeModal()
+    setTurnWords(completeWord)
+    axios
+        .post("http://localhost:4001/verifyWord", {
+          words: completeWord,
+          lang,
+        })
+        .then((res) => {
+          const results = res.data;
+          if (Object.values(results).every((val) => val === "true")) {
+            const [turnPoints, turnHighScore] = getTurnPoints(
+              completeWord,
+              placedTiles,
+              turn
+            );
+            const playerPreviousPoints = scores[turn];
+            const updatedScores = {
+              ...scores,
+              [turn]: playerPreviousPoints + turnPoints,
+            };
+            setScores(updatedScores);
+            if (turnHighScore.points > highestScoringWord.points) {
+              setHighestScoringWord(turnHighScore);
+              nextPlayer(consecutivePasses * -1, updatedScores, turnHighScore);
+            } else
+              nextPlayer(
+                consecutivePasses * -1,
+                updatedScores,
+                highestScoringWord
+              );
+            setPlacedTiles([]);
+            return;
+          } else {
+            const checkedWords = Object.keys(results);
+            const invalidWords = [];
+            checkedWords.forEach((word) => {
+              if (results[word] === "false") {
+                invalidWords.push(word);
+              } else {
+                return;
+              }
+            });
+            //just showing first for simplicity
+            setNotification(
+              `The word "${invalidWords[0]}" was not found in the dictionary.`
+            );
+          }
+        });
+
+    //do soemthing 
+  }
 
   const handleTimeOut = () => {
     setOutcome("TimeOut");
@@ -574,52 +628,7 @@ const GameScreen = ({
       var newWords = wordsOnBoard.filter((word) => word.newWord === true);
       setTurnWords(newWords);
       handleBlankTiles(newWords, setConfirmMessage);
-      axios
-        .post("http://localhost:4001/verifyWord", {
-          words: newWords,
-          lang,
-        })
-        .then((res) => {
-          const results = res.data;
-          if (Object.values(results).every((val) => val === "true")) {
-            const [turnPoints, turnHighScore] = getTurnPoints(
-              newWords,
-              placedTiles,
-              turn
-            );
-            const playerPreviousPoints = scores[turn];
-            const updatedScores = {
-              ...scores,
-              [turn]: playerPreviousPoints + turnPoints,
-            };
-            setScores(updatedScores);
-            if (turnHighScore.points > highestScoringWord.points) {
-              setHighestScoringWord(turnHighScore);
-              nextPlayer(consecutivePasses * -1, updatedScores, turnHighScore);
-            } else
-              nextPlayer(
-                consecutivePasses * -1,
-                updatedScores,
-                highestScoringWord
-              );
-            setPlacedTiles([]);
-            return;
-          } else {
-            const checkedWords = Object.keys(results);
-            const invalidWords = [];
-            checkedWords.forEach((word) => {
-              if (results[word] === "false") {
-                invalidWords.push(word);
-              } else {
-                return;
-              }
-            });
-            //just showing first for simplicity
-            setNotification(
-              `The word "${invalidWords[0]}" was not found in the dictionary.`
-            );
-          }
-        });
+      //moved axios call from here
       return;
     } else {
       const placedTilesIndices = placedTiles.map((tile) => tile.square);
@@ -772,6 +781,7 @@ const GameScreen = ({
             closeModal={closeModal}
             turnWords={turnWords}
             setTurnWords={setTurnWords}
+            handleBlankTilefromConfirmModal={handleBlankTilefromConfirmModal}
           />
         )}
       </div>
