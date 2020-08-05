@@ -146,7 +146,6 @@ const App = () => {
           setPlayers={setPlayers}
           setInvitedPlayer={setInvitedPlayer}
           setGameId={setGameId}
-          setInvitedPlayer={setInvitedPlayer}
           setInviteSent={setInviteSent}
           setCurrentPlayer={setCurrentPlayer}
           setNotification={setNotification}

@@ -120,6 +120,47 @@ const startingTiles = {
       { letter: "y", points: 10 },
     ],
   },
+  de: {
+    15: [{ letter: "e", points: 1 }],
+    9: [{ letter: "n", points: 1 }],
+    7: [{ letter: "s", points: 1 }],
+    6: [
+      { letter: "i", points: 1 },
+      { letter: "r", points: 1 },
+      { letter: "t", points: 1 },
+      { letter: "u", points: 1 },
+    ],
+    5: [{ letter: "a", points: 1 }],
+    4: [
+      { letter: "d", points: 1 },
+      { letter: "h", points: 2 },
+      { letter: "m", points: 3 },
+    ],
+    3: [
+      { letter: "g", points: 2 },
+      { letter: "l", points: 2 },
+      { letter: "o", points: 2 },
+    ],
+    2: [
+      { letter: "b", points: 3 },
+      { letter: "c", points: 4 },
+      { letter: "f", points: 4 },
+      { letter: "k", points: 4 },
+    ],
+    1: [
+      { letter: "w", points: 3 },
+      { letter: "z", points: 3 },
+      { letter: "p", points: 4 },
+      { letter: "ä", points: 6 },
+      { letter: "j", points: 6 },
+      { letter: "ü", points: 6 },
+      { letter: "v", points: 6 },
+      { letter: "ö", points: 8 },
+      { letter: "x", points: 8 },
+      { letter: "q", points: 10 },
+      { letter: "y", points: 10 },
+    ],
+  },
 };
 
 module.exports = startingTiles;
