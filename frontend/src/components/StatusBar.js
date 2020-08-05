@@ -21,7 +21,8 @@ const StatusBar = ({
   timeOut,
   handleTimeOut,
   timeWarning,
-  handleTimeWarning
+  handleTimeWarning,
+  lang,
 }) => {
   const aiTiles = computerRackTiles.map((tile) => {
     return (
@@ -30,8 +31,6 @@ const StatusBar = ({
       </div>
     );
   });
-
-  console.log(timeLeftPlayer);
   return (
     <div className="statusBar__frame">
       <div className="statusBar__wrapper">
@@ -44,13 +43,23 @@ const StatusBar = ({
           </div>
           {gameMode === "Computer" && (
             <div className="rackInfo">
-              <h3>SkrablBot tiles</h3>
+              <h3>
+                {lang === "en" && "SkrablBot's tiles"}
+                {lang === "tr" && "SkrablBot'un harf taşları"}
+                {lang === "fr" && "Pions de SkrablBot"}
+                {lang === "de" && "SkrablBots Buchstabensteine"}
+              </h3>
               <div className="aiRack">{aiTiles}</div>
             </div>
           )}
           {gameMode === "Online" && (
             <div className="rackInfo">
-              <h3>Highest scoring word</h3>
+              <h3>
+                {lang === "en" && "Highest scoring word"}
+                {lang === "tr" && "En yüksek puan alan kelime"}
+                {lang === "fr" && "Mot ayant obtenu le meilleur score"}
+                {lang === "de" && "Wort mit der höchsten Punktzahl"}
+              </h3>
               {highestScoringWord.word.length > 0 && (
                 <div className="hiScore">{`'${highestScoringWord.word.toUpperCase()}' - ${
                   highestScoringWord.points
@@ -70,9 +79,13 @@ const StatusBar = ({
           }
         >
           <div className="player__name">
-            {gameMode === "Computer" ? "Player" : user.name} {}
+            {gameMode === "Computer" && lang === "en" && "Player"}
+            {gameMode === "Computer" && lang === "tr" && "Oyuncu"}
+            {gameMode === "Computer" && lang === "fr" && "Joueur"}
+            {gameMode === "Computer" && lang === "de" && "Spieler"}
+            {gameMode === "Online" && user.name}
           </div>
-          <div className="player__time" >
+          <div className="player__time">
             <Timer
               setNotification={setNotification}
               timeLeft={timeLeftPlayer}
@@ -83,11 +96,15 @@ const StatusBar = ({
               handleTimeOut={handleTimeOut}
               handleTimeWarning={handleTimeWarning}
               timeWarning={timeWarning}
+              lang={lang}
             />
           </div>
 
           <div className="player__score">
-            Score:&nbsp;&nbsp;&nbsp;{" "}
+            {lang === "en" && "Score:"}
+            {lang === "tr" && "Skor:"}
+            {lang === "fr" && "Score:"}
+            {lang === "de" && "Punktzahl:"}&nbsp;&nbsp;&nbsp;{" "}
             {scores && scores[currentPlayer == 1 ? 1 : 0]}
           </div>
         </div>
@@ -109,10 +126,14 @@ const StatusBar = ({
               setTimeLeft={setTimeLeftOpponent}
               currentPlayer={currentPlayer == 1 ? 0 : 1}
               turn={turn}
+              lang={lang}
             />
           </div>
           <div className="player__score">
-            Score:&nbsp;&nbsp;&nbsp;{" "}
+            {lang === "en" && "Score:"}
+            {lang === "tr" && "Skor:"}
+            {lang === "fr" && "Score:"}
+            {lang === "de" && "Punktzahl:"}&nbsp;&nbsp;&nbsp;{" "}
             {scores && scores[currentPlayer == 1 ? 0 : 1]}
           </div>
         </div>

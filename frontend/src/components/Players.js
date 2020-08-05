@@ -14,7 +14,7 @@ const Players = ({
   setGameData,
   setCurrentPlayer,
   handleStart,
-  lang
+  lang,
 }) => {
   let [invite, setInvite] = useState("");
   socket.on("invite", (data) => {
@@ -43,7 +43,7 @@ const Players = ({
   });
 
   socket.on("userLeft", (user) => {
-    console.log("a user left" + user)
+    console.log("a user left" + user);
     setPlayers(players.filter((u) => u.token != user.token));
   });
 
@@ -55,7 +55,7 @@ const Players = ({
         setNotification("Player is in another game");
         return;
       } else {
-        socket.emit("createGame", {userToken: user.token, lang: lang});
+        socket.emit("createGame", { userToken: user.token, lang: lang });
         //invalid userId on create game
         socket.on("createGameError", (data) => {
           console.log(data);
@@ -74,8 +74,17 @@ const Players = ({
   return (
     <Fade triggerOnce>
       <div className="players__wrapper">
-        <h3>Players Online</h3>
-        Clink on a player to invite them for a game
+        <h3>
+          {lang === "en" && "Players online"}
+          {lang === "tr" && "Çevrimiçi oyuncular"}
+          {lang === "fr" && "Joueurs en ligne "}
+          {lang === "de" && "Spieler online"}
+        </h3>
+        {lang === "en" && "Click on a player to invite them for a game."}
+        {lang === "tr" && "Bir oyuna davet etmek için bir oyuncuyu tıklay."}
+        {lang === "fr" && "Cliquez sur un joueur pour l'inviter à une partie."}
+        {lang === "de" &&
+          "Klicken Sie auf einen Spieler, um ihn zu einem Spiel einzuladen."}
         <ul className="players__list">
           {players.map((player, index) => {
             return (
@@ -92,15 +101,44 @@ const Players = ({
             );
           })}
         </ul>
-        {players.length < 1 && (<><p>No one's online at the moment.</p>
-        <button className="return__button" onClick={handleStart}>Return to main menu</button></>)}
+        {players.length < 1 && (
+          <>
+            <p>
+              {lang === "en" && "No one's online at the moment."}
+              {lang === "tr" && "Şu anda kimse çevrimiçi değil."}
+              {lang === "fr" && "Personne n'est en ligne pour le moment."}
+              {lang === "de" && "Im Moment ist niemand online."}
+            </p>
+            <button className="return__button" onClick={handleStart}>
+              {lang === "en" && "Back to main menu"}
+              {lang === "tr" && "Ana menüye geri git"}
+              {lang === "fr" && "Retour au menu principal"}
+              {lang === "de" && "Zurück zum Hauptmenü"}
+            </button>
+          </>
+        )}
         {invite !== "" && (
           <div className="player__invitations">
-            <h3>Incoming Invitations</h3>
+            <h3>
+              {lang === "en" && "Incoming invitations"}
+              {lang === "tr" && "Gelen davetler"}
+              {lang === "fr" && "Invitations entrantes"}
+              {lang === "de" && "Eingehende Einladungen"}
+            </h3>
             <div className="player__invite-request">
-              <p>{invite.host.name} sent you a game request</p>
+              <p>
+                {invite.host.name} {lang === "en" && "sent you a game request."}
+                {lang === "tr" && "sana bir oyun daveti gönderdi."}
+                {lang === "fr" && "vous a envoyé une demande de jeu."}
+                {lang === "de" && "hat dir eine Spielanfrage geschickt."}
+              </p>
               <button onClick={acceptInvite}>Click to accept</button>
-              <button className="return__button" onClick={handleStart}>Return to main menu</button>
+              <button className="return__button" onClick={handleStart}>
+                {lang === "en" && "Back to main menu"}
+                {lang === "tr" && "Ana menüye geri git"}
+                {lang === "fr" && "Retour au menu principal"}
+                {lang === "de" && "Zurück zum Hauptmenü"}
+              </button>
             </div>
           </div>
         )}

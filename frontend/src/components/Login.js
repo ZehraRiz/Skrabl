@@ -14,12 +14,12 @@ const Login = ({
   setGameData,
   setNotification,
   handleStart,
-  lang
+  lang,
 }) => {
   useEffect(() => {
     const userIdFromLS = localStorage.getItem("token");
     if (userIdFromLS) {
-      socket.emit("retriveUser", { token: userIdFromLS, lang: lang});
+      socket.emit("retriveUser", { token: userIdFromLS, lang: lang });
       //backend does not recognize the token
       socket.on("tokenError", (data) => {
         setCurrentComponent("Login");
@@ -65,14 +65,14 @@ const Login = ({
   const handleLogin = (e) => {
     e.preventDefault();
     const name = e.target.name.value;
-    socket.emit("username", {name, lang});
-    socket.on("usernameError", (data) => { 
+    socket.emit("username", { name, lang });
+    socket.on("usernameError", (data) => {
       console.log(data);
       setNotification(data);
       return;
     });
     socket.on("usernameRegistered", (data) => {
-      console.log(data)
+      console.log(data);
       const user = data.user;
       localStorage.setItem("token", data.token);
       setUser(user);
@@ -89,16 +89,34 @@ const Login = ({
   return (
     <Fade className="login__container" triggerOnce>
       <div className="login__wrapper">
-        <h2>Login</h2>
+        <h2>
+          {lang === "en" && "Login"}
+          {lang === "tr" && "Giriş"}
+          {lang === "fr" && "S'identifier"}
+          {lang === "de" && "Anmeldung"}
+        </h2>
         <form className="login__form" onSubmit={handleLogin}>
-          <label htmlFor="name">Your name:</label>
+          <label htmlFor="name">
+            {lang === "en" && "Your name:"}
+            {lang === "tr" && "Adınız:"}
+            {lang === "fr" && "Votre nom:"}
+            {lang === "de" && "Dein Name:"}
+          </label>
           <input type="text" id="name" maxLength="12" />
-          <button type="submit">Login</button>
-          <button className="" onClick={handleStart}>Back</button>
+          <button type="submit">
+            {lang === "en" && "Login"}
+            {lang === "tr" && "Giriş"}
+            {lang === "fr" && "S'identifier"}
+            {lang === "de" && "Anmeldung"}
+          </button>
+          <button className="" onClick={handleStart}>
+            {lang === "en" && "Back"}
+            {lang === "tr" && "Geri git"}
+            {lang === "fr" && "Retourner"}
+            {lang === "de" && "Geh zurück"}
+          </button>
         </form>
-        
       </div>
-      
     </Fade>
   );
 };

@@ -1,17 +1,22 @@
-import React from 'react'
+import React from "react";
 
-const UserBusy = ({ socket }) => {
-    socket.on('retrivedGame', (data) => {
-        console.log(data)
-    })
+const UserBusy = ({ socket, lang }) => {
+  socket.on("retrivedGame", (data) => {
+    console.log(data);
+  });
 
-    //retrived game setup
-    //join it to game room when sent back 
-    return (
-        <div>
-            <h5>You are already in a game</h5>
-        </div>
-    )
-}
+  //retrived game setup
+  //join it to game room when sent back
+  return (
+    <div>
+      <h5>
+        {lang === "en" && "You are already in a game."}
+        {lang === "tr" && "Zaten bir oyundasın."}
+        {lang === "fr" && "Vous êtes déjà dans un jeu."}
+        {lang === "de" && "Du bist schon in einem Spiel."}
+      </h5>
+    </div>
+  );
+};
 
-export default UserBusy
+export default UserBusy;
