@@ -13,15 +13,6 @@ const GameOverModal = ({
   outcome,
   endedBy
 }) => {
-  console.log(scores,
-    highestScoringWord,
-    returnToHomeScreen,
-    currentPlayer,
-    user,
-    invitedPlayer,
-    gameMode,
-    outcome,
-    endedBy);
   let result = "";
   const opponentName = gameMode === "Online" ? invitedPlayer.name : "SkrablBot";
   const playerName = gameMode === "Online" ? user.name : "Player";
