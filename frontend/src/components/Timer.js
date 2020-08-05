@@ -31,7 +31,6 @@ const Timer = ({
   useEffect(() => {
     if (playerTime < 0.01) {
       handleTimeOut();
-      console.log('timeOut');
       clearInterval(interval);
       //setNotification("Time's up");
     }

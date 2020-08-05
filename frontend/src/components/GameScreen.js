@@ -84,7 +84,6 @@ const GameScreen = ({
       date: now.format("h:mm:ss a"),
     },
   ]);
-  const [turnWords, setTurnWords] = useState([]);
   const [timeWarning, setTimeWarning] = useState(false);
   const [endedBy, setEndedBy] = useState(0);
 
@@ -384,11 +383,23 @@ const GameScreen = ({
       }
       playSound(placeTileSound);
 
+      if (selectedTile.letter === "") {
+        //confirmation modal call
+        setConfirmMessage({
+          type: "blankTile",
+          message: "What alphabet do you want to assign?"
+        })
+      }
+
       const tileToAdd = {
         ...selectedTile,
         square: selectedSquareIndex,
         player: 0,
       };
+
+      console.log(selectedTile)
+
+    
       const updatedBoardState = boardState.map((square) => {
         if (square.index === selectedSquareIndex) {
           return { ...square, tile: tileToAdd };
@@ -585,8 +596,6 @@ const GameScreen = ({
     if (currentPlayer !== turn) return;
     if (moveIsValid(placedTiles, boardState)) {
       var newWords = wordsOnBoard.filter((word) => word.newWord === true);
-      setTurnWords(newWords);
-      handleBlankTiles(newWords, setConfirmMessage);
       axios
         .post("http://localhost:4001/verifyWord", {
           words: newWords,
@@ -785,8 +794,6 @@ const GameScreen = ({
             handlePass={handlePass}
             handleConfirmMove={handleConfirmMove}
             closeModal={closeModal}
-            turnWords={turnWords}
-            setTurnWords={setTurnWords}
           />
         )}
       </div>
