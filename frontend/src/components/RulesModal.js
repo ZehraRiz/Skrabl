@@ -189,7 +189,10 @@ const RulesModal = ({ closeModal, lang }) => {
               <h3>Accepted Skrabl Words</h3>
               <p>
                 Any word that is found in a standard English dictionary can be
-                used in the game of Skrabl.
+                used in the game of Skrabl. Only British English spelling is
+                accepted. Plurals and verbs in different forms (e.g. past tense)
+                are valid. Words which are usually spelled with a capital letter
+                (e.g. names) are not valid.
               </p>
 
               <p>
@@ -404,7 +407,11 @@ const RulesModal = ({ closeModal, lang }) => {
               <h3> Akzeptierte Skrabl-Wörter </h3>
               <p>
                 Jedes Wort, das in einem englischen Standardwörterbuch gefunden
-                wird, kann sein im Spiel von Skrabl verwendet.
+                wird, kann sein im Spiel von Skrabl verwendet. Es wird nur die
+                britische Rechtschreibung akzeptiert. Pluralformen und Verben in
+                verschiedenen Formen (z. B. Vergangenheitsform) sind gültig.
+                Wörter, die normalerweise mit einem Großbuchstaben geschrieben
+                werden (z. B. Namen), sind ungültig.
               </p>
 
               <p>
@@ -602,7 +609,10 @@ const RulesModal = ({ closeModal, lang }) => {
               <h3> Kabul Edilen Skrabl Kelimeleri </h3>
               <p>
                 Standart İngilizce sözlükte bulunan herhangi bir kelime Skrabl
-                oyununda kullanılır.
+                oyununda kullanılır. Sadece İngiliz İngilizcesi yazım kabul
+                edilir. Çoğullar ve farklı formlardaki fiiller (mesela geçmiş
+                zaman) geçerlidir. Genellikle büyük harfle yazılan kelimeler
+                (mesela adlar) geçerli değildir.
               </p>
 
               <p>
@@ -621,46 +631,47 @@ const RulesModal = ({ closeModal, lang }) => {
               </p>
             </>
           )}
-           {lang === "fr" && (
+          {lang === "fr" && (
             <>
               <h1> Règles Skrabl </h1>
               <p>
                 Lorsque vous jouez à Skrabl, de un à deux joueurs apprécieront
                 le jeu. Le but en jouant est de marquer plus de points que
-                d'autres joueurs. Lorsque les mots sont placés sur le plateau de jeu, les points sont
-                collectées et chaque lettre utilisée dans le jeu aura un
-                valeur de point différente. La stratégie principale est de jouer des mots qui
-                avoir le score le plus élevé possible en fonction de la combinaison de
-                des lettres.
+                d'autres joueurs. Lorsque les mots sont placés sur le plateau de
+                jeu, les points sont collectées et chaque lettre utilisée dans
+                le jeu aura un valeur de point différente. La stratégie
+                principale est de jouer des mots qui avoir le score le plus
+                élevé possible en fonction de la combinaison de des lettres.
               </p>
 
               <h3> Le tableau Skrabl </h3>
               <p>
                 Un tableau Skrabl sera composé de cellules situées dans un grand
-                grille carrée. La carte offre 15 cellules de haut et 15 cellules de large.
-                Les tuiles utilisées dans le jeu rentreront dans chaque cellule du plateau.
+                grille carrée. La carte offre 15 cellules de haut et 15 cellules
+                de large. Les tuiles utilisées dans le jeu rentreront dans
+                chaque cellule du plateau.
               </p>
 
               <h3> Tuiles Skrabl </h3>
               <p>
-                Il y a 100 tuiles qui sont utilisées dans le jeu et 98 d'entre elles
-                contiendra des lettres et des valeurs en points. Il y a 2 tuiles vierges
-                qui peuvent être utilisées comme tuiles sauvages pour remplacer n'importe quelle lettre.
-                Lorsqu'un blanc est joué, il restera dans le jeu en tant que lettre
-                il a remplacé.
+                Il y a 100 tuiles qui sont utilisées dans le jeu et 98 d'entre
+                elles contiendra des lettres et des valeurs en points. Il y a 2
+                tuiles vierges qui peuvent être utilisées comme tuiles sauvages
+                pour remplacer n'importe quelle lettre. Lorsqu'un blanc est
+                joué, il restera dans le jeu en tant que lettre il a remplacé.
               </p>
 
               <p>
-                Différentes lettres du jeu auront différentes valeurs de points et
-                cela dépendra de la rareté de la lettre et de sa difficulté
-                peut être de déposer cette lettre. Les carreaux vierges n'auront aucun intérêt
-                valeurs.
+                Différentes lettres du jeu auront différentes valeurs de points
+                et cela dépendra de la rareté de la lettre et de sa difficulté
+                peut être de déposer cette lettre. Les carreaux vierges n'auront
+                aucun intérêt valeurs.
               </p>
 
               <h3> Valeurs de tuile </h3>
               <p>
-                Vous trouverez ci-dessous les valeurs en points pour chaque lettre utilisée dans un
-                Jeu de Skrabl.
+                Vous trouverez ci-dessous les valeurs en points pour chaque
+                lettre utilisée dans un Jeu de Skrabl.
               </p>
 
               <p> 0 point - tuile vierge. </p>
@@ -680,144 +691,154 @@ const RulesModal = ({ closeModal, lang }) => {
               <p> 10 points - Q et Z. </p>
               <p>
                 En regardant le tableau, les joueurs verront que certaines cases
-                offrir des multiplicateurs. Si une tuile est placée sur ces cases, le
-                la valeur de la tuile sera multipliée par 2x ou 3x. Quelques carrés
-                multipliera également la valeur totale du mot et pas seulement le
-                valeur de point unique d'une tuile.
+                offrir des multiplicateurs. Si une tuile est placée sur ces
+                cases, le la valeur de la tuile sera multipliée par 2x ou 3x.
+                Quelques carrés multipliera également la valeur totale du mot et
+                pas seulement le valeur de point unique d'une tuile.
               </p>
 
               <p>
-                Scores en double lettre - Les cellules bleu clair du tableau sont
-                isolés et lorsqu'ils sont utilisés, ils doubleront la valeur de
-                la tuile placée sur cette case.
+                Scores en double lettre - Les cellules bleu clair du tableau
+                sont isolés et lorsqu'ils sont utilisés, ils doubleront la
+                valeur de la tuile placée sur cette case.
               </p>
 
               <p>
-                Score triple lettre - La cellule bleu foncé du tableau sera
-                vaut le triple du montant, donc toute tuile placée ici gagnera plus
+                Score triple lettre - La cellule bleu foncé du tableau sera vaut
+                le triple du montant, donc toute tuile placée ici gagnera plus
                 points.
               </p>
 
               <p>
-                Score de mot double - Lorsqu'une cellule est de couleur rouge clair, c'est un
-                double cellule de mot et ceux-ci se dirigent en diagonale sur le tableau, vers
-                les quatre coins. Lorsqu'un mot est placé sur ces carrés, le
-                la valeur entière du mot sera doublée.
+                Score de mot double - Lorsqu'une cellule est de couleur rouge
+                clair, c'est un double cellule de mot et ceux-ci se dirigent en
+                diagonale sur le tableau, vers les quatre coins. Lorsqu'un mot
+                est placé sur ces carrés, le la valeur entière du mot sera
+                doublée.
               </p>
 
               <p>
-                Score triple mot - Le carré rouge foncé est l'endroit où les points forts
-                peut être gagné car cela triplera le score de mots. Placer tout
-                mot sur ces carrés fera huer les points de manière drastique. Ceux-ci sont
-                trouvés sur les quatre côtés de la planche et sont équidistants de
-                les coins.
+                Score triple mot - Le carré rouge foncé est l'endroit où les
+                points forts peut être gagné car cela triplera le score de mots.
+                Placer tout mot sur ces carrés fera huer les points de manière
+                drastique. Ceux-ci sont trouvés sur les quatre côtés de la
+                planche et sont équidistants de les coins.
               </p>
 
               <p>
-                Une seule utilisation - Lors de l'utilisation des carrés de points supplémentaires sur le
-                conseil d'administration, ils ne peuvent être utilisés qu'une seule fois. Si un joueur place un mot
-                ici, il ne peut pas être utilisé comme multiplicateur en plaçant un autre mot
-                sur le même carré.
+                Une seule utilisation - Lors de l'utilisation des carrés de
+                points supplémentaires sur le conseil d'administration, ils ne
+                peuvent être utilisés qu'une seule fois. Si un joueur place un
+                mot ici, il ne peut pas être utilisé comme multiplicateur en
+                plaçant un autre mot sur le même carré.
               </p>
 
               <h3> Démarrer le jeu </h3>
 
               <p>
-                Chaque joueur commencera son tour avec sept tuiles du
-                Sac Skrabl. Il y a trois options à chaque tour. Le joueur
-                peuvent placer un mot, ils peuvent échanger des tuiles contre de nouvelles tuiles ou ils
-                peut choisir de passer. Dans la plupart des cas, les joueurs essaieront de placer un
-                mot car les deux autres options n'entraîneront aucun score.
+                Chaque joueur commencera son tour avec sept tuiles du Sac
+                Skrabl. Il y a trois options à chaque tour. Le joueur peuvent
+                placer un mot, ils peuvent échanger des tuiles contre de
+                nouvelles tuiles ou ils peut choisir de passer. Dans la plupart
+                des cas, les joueurs essaieront de placer un mot car les deux
+                autres options n'entraîneront aucun score.
               </p>
 
               <p>
-                Lorsqu'un joueur choisit d'échanger des tuiles, il peut choisir de
-                échanger une ou toutes les tuiles qu'ils détiennent actuellement. Après
-                les tuiles sont échangées, le tour est terminé et les joueurs devront
-                attendez leur prochain tour pour placer un mot au tableau.
+                Lorsqu'un joueur choisit d'échanger des tuiles, il peut choisir
+                de échanger une ou toutes les tuiles qu'ils détiennent
+                actuellement. Après les tuiles sont échangées, le tour est
+                terminé et les joueurs devront attendez leur prochain tour pour
+                placer un mot au tableau.
               </p>
 
               <p>
-                Les joueurs peuvent choisir de passer à tout moment. Ils perdront cela
-                tourner et espérer pouvoir jouer la prochaine fois. Si six
-                des passes consécutives sont effectuées (trois par joueur), le jeu
-                fin et celui avec le score le plus élevé gagnera. S'il n'y a pas
-                tuiles laissées dans la pochette Skrabl, puis le jeu se terminera après deux
-                passes consécutives.
+                Les joueurs peuvent choisir de passer à tout moment. Ils
+                perdront cela tourner et espérer pouvoir jouer la prochaine
+                fois. Si six des passes consécutives sont effectuées (trois par
+                joueur), le jeu fin et celui avec le score le plus élevé
+                gagnera. S'il n'y a pas tuiles laissées dans la pochette Skrabl,
+                puis le jeu se terminera après deux passes consécutives.
               </p>
 
               <h3> Le score du premier mot </h3>
               <p>
                 Lorsque le jeu commence, le premier joueur placera sa parole sur
                 l'étoile tourne au centre du plateau. L'étoile est un double
-                carré et offrira un double score de mots. Tous les joueurs suivant
-                construiront leurs mots sur ce mot, étendant le jeu à
+                carré et offrira un double score de mots. Tous les joueurs
+                suivant construiront leurs mots sur ce mot, étendant le jeu à
                 autres carrés sur le plateau.
               </p>
 
               <h3> Remplacement des tuiles Skrabl </h3>
               <p>
-                Une fois les tuiles jouées sur le plateau, les joueurs recevront de nouveaux
-                tuiles de la pochette pour les remplacer. Les joueurs auront toujours
-                sept tuiles pendant le jeu.
+                Une fois les tuiles jouées sur le plateau, les joueurs recevront
+                de nouveaux tuiles de la pochette pour les remplacer. Les
+                joueurs auront toujours sept tuiles pendant le jeu.
               </p>
 
               <h3> Le bonus de cinquante points </h3>
               <p>
-                Des récompenses intéressantes peuvent venir lorsque les joueurs utilisent les sept tuiles pour
-                créez un mot au tableau. Lorsque cela se produit, les joueurs
-                recevez un bonus de 50 points, en plus de la valeur du mot.
-                Si le jeu approche de la fin et que les joueurs n'en ont pas sept
-                tuiles, ils n'obtiennent pas le bonus pour l'utilisation de toutes leurs tuiles.
-                Ceci n'est collecté que pour les mots de sept lettres placés.
+                Des récompenses intéressantes peuvent venir lorsque les joueurs
+                utilisent les sept tuiles pour créez un mot au tableau. Lorsque
+                cela se produit, les joueurs recevez un bonus de 50 points, en
+                plus de la valeur du mot. Si le jeu approche de la fin et que
+                les joueurs n'en ont pas sept tuiles, ils n'obtiennent pas le
+                bonus pour l'utilisation de toutes leurs tuiles. Ceci n'est
+                collecté que pour les mots de sept lettres placés.
               </p>
 
               <h3> La fin d'un jeu Skrabl </h3>
               <p>
-                Une fois que toutes les tuiles sont parties du sac et qu'un seul joueur a
-                placé toutes leurs tuiles, le jeu se terminera et le joueur avec
-                le score le plus élevé l'emporte.
+                Une fois que toutes les tuiles sont parties du sac et qu'un seul
+                joueur a placé toutes leurs tuiles, le jeu se terminera et le
+                joueur avec le score le plus élevé l'emporte.
               </p>
 
               <h3> Comptage des scores de Skrabl </h3>
               <p>
-                À la fin du jeu, chaque joueur comptera tous les points
-                restant sur leurs tuiles qui n'ont pas été jouées. Cette somme
-                sera déduit du score final.
+                À la fin du jeu, chaque joueur comptera tous les points restant
+                sur leurs tuiles qui n'ont pas été jouées. Cette somme sera
+                déduit du score final.
               </p>
 
               <p>
-                Un bonus supplémentaire est attribué au joueur qui a terminé le jeu et
-                n'a pas de tuiles restantes. Les valeurs des tuiles de tous les joueurs restants
-                sera ajouté au score du joueur qui n'a plus de tuiles pour
-                produire le score final du jeu.
+                Un bonus supplémentaire est attribué au joueur qui a terminé le
+                jeu et n'a pas de tuiles restantes. Les valeurs des tuiles de
+                tous les joueurs restants sera ajouté au score du joueur qui n'a
+                plus de tuiles pour produire le score final du jeu.
               </p>
 
               <p>
-                Le joueur Skrabl avec le score le plus élevé après tous les scores finaux
-                sont comptés des victoires.
+                Le joueur Skrabl avec le score le plus élevé après tous les
+                scores finaux sont comptés des victoires.
               </p>
 
               <h3> Mots Skrabl acceptés </h3>
               <p>
-                Tout mot qui se trouve dans un dictionnaire anglais standard peut être
-                utilisé dans le jeu de Skrabl.
+                Tout mot qui se trouve dans un dictionnaire anglais standard
+                peut être utilisé dans le jeu de Skrabl. Seule l'orthographe
+                anglaise britannique est acceptée. Les pluriels et les verbes
+                sous différentes formes (par exemple le passé) sont valides. Les
+                mots qui sont généralement écrits avec une majuscule (par
+                exemple les noms) ne sont pas valides.
               </p>
 
               <p>
-                Il y a des mots qui ne peuvent pas être joués et ceux-ci
-                inclure des suffixes, des préfixes et des abréviations. Tout mot qui
-                nécessite l'utilisation d'un trait d'union ou une apostrophe ne peut pas être joué dans
-                le jeu. Tout mot nécessitant l'utilisation d'une majuscule est
-                interdit.
+                Il y a des mots qui ne peuvent pas être joués et ceux-ci inclure
+                des suffixes, des préfixes et des abréviations. Tout mot qui
+                nécessite l'utilisation d'un trait d'union ou une apostrophe ne
+                peut pas être joué dans le jeu. Tout mot nécessitant
+                l'utilisation d'une majuscule est interdit.
               </p>
 
               <p>
-                Lorsque vous jouez à une version anglaise du jeu, les mots étrangers sont
-                ne peut pas être placé sur le plateau. Cependant, si l'étranger
-                mot apparaît dans un dictionnaire anglais standard, c'est
-                permis. La raison en est que le mot est
-                assez parlé et est considéré comme faisant partie de la langue anglaise.
+                Lorsque vous jouez à une version anglaise du jeu, les mots
+                étrangers sont ne peut pas être placé sur le plateau. Cependant,
+                si l'étranger mot apparaît dans un dictionnaire anglais
+                standard, c'est permis. La raison en est que le mot est assez
+                parlé et est considéré comme faisant partie de la langue
+                anglaise.
               </p>
             </>
           )}

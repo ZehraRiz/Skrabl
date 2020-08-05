@@ -13,21 +13,34 @@ const WelcomeScreen = ({
   setLangFr,
   setLangDe,
   setLangTr,
+  lang,
 }) => {
   return (
     <Fade triggerOnce>
       <div className="welcome__main">
         <div className="welcome__menu">
-          <h2>Select game type...</h2>
+          {lang === "en" && <h2>Select game mode...</h2>}
+          {lang === "tr" && <h2>Oyun modunu seç...</h2>}
+          {lang === "fr" && <h2>Sélectionnez le mode de jeu...</h2>}
+          {lang === "de" && <h2>Wählen Sie den Spielmodus...</h2>}
           <button onClick={handleChooseComputer}>
-            <span>Player</span>
+            {lang === "en" && <span>Player</span>}
+            {lang === "tr" && <span>Oyuncu</span>}
+            {lang === "fr" && <span>Joueur</span>}
+            {lang === "de" && <span>Spieler</span>}
             <span className="vs">VS</span>
             <span>SkrablBot</span>
           </button>
           <button onClick={handleChooseOnline}>
-            <span>Player</span>
+            {lang === "en" && <span>Player</span>}
+            {lang === "tr" && <span>Oyuncu</span>}
+            {lang === "fr" && <span>Joueur</span>}
+            {lang === "de" && <span>Spieler</span>}
             <span className="vs">VS</span>
-            <span>Player</span>
+            {lang === "en" && <span>Player</span>}
+            {lang === "tr" && <span>Oyuncu</span>}
+            {lang === "fr" && <span>Joueur</span>}
+            {lang === "de" && <span>Spieler</span>}
           </button>
         </div>
         <div className="language__select">

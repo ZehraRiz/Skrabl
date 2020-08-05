@@ -13,6 +13,7 @@ const InviteScreen = ({
   setCurrentPlayer,
   inviteSent,
   setInviteSent,
+  lang,
 }) => {
   const [timeInput, setTimeInput] = useState(20);
 
@@ -107,11 +108,22 @@ const InviteScreen = ({
   return (
     <Fade triggerOnce>
       <div className="inviteScreen__wrapper">
-        <h3>You are inviting: {invitedPlayer.name}</h3>
+        <h3>
+          {lang === "en" && "You are inviting:"}
+          {lang === "tr" && "Davet ettiğin kişi:"}
+          {lang === "fr" && "Vous invitez:"}
+          {lang === "de" && "Sie laden ein:"}
+          {invitedPlayer.name}
+        </h3>
         <div className="inviteScreen__list">
           {!inviteSent && (
             <div className="inviteScreen__option">
-              <label htmlFor="time">Time per player per game (mins):</label>
+              <label htmlFor="time">
+                {lang === "en" && "Time per player per game (mins):"}
+                {lang === "tr" && "Oyunda oyuncu başına süre (dakika):"}
+                {lang === "fr" && "Temps par joueur et par partie (minutes):"}
+                {lang === "de" && "Zeit pro Spieler und Spiel (Minuten):"}
+              </label>
               <input
                 type="number"
                 id="time"
@@ -123,20 +135,45 @@ const InviteScreen = ({
         </div>
         <div className="inviteScreen__buttons">
           <button type="button" onClick={handleClose}>
-            Cancel
+            {lang === "en" && "Cancel"}
+            {lang === "tr" && "Iptal"}
+            {lang === "fr" && "Annuler"}
+            {lang === "de" && "Stornieren "}
           </button>
 
           {!inviteSent && (
             <button type="button" onClick={handleApplyOptions}>
-              Send Invite
+              {lang === "en" && "Send invite"}
+              {lang === "tr" && "Daveti gönder"}
+              {lang === "fr" && "Envoyer invitation"}
+              {lang === "de" && "Senden Einladung"}
             </button>
           )}
 
-          {inviteSent && <p>Waiting for player to accept invite</p>}
+          {inviteSent && (
+            <p>
+              {lang === "en" && "Waiting for player to accept invite."}
+              {lang === "tr" && "Oyuncunun daveti kabul etmesi bekleniyor."}
+              {lang === "fr" &&
+                "En attente de l'acceptation de l'invitation par le joueur."}
+              {lang === "de" &&
+                "Warten auf die Annahme der Einladung durch den Spieler. "}
+            </p>
+          )}
           {invite !== "" && (
             <div>
-              <p>{invite.host.name} sent you a game request</p>
-              <button onClick={acceptInvite}>Click to accept</button>
+              <p>
+                {invite.host.name} {lang === "en" && "sent you a game request."}
+                {lang === "tr" && "sana bir oyun daveti gönderdi."}
+                {lang === "fr" && "vous a envoyé une demande de jeu."}
+                {lang === "de" && "hat dir eine Spielanfrage geschickt."}
+              </p>
+              <button onClick={acceptInvite}>
+                {invite.host.name} {lang === "en" && "Click to accept"}
+                {lang === "tr" && "Kabul etmek için tıklay"}
+                {lang === "fr" && "Cliquez pour accepter"}
+                {lang === "de" && "Klicken Sie zum Akzeptieren"}
+              </button>
             </div>
           )}
         </div>

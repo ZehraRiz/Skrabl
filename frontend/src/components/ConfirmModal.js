@@ -6,7 +6,6 @@ const ConfirmModal = ({
   message,
   handleResign,
   handlePass,
-  handleConfirmMove,
   closeModal,
   setBlankTileLetter
 }) => {
@@ -34,10 +33,6 @@ const ConfirmModal = ({
       confirmFunction = handlePass;
       break;
 
-    case "confirm":
-      confirmFunction = handleConfirmMove;
-      break;
-    
     case "blankTile":
       confirmFunction = handleBlankTile;
       break;
@@ -57,10 +52,16 @@ const ConfirmModal = ({
         }
         <div className="confirmModal__buttons">
           <button className="button__confirm" onClick={confirmFunction}>
-            Confirm
+            {lang === "en" && "Confirm"}
+            {lang === "tr" && "Onayla"}
+            {lang === "fr" && "Confirmer"}
+            {lang === "de" && "Bestätigen "}
           </button>
           <button className="button__cancel" onClick={closeModal}>
-            Cancel
+            {lang === "en" && "Cancel"}
+            {lang === "tr" && "Iptal"}
+            {lang === "fr" && "Annuler"}
+            {lang === "de" && "Stornieren "}
           </button>
         </div>
       </div>

@@ -9,7 +9,7 @@ import GameScreen from "./components/GameScreen";
 import NotificationModal from "./components/NotificationModal";
 import RulesModal from "./components/RulesModal";
 import "./styles/global.css";
-import WelcomeScreen from "./components/WelcomeScreen";
+import GameModeScreen from "./components/GameModeScreen";
 import TitleScreen from "./components/TitleScreen";
 import LevelSelectScreen from "./components/LevelSelectScreen";
 
@@ -73,7 +73,7 @@ const App = () => {
 
   const handleStart = () => {
     setGameMode(null);
-    setCurrentComponent("WelcomeScreen");
+    setCurrentComponent("GameModeScreen");
   };
 
   const setLangEn = () => {
@@ -119,14 +119,15 @@ const App = () => {
       {currentComponent === "TitleScreen" && (
         <TitleScreen handleStart={handleStart} />
       )}
-      {currentComponent === "WelcomeScreen" && (
-        <WelcomeScreen
+      {currentComponent === "GameModeScreen" && (
+        <GameModeScreen
           handleChooseOnline={handleChooseOnline}
           handleChooseComputer={handleChooseComputer}
           setLangEn={setLangEn}
           setLangFr={setLangFr}
           setLangDe={setLangDe}
           setLangTr={setLangTr}
+          lang={lang}
         />
       )}
       {currentComponent === "LevelSelectScreen" && (
@@ -135,6 +136,7 @@ const App = () => {
           handleChooseEasy={handleChooseEasy}
           handleChooseNormal={handleChooseNormal}
           handleChooseHard={handleChooseHard}
+          lang={lang}
         />
       )}
       {currentComponent === "Login" && (
@@ -181,6 +183,7 @@ const App = () => {
           setCurrentPlayer={setCurrentPlayer}
           inviteSent={inviteSent}
           setInviteSent={setInviteSent}
+          lang={lang}
         />
       )}
       {currentComponent === "GameScreen" && (
@@ -203,11 +206,14 @@ const App = () => {
           setGameMode={setGameMode}
         />
       )}
-      {currentComponent === "UserBusy" && <UserBusy socket={socket} />}
+      {currentComponent === "UserBusy" && (
+        <UserBusy socket={socket} lang={lang} />
+      )}
       {notification && (
         <NotificationModal
           notification={notification}
           handleCloseNotificationModal={handleCloseNotificationModal}
+          lang={lang}
         />
       )}
       {viewRules && <RulesModal lang={lang} closeModal={handleClickRules} />}

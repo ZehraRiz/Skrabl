@@ -1,7 +1,7 @@
 import React from "react";
 import "../styles/Chat.css";
 
-const Chat = ({ currentPlayer, mode, chatThread, handleSendMessage }) => {
+const Chat = ({ currentPlayer, mode, chatThread, handleSendMessage, lang }) => {
   return (
     <div className={mode === "modal" ? "chat__wrapper modal" : "chat__wrapper"}>
       <ul className="chat__list">
@@ -21,7 +21,12 @@ const Chat = ({ currentPlayer, mode, chatThread, handleSendMessage }) => {
       </ul>
       <form onSubmit={handleSendMessage}>
         <input type="text" name="message" />
-        <button type="submit">Send</button>
+        <button type="submit">
+          {lang === "en" && "Send"}
+          {lang === "tr" && "Gönder"}
+          {lang === "fr" && "Envoyer"}
+          {lang === "de" && "Senden"}
+        </button>
       </form>
     </div>
   );
