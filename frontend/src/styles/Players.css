@@ -51,12 +51,12 @@
   align-items: center;
   justify-content: center;
 }
+
 .player__invite-request {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-
 
 .players__wrapper button {
   max-width: 200px;

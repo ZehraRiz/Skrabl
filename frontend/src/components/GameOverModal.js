@@ -11,7 +11,7 @@ const GameOverModal = ({
   invitedPlayer,
   gameMode,
   outcome,
-  endedBy
+  endedBy,
 }) => {
   let result = "";
   const opponentName = gameMode === "Online" ? invitedPlayer.name : "SkrablBot";
@@ -28,16 +28,24 @@ const GameOverModal = ({
   }
 
   if (outcome === "TimeOut") {
-    playerScore -= 50;
+    if (endedBy === currentPlayer) {
+      playerScore -= 50;
+    } else opponentScore -= 50;
   }
 
   switch (true) {
     case outcome === "Resign":
-      result = endedBy === currentPlayer ? `${opponentName} wins by default!` : `${playerName} wins by default!`;
+      result =
+        endedBy === currentPlayer
+          ? `${opponentName} wins by default!`
+          : `${playerName} wins by default!`;
       break;
 
     case outcome === "TimeOut":
-      result = `${playerName} ran out of time!`;
+      result =
+        endedBy === currentPlayer
+          ? `${playerName} ran out of time!`
+          : `${opponentName} ran out of time!`;
       break;
 
     case playerScore > opponentScore:
@@ -55,7 +63,12 @@ const GameOverModal = ({
 
   return (
     <Fade triggerOnce className="gameOverModal__wrapper">
-      <Bounce triggerOnce cascade damping={0.5} className="gameOverModal__content">
+      <Bounce
+        triggerOnce
+        cascade
+        damping={0.5}
+        className="gameOverModal__content"
+      >
         <h2>{result}</h2>
         {outcome === "TimeOut" && <p>(-50pts)</p>}
         <h3>Scores</h3>
