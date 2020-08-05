@@ -1,2 +1,32 @@
 .timer__wrapper {
 }
+
+.timer__time {
+    display: inline-block;
+}
+.warning {
+    animation: pulse 1s infinite;
+    -webkit-animation: pulse 1s infinite;
+    color: rgb(245, 107, 16);
+    text-shadow: 0 0 1px rgb(5, 5, 5);
+}
+  
+
+@keyframes pulse {
+    0%, 100% {
+      transform: scale(1);
+      -webkit-transform: scale(1);
+      -moz-transform: scale(1);
+      -ms-transform: scale(1);
+      -o-transform: scale(1);
+    }
+  
+    50% {
+      transform: scale(1.2);
+      -webkit-transform: scale(1.2);
+      -moz-transform: scale(1.2);
+      -ms-transform: scale(1.2);
+      -o-transform: scale(1.2);
+    }
+}
+  

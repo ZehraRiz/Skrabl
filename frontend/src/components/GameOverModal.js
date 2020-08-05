@@ -26,6 +26,10 @@ const GameOverModal = ({
     var opponentScore = scores[0];
   }
 
+  if (outcome === "TimeOut") {
+    playerScore -= 50;
+  }
+
   switch (true) {
     case outcome === "Resign":
       result = `${opponentName} wins by default!`;
@@ -49,9 +53,10 @@ const GameOverModal = ({
   }
 
   return (
-    <Fade className="gameOverModal__wrapper">
-      <Bounce cascade damping={0.5} className="gameOverModal__content">
+    <Fade triggerOnce className="gameOverModal__wrapper">
+      <Bounce triggerOnce cascade damping={0.5} className="gameOverModal__content">
         <h2>{result}</h2>
+        {outcome === "TimeOut" && <p>(-50pts)</p>}
         <h3>Scores</h3>
         <p>
           {playerName}: &nbsp;&nbsp;{playerScore}pts

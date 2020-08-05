@@ -7,10 +7,13 @@ const Timer = ({
   timeLeft,
   setTimeLeft,
   currentPlayer,
-  turn
+  turn,
+  handleTimeOut,
+  handleTimeWarning,
+  timeWarning
 }) => {
   let interval;
-  const[playerTime, setPlayerTime] =useState(timeLeft)
+  const [playerTime, setPlayerTime] = useState(timeLeft)
 
    useEffect(() => {
     if (currentPlayer === turn) {
@@ -26,15 +29,21 @@ const Timer = ({
   },[turn])
 
   useEffect(() => {
-    if (playerTime=== 0) {
+    console.log(playerTime);
+    if (playerTime < 0.01) {
+      handleTimeOut();
+      console.log('timeOut');
       clearInterval(interval);
-      setNotification("Time's up");
+      //setNotification("Time's up");
+    }
+    if (playerTime < 1) {
+      handleTimeWarning();
     }
   }, [playerTime]);
 
   return (
     <div className="timer__wrapper">
-      Time:&nbsp;&nbsp;&nbsp;&nbsp; {formatMilliseconds(playerTime*60*1000)}
+      Time:&nbsp;&nbsp;&nbsp;&nbsp; <div className={timeWarning ? "timer__time warning" : "timer__time"}>{formatMilliseconds(playerTime*60*1000)}</div>
     </div>
   );
 };

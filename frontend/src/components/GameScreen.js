@@ -45,7 +45,7 @@ const GameScreen = ({
   const [gameIsOver, setGameIsOver] = useState(false);
   const [confirmMessage, setConfirmMessage] = useState(null);
   const [boardState, setBoardState] = useState([]);
-  const [timeLeftPlayer, setTimeLeftPlayer] = useState(20);
+  const [timeLeftPlayer, setTimeLeftPlayer] = useState(.1);
   const [timeLeftOpponent, setTimeLeftOpponent] = useState(20);
   const [scores, setScores] = useState({ 0: 0, 1: 0 });
   const [wordsOnBoard, setWordsOnBoard] = useState(null);
@@ -80,6 +80,8 @@ const GameScreen = ({
     },
   ]);
   const [turnWords, setTurnWords] = useState([]);
+  const [timeOut, setTimeout] = useState(false);
+  const [timeWarning, setTimeWarning] = useState(false);
 
   useBeforeunload(() => "Are you sure you want to leave the game?");
 
@@ -189,7 +191,7 @@ const GameScreen = ({
           setBoardState(res.data.newBoardState);
           setComputerRackTiles(res.data.newRackTiles);
           setScores(updatedScores);
-          nextPlayer(0, updatedScores, highestScoringWord);
+          nextPlayer(consecutivePasses * -1, updatedScores, highestScoringWord);
         }
       });
   };
@@ -497,6 +499,15 @@ const GameScreen = ({
     setConsecutivePasses(consecutivePasses + 1);
   };
 
+  const handleTimeOut = () => {
+    setOutcome("TimeOut");
+    gameOver("TimeOut");
+  };
+
+  const handleTimeWarning = () => {
+    setTimeWarning(true);
+  };
+
   const handleClickExchangeTiles = () => {
     if (currentPlayer === turn) {
       setBoardIsDisabled(!boardIsDisabled);
@@ -519,7 +530,7 @@ const GameScreen = ({
     if (gameMode === "Computer") {
       setPouch([...pouch, ...tilesToExchange]);
     }
-    nextPlayer(0, scores, highestScoringWord);
+    nextPlayer(consecutivePasses * -1, scores, highestScoringWord);
   };
 
   const handleClickClearTiles = () => {
@@ -696,6 +707,10 @@ const GameScreen = ({
             currentPlayer={currentPlayer}
             turn={turn}
             gameMode={gameMode}
+            timeOut={timeOut}
+            handleTimeOut={handleTimeOut}
+            timeWarning={timeWarning}
+            handleTimeWarning={handleTimeWarning}
           />
           {!boardIsDisabled && (
             <GameButtons
