@@ -8,7 +8,7 @@ const {
   isPlayerInGame,
   findGame,
   player2Accepted,
-  getPlayerNumber,
+  updateGame,
 } = require("../store/games.js");
 const {
   findRegisteredUser,
@@ -190,8 +190,6 @@ module.exports.listen = function (io, socket) {
         socket.emit("gameEnded", "The game has ended");
         return;
       } else {
-        console.log("198 SocketUpdate");
-        console.log(highestScoringWord);
         game.gameState.boardState = boardState;
         game.gameState.scores = scores;
         game.gameState.consecutivePasses = consecutivePasses;
@@ -211,6 +209,7 @@ module.exports.listen = function (io, socket) {
         if (returnedTiles && returnedTiles.length > 0) {
           game.gameState.pouch = [...game.gameState.pouch, ...returnedTiles];
         }
+        updateGame(game)
         io.in(gameId).emit("gameUpdated", game);
       }
     }

@@ -75,8 +75,7 @@ const GameScreen = ({
 		setPouch(res.data);
 	};
 	const moment = require("moment");
-	let now = moment();
-
+  let now = moment();
 	const [ newMessage, setNewMessage ] = useState();
 	const [ chatThread, setChatThread ] = useState([
 		{
@@ -92,6 +91,8 @@ const GameScreen = ({
 	const [ blankTileLetter, setBlankTileLetter ] = useState("");
 
 	useBeforeunload(() => notifications["Are you sure you want to leave the game?"][lang]);
+
+
 
 	//CHAT FUNCTIONS
 	//______________________________________________________________________________
@@ -169,24 +170,22 @@ const GameScreen = ({
 		[ boardIsDisabled ]
 	);
 
-	useEffect(
-		() => {
+  useEffect(
+    () => {
 			//get board and set inital state
-			//this is setting everythin back to initial game data, that was recieved when game started
-			console.log(gameData);
 			if (gameMode === "Online") {
 				setGameIsOver(gameData.gameState.isOver);
 				setPlayerRackTiles(
 					currentPlayer === 0 ? gameData.gameState.player1Tiles : gameData.gameState.player2Tiles
 				);
-				setBoardState(gameData.gameState.boardState);
 				setTimeLeftPlayer(
 					currentPlayer === 0 ? gameData.gameState.player1TimeLeft : gameData.gameState.player2TimeLeft
 				);
 				setTimeLeftOpponent(
 					currentPlayer === 1 ? gameData.gameState.player1TimeLeft : gameData.gameState.player2TimeLeft
 				);
-				setScores(gameData.gameState.scores);
+        setScores(gameData.gameState.scores);
+        setBoardState(gameData.gameState.boardState)
 				setTurn(gameData.gameState.turn);
 				setConsecutivePasses(gameData.gameState.consecutivePasses);
 				setPouch(gameData.gameState.pouch);
@@ -196,8 +195,9 @@ const GameScreen = ({
 			if (gameMode === "Computer") {
 				fillPouch();
 				setTurn(0);
-			}
-			getBoard();
+      }
+      if (gameData.gameState.boardState.length===0) {
+			getBoard();}
 		},
 		[ gameMode ]
 	);
@@ -257,7 +257,7 @@ const GameScreen = ({
 	};
 
 	const nextPlayer = (x = 0, newScores = { 0: 0, 0: 0 }, highestScoringWord = highestScoringWord) => {
-		if (gameMode === "Online") {
+    if (gameMode === "Online") {
 			socket.emit("updateGameState", {
 				gameId: gameData.gameId,
 				boardState: boardState,
