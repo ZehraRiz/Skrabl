@@ -89,22 +89,28 @@ const GameOverModal = ({
         <p>
           {opponentName}: &nbsp;&nbsp;{opponentScore}pts
         </p>
-        <h4>
-          {lang === "en" && "Highest scoring word"}
-          {lang === "tr" && "En yüksek puan alan kelime"}
-          {lang === "fr" && "Mot ayant obtenu le meilleur score"}
-          {lang === "de" && "Wort mit der höchsten Punktzahl"}
-        </h4>
-        <p>
-          '{hsw}': &nbsp;&nbsp; {highestScoringWord.points}{" "}
-          {lang === "en" && "points"}
-          {lang === "tr" && "puan"}
-          {lang === "fr" && "points"}
-          {lang === "de" && "Punkte"}{" "}
-        </p>
-        <p>{`(${
-          highestScoringWord.player === 0 ? playerName : opponentName
-        })`}</p>
+        <div
+          className={`gameOverModal__hsw ${
+            hsw === "" ? "gameOverModal__hsw--hidden" : ""
+          }`}
+        >
+          <h4>
+            {lang === "en" && "Highest scoring word"}
+            {lang === "tr" && "En yüksek puan alan kelime"}
+            {lang === "fr" && "Mot ayant obtenu le meilleur score"}
+            {lang === "de" && "Wort mit der höchsten Punktzahl"}
+          </h4>
+          <p>
+            '{hsw}': &nbsp;&nbsp; {highestScoringWord.points}{" "}
+            {lang === "en" && "points"}
+            {lang === "tr" && "puan"}
+            {lang === "fr" && "points"}
+            {lang === "de" && "Punkte"}{" "}
+          </p>
+          <p>{`(${
+            highestScoringWord.player === 0 ? playerName : opponentName
+          })`}</p>
+        </div>
         <button onClick={returnToHomeScreen}>OK</button>
       </Bounce>
     </Fade>
