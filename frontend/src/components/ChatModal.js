@@ -8,6 +8,7 @@ const ChatModal = ({
   currentPlayer,
   chatThread,
   handleSendMessage,
+  lang,
 }) => {
   return (
     <Fade triggerOnce className="chatModal__wrapper">
@@ -18,7 +19,10 @@ const ChatModal = ({
         handleSendMessage={handleSendMessage}
       />
       <button className="button__cancel" onClick={closeModal}>
-        Close
+        {lang === "en" && "Close"}
+        {lang === "tr" && "Kapat"}
+        {lang === "fr" && "Ferme "}
+        {lang === "de" && "schließen"}
       </button>
     </Fade>
   );

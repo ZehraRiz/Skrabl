@@ -19,6 +19,12 @@ import { bonusSquareIndices } from "../assets/bonusSquareIndices";
 import { Fade } from "react-awesome-reveal";
 import { useBeforeunload } from "react-beforeunload";
 import axios from "axios";
+import shuffleSound from "../assets/shuffle.wav";
+import placeTileSound from "../assets/placeTile.wav";
+import removeTileSound from "../assets/removeTile.wav";
+import correctSound from "../assets/correct.wav";
+import invalidSound from "../assets/invalid.wav";
+import { notifications } from "../assets/notifications";
 import "../styles/GameScreen.css";
 
 const GameScreen = ({
@@ -75,16 +81,18 @@ const GameScreen = ({
     {
       playerFromBackend: 0,
       playerName: "SkrablBot",
-      msg: "Welcome, you are now connected",
+      msg: notifications["Welcome, you are now connected."][lang],
       date: now.format("h:mm:ss a"),
     },
   ]);
   const [turnWords, setTurnWords] = useState([]);
   const [timeWarning, setTimeWarning] = useState(false);
   const [endedBy, setEndedBy] = useState(0);
+  const [blankTileLetter, setBlankTileLetter]= useState("")
 
-
-  useBeforeunload(() => "Are you sure you want to leave the game?");
+  useBeforeunload(
+    () => notifications["Are you sure you want to leave the game?"][lang]
+  );
 
   useEffect(() => {
     if (gameMode === "Online") {
@@ -265,6 +273,16 @@ const GameScreen = ({
   }, [turn]);
 
   useEffect(() => {
+    if (selectedTile) {
+      const tile = selectedTile;
+      tile.letter = blankTileLetter
+      tile.wasBlank = true
+    setSelectedTile(tile)
+    placeTile2();
+    }
+  }, [blankTileLetter])
+
+  useEffect(() => {
     if (gameMode === "Online") {
       socket.on("sendingTiles", (data) => {
         setPlayerRackTiles([...playerRackTiles, ...data]);
@@ -273,8 +291,8 @@ const GameScreen = ({
 
       socket.on("gameEnd", (data) => {
         //redirect to players screen or show who won
-        console.log(data.gameEndedBy)// player 0 or player 1
-        console.log(data.game.gameState.outcome)//the outcome 
+        console.log(data.gameEndedBy); // player 0 or player 1
+        console.log(data.game.gameState.outcome); //the outcome
         setOutcome(data.game.gameState.outcome);
         setEndedBy(data.gameEndedBy);
         exitGame();
@@ -380,7 +398,27 @@ const GameScreen = ({
       if (squareIsOccupied) {
         return;
       }
-      const tileToAdd = {
+      playSound(placeTileSound);
+
+      if (selectedTile.letter === "") {
+      
+        setConfirmMessage({
+          type: "blankTile",
+          message: "What letter would you like to assign to the blank tile?"
+        })
+        return;
+      }
+      else {
+        const tile = selectedTile;
+        tile.wasBlank = false
+        setSelectedTile(tile)
+        placeTile2()
+      }
+    };
+  }
+    
+    const placeTile2 = () => {
+              const tileToAdd = {
         ...selectedTile,
         square: selectedSquareIndex,
         player: 0,
@@ -392,6 +430,7 @@ const GameScreen = ({
           return square;
         }
       });
+
       setBoardState(updatedBoardState);
       setPlacedTiles([
         ...placedTiles,
@@ -403,7 +442,7 @@ const GameScreen = ({
       setSelectedTile(null);
       setSelectedSquareIndex(null);
     }
-  };
+    
 
   //EVENT HANDLERS
 
@@ -426,6 +465,7 @@ const GameScreen = ({
       return;
 
     if (tileToRemove.player === 0) {
+      playSound(removeTileSound);
       const updatedBoardState = boardState.map((square) => {
         if (square.tile && square.tile.square === tileToRemove.square) {
           return { ...square, tile: null };
@@ -437,6 +477,7 @@ const GameScreen = ({
       setPlacedTiles(
         placedTiles.filter((tile) => tile.square !== tileToRemove.square)
       );
+      if (tileToRemove.wasBlank) tileToRemove.letter = "";
       setPlayerRackTiles([...playerRackTiles, tileToRemove]);
     }
   };
@@ -447,12 +488,14 @@ const GameScreen = ({
       setConfirmMessage({
         type: "pass",
         message:
-          "This will be the sixth consecutive pass, and will end the game!  Are you sure you want to pass?",
+          notifications[
+            "This will be the sixth consecutive pass, and will end the game!  Are you sure you want to pass?"
+          ][lang],
       });
     } else {
       setConfirmMessage({
         type: "pass",
-        message: "Are you sure you want to pass?",
+        message: notifications["Are you sure you want to pass?"][lang],
       });
     }
   };
@@ -460,19 +503,17 @@ const GameScreen = ({
   const handleClickResign = () => {
     setConfirmMessage({
       type: "resign",
-      message: "Are you sure you want to resign?",
+      message: notifications["Are you sure you want to resign?"][lang],
     });
   };
 
-  const handleConfirmMove = () => {
-    if (currentPlayer !== turn) return;
-    setConfirmMessage({
-      type: "confirm",
-      message: "Confirm move end?",
-    });
+  const playSound = (audioFile) => {
+    const audio = new Audio(audioFile);
+    audio.play();
   };
 
   const handleClickShuffle = () => {
+    playSound(shuffleSound);
     const shuffled = shuffle([...playerRackTiles]);
     setPlayerRackTiles([...shuffled]);
   };
@@ -592,6 +633,7 @@ const GameScreen = ({
               ...scores,
               [turn]: playerPreviousPoints + turnPoints,
             };
+            playSound(correctSound);
             setScores(updatedScores);
             if (turnHighScore.points > highestScoringWord.points) {
               setHighestScoringWord(turnHighScore);
@@ -615,13 +657,15 @@ const GameScreen = ({
               }
             });
             //just showing first for simplicity
+            playSound(invalidSound);
             setNotification(
-              `The word "${invalidWords[0]}" was not found in the dictionary.`
+              `${notifications["The following word was not found in the dictionary:"][lang]} ${invalidWords[0]}`
             );
           }
         });
       return;
     } else {
+      playSound(invalidSound);
       const placedTilesIndices = placedTiles.map((tile) => tile.square);
       if (
         scores[0] === 0 &&
@@ -629,11 +673,13 @@ const GameScreen = ({
         placedTilesIndices.indexOf(112) === -1
       ) {
         setNotification(
-          "The first word on the board must use the centre square."
+          notifications[
+            "The first word on the board must use the centre square."
+          ][lang]
         );
         return;
       } else {
-        setNotification("The move is not valid.");
+        setNotification(notifications["The move is not valid."][lang]);
         return;
       }
     }
@@ -678,6 +724,7 @@ const GameScreen = ({
             closeModal={handleClickChat}
             chatThread={chatThread}
             handleSendMessage={handleSendMessage}
+            lang={lang}
           />
         )}
         <div className="gameScreen__main">
@@ -717,6 +764,7 @@ const GameScreen = ({
             handleTimeOut={handleTimeOut}
             timeWarning={timeWarning}
             handleTimeWarning={handleTimeWarning}
+            lang={lang}
           />
           {!boardIsDisabled && (
             <GameButtons
@@ -727,12 +775,14 @@ const GameScreen = ({
               handleClickResign={handleClickResign}
               handleClickPass={handleClickPass}
               handleClickExchangeTiles={handleClickExchangeTiles}
+              lang={lang}
             />
           )}
           {boardIsDisabled && (
             <ExchangeTilesButtons
               handleCancelExchange={handleCancelExchange}
               handleConfirmExchange={handleConfirmExchange}
+              lang={lang}
             />
           )}
           {gameMode === "Online" && (
@@ -743,6 +793,7 @@ const GameScreen = ({
               currentPlayer={currentPlayer}
               socket={socket}
               handleSendMessage={handleSendMessage}
+              lang={lang}
             />
           )}
         </div>
@@ -757,9 +808,9 @@ const GameScreen = ({
             endedBy={endedBy}
             highestScoringWord={highestScoringWord}
             gameMode={gameMode}
-            // scoredWords={scoredWords}
             socket={socket}
             returnToHomeScreen={returnToHomeScreen}
+            lang={lang}
           />
         )}
         {confirmMessage && (
@@ -767,10 +818,11 @@ const GameScreen = ({
             message={confirmMessage}
             handleResign={handleResign}
             handlePass={handlePass}
-            handleConfirmMove={handleConfirmMove}
             closeModal={closeModal}
             turnWords={turnWords}
             setTurnWords={setTurnWords}
+            setBlankTileLetter={setBlankTileLetter}
+            lang={lang}
           />
         )}
       </div>

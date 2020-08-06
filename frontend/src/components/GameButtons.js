@@ -13,6 +13,7 @@ const GameButtons = ({
   handleClickPass,
   handleClickExchangeTiles,
   placedTiles,
+  lang,
 }) => {
   const numPlacedTiles = placedTiles.length;
   return (
@@ -20,20 +21,29 @@ const GameButtons = ({
       <button onClick={handleClickShuffle}>
         <div className="button__text">
           <img className="button__icon" src={shuffle} />
-          Shuffle
+          {lang === "en" && "Shuffle"}
+          {lang === "tr" && "Karıştır"}
+          {lang === "fr" && "Mélanger"}
+          {lang === "de" && "Mische "}
         </div>
       </button>
       <button onClick={handleClickExchangeTiles}>
         <div className="button__text">
           <img className="button__icon" src={exchange} />
-          Swap
+          {lang === "en" && "Swap"}
+          {lang === "tr" && "Değiştir"}
+          {lang === "fr" && "Changer"}
+          {lang === "de" && "Wechseln "}
         </div>
       </button>
       {numPlacedTiles === 0 && (
         <button onClick={handleClickPass}>
           <div className="button__text">
             <img className="button__icon" src={pass} />
-            Pass
+            {lang === "en" && "Pass"}
+            {lang === "tr" && "Pas geç"}
+            {lang === "fr" && "Passer"}
+            {lang === "de" && "Passe "}
           </div>
         </button>
       )}
@@ -41,14 +51,20 @@ const GameButtons = ({
         <button onClick={handleClickConfirmMove}>
           <div className="button__text">
             <img className="button__icon" src={confirm} />
-            Confirm
+            {lang === "en" && "Confirm"}
+            {lang === "tr" && "Onayla"}
+            {lang === "fr" && "Confirmer"}
+            {lang === "de" && "Bestätigen "}
           </div>
         </button>
       )}
       <button onClick={handleClickResign}>
         <div className="button__text">
           <img className="button__icon" src={resign} />
-          Resign
+          {lang === "en" && "Resign"}
+          {lang === "tr" && "Teslim ol"}
+          {lang === "fr" && "Abandonner"}
+          {lang === "de" && "Gib auf "}
         </div>
       </button>
     </div>
