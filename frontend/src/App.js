@@ -199,6 +199,7 @@ const App = () => {
           setCurrentPlayer={setCurrentPlayer}
           currentPlayer={currentPlayer}
           gameData={gameData}
+          setGameData={setGameData}
           socket={socket}
           gameMode={gameMode}
           lang={lang}

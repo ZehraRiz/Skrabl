@@ -1,11 +1,6 @@
 const { findGame} = require("../store/games.js");
 const { findRegisteredUser, setRegisteredUser, getAllRegisteredUsers, addUserSession, deleteSocket, switchGameSocket } = require("../store/registeredUsers");
 const {userRoomSocketSetup, userBroadcastToRoom, userLeftBroadcastToRoom} = require("../utils/rooms.js")
-const ONLINE_SOCKETS = "ONLINE_SOCKETs"
-const EN_ROOM = "EN_ROOM"
-const DE_ROOM = "DE_ROOM"
-const FR_ROOM = "FR_ROOM"
-const TR_ROOM = "TR_ROOM"
 
 module.exports.listen = function (io, socket) {
   
