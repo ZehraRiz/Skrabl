@@ -166,46 +166,44 @@ const GameScreen = ({
         level,
       })
       .then((res) => {
-        if (res.data.exchange && pouch.length > 0) {
-          setComputerConsecutivePasses(0);
-          setNotification(
-            notifications["SkrablBot has exchanged his tiles."][lang]
-          );
-          const computerRackTilesCopy = [...computerRackTiles];
-          setPouch([...pouch, ...computerRackTilesCopy]);
-          setComputerRackTiles([]);
-          //computer rack tiles might not be updated by the time getTiles is called
-          nextPlayer(0, scores, highestScoringWord);
-        } else if (res.data.pass || (res.data.exchange && !pouch.length)) {
-          setComputerConsecutivePasses(computerConsecutivePasses + 1);
-          setNotification(
-            notifications["SkrablBot has decided to pass."][lang]
-          );
-          nextPlayer(1, scores, highestScoringWord);
-        } else {
-          setComputerConsecutivePasses(0);
-          const newWords = findWordsOnBoard(
-            res.data.newBoardState,
-            res.data.tilesUsed
-          ).filter((word) => word.newWord === true);
-          const [turnPoints, turnHighScore] = getTurnPoints(
-            newWords,
-            res.data.tilesUsed,
-            turn
-          );
-          if (turnHighScore.points > highestScoringWord.points) {
-            setHighestScoringWord(turnHighScore);
+        setTimeout(() => {
+          if (res.data.exchange && pouch.length > 0) {
+            setComputerConsecutivePasses(0);
+            setNotification("SkrablBot has exchanged his tiles.");
+            const computerRackTilesCopy = [...computerRackTiles];
+            setPouch([...pouch, ...computerRackTilesCopy]);
+            setComputerRackTiles([]);
+            //computer rack tiles might not be updated by the time getTiles is called
+            nextPlayer(0, scores, highestScoringWord);
+          } else if (res.data.pass || (res.data.exchange && !pouch.length)) {
+            setComputerConsecutivePasses(computerConsecutivePasses + 1);
+            setNotification("SkrablBot has decided to pass.");
+            nextPlayer(1, scores, highestScoringWord);
+          } else {
+            setComputerConsecutivePasses(0);
+            const newWords = findWordsOnBoard(
+              res.data.newBoardState,
+              res.data.tilesUsed
+            ).filter((word) => word.newWord === true);
+            const [turnPoints, turnHighScore] = getTurnPoints(
+              newWords,
+              res.data.tilesUsed,
+              turn
+            );
+            if (turnHighScore.points > highestScoringWord.points) {
+              setHighestScoringWord(turnHighScore);
+            }
+            const playerPreviousPoints = scores[turn];
+            const updatedScores = {
+              ...scores,
+              [turn]: playerPreviousPoints + turnPoints,
+            };
+            setBoardState(res.data.newBoardState);
+            setComputerRackTiles(res.data.newRackTiles);
+            setScores(updatedScores);
+            nextPlayer(consecutivePasses * -1, updatedScores, highestScoringWord);
           }
-          const playerPreviousPoints = scores[turn];
-          const updatedScores = {
-            ...scores,
-            [turn]: playerPreviousPoints + turnPoints,
-          };
-          setBoardState(res.data.newBoardState);
-          setComputerRackTiles(res.data.newRackTiles);
-          setScores(updatedScores);
-          nextPlayer(consecutivePasses * -1, updatedScores, highestScoringWord);
-        }
+        }, (Math.floor((Math.random() * 6000) + 3000)))
       });
   };
 
