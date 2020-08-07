@@ -1,0 +1,40 @@
+{
+  "files": {
+    "main.css": "/static/css/main.3557b1e1.chunk.css",
+    "main.js": "/static/js/main.6fd9cbf3.chunk.js",
+    "main.js.map": "/static/js/main.6fd9cbf3.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.c8a21426.js",
+    "runtime-main.js.map": "/static/js/runtime-main.c8a21426.js.map",
+    "static/js/2.a5fa006c.chunk.js": "/static/js/2.a5fa006c.chunk.js",
+    "static/js/2.a5fa006c.chunk.js.map": "/static/js/2.a5fa006c.chunk.js.map",
+    "index.html": "/index.html",
+    "precache-manifest.8a9a7595b7f84adaf5772a71a8cb3661.js": "/precache-manifest.8a9a7595b7f84adaf5772a71a8cb3661.js",
+    "service-worker.js": "/service-worker.js",
+    "static/css/main.3557b1e1.chunk.css.map": "/static/css/main.3557b1e1.chunk.css.map",
+    "static/js/2.a5fa006c.chunk.js.LICENSE.txt": "/static/js/2.a5fa006c.chunk.js.LICENSE.txt",
+    "static/media/chat.svg": "/static/media/chat.66639537.svg",
+    "static/media/confirm.svg": "/static/media/confirm.1fbf1af4.svg",
+    "static/media/correct.wav": "/static/media/correct.107e5d28.wav",
+    "static/media/deflag.svg": "/static/media/deflag.97f542f0.svg",
+    "static/media/frflag.svg": "/static/media/frflag.81465a1d.svg",
+    "static/media/help.svg": "/static/media/help.2dce384a.svg",
+    "static/media/invalid.wav": "/static/media/invalid.e0d006dd.wav",
+    "static/media/pass.svg": "/static/media/pass.86ff50fc.svg",
+    "static/media/placeTile.wav": "/static/media/placeTile.59e742c6.wav",
+    "static/media/pouch.svg": "/static/media/pouch.ee87ddc3.svg",
+    "static/media/removeTile.wav": "/static/media/removeTile.bcde24aa.wav",
+    "static/media/shuffle.svg": "/static/media/shuffle.2188ad5e.svg",
+    "static/media/shuffle.wav": "/static/media/shuffle.b913d0a3.wav",
+    "static/media/star.svg": "/static/media/star.beeebad2.svg",
+    "static/media/stop.svg": "/static/media/stop.982692f0.svg",
+    "static/media/swap.svg": "/static/media/swap.fdd78fec.svg",
+    "static/media/tkflag.svg": "/static/media/tkflag.ddcb73a0.svg",
+    "static/media/ukflag.svg": "/static/media/ukflag.dbb2d233.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.c8a21426.js",
+    "static/js/2.a5fa006c.chunk.js",
+    "static/css/main.3557b1e1.chunk.css",
+    "static/js/main.6fd9cbf3.chunk.js"
+  ]
+}
