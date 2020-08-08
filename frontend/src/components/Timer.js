@@ -25,9 +25,7 @@ const Timer = ({
   }, [turn, playerTime]);
 
   useEffect(() => {
-    if (currentPlayer === turn) {
-      setTimeLeft(playerTime);
-    }
+    setTimeLeft(playerTime);
   }, [turn]);
 
   useEffect(() => {
