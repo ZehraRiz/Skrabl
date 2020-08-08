@@ -23,9 +23,12 @@ function addUserSession(token, socketId, lang) {
 	let updatedUser;
 	registeredUsers.map((user) => {
 		if (user.token == token) {
+			const repeatingSession = user.currentSessions.find(session => session === socketId);
+			if (repeatingSession) return;
+			else{
 			user.currentSessions.push(socketId);
 			user.lang = lang
-			updatedUser = user;
+			updatedUser = user;}
 		}
 	});
 	return updatedUser;
@@ -90,7 +93,6 @@ function removeGameSocket(token) {
 
 function deleteSocket(socketId) {
 	let userToReturn;
-	console.log(registeredUsers)
 	registeredUsers.map((user) => {
 		var index = user.currentSessions.indexOf(socketId);
 		if (index > -1) {
@@ -99,7 +101,6 @@ function deleteSocket(socketId) {
 			return;
 		}
 	});
-	console.log(registeredUsers)
 	return userToReturn;
 }
 function switchGameSocket(u) {
@@ -107,13 +108,11 @@ function switchGameSocket(u) {
 	registeredUsers.map(user => {
 		if (user.token === u.token) {
 			if (user.currentSessions.length <= 0) {
-				user.socketWithGame = 0
-				console.log("no session available to put game on ")
+				user.socketWithGame= 0
 			}
 			else {
 				u.socketWithGame = user.currentSessions[0]
 				gameId = u.gameId;
-				
 			}
 		}
 	})

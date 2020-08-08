@@ -59,7 +59,8 @@ module.exports.listen = function(io, socket) {
 			});
 		}
 		updatedUser = addUserSession(token, socket.id, lang);
-		let game;
+		if (updatedUser) {
+				let game;
 		let invitedPlayer;
 		let currentPlayer;
 
@@ -106,6 +107,8 @@ module.exports.listen = function(io, socket) {
 				userBroadcastToRoom(socket, updatedUser);
 			}
 		}
+		}
+	
 	});
 
 	//USER DISCONNECTS
@@ -115,11 +118,9 @@ module.exports.listen = function(io, socket) {
 		if (user.socketWithGame === socket.id) {
 			console.log("closed socket with game")
 			const gameId = switchGameSocket(user);
-			if (gameId) {
-				const newSetSocket = findRegisteredUser(user.token).socketWithGame;
-			io.to(newSetSocket).emit("retrivedGame");
-			}
-			
+			game = findGame(user.gameId);
+			const newSetSocket = findRegisteredUser(user.token).socketWithGame;
+			io.to(newSetSocket).emit("retrivedGame", gameId);
 		}
 		if (!user.currentSessions.length) {
 			userLeftBroadcastToRoom(socket, user);

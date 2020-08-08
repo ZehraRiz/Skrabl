@@ -23,11 +23,13 @@ const Login = ({
       socket.emit("retriveUser", { token: userIdFromLS, lang: lang });
       //backend does not recognize the token
       socket.on("tokenError", (data) => {
+        console.log(data)
         setCurrentComponent("Login");
         localStorage.removeItem("token");
         return;
       });
       socket.on("retrievdUser", (data) => {
+        console.log("found ur prev session")
         //found your previous session
         setUser(data.user);
         if (data.setGameOnSocket) {
