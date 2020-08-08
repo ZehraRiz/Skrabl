@@ -38,7 +38,6 @@ module.exports.listen = function(io, socket) {
 	socket.on("retriveUser", ({ token, lang }) => {
 		let updatedUser;
 		let roomChange = false;
-		//first session available, emit to all
 		//user had invited someone
 		//user is in a game
 		if (token === "") {
@@ -111,19 +110,16 @@ module.exports.listen = function(io, socket) {
 
 	//USER DISCONNECTS
 	socket.on("disconnect", () => {
-		//user left is not being broadcasted properly
-		console.log("A connection left");
 		const user = deleteSocket(socket.id);
 		if (!user) return;
 		if (user.socketWithGame === socket.id) {
+			console.log("closed socket with game")
 			const gameId = switchGameSocket(user);
-			//all user sessions are not getting userLeft
-			//gameId will be returned if there are more sockets available
-			// null will be returned if not more sockets available
-			//emit game to new socket and join
-			//send them on extra screen
-			const newSetSocket = findRegisteredUser(user.token).socketWithGame;
-			io.to(newSetSocket).emit("retrivedGame", gameId);
+			if (gameId) {
+				const newSetSocket = findRegisteredUser(user.token).socketWithGame;
+			io.to(newSetSocket).emit("retrivedGame");
+			}
+			
 		}
 		if (!user.currentSessions.length) {
 			userLeftBroadcastToRoom(socket, user);

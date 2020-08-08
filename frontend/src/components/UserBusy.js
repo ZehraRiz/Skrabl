@@ -1,8 +1,8 @@
 import React from "react";
 
-const UserBusy = ({ socket, lang }) => {
+const UserBusy = ({ socket, lang, setCurrentCompoent }) => {
   socket.on("retrivedGame", (data) => {
-    console.log(data);
+    setCurrentCompoent("Login")
   });
 
   //retrived game setup

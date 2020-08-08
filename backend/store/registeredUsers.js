@@ -90,6 +90,7 @@ function removeGameSocket(token) {
 
 function deleteSocket(socketId) {
 	let userToReturn;
+	console.log(registeredUsers)
 	registeredUsers.map((user) => {
 		var index = user.currentSessions.indexOf(socketId);
 		if (index > -1) {
@@ -98,6 +99,7 @@ function deleteSocket(socketId) {
 			return;
 		}
 	});
+	console.log(registeredUsers)
 	return userToReturn;
 }
 function switchGameSocket(u) {
@@ -105,11 +107,13 @@ function switchGameSocket(u) {
 	registeredUsers.map(user => {
 		if (user.token === u.token) {
 			if (user.currentSessions.length <= 0) {
-				user.socketWithGame= 0
+				user.socketWithGame = 0
+				console.log("no session available to put game on ")
 			}
 			else {
 				u.socketWithGame = user.currentSessions[0]
 				gameId = u.gameId;
+				
 			}
 		}
 	})

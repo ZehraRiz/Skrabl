@@ -72,7 +72,6 @@ const Login = ({
   }, []);
 
   useEffect(() => {
-    console.log("checking ls")
     checkUserData()
   },[])
 

@@ -42,7 +42,10 @@ const GameScreen = ({
 	resetChatMsg,
 	lang,
 	setGameMode,
-	level
+	level,
+	setInviteSent,
+	setInvitedPlayer,
+	setGameId
 }) => {
 	const [ selectedTile, setSelectedTile ] = useState(null);
 	const [ selectedSquareIndex, setSelectedSquareIndex ] = useState(null);
@@ -708,6 +711,9 @@ const GameScreen = ({
 		if (gameMode === "Online") {
 			resetChatMsg();
 			setCurrentComponent("Login");
+			setInvitedPlayer(null);
+			setInviteSent(false);
+			setGameId("")
 		} else {
 			setCurrentComponent("WelcomeScreen");
 			setGameMode(null);

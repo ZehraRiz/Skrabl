@@ -34,7 +34,6 @@ module.exports.listen = function (io, socket) {
 
   socket.on("playerInGame", (player) => {
     const user = findRegisteredUser(player.token);
-
     const isBusy = user.socketWithGame != "";
     socket.emit("playerUnavailable", isBusy);
   });
@@ -51,6 +50,9 @@ module.exports.listen = function (io, socket) {
     } else
       socket.emit("removedGame", "Sorry we couldnt find the game to delete");
   });
+  //should be called if user reloads without other player joining. 
+
+ 
 
   //creator joins game
   socket.on("joinGame", ({ token, gameId, time }) => {
