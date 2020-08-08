@@ -52,62 +52,61 @@ module.exports.listen = function(io, socket) {
 		}
 
 		if (user.lang !== lang) {
-			roomChange = true
+			roomChange = true;
 			user.currentSessions.map((session) => {
 				userLeaveRoom(io.sockets.connected[session], user);
 				userRoomSocketSetup(io.sockets.connected[session], lang);
 				userLeftBroadcastToRoom(io.sockets.connected[session], user);
 			});
-		} 
-			updatedUser = addUserSession(token, socket.id, lang);
-			let game;
-			let invitedPlayer;
-			let currentPlayer;
-
-			const gameSocket = updatedUser.socketWithGame;
-			if (gameSocket !== "") {
-				//game id and game socket are set together in all games.
-				game = findGame(user.gameId);
-				if (game) {
-					socket.join(game.gameId);
-					if (token == game.player1.playerId) {
-						invitedPlayer = findRegisteredUser(game.player2.playerId);
-						currentPlayer = 0;
-					} else {
-						invitedPlayer = findRegisteredUser(game.player1.playerId);
-						currentPlayer = 1;
-					}
-				}
 		}
-		
-		!roomChange? userRoomSocketSetup(socket, lang) : "";
-		roomChange ? 
-			updatedUser.currentSessions.map(session => {
+		updatedUser = addUserSession(token, socket.id, lang);
+		let game;
+		let invitedPlayer;
+		let currentPlayer;
+
+		const gameSocket = updatedUser.socketWithGame;
+		if (gameSocket !== "") {
+			//game id and game socket are set together in all games.
+			game = findGame(user.gameId);
+			if (game) {
+				socket.join(game.gameId);
+				if (token == game.player1.playerId) {
+					invitedPlayer = findRegisteredUser(game.player2.playerId);
+					currentPlayer = 0;
+				} else {
+					invitedPlayer = findRegisteredUser(game.player1.playerId);
+					currentPlayer = 1;
+				}
+			}
+		}
+
+		!roomChange ? userRoomSocketSetup(socket, lang) : "";
+		if (roomChange) {
+			updatedUser.currentSessions.map((session) => {
 				io.to(session).emit("userChangeRoom", updatedUser.lang);
-			
-			})
-			//send to all sockets that room has been changed. players screen should be updated
-			//cancel any game invites. sent back to players screen 
-
-		: ""
-
-			//sending back the user
-			socket.emit("retrievdUser", {
-				user: updatedUser,
-				allOnlineUsers: getAllRegisteredUsers(updatedUser.lang), //send all currently online users
-				inGame: gameSocket === "" ? false : true,
-				setGameOnSocket: gameSocket === 0 ? true : false,
-				game: game,
-				currentPlayer: currentPlayer,
-				invitedPlayer: invitedPlayer //oppponent player
 			});
-			
-		if (!roomChange) {//only one session connected
+			userBroadcastToRoom(socket, updatedUser);
+		}
+
+		//handel on player's own player screen and invite screen
+
+		//sending back the user
+		socket.emit("retrievdUser", {
+			user: updatedUser,
+			allOnlineUsers: getAllRegisteredUsers(updatedUser.lang), //send all currently online users
+			inGame: gameSocket === "" ? false : true,
+			setGameOnSocket: gameSocket === 0 ? true : false,
+			game: game,
+			currentPlayer: currentPlayer,
+			invitedPlayer: invitedPlayer //oppponent player
+		});
+
+		if (!roomChange) {
+			//only one session connected
 			if (updatedUser.currentSessions.length <= 1) {
 				userBroadcastToRoom(socket, updatedUser);
 			}
 		}
-		
 	});
 
 	//USER DISCONNECTS
