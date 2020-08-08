@@ -87,12 +87,10 @@ const StatusBar = ({
           </div>
           <div className="player__time">
             <Timer
-              setNotification={setNotification}
               timeLeft={timeLeftPlayer}
               setTimeLeft={setTimeLeftPlayer}
               currentPlayer={currentPlayer}
               turn={turn}
-              timeOut={timeOut}
               handleTimeOut={handleTimeOut}
               handleTimeWarning={handleTimeWarning}
               timeWarning={timeWarning}

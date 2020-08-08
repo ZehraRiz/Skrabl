@@ -14,9 +14,9 @@ const InviteScreen = ({
   inviteSent,
   setInviteSent,
   lang,
+  setLang
 }) => {
   const [timeInput, setTimeInput] = useState(20);
-
   let [invite, setInvite] = useState("");
 
   const handleTimeChange = (e) => {
@@ -28,9 +28,19 @@ const InviteScreen = ({
     socket.on("removedGame", (data) => {
       console.log(data);
       setInvitedPlayer("");
+      setInviteSent(false)
+      setInvite("")
       setCurrentComponent("Players");
     });
   };
+
+  socket.on("userChangeRoom", (data) => {
+    setLang(data)
+     setInvitedPlayer("");
+    setInviteSent(false)
+    setCurrentComponent("Login")
+      });
+
 
   socket.on("gameJoined2", (data) => {
     if (invite === "") {

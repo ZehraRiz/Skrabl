@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../styles/Players.css";
 import { Fade } from "react-awesome-reveal";
+import Login from "./Login";
 
 const Players = ({
   players,
@@ -15,7 +16,18 @@ const Players = ({
   setCurrentPlayer,
   handleStart,
   lang,
+  setLang,
+  setInviteSent
+
 }) => {
+
+  
+  socket.on("userChangeRoom", (data) => {
+    setLang(data)
+        setCurrentComponent("Login")
+      });
+
+    
   let [invite, setInvite] = useState("");
   socket.on("invite", (data) => {
     setInvite(data);
@@ -55,7 +67,7 @@ const Players = ({
         setNotification("Player is in another game");
         return;
       } else {
-        socket.emit("createGame", { userToken: user.token, lang: lang });
+        socket.emit("createGame", { userToken: user.token, lang: lang, player1: user, player2: player });
         //invalid userId on create game
         socket.on("createGameError", (data) => {
           console.log(data);
