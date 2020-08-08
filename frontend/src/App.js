@@ -169,6 +169,7 @@ const App = () => {
           setNotification={setNotification}
           setCurrentPlayer={setCurrentPlayer}
           lang={lang}
+          setLang={setLang}
         />
       )}
       {currentComponent === "InviteScreen" && (

@@ -16,7 +16,8 @@ const Login = ({
   handleStart,
   lang,
 }) => {
-  useEffect(() => {
+
+  const checkUserData = () => {
     const userIdFromLS = localStorage.getItem("token");
     if (userIdFromLS) {
       socket.emit("retriveUser", { token: userIdFromLS, lang: lang });
@@ -60,7 +61,20 @@ const Login = ({
         }
       });
     } else setCurrentComponent("Login");
+}
+
+  useEffect(() => {
+    checkUserData()
+    window.addEventListener('storage', checkUserData)
+  return () => {
+    window.removeEventListener('storage', checkUserData)
+  }
   }, []);
+
+  useEffect(() => {
+    console.log("checking ls")
+    checkUserData()
+  },[])
 
   const handleLogin = (e) => {
     e.preventDefault();

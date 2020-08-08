@@ -32,6 +32,8 @@ const InviteScreen = ({
     });
   };
 
+  socket.on("userSwitchRoom", event=> console.log(event))
+
   socket.on("gameJoined2", (data) => {
     if (invite === "") {
       setCurrentPlayer(0);

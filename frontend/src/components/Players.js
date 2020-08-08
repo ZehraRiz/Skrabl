@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../styles/Players.css";
 import { Fade } from "react-awesome-reveal";
+import Login from "./Login";
 
 const Players = ({
   players,
@@ -15,7 +16,18 @@ const Players = ({
   setCurrentPlayer,
   handleStart,
   lang,
+  setLang
+
 }) => {
+
+
+  socket.on("userChangeRoom", (data) => {
+    setLang(data)
+        setCurrentComponent("Login")
+      });
+
+    
+
   let [invite, setInvite] = useState("");
   socket.on("invite", (data) => {
     setInvite(data);
