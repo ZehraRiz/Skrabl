@@ -4,8 +4,8 @@ const FR_ROOM = "FR_ROOM"
 const TR_ROOM = "TR_ROOM"
 
 
-function userRoomSocketSetup (socket, registeredUser){
-    switch (registeredUser.lang) {
+function userRoomSocketSetup(socket, lang){
+    switch (lang) {
         case "en":
             socket.join(EN_ROOM); break;
         case "de":
@@ -30,6 +30,19 @@ function userBroadcastToRoom(socket, registeredUser) {
     }
 }
 
+function userLeaveRoom(socket, registeredUser) {
+       switch (registeredUser.lang) {
+        case "en":
+            socket.leave(EN_ROOM); break;
+        case "de":
+            socket.leave(DE_ROOM); break;
+        case "fr":
+            socket.leave(FR_ROOM); break;
+        case "tr":
+            socket.leave(TR_ROOM); break;
+    }
+}
+
 function userLeftBroadcastToRoom(socket, registeredUser) {
        switch (registeredUser.lang) {
         case "en":
@@ -43,9 +56,20 @@ function userLeftBroadcastToRoom(socket, registeredUser) {
     }
 }
 
+function boradcastRoomChangeToAllSessions(socket, lang) {
+    socket.on('user message', function (msg) {
+    socket.broadcast.emit('user message', socket.nickname, msg);
+  });
+}
+
+
+
+
 
 module.exports = {
     userRoomSocketSetup,
     userBroadcastToRoom,
-    userLeftBroadcastToRoom
+    userLeftBroadcastToRoom,
+    userLeaveRoom,
+    boradcastRoomChangeToAllSessions
 }

@@ -23,9 +23,12 @@ function addUserSession(token, socketId, lang) {
 	let updatedUser;
 	registeredUsers.map((user) => {
 		if (user.token == token) {
+			const repeatingSession = user.currentSessions.find(session => session === socketId);
+			if (repeatingSession) return;
+			else{
 			user.currentSessions.push(socketId);
 			user.lang = lang
-			updatedUser = user;
+			updatedUser = user;}
 		}
 	});
 	return updatedUser;

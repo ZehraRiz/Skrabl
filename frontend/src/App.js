@@ -169,6 +169,7 @@ const App = () => {
           setNotification={setNotification}
           setCurrentPlayer={setCurrentPlayer}
           lang={lang}
+          setLang={setLang}
         />
       )}
       {currentComponent === "InviteScreen" && (
@@ -184,6 +185,7 @@ const App = () => {
           inviteSent={inviteSent}
           setInviteSent={setInviteSent}
           lang={lang}
+          setInviteSent={setInviteSent}
         />
       )}
       {currentComponent === "GameScreen" && (
@@ -199,15 +201,19 @@ const App = () => {
           setCurrentPlayer={setCurrentPlayer}
           currentPlayer={currentPlayer}
           gameData={gameData}
+          setGameData={setGameData}
           socket={socket}
           gameMode={gameMode}
           lang={lang}
           level={level}
           setGameMode={setGameMode}
+          setInviteSent={setInviteSent}
+          setInvitedPlayer={setInvitedPlayer}
+          setGameId={setGameId}
         />
       )}
       {currentComponent === "UserBusy" && (
-        <UserBusy socket={socket} lang={lang} />
+        <UserBusy socket={socket} lang={lang} setCurrentCompoent={setCurrentComponent} />
       )}
       {notification && (
         <NotificationModal
