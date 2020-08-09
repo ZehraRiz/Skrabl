@@ -39,7 +39,7 @@
 .statusBar__reverse {
   display: flex;
   align-items: center;
-  font-size: 0.7em;
+  font-size: 0.9em;
   padding: 0.5em 0.5em;
   justify-content: space-around;
   content: "";

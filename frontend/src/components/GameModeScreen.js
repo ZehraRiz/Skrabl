@@ -16,7 +16,6 @@ const WelcomeScreen = ({
   lang,
 }) => {
   return (
-    <Fade triggerOnce>
       <div className="welcome__main">
         <div className="welcome__menu">
           {lang === "en" && <h2>Select game mode...</h2>}
@@ -58,7 +57,6 @@ const WelcomeScreen = ({
           </div>
         </div>
       </div>
-    </Fade>
   );
 };
 

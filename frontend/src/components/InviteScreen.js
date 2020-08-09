@@ -116,7 +116,6 @@ const InviteScreen = ({
   };
 
   return (
-    <Fade triggerOnce>
       <div className="inviteScreen__wrapper">
         <h3>
           {lang === "en" && "You are inviting:"}
@@ -188,7 +187,6 @@ const InviteScreen = ({
           )}
         </div>
       </div>
-    </Fade>
   );
 };
 
