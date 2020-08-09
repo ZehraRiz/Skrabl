@@ -730,7 +730,6 @@ const GameScreen = ({
 	//______________________________________________________________________________
 
 	return (
-		<Fade className="container__full-height" triggerOnce>
 			<div className="gameScreen__wrapper">
 				{viewChat && (
 					<ChatModal
@@ -840,7 +839,6 @@ const GameScreen = ({
 					/>
 				)}
 			</div>
-		</Fade>
 	);
 };
 
