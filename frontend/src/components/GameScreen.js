@@ -198,9 +198,16 @@ const GameScreen = ({
 			if (gameMode === "Computer") {
 				fillPouch();
 				setTurn(0);
-      }
-      if (gameData.gameState.boardState.length===0) {
-			getBoard();}
+		  }
+		  
+		  if (gameData) {
+			  if(gameData.gameState.boardState.length === 0){
+				  getBoard();
+			   }
+		  }
+		  if (gameMode === "Computer") {
+			  getBoard();
+			}
 		},
 		[ gameMode ]
 	);
