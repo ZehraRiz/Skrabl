@@ -84,7 +84,7 @@ const Players = ({
   };
 
   return (
-    <Fade triggerOnce>
+    
       <div className="players__wrapper">
         <h3>
           {lang === "en" && "Players online"}
@@ -155,7 +155,6 @@ const Players = ({
           </div>
         )}
       </div>
-    </Fade>
   );
 };
 

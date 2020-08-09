@@ -45,7 +45,7 @@ const ConfirmModal = ({
 
   
   return (
-    <Fade triggerOnce className="confirmModal__wrapper">
+    <div className="confirmModal__wrapper">
       <div className="confirmModal__content">
         <p>{message.message}</p>
         {message.type === "blankTile" && 
@@ -66,7 +66,7 @@ const ConfirmModal = ({
           </button>
         </div>
       </div>
-    </Fade>
+    </div>
   );
 };
 

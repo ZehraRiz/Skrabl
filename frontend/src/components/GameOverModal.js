@@ -73,7 +73,7 @@ const GameOverModal = ({
   }
 
   return (
-    <Fade className="gameOverModal__wrapper">
+    <div className="gameOverModal__wrapper">
       <Bounce cascade damping={0.5} className="gameOverModal__content">
         <h2>{result}</h2>
         <p>{outcome === "TimeOut" && "(-50pts)"}</p>
@@ -113,7 +113,7 @@ const GameOverModal = ({
         </div>
         <button onClick={returnToHomeScreen}>OK</button>
       </Bounce>
-    </Fade>
+    </div>
   );
 };
 

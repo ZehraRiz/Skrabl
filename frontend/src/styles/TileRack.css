@@ -42,12 +42,12 @@
 /* large tablet */
 @media (min-width: 850px) {
   .tileRack__wrapper {
-    width: 70vh;
+    width: 75vh;
     margin-top: 10px;
-    height: 10vh;
+    height: 11vh;
     justify-content: flex-start;
-    max-width: 70vh;
-    max-height: 10vh;
+    max-width: 75vh;
+    max-height: 11vh;
     min-width: 475px;
     min-height: 70px;
   }

@@ -21,7 +21,7 @@
   font-size: 1.5rem;
   min-height: 200px;
   border-radius: 6px;
-  opacity: 0;
+  //opacity: 0;
 }
 
 .confirmModal__content p {

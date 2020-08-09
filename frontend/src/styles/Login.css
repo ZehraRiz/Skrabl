@@ -5,7 +5,7 @@
   align-items: center;
   justify-content: center;
   padding: 2rem;
-  opacity: 0;
+  //opacity: 0;
 }
 
 .login__wrapper h2 {

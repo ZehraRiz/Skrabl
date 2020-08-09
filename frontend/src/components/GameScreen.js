@@ -730,6 +730,7 @@ const GameScreen = ({
 	//______________________________________________________________________________
 
 	return (
+
 			<div className="gameScreen__wrapper">
 				{viewChat && (
 					<ChatModal

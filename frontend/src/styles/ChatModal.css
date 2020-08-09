@@ -22,7 +22,7 @@
     max-height: 80vh;
     overflow-y: scroll;
     font-size: 1em;
-    opacity: 0;
+    //opacity: 0;
   }
 
   .chatModal__content p {
