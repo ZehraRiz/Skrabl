@@ -722,7 +722,7 @@ const GameScreen = ({
 			setInviteSent(false);
 			setGameId("")
 		} else {
-			setCurrentComponent("WelcomeScreen");
+			setCurrentComponent("GameModeScreen");
 			setGameMode(null);
 		}
 	};
@@ -730,7 +730,7 @@ const GameScreen = ({
 	//______________________________________________________________________________
 
 	return (
-
+			
 			<div className="gameScreen__wrapper">
 				{viewChat && (
 					<ChatModal
@@ -741,6 +741,7 @@ const GameScreen = ({
 						lang={lang}
 					/>
 				)}
+				<Fade>
 				<div className="gameScreen__main">
 					<div className="gameScreen__board">
 						<Board
@@ -811,7 +812,7 @@ const GameScreen = ({
 						/>
 					)}
 				</div>
-
+				</Fade>
 				{gameIsOver && (
 					<GameOverModal
 						user={user}
