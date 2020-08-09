@@ -8,7 +8,8 @@ const NotificationModal = ({
   lang,
 }) => {
   return (
-    <div className="notificationModal__wrapper">
+    <Fade className="notificationModal__wrapper">
+      
       <div className="notificationModal__content">
         <p>{notification}</p>
         <button onClick={handleCloseNotificationModal}>
@@ -18,7 +19,7 @@ const NotificationModal = ({
           {lang === "de" && "schließen"}
         </button>
       </div>
-    </div>
+      </Fade>
   );
 };
 

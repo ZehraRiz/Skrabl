@@ -46,6 +46,7 @@ const ConfirmModal = ({
   
   return (
     <div className="confirmModal__wrapper">
+      <Fade>
       <div className="confirmModal__content">
         <p>{message.message}</p>
         {message.type === "blankTile" && 
@@ -66,6 +67,7 @@ const ConfirmModal = ({
           </button>
         </div>
       </div>
+      </Fade>
     </div>
   );
 };
