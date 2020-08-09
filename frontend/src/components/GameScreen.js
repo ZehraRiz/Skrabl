@@ -198,9 +198,16 @@ const GameScreen = ({
 			if (gameMode === "Computer") {
 				fillPouch();
 				setTurn(0);
-      }
-      if (gameData.gameState.boardState.length===0) {
-			getBoard();}
+		  }
+		  
+		  if (gameData) {
+			  if(gameData.gameState.boardState.length === 0){
+				  getBoard();
+			   }
+		  }
+		  if (gameMode === "Computer") {
+			  getBoard();
+			}
 		},
 		[ gameMode ]
 	);
@@ -723,7 +730,6 @@ const GameScreen = ({
 	//______________________________________________________________________________
 
 	return (
-		<Fade className="container__full-height" triggerOnce>
 			<div className="gameScreen__wrapper">
 				{viewChat && (
 					<ChatModal
@@ -833,7 +839,6 @@ const GameScreen = ({
 					/>
 				)}
 			</div>
-		</Fade>
 	);
 };
 
