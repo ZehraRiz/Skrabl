@@ -26,6 +26,7 @@ import correctSound from "../assets/correct.wav";
 import invalidSound from "../assets/invalid.wav";
 import { notifications } from "../assets/notifications";
 import "../styles/GameScreen.css";
+import {Div100vh} from 'react-div-100vh';
 
 const GameScreen = ({
 	user,
@@ -814,6 +815,7 @@ const GameScreen = ({
 				</div>
 				</Fade>
 				{gameIsOver && (
+					<Div100vh>
 					<GameOverModal
 						user={user}
 						invitedPlayer={invitedPlayer}
@@ -827,8 +829,10 @@ const GameScreen = ({
 						returnToHomeScreen={returnToHomeScreen}
 						lang={lang}
 					/>
+					</Div100vh>
 				)}
 				{confirmMessage && (
+					<Div100vh>
 					<ConfirmModal
 						message={confirmMessage}
 						handleResign={handleResign}
@@ -839,6 +843,7 @@ const GameScreen = ({
 						setBlankTileLetter={setBlankTileLetter}
 						lang={lang}
 					/>
+					</Div100vh>
 				)}
 			</div>
 	);

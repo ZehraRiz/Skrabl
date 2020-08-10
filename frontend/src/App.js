@@ -12,6 +12,7 @@ import "./styles/global.css";
 import GameModeScreen from "./components/GameModeScreen";
 import TitleScreen from "./components/TitleScreen";
 import LevelSelectScreen from "./components/LevelSelectScreen";
+import { Div100vh } from 'react-div-100vh';
 
 
 const App = () => {
@@ -217,11 +218,13 @@ const App = () => {
         <UserBusy socket={socket} lang={lang} setCurrentCompoent={setCurrentComponent} />
       )}
       {notification && (
+        <Div100vh>
         <NotificationModal
           notification={notification}
           handleCloseNotificationModal={handleCloseNotificationModal}
           lang={lang}
         />
+        </Div100vh>
       )}
       {viewRules && <RulesModal lang={lang} closeModal={handleClickRules} />}
     </div>
