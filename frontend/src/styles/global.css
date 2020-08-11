@@ -57,7 +57,7 @@ h1 {
 }
 
 .container__full-height {
-  height: calc(100vh - 40px);
+  height: calc(100% - 20px);
   display: flex;
   justify-content:center;
 }
@@ -73,7 +73,7 @@ button:focus {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+
   }
 
   h1 {
@@ -83,6 +83,6 @@ button:focus {
 
 @media (min-height: 770px) {
   .container__full-height {
-    height: calc(100vh - 55px);
+    //height: calc(100vh - 55px);
   }
 }
