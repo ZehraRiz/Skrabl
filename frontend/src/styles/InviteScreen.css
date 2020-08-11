@@ -6,7 +6,6 @@
   align-items: center;
   justify-content: center;
   height: calc(80vh - 75px);
-  width: 100vw;
   opacity: 0;
 }
 
