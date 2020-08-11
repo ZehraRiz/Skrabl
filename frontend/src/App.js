@@ -12,7 +12,7 @@ import "./styles/global.css";
 import GameModeScreen from "./components/GameModeScreen";
 import TitleScreen from "./components/TitleScreen";
 import LevelSelectScreen from "./components/LevelSelectScreen";
-import { Div100vh } from 'react-div-100vh';
+import Div100vh from 'react-div-100vh';
 
 
 const App = () => {
