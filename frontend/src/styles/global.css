@@ -30,7 +30,6 @@ html {
 
 #root {
   height: 100%;
-  //overflow: hidden;
 }
 
 body {
@@ -57,8 +56,9 @@ h1 {
 }
 
 .container__full-height {
-  height: calc(100% - 20px);
+  height: calc(100% - 40px);
   display: flex;
+  align-items: center;
   justify-content:center;
 }
 
@@ -79,10 +79,11 @@ button:focus {
   h1 {
     font-size: 2em;
   }
+
 }
 
 @media (min-height: 770px) {
   .container__full-height {
-    //height: calc(100vh - 55px);
+    height: calc(100vh - 55px);
   }
 }
