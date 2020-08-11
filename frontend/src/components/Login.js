@@ -102,7 +102,7 @@ const Login = ({
     e.target.reset();
   };
   return (
-    <Fade className="login__container" triggerOnce>
+    <div className="login__container" >
       <div className="login__wrapper">
         <h2>
           {lang === "en" && "Login"}
@@ -132,7 +132,7 @@ const Login = ({
           </button>
         </form>
       </div>
-    </Fade>
+    </div>
   );
 };
 

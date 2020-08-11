@@ -11,6 +11,7 @@
     "react": "^16.13.1",
     "react-awesome-reveal": "^2.4.2",
     "react-beforeunload": "^2.2.2",
+    "react-div-100vh": "^0.3.8",
     "react-dom": "^16.13.1",
     "react-scripts": "3.4.1",
     "socket.io-client": "^2.3.0"

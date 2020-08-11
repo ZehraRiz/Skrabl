@@ -4,7 +4,8 @@ import { Fade } from "react-awesome-reveal";
 
 const RulesModal = ({ closeModal, lang }) => {
   return (
-    <Fade triggerOnce className="rulesModal__wrapper" onClick={closeModal}>
+    <Fade className="rulesModal__wrapper" onClick={closeModal}>
+  
       <div className="rulesModal__content">
         <div className="rulesModal__text">
           {lang === "en" && (
@@ -847,7 +848,7 @@ const RulesModal = ({ closeModal, lang }) => {
           <button onClick={closeModal}>Close</button>
         </div>
       </div>
-    </Fade>
+      </Fade>
   );
 };
 

@@ -84,8 +84,9 @@ const Players = ({
   };
 
   return (
-    <Fade triggerOnce>
-      <div className="players__wrapper">
+    
+      <Fade className="players__wrapper">
+        <div className="players__content">
         <h3>
           {lang === "en" && "Players online"}
           {lang === "tr" && "Çevrimiçi oyuncular"}
@@ -154,8 +155,8 @@ const Players = ({
             </div>
           </div>
         )}
-      </div>
-    </Fade>
+        </div>
+      </Fade>
   );
 };
 

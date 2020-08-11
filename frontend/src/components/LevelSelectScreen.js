@@ -10,9 +10,9 @@ const LevelSelectScreen = ({
   lang,
 }) => {
   return (
-    <Fade triggerOnce>
-      <div className="levelSelect__main">
+      <Fade className="levelSelect__main">
         <div className="levelSelect__menu">
+          <div className="levelSelect__options">
           <h2>
             {lang === "en" && "Select level..."}
             {lang === "tr" && "Seviye seç..."}
@@ -44,8 +44,9 @@ const LevelSelectScreen = ({
           {lang === "fr" && "Retourner"}
           {lang === "de" && "Geh zurück"}
         </button>
-      </div>
-    </Fade>
+
+        </div>
+      </Fade>
   );
 };
 

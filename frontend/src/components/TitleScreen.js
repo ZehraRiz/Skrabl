@@ -4,7 +4,6 @@ import { Fade, Bounce } from "react-awesome-reveal";
 
 const TitleScreen = ({ handleStart }) => {
   return (
-    <Fade triggerOnce>
       <div className="title__main">
         <Bounce cascade damping={0.2} className="title__content">
           <h1>S</h1>
@@ -20,7 +19,6 @@ const TitleScreen = ({ handleStart }) => {
           </button>
         </Bounce>
       </div>
-    </Fade>
   );
 };
 

@@ -16,8 +16,8 @@ const WelcomeScreen = ({
   lang,
 }) => {
   return (
-    <Fade triggerOnce>
-      <div className="welcome__main">
+
+      <Fade className="welcome__main">
         <div className="welcome__menu">
           {lang === "en" && <h2>Select game mode...</h2>}
           {lang === "tr" && <h2>Oyun modunu seç...</h2>}
@@ -57,8 +57,7 @@ const WelcomeScreen = ({
             <img className="language__icon" src={tr} />
           </div>
         </div>
-      </div>
-    </Fade>
+      </Fade>
   );
 };
 

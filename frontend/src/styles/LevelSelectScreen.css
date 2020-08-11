@@ -4,16 +4,22 @@
     align-items: center;
     justify-content: center;
     width: 100%;
-    height: 90vh;
-    opacity: 0;
+    height: 100%;
+
   }
   
+
+  .levelSelect__options {
+    margin-bottom: 1em;
+  }
+
   .levelSelect__menu {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     margin-bottom: 5em;
+    opacity: 0;
   }
   
   .levelSelect__menu h2 {

@@ -26,6 +26,7 @@ import correctSound from "../assets/correct.wav";
 import invalidSound from "../assets/invalid.wav";
 import { notifications } from "../assets/notifications";
 import "../styles/GameScreen.css";
+import Div100vh from 'react-div-100vh';
 
 const GameScreen = ({
 	user,
@@ -722,7 +723,7 @@ const GameScreen = ({
 			setInviteSent(false);
 			setGameId("")
 		} else {
-			setCurrentComponent("WelcomeScreen");
+			setCurrentComponent("GameModeScreen");
 			setGameMode(null);
 		}
 	};
@@ -730,7 +731,7 @@ const GameScreen = ({
 	//______________________________________________________________________________
 
 	return (
-		<Fade className="container__full-height" triggerOnce>
+			
 			<div className="gameScreen__wrapper">
 				{viewChat && (
 					<ChatModal
@@ -741,6 +742,7 @@ const GameScreen = ({
 						lang={lang}
 					/>
 				)}
+				<Fade>
 				<div className="gameScreen__main">
 					<div className="gameScreen__board">
 						<Board
@@ -811,8 +813,9 @@ const GameScreen = ({
 						/>
 					)}
 				</div>
-
+				</Fade>
 				{gameIsOver && (
+
 					<GameOverModal
 						user={user}
 						invitedPlayer={invitedPlayer}
@@ -826,8 +829,10 @@ const GameScreen = ({
 						returnToHomeScreen={returnToHomeScreen}
 						lang={lang}
 					/>
+
 				)}
 				{confirmMessage && (
+					<Div100vh>
 					<ConfirmModal
 						message={confirmMessage}
 						handleResign={handleResign}
@@ -838,9 +843,9 @@ const GameScreen = ({
 						setBlankTileLetter={setBlankTileLetter}
 						lang={lang}
 					/>
+					</Div100vh>
 				)}
 			</div>
-		</Fade>
 	);
 };
 

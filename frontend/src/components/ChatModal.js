@@ -1,6 +1,6 @@
 import React from "react";
 import "../styles/ChatModal.css";
-import { Fade } from "react-awesome-reveal";
+//import { Fade } from "react-awesome-reveal";
 import Chat from "./Chat";
 
 const ChatModal = ({
@@ -11,7 +11,7 @@ const ChatModal = ({
   lang,
 }) => {
   return (
-    <Fade triggerOnce className="chatModal__wrapper">
+    <div className="chatModal__wrapper">
       <Chat
         mode={"modal"}
         currentPlayer={currentPlayer}
@@ -24,7 +24,7 @@ const ChatModal = ({
         {lang === "fr" && "Ferme "}
         {lang === "de" && "schließen"}
       </button>
-    </Fade>
+    </div>
   );
 };
 
