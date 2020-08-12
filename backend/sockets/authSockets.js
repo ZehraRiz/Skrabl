@@ -5,7 +5,8 @@ const {
 	getAllRegisteredUsers,
 	addUserSession,
 	deleteSocket,
-	switchGameSocket
+	switchGameSocket,
+	noPlayersOnline
 } = require("../store/registeredUsers");
 const {
 	userRoomSocketSetup,
@@ -60,63 +61,66 @@ module.exports.listen = function(io, socket) {
 		}
 		updatedUser = addUserSession(token, socket.id, lang);
 		if (updatedUser) {
-				let game;
-		let invitedPlayer;
-		let currentPlayer;
+			let game;
+			let invitedPlayer;
+			let currentPlayer;
 
-		const gameSocket = updatedUser.socketWithGame;
-		if (gameSocket !== "") {
-			//game id and game socket are set together in all games.
-			game = findGame(user.gameId);
-			if (game) {
-				socket.join(game.gameId);
-				if (token == game.player1.playerId) {
-					invitedPlayer = findRegisteredUser(game.player2.playerId);
-					currentPlayer = 0;
-				} else {
-					invitedPlayer = findRegisteredUser(game.player1.playerId);
-					currentPlayer = 1;
+			const gameSocket = updatedUser.socketWithGame;
+			if (gameSocket !== "") {
+				//game id and game socket are set together in all games.
+				game = findGame(user.gameId);
+				if (game) {
+					socket.join(game.gameId);
+					if (token == game.player1.playerId) {
+						invitedPlayer = findRegisteredUser(game.player2.playerId);
+						currentPlayer = 0;
+					} else {
+						invitedPlayer = findRegisteredUser(game.player1.playerId);
+						currentPlayer = 1;
+					}
+				}
+			}
+
+			!roomChange ? userRoomSocketSetup(socket, lang) : "";
+			if (roomChange) {
+				updatedUser.currentSessions.map((session) => {
+					io.to(session).emit("userChangeRoom", updatedUser.lang);
+				});
+				userBroadcastToRoom(socket, updatedUser);
+			}
+
+			//handel on player's own player screen and invite screen
+
+			//sending back the user
+			socket.emit("retrievdUser", {
+				user: updatedUser,
+				allOnlineUsers: getAllRegisteredUsers(updatedUser.lang), //send all currently online users
+				inGame: gameSocket === "" ? false : true,
+				setGameOnSocket: gameSocket === 0 ? true : false,
+				game: game,
+				currentPlayer: currentPlayer,
+				invitedPlayer: invitedPlayer //oppponent player
+			});
+
+			if (!roomChange) {
+				//only one session connected
+				if (updatedUser.currentSessions.length <= 1) {
+					userBroadcastToRoom(socket, updatedUser);
 				}
 			}
 		}
-
-		!roomChange ? userRoomSocketSetup(socket, lang) : "";
-		if (roomChange) {
-			updatedUser.currentSessions.map((session) => {
-				io.to(session).emit("userChangeRoom", updatedUser.lang);
-			});
-			userBroadcastToRoom(socket, updatedUser);
-		}
-
-		//handel on player's own player screen and invite screen
-
-		//sending back the user
-		socket.emit("retrievdUser", {
-			user: updatedUser,
-			allOnlineUsers: getAllRegisteredUsers(updatedUser.lang), //send all currently online users
-			inGame: gameSocket === "" ? false : true,
-			setGameOnSocket: gameSocket === 0 ? true : false,
-			game: game,
-			currentPlayer: currentPlayer,
-			invitedPlayer: invitedPlayer //oppponent player
-		});
-
-		if (!roomChange) {
-			//only one session connected
-			if (updatedUser.currentSessions.length <= 1) {
-				userBroadcastToRoom(socket, updatedUser);
-			}
-		}
-		}
-	
 	});
 
 	//USER DISCONNECTS
 	socket.on("disconnect", () => {
+		console.log("a user left");
 		const user = deleteSocket(socket.id);
-		if (!user) return;
+		if (!user) {
+			console.log("not a user");
+			return;
+		}
 		if (user.socketWithGame === socket.id) {
-			console.log("closed socket with game")
+			console.log("closed socket with game");
 			const gameId = switchGameSocket(user);
 			game = findGame(user.gameId);
 			const newSetSocket = findRegisteredUser(user.token).socketWithGame;
@@ -125,5 +129,7 @@ module.exports.listen = function(io, socket) {
 		if (!user.currentSessions.length) {
 			userLeftBroadcastToRoom(socket, user);
 		} //should be sent to the game as well
+
+		console.log("no of players online: " + noPlayersOnline());
 	});
 };
