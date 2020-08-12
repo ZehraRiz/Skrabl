@@ -14,23 +14,26 @@ function setRegisteredUser(token, name, currentSessions, lang = "en") {
 }
 
 function findRegisteredUser(token) {
-	return registeredUsers.find((user) => user.token == token);
+	return registeredUsers.find((user) => user.token.toString() === token.toString());
 }
 
 function addUserSession(token, socketId, lang) {
 	let updatedUser;
+	let fromGameEnd = false;
 	registeredUsers.map((user) => {
-		if (user.token == token) {
+		if (user.token.toString() === token.toString()) {
 			const repeatingSession = user.currentSessions.find((session) => session === socketId);
-			if (repeatingSession) return;
+			if (repeatingSession) {
+				fromGameEnd= true
+			}
 			else {
 				user.currentSessions.push(socketId);
 				user.lang = lang;
-				updatedUser = user;
 			}
+			updatedUser = user;
 		}
 	});
-	return updatedUser;
+	return {updatedUser, fromGameEnd};
 }
 
 function removeGameFromUser(token) {

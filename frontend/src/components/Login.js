@@ -20,7 +20,11 @@ const Login = ({
   const checkUserData = () => {
     const userIdFromLS = localStorage.getItem("token");
     if (userIdFromLS) {
+      console.log("sending token to backend")
       socket.emit("retriveUser", { token: userIdFromLS, lang: lang });
+    }
+  }
+
       //backend does not recognize the token
       socket.on("tokenError", (data) => {
         console.log(data)
@@ -28,9 +32,9 @@ const Login = ({
         localStorage.removeItem("token");
         return;
       });
+    
       socket.on("retrievdUser", (data) => {
         console.log("found ur prev session")
-        //found your previous session
         setUser(data.user);
         if (data.setGameOnSocket) {
           //setup thhe game and return;
@@ -50,9 +54,9 @@ const Login = ({
           }
           return;
         }
-
         if (data.inGame) {
           setCurrentComponent("UserBusy");
+          return;
         } else {
           setPlayers(
             data.allOnlineUsers.filter((user) => {
@@ -62,20 +66,18 @@ const Login = ({
           setCurrentComponent("Players");
         }
       });
-    } else setCurrentComponent("Login");
-}
+
+
 
   useEffect(() => {
-    checkUserData()
     window.addEventListener('storage', checkUserData)
+    checkUserData()
+    
   return () => {
     window.removeEventListener('storage', checkUserData)
   }
   }, []);
 
-  useEffect(() => {
-    checkUserData()
-  },[])
 
   const handleLogin = (e) => {
     e.preventDefault();

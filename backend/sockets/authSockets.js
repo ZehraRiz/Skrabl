@@ -22,7 +22,7 @@ module.exports.listen = function(io, socket) {
 			//validation needs to be improved
 			socket.emit("usernameError", "Please enter a valid username");
 		} else {
-			const registeredUser = setRegisteredUser(Math.random(1 - 100), name, [ socket.id ], lang);
+			const registeredUser = setRegisteredUser((Math.random(1 - 100)), name, [ socket.id ], lang);
 			socket.emit("usernameRegistered", {
 				token: registeredUser.token,
 				msg: "you are a registered player now",
@@ -37,12 +37,12 @@ module.exports.listen = function(io, socket) {
 
 	//USER LOGIN USING TOKEN IN LS
 	socket.on("retriveUser", ({ token, lang }) => {
-		let updatedUser;
 		let roomChange = false;
+		//SCENERIOS TO HANDLE: 
 		//user had invited someone
 		//user is in a game
 		if (token === "") {
-			socket.emit("tokenError", "We have no saved sessions");
+			socket.emit("tokenError", "empty token");
 			return;
 		}
 		const user = findRegisteredUser(token);
@@ -59,7 +59,8 @@ module.exports.listen = function(io, socket) {
 				userLeftBroadcastToRoom(io.sockets.connected[session], user);
 			});
 		}
-		updatedUser = addUserSession(token, socket.id, lang);
+		const { updatedUser, fromGameEnd } = addUserSession(token, socket.id, lang);
+		if(fromGameEnd) console.log("user came from gameEnd")
 		if (updatedUser) {
 			let game;
 			let invitedPlayer;
@@ -102,7 +103,7 @@ module.exports.listen = function(io, socket) {
 				invitedPlayer: invitedPlayer //oppponent player
 			});
 
-			if (!roomChange) {
+			if (!roomChange && !fromGameEnd) {
 				//only one session connected
 				if (updatedUser.currentSessions.length <= 1) {
 					userBroadcastToRoom(socket, updatedUser);
@@ -113,12 +114,8 @@ module.exports.listen = function(io, socket) {
 
 	//USER DISCONNECTS
 	socket.on("disconnect", () => {
-		console.log("a user left");
 		const user = deleteSocket(socket.id);
-		if (!user) {
-			console.log("not a user");
-			return;
-		}
+		if (!user) return;
 		if (user.socketWithGame === socket.id) {
 			console.log("closed socket with game");
 			const gameId = switchGameSocket(user);
@@ -128,8 +125,9 @@ module.exports.listen = function(io, socket) {
 		}
 		if (!user.currentSessions.length) {
 			userLeftBroadcastToRoom(socket, user);
+			console.log(`${user.name} has closed all the game tabs`)
 		} //should be sent to the game as well
 
-		console.log("no of players online: " + noPlayersOnline());
+		console.log("Total no of players online: " + noPlayersOnline());
 	});
 };
