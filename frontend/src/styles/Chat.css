@@ -16,12 +16,22 @@
   max-width: 200px;
   display: none;
 }
-
+.chat__list-wrapper {
+    overflow-y: scroll;
+    height: 75.5vh;
+    min-height: 527px;
+    background: #eee;
+    margin: .1em;
+    border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    -ms-border-radius: 3px;
+    -o-border-radius: 3px;
+}
 
 
 .chat__list {
   list-style: none;
-  overflow-y: auto;
   padding: 0.5rem;
   overflow-wrap: break-word;
 }
@@ -29,6 +39,7 @@
 .chat__wrapper form {
   display: flex;
   justify-content: center;
+  padding: 0.2em;
 }
 
 .chat__message {

@@ -722,7 +722,7 @@ const GameScreen = ({
 			setInviteSent(false);
 			setGameId("")
 		} else {
-			setCurrentComponent("WelcomeScreen");
+			setCurrentComponent("GameModeScreen");
 			setGameMode(null);
 		}
 	};
