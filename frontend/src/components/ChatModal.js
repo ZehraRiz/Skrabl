@@ -17,6 +17,7 @@ const ChatModal = ({
         currentPlayer={currentPlayer}
         chatThread={chatThread}
         handleSendMessage={handleSendMessage}
+        lang={lang}
       />
       <button className="button__cancel" onClick={closeModal}>
         {lang === "en" && "Close"}

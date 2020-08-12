@@ -119,6 +119,7 @@ button:active {
   .gameButtons__wrapper button {
     margin: 5px 0px;
     height: 25%;
+
   }
 
   .button__text {
@@ -126,7 +127,7 @@ button:active {
     align-items: center;
     justify-content: flex-start;
     width: 100%;
-    font-size: 1.7em;
+    font-size: 1.4em;
   }
 
   .button__exchange {
@@ -141,7 +142,12 @@ button:active {
   }
 }
 
-
+@media (min-width: 940px) {
+  
+  .button__text {
+    font-size: 1.7em;
+  }
+}
 @media (max-height: 850px) {
 	.gameButtons__wrapper button:not(.button__exchange) {
 	  font-size: .8em;
