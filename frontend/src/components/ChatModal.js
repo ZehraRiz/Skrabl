@@ -18,13 +18,8 @@ const ChatModal = ({
         chatThread={chatThread}
         handleSendMessage={handleSendMessage}
         lang={lang}
+        closeModal={closeModal}
       />
-      <button className="button__cancel" onClick={closeModal}>
-        {lang === "en" && "Close"}
-        {lang === "tr" && "Kapat"}
-        {lang === "fr" && "Ferme "}
-        {lang === "de" && "schließen"}
-      </button>
     </Fade>
   );
 };

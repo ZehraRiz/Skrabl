@@ -4,7 +4,7 @@ import "../styles/Chat.css";
 const Chat = ({ currentPlayer, mode, chatThread, handleSendMessage, lang }) => {
   return (
     <div className={mode === "modal" ? "chat__wrapper modal" : "chat__wrapper"}>
-      <div className="chat__list-wrapper">
+      <div className={mode ==="modal" ? "chat__list-wrapper-modal" : "chat__list-wrapper"}>
         <ul className="chat__list">
           {chatThread.map((message, index) => (
             <li className="chat__message" key={index}>
