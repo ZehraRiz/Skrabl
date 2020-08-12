@@ -18,6 +18,7 @@
 }
 
 .inviteScreen__wrapper button {
+  width: 200px;
   margin-bottom: 1em;
 }
 
@@ -33,30 +34,48 @@
   padding: 2rem;
 }
 
+
+.inviteScreen__buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.inviteScreen__wrapper button {
+  width: 200px;
+  margin-bottom: 1.5em;
+  padding: .5em;
+}
+
+#time {
+  text-align: center;
+  width: 200px;
+}
+
 /* tablet */
 @media (min-width: 500px) {
   .inviteScreen__list {
-    width: 70%;
+ 
   }
 }
 
 /* large tablet */
 @media (min-width: 750px) {
   .inviteScreen__list {
-    width: 60%;
+
   }
 }
 
 /* laptop */
 @media (min-width: 1000px) {
   .inviteScreen__list {
-    width: 50%;
+
   }
 }
 
 /* desktop */
 @media (min-width: 1250px) {
   .inviteScreen__list {
-    width: 40%;
+ 
   }
 }

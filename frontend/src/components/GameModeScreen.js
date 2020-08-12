@@ -6,7 +6,7 @@ import de from "../images/deflag.svg";
 import fr from "../images/frflag.svg";
 import tr from "../images/tkflag.svg";
 
-const WelcomeScreen = ({
+const GameModeScreen = ({
   handleChooseComputer,
   handleChooseOnline,
   setLangEn,
@@ -62,4 +62,4 @@ const WelcomeScreen = ({
   );
 };
 
-export default WelcomeScreen;
+export default GameModeScreen;
