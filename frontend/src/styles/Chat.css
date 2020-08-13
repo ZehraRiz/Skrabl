@@ -16,6 +16,7 @@
   max-width: 200px;
   display: none;
 }
+
 .chat__list-wrapper {
     overflow-y: scroll;
     height: 75.5vh;
@@ -29,6 +30,17 @@
     -o-border-radius: 3px;
 }
 
+.chat__list-wrapper-modal {
+  overflow-y: scroll;
+  height: 75.5vh;
+  background: #eee;
+  margin: .1em;
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
+}
 
 .chat__list {
   list-style: none;
