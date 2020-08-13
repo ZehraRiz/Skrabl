@@ -170,6 +170,7 @@ const App = () => {
           setCurrentPlayer={setCurrentPlayer}
           lang={lang}
           setLang={setLang}
+          invitedPlayer={invitedPlayer}
         />
       )}
       {currentComponent === "InviteScreen" && (
@@ -210,6 +211,7 @@ const App = () => {
           setInviteSent={setInviteSent}
           setInvitedPlayer={setInvitedPlayer}
           setGameId={setGameId}
+          setGameData={setGameData}
         />
       )}
       {currentComponent === "UserBusy" && (

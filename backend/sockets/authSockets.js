@@ -60,7 +60,6 @@ module.exports.listen = function(io, socket) {
 			});
 		}
 		const { updatedUser, fromGameEnd } = addUserSession(token, socket.id, lang);
-		if(fromGameEnd) console.log("user came from gameEnd")
 		if (updatedUser) {
 			let game;
 			let invitedPlayer;

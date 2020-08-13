@@ -39,11 +39,10 @@ function addUserSession(token, socketId, lang) {
 function removeGameFromUser(token) {
 	let userToUpdate;
 	registeredUsers.map((user) => {
-		if (user.token == token) {
+		if (user.token.toString() == token.toString()) {
 			console.log(`removing ${user.gameId} from ${user.name}`);
 			user.gameId = "";
 			user.socketWithGame = "";
-
 			userToUpdate = user;
 		}
 	});
@@ -79,17 +78,6 @@ function setGameSocket(token, socketId) {
 	return updatedUser;
 }
 
-function removeGameSocket(token) {
-	let updatedUser;
-	registeredUsers.map((user) => {
-		if (user.token === token) {
-			user.socketWithGame = "";
-			updatedUser = user;
-			return;
-		}
-	});
-	return updatedUser;
-}
 
 function deleteSocket(socketId) {
 	let userToReturn;
@@ -132,7 +120,6 @@ module.exports = {
 	setUserGame,
 	removeGameFromUser,
 	setGameSocket,
-	removeGameSocket,
 	switchGameSocket,
 	noPlayersOnline
 };
