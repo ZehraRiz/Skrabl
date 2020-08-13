@@ -96,6 +96,9 @@ const GameScreen = ({
 
 	useBeforeunload(() => notifications["Are you sure you want to leave the game?"][lang]);
 
+
+	
+
 	//CHAT FUNCTIONS
 	//______________________________________________________________________________
 	useEffect(() => {
@@ -176,6 +179,7 @@ const GameScreen = ({
 		() => {
 			//get board and set inital state
 			if (gameMode === "Online") {
+				
 				setGameIsOver(gameData.gameState.isOver);
 				setPlayerRackTiles(
 					currentPlayer === 0 ? gameData.gameState.player1Tiles : gameData.gameState.player2Tiles
@@ -307,13 +311,15 @@ const GameScreen = ({
 
 				//update global game data here for reloads
 				socket.on("gameUpdated", (data) => {
+					console.log(gameData.gameState.player2TimeLeft)
+					console.log(gameData.gameState.player1TimeLeft)
 					setGameIsOver(data.gameState.isOver);
 					setBoardState(data.gameState.boardState);
 					setTimeLeftPlayer(
-						currentPlayer === 0 ? gameData.gameState.player1TimeLeft : gameData.gameState.player2TimeLeft
+						currentPlayer === 0 ? data.gameState.player1TimeLeft : data.gameState.player2TimeLeft
 					);
 					setTimeLeftOpponent(
-						currentPlayer === 1 ? gameData.gameState.player1TimeLeft : gameData.gameState.player2TimeLeft
+						currentPlayer === 1 ? data.gameState.player1TimeLeft : data.gameState.player2TimeLeft
 					);
 					setScores(data.gameState.scores);
 					setTurn(data.gameState.turn);

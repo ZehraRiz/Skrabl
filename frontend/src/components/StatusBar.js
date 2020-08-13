@@ -24,7 +24,6 @@ const StatusBar = ({
 	handleTimeWarning,
 	lang
 }) => {
-	console.log(timeLeftPlayer);
 
 	const aiTiles = computerRackTiles.map((tile) => {
 		return (

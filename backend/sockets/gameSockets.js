@@ -8,7 +8,6 @@ const {
 	isPlayerInGame,
 	findGame,
 	player2Accepted,
-	updateGame
 } = require("../store/games.js");
 const { findRegisteredUser, setUserGame, removeGameFromUser, setGameSocket } = require("../store/registeredUsers");
 
@@ -45,8 +44,8 @@ module.exports.listen = function(io, socket) {
 
 	//creator joins game
 	socket.on("joinGame", ({ token, gameId, time }) => {
-    console.log("gameId: "+gameId);
-    if (!gameId) return;
+		console.log("gameId: " + gameId);
+		if (!gameId) return;
 		if (!findRegisteredUser(token)) {
 			socket.emit("joinGameError", "please register before joining a game");
 			return;
@@ -190,7 +189,6 @@ module.exports.listen = function(io, socket) {
 				if (returnedTiles && returnedTiles.length > 0) {
 					game.gameState.pouch = [ ...game.gameState.pouch, ...returnedTiles ];
 				}
-				updateGame(game);
 				io.in(gameId).emit("gameUpdated", game);
 			}
 		}
