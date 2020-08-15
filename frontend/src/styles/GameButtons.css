@@ -148,13 +148,12 @@ button:active {
     font-size: 1.7em;
   }
 }
+
 @media (max-height: 850px) {
 	.gameButtons__wrapper button:not(.button__exchange) {
 	  font-size: .8em;
 	}
 }
-
-  
 
 @media (max-height: 650px) {
 	.gameButtons__wrapper button {
