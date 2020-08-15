@@ -12,15 +12,35 @@ const MenuModal = ({
   return (
     <Fade triggerOnce className="menuModal__wrapper">
       <div className="menuModal__content">
-          <h2>Menu</h2>
-          <button onClick={handleClickRules}>Rules</button>
-          <button onClick={handleClickSound}>{mute ? 'Sounds Off' : 'Sounds On'}</button>
-          <button onClick={null}>About</button>
+        <h2>
+          {lang === "en" && "Rules"}
+          {lang === "tr" && "Kurallar"}
+          {lang === "fr" && "Règles"}
+          {lang === "de" && "Regeln"}
+        </h2>
+        <button onClick={handleClickRules}>
+          {lang === "en" && "Menu"}
+          {lang === "tr" && "Menü"}
+          {lang === "fr" && "Menu"}
+          {lang === "de" && "Speisekarte"}
+        </button>
+        <button onClick={handleClickSound}>
+          {lang === "en" && (mute ? "Sound Off" : "Sound On")}
+          {lang === "tr" && (mute ? "Sesi Kapamak" : "Ses Açık")}
+          {lang === "fr" && (mute ? "Son Éteint" : "Son Sur")}
+          {lang === "de" && (mute ? "Ton Aus" : "Ton An")}
+        </button>
+        <button onClick={null}>
+          {lang === "en" && "About"}
+          {lang === "tr" && "Hakkında"}
+          {lang === "fr" && "À Propos"}
+          {lang === "de" && "Über"}
+        </button>
         <button onClick={closeModal}>
           {lang === "en" && "Close"}
           {lang === "tr" && "Kapat"}
           {lang === "fr" && "Ferme "}
-          {lang === "de" && "schließen"}
+          {lang === "de" && "Schließen"}
         </button>
       </div>
     </Fade>
