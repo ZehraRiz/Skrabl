@@ -45,7 +45,8 @@ const GameScreen = ({
 	level,
 	setInviteSent,
 	setInvitedPlayer,
-	setGameId
+	setGameId,
+	setGameData
 }) => {
 	const [ selectedTile, setSelectedTile ] = useState(null);
 	const [ selectedSquareIndex, setSelectedSquareIndex ] = useState(null);
@@ -299,8 +300,6 @@ const GameScreen = ({
 
 				socket.on("gameEnd", (data) => {
 					//redirect to players screen or show who won
-					console.log(data.gameEndedBy); // player 0 or player 1
-					console.log(data.game.gameState.outcome); //the outcome
 					setOutcome(data.game.gameState.outcome);
 					setEndedBy(data.gameEndedBy);
 					exitGame();
@@ -717,6 +716,7 @@ const GameScreen = ({
 			resetChatMsg();
 			setCurrentComponent("Login");
 			setInvitedPlayer(null);
+			setGameData("null");
 			setInviteSent(false);
 			setGameId("");
 		} else {
