@@ -63,7 +63,7 @@ const GameButtons = ({
           <img className="button__icon" src={resign} />
           {lang === "en" && "Resign"}
           {lang === "tr" && "Teslim ol"}
-          {lang === "fr" && "Abandonner"}
+          {lang === "fr" && "Céder à"}
           {lang === "de" && "Gib auf "}
         </div>
       </button>
