@@ -30,9 +30,14 @@
       margin: 1em;
   }
 
-  .aboutModal__dev:last-of-type, .aboutModal__dev:first-of-type  {
+  .aboutModal__dev:first-of-type  {
     margin-top: 2em;
-    }
+  }
+
+  .aboutModal__dev:last-of-type {
+    margin-top: 4em;
+    font-size: .6em;
+  }
 
   .aboutModal__content button {
     margin-top: 2rem;
