@@ -8,6 +8,8 @@ import UserBusy from "./components/UserBusy";
 import GameScreen from "./components/GameScreen";
 import NotificationModal from "./components/NotificationModal";
 import RulesModal from "./components/RulesModal";
+import MenuModal from "./components/MenuModal";
+import AboutModal from "./components/AboutModal";
 import "./styles/global.css";
 import GameModeScreen from "./components/GameModeScreen";
 import TitleScreen from "./components/TitleScreen";
@@ -26,10 +28,13 @@ const App = () => {
   const [socket, setSocket] = useState(null);
   const [inviteSent, setInviteSent] = useState(false);
   const [viewRules, setViewRules] = useState(false);
+  const [viewMenu, setViewMenu] = useState(false);
   const [viewChat, setViewChat] = useState(false);
+  const [viewAbout, setViewAbout] = useState(false);
   const [newChatMsg, setNewChatMsg] = useState(false);
   const [lang, setLang] = useState("en");
   const [level, setLevel] = useState("normal");
+  const [mute, setMute] = useState(false);
 
   useEffect(() => {
     if (gameMode === "Computer") {
@@ -54,8 +59,22 @@ const App = () => {
     setGameMode("Online");
   };
 
+  const handleClickMenu = () => {
+    setViewMenu(!viewMenu);
+  };
+
+  const handleClickSound = () => {
+    setMute(!mute);
+  };
+
   const handleClickRules = () => {
+    setViewMenu(false);
     setViewRules(!viewRules);
+  };
+
+  const handleClickAbout = () => {
+    setViewMenu(false);
+    setViewAbout(!viewAbout);
   };
 
   const handleClickChat = () => {
@@ -111,7 +130,7 @@ const App = () => {
           currentComponent={currentComponent}
           newChatMsg={newChatMsg}
           handleStart={handleStart}
-          handleClickRules={handleClickRules}
+          handleClickMenu={handleClickMenu}
           handleClickChat={handleClickChat}
           gameMode={gameMode}
         />
@@ -191,6 +210,7 @@ const App = () => {
       )}
       {currentComponent === "GameScreen" && (
         <GameScreen
+          mute={mute}
           resetChatMsg={resetChatMsg}
           handleNewChatMsg={handleNewChatMsg}
           handleClickChat={handleClickChat}
@@ -215,7 +235,11 @@ const App = () => {
         />
       )}
       {currentComponent === "UserBusy" && (
-        <UserBusy socket={socket} lang={lang} setCurrentCompoent={setCurrentComponent} />
+        <UserBusy
+          socket={socket}
+          lang={lang}
+          setCurrentCompoent={setCurrentComponent}
+        />
       )}
       {notification && (
         <NotificationModal
@@ -225,6 +249,17 @@ const App = () => {
         />
       )}
       {viewRules && <RulesModal lang={lang} closeModal={handleClickRules} />}
+      {viewAbout && <AboutModal lang={lang} closeModal={handleClickAbout} />}
+      {viewMenu && (
+        <MenuModal
+          lang={lang}
+          closeModal={handleClickMenu}
+          handleClickRules={handleClickRules}
+          handleClickSound={handleClickSound}
+          handleClickAbout={handleClickAbout}
+          mute={mute}
+        />
+      )}
     </div>
   );
 };

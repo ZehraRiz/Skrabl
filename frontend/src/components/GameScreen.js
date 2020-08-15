@@ -46,7 +46,8 @@ const GameScreen = ({
 	setInviteSent,
 	setInvitedPlayer,
 	setGameId,
-	setGameData
+	setGameData,
+	mute
 }) => {
 	const [ selectedTile, setSelectedTile ] = useState(null);
 	const [ selectedSquareIndex, setSelectedSquareIndex ] = useState(null);
@@ -93,6 +94,7 @@ const GameScreen = ({
 	const [ timeWarning, setTimeWarning ] = useState(false);
 	const [ endedBy, setEndedBy ] = useState(0);
 	const [ blankTileLetter, setBlankTileLetter ] = useState("");
+	
 
 	useBeforeunload(() => notifications["Are you sure you want to leave the game?"][lang]);
 
@@ -703,8 +705,10 @@ const GameScreen = ({
 	//______________________________________________________________________________
 
 	const playSound = (audioFile) => {
-		const audio = new Audio(audioFile);
-		audio.play();
+		if (!mute) {
+			const audio = new Audio(audioFile);
+			audio.play();
+		}
 	};
 
 	const exitGame = () => {
@@ -739,7 +743,7 @@ const GameScreen = ({
 						lang={lang}
 					/>
 				)}
-				<div className="gameScreen__main">
+				<div className={gameMode === 'Computer' ? "gameScreen__main" : "gameScreen__main gameScreen__chat" }>
 					<div className="gameScreen__board">
 						<Board
 							handleClickSquare={handleClickSquare}

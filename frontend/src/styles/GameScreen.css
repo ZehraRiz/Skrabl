@@ -26,8 +26,8 @@
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
-  perspective: 1000px;
-}
+  perspective: 1001px;
+} 
 
 /* tablet */
 @media (min-width: 500px) {
@@ -46,12 +46,18 @@
   
   .gameScreen__main {
     height: auto;
-    grid-template-columns: minmax(150px, 200px) auto auto;
+    grid-template-columns: minmax(200px, 200px) auto auto;
     grid-template-rows: auto 1fr auto;
     grid-gap: 10px;
     padding: 10px;
     max-width: 100%;
   }
+
+  
+  .gameScreen__chat {
+    grid-template-columns: minmax(200px, 200px) auto minmax(150px, 350px);
+  }
+  
   
   .gameScreen__board {
     display: flex;

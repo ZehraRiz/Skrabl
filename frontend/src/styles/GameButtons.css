@@ -102,6 +102,10 @@ button:active {
   }
 }
 
+@media (max-width: 850px)  {
+  .button__text {
+  }
+}
 
 @media (min-width: 850px) {
   .gameButtons__wrapper {
@@ -142,19 +146,18 @@ button:active {
   }
 }
 
-@media (min-width: 940px) {
+@media (min-width: 1050px) {
   
   .button__text {
     font-size: 1.7em;
   }
 }
+
 @media (max-height: 850px) {
 	.gameButtons__wrapper button:not(.button__exchange) {
 	  font-size: .8em;
 	}
 }
-
-  
 
 @media (max-height: 650px) {
 	.gameButtons__wrapper button {
