@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../styles/InviteScreen.css";
 import { Fade } from "react-awesome-reveal";
 
@@ -84,16 +84,18 @@ const InviteScreen = ({
       gameId: gameId,
       time: timeInput,
     });
+  };
 
-    //add notifications here and setDisplayedComponentBack
+    useEffect(() => {
+       //add notifications here and setDisplayedComponentBack
+      
     socket.on("joinGameError", (data) => {
       console.log(data);
       setInviteSent(false);
       setCurrentComponent = "Players";
     });
-
     //on succesful game join
-    socket.on("gameJoined", (data) => {
+    socket.off("gameJoined").on("gameJoined", (data) => {
       console.log(data);
       setInviteSent(true);
       socket.emit("gameRequest", {
@@ -113,7 +115,9 @@ const InviteScreen = ({
         setCurrentComponent("GameScreen");
       });
     });
-  };
+    }, [])
+  
+
 
   return (
     <Fade triggerOnce>
