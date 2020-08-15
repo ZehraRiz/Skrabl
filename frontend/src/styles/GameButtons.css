@@ -143,6 +143,7 @@ button:active {
     height: auto;
     opacity: 0.9;
     //margin: 0 .8em;
+    margin-left: 7%;
   }
 }
 
