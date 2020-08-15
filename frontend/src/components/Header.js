@@ -4,7 +4,7 @@ import infoIcon from "../images/help.svg";
 import chatIcon from "../images/chat.svg";
 import {HeartBeat} from "react-awesome-reveal";
 
-const Header = ({ handleClickRules, handleClickChat, gameMode, handleStart, newChatMsg, currentComponent }) => {
+const Header = ({ handleClickMenu, handleClickChat, gameMode, handleStart, newChatMsg, currentComponent }) => {
   return (
     <div className="header__wrapper">
       {gameMode === "Online" && currentComponent === "GameScreen" && (
@@ -14,7 +14,7 @@ const Header = ({ handleClickRules, handleClickChat, gameMode, handleStart, newC
         </div>
       )}
       <div className="header__title"><h1 onClick={currentComponent !== "GameScreen" ? handleStart : null}>Skrabl</h1></div>
-      <div className="header__rules" onClick={handleClickRules}>
+      <div className="header__rules" onClick={handleClickMenu}>
         <img src={infoIcon} />
       </div>
     </div>
