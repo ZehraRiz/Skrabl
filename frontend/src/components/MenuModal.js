@@ -14,16 +14,16 @@ const MenuModal = ({
     <Fade triggerOnce className="menuModal__wrapper">
       <div className="menuModal__content">
         <h2>
-          {lang === "en" && "Rules"}
-          {lang === "tr" && "Kurallar"}
-          {lang === "fr" && "Règles"}
-          {lang === "de" && "Regeln"}
-        </h2>
-        <button onClick={handleClickRules}>
           {lang === "en" && "Menu"}
           {lang === "tr" && "Menü"}
           {lang === "fr" && "Menu"}
           {lang === "de" && "Speisekarte"}
+        </h2>
+        <button onClick={handleClickRules}>
+          {lang === "en" && "Rules"}
+          {lang === "tr" && "Kurallar"}
+          {lang === "fr" && "Règles"}
+          {lang === "de" && "Regeln"}
         </button>
         <button onClick={handleClickSound}>
           {lang === "en" && (mute ? "Sound Off" : "Sound On")}

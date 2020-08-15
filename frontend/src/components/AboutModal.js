@@ -14,7 +14,15 @@ const AboutModal = ({ closeModal, lang }) => {
         </h3>
         <div className="aboutModal__team">
           <div className="aboutModal__dev">
-            <h4>Zehra Rizvi</h4>
+            <h4>
+              <a
+                target="_blank"
+                rel="noopener noreferrer"
+                href="https://github.com/ZehraRiz"
+              >
+                Zehra Rizvi
+              </a>
+            </h4>
           </div>
           <div className="aboutModal__dev">
             <h4>
@@ -46,7 +54,7 @@ const AboutModal = ({ closeModal, lang }) => {
                 rel="noopener noreferrer"
                 href="https://github.com/ZehraRiz/Skrabl"
               >
-                View Skrabl Code
+                GitHub
               </a>
             </h4>
           </div>

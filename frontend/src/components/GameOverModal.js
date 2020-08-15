@@ -21,7 +21,7 @@ const GameOverModal = ({
   } else if (lang === "tr") {
     playerText = "Oyuncu";
   } else if (lang === "fr") {
-    playerText = "joueur";
+    playerText = "Joueur";
   } else if (lang === "de") {
     playerText = "Spieler";
   }
@@ -51,7 +51,7 @@ const GameOverModal = ({
           ? `${opponentName} ${notifications["wins by default!"][lang]}`
           : `${playerName} ${notifications["wins by default!"][lang]}`;
       break;
-
+ 
     case outcome === "TimeOut":
       result =
         endedBy === currentPlayer

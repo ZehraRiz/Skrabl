@@ -51,6 +51,17 @@ body {
 }
 
 
+a {
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  color: #1b1b1b;
+  text-decoration: underline;
+}
+
+a:visited {
+  color: #444;
+}
+
 h1 {
   font-size: 2em;
   font-family: "Ranchers", cursive;
