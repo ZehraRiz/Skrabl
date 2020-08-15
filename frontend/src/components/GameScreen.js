@@ -739,7 +739,7 @@ const GameScreen = ({
 						lang={lang}
 					/>
 				)}
-				<div className="gameScreen__main">
+				<div className={gameMode === 'Computer' ? "gameScreen__main" : "gameScreen__main gameScreen__chat" }>
 					<div className="gameScreen__board">
 						<Board
 							handleClickSquare={handleClickSquare}

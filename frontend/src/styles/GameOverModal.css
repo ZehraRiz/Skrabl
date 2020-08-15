@@ -29,6 +29,7 @@
   min-height: 200px;
   border-radius: 6px;
   opacity: 0;
+  text-align: center;
 }
 
 .gameOverModal__hsw--hidden {

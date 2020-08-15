@@ -47,6 +47,7 @@ body {
 .page {
   height: 100%;
   position: relative;
+
 }
 
 
@@ -90,7 +91,6 @@ button:focus {
     display: flex;
     flex-direction: column;
     align-items: center;
-
   }
 
   h1 {
@@ -98,7 +98,11 @@ button:focus {
   }
 
 }
-
+@media (min-width: 850px) and (min-height: 800px) {
+  .page {
+    font-size: 18px;
+  }
+}
 @media (min-height: 770px) {
   .container__full-height {
     height: calc(100vh - 55px);

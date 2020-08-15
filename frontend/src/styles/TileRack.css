@@ -26,16 +26,16 @@
 
 .tileRack__tile {
   width: 13.8%;
-  max-width: 100px;
+  //max-width: 100px;
   margin: 0 1px;
 }
 
 /* tablet */
 @media (min-width: 510px) {
   
-.tileRack__wrapper {
-  max-height: 75px
-}
+  .tileRack__wrapper {
+    max-height: 75px
+  }
 
 }
 
@@ -53,7 +53,7 @@
   }
   .tileRack__tile {
     width: 13.9%;
-    max-width: 100px;
+    //max-width: 100px;
     margin: 0 1px;
   }
 }
