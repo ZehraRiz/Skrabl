@@ -6,6 +6,7 @@ const MenuModal = ({
   closeModal,
   handleClickRules,
   handleClickSound,
+  handleClickAbout,
   mute,
   lang,
 }) => {
@@ -30,7 +31,7 @@ const MenuModal = ({
           {lang === "fr" && (mute ? "Son Éteint" : "Son Sur")}
           {lang === "de" && (mute ? "Ton Aus" : "Ton An")}
         </button>
-        <button onClick={null}>
+        <button onClick={handleClickAbout}>
           {lang === "en" && "About"}
           {lang === "tr" && "Hakkında"}
           {lang === "fr" && "À Propos"}

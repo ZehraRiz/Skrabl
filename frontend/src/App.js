@@ -9,6 +9,7 @@ import GameScreen from "./components/GameScreen";
 import NotificationModal from "./components/NotificationModal";
 import RulesModal from "./components/RulesModal";
 import MenuModal from "./components/MenuModal";
+import AboutModal from "./components/AboutModal";
 import "./styles/global.css";
 import GameModeScreen from "./components/GameModeScreen";
 import TitleScreen from "./components/TitleScreen";
@@ -29,6 +30,7 @@ const App = () => {
   const [viewRules, setViewRules] = useState(false);
   const [viewMenu, setViewMenu] = useState(false);
   const [viewChat, setViewChat] = useState(false);
+  const [viewAbout, setViewAbout] = useState(false);
   const [newChatMsg, setNewChatMsg] = useState(false);
   const [lang, setLang] = useState("en");
   const [level, setLevel] = useState("normal");
@@ -68,6 +70,11 @@ const App = () => {
   const handleClickRules = () => {
     setViewMenu(false);
     setViewRules(!viewRules);
+  };
+
+  const handleClickAbout = () => {
+    setViewMenu(false);
+    setViewAbout(!viewAbout);
   };
 
   const handleClickChat = () => {
@@ -242,12 +249,14 @@ const App = () => {
         />
       )}
       {viewRules && <RulesModal lang={lang} closeModal={handleClickRules} />}
+      {viewAbout && <AboutModal lang={lang} closeModal={handleClickAbout} />}
       {viewMenu && (
         <MenuModal
           lang={lang}
           closeModal={handleClickMenu}
           handleClickRules={handleClickRules}
           handleClickSound={handleClickSound}
+          handleClickAbout={handleClickAbout}
           mute={mute}
         />
       )}
