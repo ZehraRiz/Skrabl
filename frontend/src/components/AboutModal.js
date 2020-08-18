@@ -54,7 +54,7 @@ const AboutModal = ({ closeModal, lang }) => {
                 rel="noopener noreferrer"
                 href="https://github.com/ZehraRiz/Skrabl"
               >
-                GitHub
+                https://github.com/ZehraRiz/Skrabl
               </a>
             </h4>
           </div>

@@ -79,7 +79,7 @@ button:active {
   button img {
     width: 20px;
     margin-bottom: 0;
-    margin-right: 1em;
+    margin-right: 7%;
   }
   .button__text {
     flex-direction: row;
@@ -143,6 +143,7 @@ button:active {
     height: auto;
     opacity: 0.9;
     //margin: 0 .8em;
+    margin-left: 7%;
   }
 }
 
