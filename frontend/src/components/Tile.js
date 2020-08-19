@@ -7,6 +7,7 @@ const Tile = ({
   tilesToExchange,
   selectedTile,
   lang,
+  rackIndex,
 }) => {
   const tileSelected =
     tilesToExchange.filter((item) => item.id === tile.id).length > 0 ||
@@ -28,10 +29,14 @@ const Tile = ({
 
   return (
     <div
-      className={
-        tileSelected ? "tile__wrapper tile__wrapper--selected" : "tile__wrapper"
-      }
+      className={`tile__wrapper ${tileSelected && "tile__wrapper--selected"} ${
+        rackIndex !== undefined && "tile__wrapper--rack"
+      }`}
       onClick={() => handleClickTile(tile)}
+      draggable
+      id={tile.id}
+      data-origin="rack"
+      data-index={rackIndex}
     >
       <span className="tile__letter">{getLetter(tile)}</span>
       <span className="tile__points">{tile.points}</span>

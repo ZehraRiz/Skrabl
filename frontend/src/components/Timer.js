@@ -15,14 +15,9 @@ const Timer = ({
   let interval;
   const [playerTime, setPlayerTime] = useState(timeLeft);
 
-    useEffect(() => {
-    setPlayerTime(timeLeft)
-  }, [timeLeft])
-
-  // useEffect(() => {
-  //     if(playerTime< 20)
-  //   setTimeLeft(playerTime);
-  // }, [turn]);
+  useEffect(() => {
+    setPlayerTime(timeLeft);
+  }, [timeLeft]);
 
   useEffect(() => {
     if (currentPlayer === turn) {
@@ -33,15 +28,12 @@ const Timer = ({
     }
   }, [turn, playerTime]);
 
-
-
   useEffect(() => {
     if (playerTime < 0.01) {
       handleTimeOut();
       clearInterval(interval);
     }
     if (playerTime < 1) {
-      console.log(playerTime)
       handleTimeWarning();
     }
   }, [playerTime]);
