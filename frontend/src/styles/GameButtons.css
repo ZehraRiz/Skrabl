@@ -79,7 +79,7 @@ button:active {
   button img {
     width: 20px;
     margin-bottom: 0;
-    margin-right: 1em;
+    margin-right: 7%;
   }
   .button__text {
     flex-direction: row;
@@ -102,6 +102,10 @@ button:active {
   }
 }
 
+@media (max-width: 850px)  {
+  .button__text {
+  }
+}
 
 @media (min-width: 850px) {
   .gameButtons__wrapper {
@@ -138,23 +142,23 @@ button:active {
     width: 35px;
     height: auto;
     opacity: 0.9;
-    margin: 0 .8em;
+    //margin: 0 .8em;
+    margin-left: 7%;
   }
 }
 
-@media (min-width: 940px) {
+@media (min-width: 1050px) {
   
   .button__text {
     font-size: 1.7em;
   }
 }
+
 @media (max-height: 850px) {
 	.gameButtons__wrapper button:not(.button__exchange) {
 	  font-size: .8em;
 	}
 }
-
-  
 
 @media (max-height: 650px) {
 	.gameButtons__wrapper button {

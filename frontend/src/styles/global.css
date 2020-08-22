@@ -47,8 +47,20 @@ body {
 .page {
   height: 100%;
   position: relative;
+
 }
 
+
+a {
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  color: #1b1b1b;
+  text-decoration: underline;
+}
+
+a:visited {
+  color: #444;
+}
 
 h1 {
   font-size: 2em;
@@ -90,7 +102,6 @@ button:focus {
     display: flex;
     flex-direction: column;
     align-items: center;
-
   }
 
   h1 {
@@ -98,7 +109,11 @@ button:focus {
   }
 
 }
-
+@media (min-width: 850px) and (min-height: 800px) {
+  .page {
+    font-size: 18px;
+  }
+}
 @media (min-height: 770px) {
   .container__full-height {
     height: calc(100vh - 55px);
