@@ -205,7 +205,7 @@ const GameScreen = ({
 				setTurn(0);
 			}
 
-			if (gameData) {
+			if (gameData && gameMode === "Online") {
 				if (gameData.gameState.boardState.length === 0) {
 					getBoard();
 				}
