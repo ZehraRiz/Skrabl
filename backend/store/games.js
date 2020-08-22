@@ -117,17 +117,6 @@ function getAllGames() {
   return games;
 }
 
-const updateGame = (gametoEdit) => {
-  let newGames = games.map(game => {
-    if (game.gameId === gametoEdit.gameId) {
-      game = game
-      g = game
-    } 
-    return game
-  })
-  games = newGames
-}
-
 module.exports = {
   gameJoin,
   setGamePlayer1,
@@ -138,5 +127,4 @@ module.exports = {
   findGame,
   removeGame,
   player2Accepted,
-  updateGame
 };
