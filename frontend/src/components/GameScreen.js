@@ -96,6 +96,7 @@ const GameScreen = ({
   const [blankTileLetter, setBlankTileLetter] = useState("");
   const [dragTileId, setDragTileId] = useState(null);
   const [dragOriginIndex, setDragOriginIndex] = useState(null);
+  const [draggedTile, setDraggedTile] = useState(null);
 
   useBeforeunload(
     () => notifications["Are you sure you want to leave the game?"][lang]
@@ -761,56 +762,69 @@ const GameScreen = ({
   //______________________________________________________________________________
 
   const handleDragStart = (e) => {
-    e.persist();
     setDragTileId(JSON.parse(e.target.id));
     if (e.target.dataset.origin === "board") {
       setDragOriginIndex(JSON.parse(e.target.parentNode.id));
     }
-    setTimeout(() => {
-      e.target.style.display = "none";
-    }, 0);
+    setDraggedTile(e.target);
+  };
+
+  const handleDragOver = (e) => {
+    if (
+      e.target.id &&
+      e.target.id !== "rack" &&
+      JSON.parse(e.target.id) === dragTileId
+    ) {
+      e.preventDefault();
+    } else {
+      const childrenArray = Array.from(e.target.children);
+      for (let i = 0; i < childrenArray.length; i++) {
+        if (
+          childrenArray[i].classList.contains("board__tile") ||
+          childrenArray[i].parentNode.classList.contains("board__tile")
+        ) {
+          return;
+        }
+      }
+    }
+
+    e.preventDefault();
   };
 
   const handleDrop = (e) => {
-    e.preventDefault();
-    //if moving to rack
-    e.persist();
-    e.stopPropagation();
-    //sometimes the target is a nested child element e.g. tile__letter so the tile just disappears
-    if (
-      e.target.classList.contains("tileRack__wrapper") ||
-      e.target.classList.contains("tileRack__tile")
-    ) {
-      const movingTile = placedTiles.filter(
-        (tile) => tile.id === dragTileId
-      )[0];
-      movingTile.square = null;
-      const updatedPlacedTiles = placedTiles.filter(
-        (tile) => tile.id !== dragTileId
-      );
-      const updatedBoardState = boardState.map((square) => {
-        if (square.index === dragOriginIndex) {
-          return { ...square, tile: null };
-        } else return square;
-      });
-      setBoardState(updatedBoardState);
-      setPlacedTiles(updatedPlacedTiles);
-      //need to get index to insert tile
-      const updatedPlayerRackTiles = [...playerRackTiles, movingTile];
-      setPlayerRackTiles(updatedPlayerRackTiles);
-    } else {
-      //if moving to board
-      const targetId = JSON.parse(e.target.id);
+    //if moving to board
+    if (e.currentTarget.classList.contains("board__square")) {
+      const targetId = JSON.parse(e.currentTarget.id);
       let movingTile;
+      let updatedPlacedTiles;
+      //if dropped back into same square
+      if (targetId === dragOriginIndex) {
+        setDragOriginIndex(null);
+        setDragTileId(null);
+        return;
+      }
       //if coming from another square
       if (dragOriginIndex !== null) {
         movingTile = placedTiles.filter((tile) => tile.id === dragTileId)[0];
+        updatedPlacedTiles = placedTiles.map((tile) => {
+          if (tile.id === movingTile.id) {
+            return { ...tile, square: targetId };
+          } else {
+            return tile;
+          }
+        });
       } else {
         //if coming from rack
         movingTile = playerRackTiles.filter(
           (tile) => tile.id === dragTileId
         )[0];
+        const updatedPlayerRackTiles = playerRackTiles.filter(
+          (tile) => tile.id !== dragTileId
+        );
+        setPlayerRackTiles(updatedPlayerRackTiles);
+        updatedPlacedTiles = [...placedTiles, movingTile];
       }
+      playSound(placeTileSound);
       movingTile.square = targetId;
       const updatedBoardState = boardState
         .map((square) => {
@@ -825,16 +839,40 @@ const GameScreen = ({
             return square;
           }
         });
-      const updatedPlacedTiles = [...placedTiles, movingTile];
       setBoardState(updatedBoardState);
       setPlacedTiles(updatedPlacedTiles);
+      //if moving to rack
+    } else {
+      //if from board
+      if (dragOriginIndex !== null) {
+        playSound(placeTileSound);
+        const movingTile = placedTiles.filter(
+          (tile) => tile.id === dragTileId
+        )[0];
+        movingTile.square = null;
+        const updatedPlacedTiles = placedTiles.filter(
+          (tile) => tile.id !== dragTileId
+        );
+        const updatedBoardState = boardState.map((square) => {
+          if (square.index === dragOriginIndex) {
+            return { ...square, tile: null };
+          } else return square;
+        });
+        setBoardState(updatedBoardState);
+        setPlacedTiles(updatedPlacedTiles);
+        //need to get index to insert tile
+        const updatedPlayerRackTiles = [...playerRackTiles, movingTile];
+        setPlayerRackTiles(updatedPlayerRackTiles);
+        //if moving within rack
+      } else {
+        //do nothing for now
+        setDragOriginIndex(null);
+        setDragTileId(null);
+        return;
+      }
     }
     setDragOriginIndex(null);
     setDragTileId(null);
-  };
-
-  const handleDragOver = (e) => {
-    e.preventDefault();
   };
 
   return (

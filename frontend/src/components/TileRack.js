@@ -32,7 +32,7 @@ const TileRack = ({
             turn={turn}
             boardIsDisabled={boardIsDisabled}
             rackIndex={index}
-            key={index}
+            key={tile.id}
           />
         ))}
     </div>
