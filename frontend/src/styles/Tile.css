@@ -48,6 +48,11 @@
   font-size: 0.6rem;
 }
 
+.tile__wrapper--rack {
+  width: 13.8%;
+  margin: 0 1px;
+}
+
 /* tablet */
 @media (min-width: 500px) {
   .tile__letter {
@@ -74,8 +79,6 @@
 
 /* laptop */
 
-
-
 @media (max-width: 500px) {
   .tile__points--sm {
     bottom: 2px;
@@ -85,20 +88,22 @@
 }
 
 @media (max-height: 850px) {
-
   .tile__points {
-    font-size: .7em;
-    bottom: .3em;
-    right: .3em;
+    font-size: 0.7em;
+    bottom: 0.3em;
+    right: 0.3em;
   }
- 
+
   .tile__points--sm {
     bottom: 1.8px;
     right: 1.8px;
     font-size: 0.36rem;
   }
+  .tile__wrapper--rack {
+    width: 13.9%;
+    margin: 0 1px;
+  }
 }
-
 
 /* desktop */
 @media (min-width: 850px) {

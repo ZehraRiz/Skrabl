@@ -52,7 +52,7 @@ const getBonusText = (square) => {
       bonusText = bonusText;
   }
   if (square.index === 112) {
-    bonusText = '';
+    bonusText = "";
   }
   return bonusText;
 };
@@ -63,6 +63,9 @@ const Board = ({
   boardState,
   isDisabled,
   lang,
+  handleDrop,
+  handleDragOver,
+  handleDragStart,
 }) => {
   const getLetter = (tile) => {
     let letter;
@@ -81,14 +84,18 @@ const Board = ({
       <div className={"board__board " + (isDisabled ? "disabled" : "")}>
         {boardState &&
           boardState.length > 0 &&
-          boardState.map((square, index) => { 
-            const bonusClassName = getBonusClassName(square); 
+          boardState.map((square, index) => {
+            const bonusClassName = getBonusClassName(square);
             let placedTile;
             if (square.tile) {
               placedTile = (
                 <span
                   className="board__tile"
                   onClick={() => handleClickPlacedTile(square.tile)}
+                  draggable
+                  id={square.tile.id}
+                  data-origin="board"
+                  onDragStart={handleDragStart}
                 >
                   <span>{getLetter(square.tile)}</span>
                   <span className="tile__points--sm">{square.tile.points}</span>
@@ -101,7 +108,10 @@ const Board = ({
                   index === 112 && "board__centre"
                 }`}
                 key={index}
+                id={index}
                 onClick={(e) => handleClickSquare(square)}
+                onDrop={handleDrop}
+                onDragOver={handleDragOver}
               >
                 {!placedTile && (
                   <span className="board__bonus-text">

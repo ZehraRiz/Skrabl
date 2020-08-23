@@ -13,25 +13,22 @@ const Timer = ({
   lang,
 }) => {
   let interval;
- 
 
   useEffect(() => {
     if (currentPlayer === turn) {
       interval = setInterval(() => {
-        setTimeLeft(timeLeft- 1 / 60);
+        setTimeLeft(timeLeft - 1 / 60);
       }, 1000);
       return () => clearInterval(interval);
     }
   }, [timeLeft, turn]);
-
-
 
   useEffect(() => {
     if (timeLeft < 0.01) {
       handleTimeOut();
       clearInterval(interval);
     }
-    if (timeLeft< 1) {
+    if (timeLeft < 1) {
       handleTimeWarning();
     }
   }, [timeLeft]);
