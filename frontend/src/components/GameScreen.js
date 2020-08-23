@@ -96,7 +96,6 @@ const GameScreen = ({
   const [blankTileLetter, setBlankTileLetter] = useState("");
   const [dragTileId, setDragTileId] = useState(null);
   const [dragOriginIndex, setDragOriginIndex] = useState(null);
-  const [draggedTile, setDraggedTile] = useState(null);
 
   useBeforeunload(
     () => notifications["Are you sure you want to leave the game?"][lang]
@@ -112,6 +111,7 @@ const GameScreen = ({
       });
       socket.on("chatError", (data) => console.log(data));
     }
+    //eslint-disable-next-line
   }, []);
 
   useEffect(() => {
@@ -119,6 +119,7 @@ const GameScreen = ({
       setChatThread([...chatThread, newMessage]);
       setNewMessage(null);
     }
+    //eslint-disable-next-line
   }, [newMessage]);
 
   const handleSendMessage = (e) => {
@@ -142,6 +143,7 @@ const GameScreen = ({
     if (turn !== null) {
       getTiles();
     }
+    //eslint-disable-next-line
   }, [turn]);
 
   useEffect(() => {
@@ -161,6 +163,7 @@ const GameScreen = ({
         setComputerRackTiles([...newTilesComputer]);
       }
     }
+    //eslint-disable-next-line
   }, [pouch]);
 
   useEffect(() => {
@@ -168,6 +171,7 @@ const GameScreen = ({
     if (!boardIsDisabled && tilesToExchange.length > 0) {
       getTiles();
     }
+    //eslint-disable-next-line
   }, [boardIsDisabled]);
 
   useEffect(() => {
@@ -210,6 +214,7 @@ const GameScreen = ({
     if (gameMode === "Computer") {
       getBoard();
     }
+    //eslint-disable-next-line
   }, [gameMode]);
 
   //handle blank tile
@@ -221,6 +226,7 @@ const GameScreen = ({
       setSelectedTile(tile);
       placeTile2();
     }
+    //eslint-disable-next-line
   }, [blankTileLetter]);
 
   const getBoard = () => {
@@ -265,7 +271,7 @@ const GameScreen = ({
 
   const nextPlayer = (
     x = 0,
-    newScores = { 0: 0, 0: 0 },
+    newScores = { 0: 0, 1: 0 },
     highestScoringWord = highestScoringWord
   ) => {
     if (gameMode === "Online") {
@@ -329,6 +335,7 @@ const GameScreen = ({
         setOutcome(data.gameState.outcome);
       });
     }
+    //eslint-disable-next-line
   }, [playerRackTiles]);
 
   const handleTimeOut = () => {
@@ -344,6 +351,7 @@ const GameScreen = ({
     if (placedTiles.length > 0) {
       getWordsOnBoard();
     }
+    //eslint-disable-next-line
   }, [placedTiles]);
 
   const getWordsOnBoard = () => {
@@ -425,6 +433,7 @@ const GameScreen = ({
     if (gameMode === "Computer" && turn === 1) {
       computerMove();
     }
+    //eslint-disable-next-line
   }, [playerRackTiles]);
 
   useEffect(() => {
@@ -432,6 +441,7 @@ const GameScreen = ({
     if (gameMode === "Computer" && turn === 1 && playerRackTiles.length === 7) {
       computerMove();
     }
+    //eslint-disable-next-line
   }, [turn]);
 
   //______________________________________________________________________________
@@ -440,6 +450,7 @@ const GameScreen = ({
   //______________________________________________________________________________
   useEffect(() => {
     placeTile();
+    //eslint-disable-next-line
   }, [selectedSquareIndex]);
 
   //consecutive passes
@@ -452,6 +463,7 @@ const GameScreen = ({
       // end game
       gameOver();
     }
+    //eslint-disable-next-line
   }, [consecutivePasses]);
 
   //the placed tile is sent to check for blank tiles
@@ -521,7 +533,7 @@ const GameScreen = ({
     if (
       selectedTile === 0 ||
       currentPlayer !== turn ||
-      placedTiles.filter((tile) => tile.square == tileToRemove.square)
+      placedTiles.filter((tile) => tile.square === tileToRemove.square)
         .length === 0
     )
       return;
@@ -764,11 +776,12 @@ const GameScreen = ({
   //______________________________________________________________________________
 
   const handleDragStart = (e) => {
+    e.persist();
+    console.log(e);
     setDragTileId(JSON.parse(e.target.id));
     if (e.target.dataset.origin === "board") {
       setDragOriginIndex(JSON.parse(e.target.parentNode.id));
     }
-    setDraggedTile(e.target);
   };
 
   const handleDragOver = (e) => {

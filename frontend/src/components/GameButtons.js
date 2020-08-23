@@ -20,7 +20,7 @@ const GameButtons = ({
     <div className="gameButtons__wrapper">
       <button onClick={handleClickShuffle}>
         <div className="button__text">
-          <img className="button__icon" src={shuffle} />
+          <img className="button__icon" src={shuffle} alt="shuffle" />
           {lang === "en" && "Shuffle"}
           {lang === "tr" && "Karıştır"}
           {lang === "fr" && "Mélanger"}
@@ -29,7 +29,7 @@ const GameButtons = ({
       </button>
       <button onClick={handleClickExchangeTiles}>
         <div className="button__text">
-          <img className="button__icon" src={exchange} />
+          <img className="button__icon" src={exchange} alt="exchange" />
           {lang === "en" && "Swap"}
           {lang === "tr" && "Değiştir"}
           {lang === "fr" && "Changer"}
@@ -39,7 +39,7 @@ const GameButtons = ({
       {numPlacedTiles === 0 && (
         <button onClick={handleClickPass}>
           <div className="button__text">
-            <img className="button__icon" src={pass} />
+            <img className="button__icon" src={pass} alt="pass" />
             {lang === "en" && "Pass"}
             {lang === "tr" && "Pas geç"}
             {lang === "fr" && "Passer"}
@@ -50,7 +50,7 @@ const GameButtons = ({
       {numPlacedTiles > 0 && (
         <button onClick={handleClickConfirmMove}>
           <div className="button__text">
-            <img className="button__icon" src={confirm} />
+            <img className="button__icon" src={confirm} alt="confirm" />
             {lang === "en" && "Confirm"}
             {lang === "tr" && "Onayla"}
             {lang === "fr" && "Confirmer"}
@@ -60,7 +60,7 @@ const GameButtons = ({
       )}
       <button onClick={handleClickResign}>
         <div className="button__text">
-          <img className="button__icon" src={resign} />
+          <img className="button__icon" src={resign} alt="resign" />
           {lang === "en" && "Resign"}
           {lang === "tr" && "Teslim ol"}
           {lang === "fr" && "Céder à"}

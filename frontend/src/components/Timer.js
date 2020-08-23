@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { formatMilliseconds } from "../utils/formatMilliseconds";
 import "../styles/Timer.css";
 
@@ -31,6 +31,7 @@ const Timer = ({
     if (timeLeft < 1) {
       handleTimeWarning();
     }
+    //eslint-disable-next-line
   }, [timeLeft]);
 
   return (

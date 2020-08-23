@@ -30,12 +30,14 @@ const GameOverModal = ({
   const playerName = gameMode === "Online" ? user.name : playerText;
   const hsw = highestScoringWord.word.toUpperCase();
 
-  if (currentPlayer == 0) {
-    var playerScore = scores[0];
-    var opponentScore = scores[1];
+  let playerScore;
+  let opponentScore;
+  if (currentPlayer === 0) {
+    playerScore = scores[0];
+    opponentScore = scores[1];
   } else {
-    var playerScore = scores[1];
-    var opponentScore = scores[0];
+    playerScore = scores[1];
+    opponentScore = scores[0];
   }
 
   if (outcome === "TimeOut") {
@@ -51,7 +53,7 @@ const GameOverModal = ({
           ? `${opponentName} ${notifications["wins by default!"][lang]}`
           : `${playerName} ${notifications["wins by default!"][lang]}`;
       break;
- 
+
     case outcome === "TimeOut":
       result =
         endedBy === currentPlayer

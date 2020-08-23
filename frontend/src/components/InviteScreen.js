@@ -14,7 +14,7 @@ const InviteScreen = ({
   inviteSent,
   setInviteSent,
   lang,
-  setLang
+  setLang,
 }) => {
   const [timeInput, setTimeInput] = useState(20);
   let [invite, setInvite] = useState("");
@@ -28,19 +28,18 @@ const InviteScreen = ({
     socket.on("removedGame", (data) => {
       console.log(data);
       setInvitedPlayer("");
-      setInviteSent(false)
-      setInvite("")
+      setInviteSent(false);
+      setInvite("");
       setCurrentComponent("Players");
     });
   };
 
   socket.on("userChangeRoom", (data) => {
-    setLang(data)
-     setInvitedPlayer("");
-    setInviteSent(false)
-    setCurrentComponent("Login")
-      });
-
+    setLang(data);
+    setInvitedPlayer("");
+    setInviteSent(false);
+    setCurrentComponent("Login");
+  });
 
   socket.on("gameJoined2", (data) => {
     if (invite === "") {
@@ -86,13 +85,13 @@ const InviteScreen = ({
     });
   };
 
-    useEffect(() => {
-       //add notifications here and setDisplayedComponentBack
-      
+  useEffect(() => {
+    //add notifications here and setDisplayedComponentBack
+
     socket.on("joinGameError", (data) => {
       console.log(data);
       setInviteSent(false);
-      setCurrentComponent = "Players";
+      setCurrentComponent("Players");
     });
     //on succesful game join
     socket.off("gameJoined").on("gameJoined", (data) => {
@@ -115,9 +114,7 @@ const InviteScreen = ({
         setCurrentComponent("GameScreen");
       });
     });
-    }, [])
-  
-
+  }, []);
 
   return (
     <Fade triggerOnce>
