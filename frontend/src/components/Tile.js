@@ -8,6 +8,7 @@ const Tile = ({
   selectedTile,
   lang,
   rackIndex,
+  handleDragStart,
 }) => {
   const tileSelected =
     tilesToExchange.filter((item) => item.id === tile.id).length > 0 ||
@@ -37,6 +38,7 @@ const Tile = ({
       id={tile.id}
       data-origin="rack"
       data-index={rackIndex}
+      onDragStart={handleDragStart}
     >
       <span className="tile__letter">{getLetter(tile)}</span>
       <span className="tile__points">{tile.points}</span>

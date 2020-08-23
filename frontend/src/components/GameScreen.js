@@ -202,7 +202,7 @@ const GameScreen = ({
       setTurn(0);
     }
 
-    if (gameData) {
+    if (gameData && gameMode === "Online") {
       if (gameData.gameState.boardState.length === 0) {
         getBoard();
       }
@@ -308,17 +308,19 @@ const GameScreen = ({
 
       //update global game data here for reloads
       socket.on("gameUpdated", (data) => {
+        console.log(gameData.gameState.player2TimeLeft);
+        console.log(gameData.gameState.player1TimeLeft);
         setGameIsOver(data.gameState.isOver);
         setBoardState(data.gameState.boardState);
         setTimeLeftPlayer(
           currentPlayer === 0
-            ? gameData.gameState.player1TimeLeft
-            : gameData.gameState.player2TimeLeft
+            ? data.gameState.player1TimeLeft
+            : data.gameState.player2TimeLeft
         );
         setTimeLeftOpponent(
           currentPlayer === 1
-            ? gameData.gameState.player1TimeLeft
-            : gameData.gameState.player2TimeLeft
+            ? data.gameState.player1TimeLeft
+            : data.gameState.player2TimeLeft
         );
         setScores(data.gameState.scores);
         setTurn(data.gameState.turn);
@@ -894,16 +896,16 @@ const GameScreen = ({
               : "gameScreen__main gameScreen__chat"
           }
         >
-          <div className="gameScreen__board" onDragStart={handleDragStart}>
+          <div className="gameScreen__board">
             <Board
               handleClickSquare={handleClickSquare}
               handleClickPlacedTile={handleClickPlacedTile}
               boardState={boardState}
               isDisabled={boardIsDisabled}
               lang={lang}
-              handleDragStart={handleDragStart}
               handleDrop={handleDrop}
               handleDragOver={handleDragOver}
+              handleDragStart={handleDragStart}
             />
             <TileRack
               selectedTile={selectedTile}
@@ -915,6 +917,7 @@ const GameScreen = ({
               boardIsDisabled={boardIsDisabled}
               handleDragOver={handleDragOver}
               handleDrop={handleDrop}
+              handleDragStart={handleDragStart}
             />
           </div>
           <StatusBar

@@ -65,6 +65,7 @@ const Board = ({
   lang,
   handleDrop,
   handleDragOver,
+  handleDragStart,
 }) => {
   const getLetter = (tile) => {
     let letter;
@@ -94,6 +95,7 @@ const Board = ({
                   draggable
                   id={square.tile.id}
                   data-origin="board"
+                  onDragStart={handleDragStart}
                 >
                   <span>{getLetter(square.tile)}</span>
                   <span className="tile__points--sm">{square.tile.points}</span>

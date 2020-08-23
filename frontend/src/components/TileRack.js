@@ -12,6 +12,7 @@ const TileRack = ({
   boardIsDisabled,
   handleDragOver,
   handleDrop,
+  handleDragStart,
 }) => {
   return (
     <div
@@ -33,6 +34,7 @@ const TileRack = ({
             boardIsDisabled={boardIsDisabled}
             rackIndex={index}
             key={tile.id}
+            handleDragStart={handleDragStart}
           />
         ))}
     </div>
