@@ -14,7 +14,6 @@ import { moveIsValid } from "../utils/moveIsValid";
 import { squaresAreOccupied } from "../utils/squaresAreOccupied";
 import { findWordsOnBoard } from "../utils/findWordsOnBoard";
 import { getTurnPoints } from "../utils/getTurnPoints";
-import { handleBlankTiles } from "../utils/handleBlankTiles";
 import { bonusSquareIndices } from "../assets/bonusSquareIndices";
 import { Fade } from "react-awesome-reveal";
 import { useBeforeunload } from "react-beforeunload";
@@ -26,6 +25,7 @@ import correctSound from "../assets/correct.wav";
 import invalidSound from "../assets/invalid.wav";
 import { notifications } from "../assets/notifications";
 import "../styles/GameScreen.css";
+import BlankAssignModal from "./BlankAssignModal";
 
 const GameScreen = ({
   user,
@@ -93,9 +93,10 @@ const GameScreen = ({
   const [turnWords, setTurnWords] = useState([]);
   const [timeWarning, setTimeWarning] = useState(false);
   const [endedBy, setEndedBy] = useState(0);
-  const [blankTileLetter, setBlankTileLetter] = useState("");
   const [dragTileId, setDragTileId] = useState(null);
   const [dragOriginIndex, setDragOriginIndex] = useState(null);
+  const [showBlankAssignModal, setShowBlankAssignModal] = useState(false);
+  const [tileToAssignId, setTileToAssignId] = useState(null);
 
   useBeforeunload(
     () => notifications["Are you sure you want to leave the game?"][lang]
@@ -216,18 +217,6 @@ const GameScreen = ({
     }
     //eslint-disable-next-line
   }, [gameMode]);
-
-  //handle blank tile
-  useEffect(() => {
-    if (selectedTile) {
-      const tile = selectedTile;
-      tile.letter = blankTileLetter;
-      tile.wasBlank = true;
-      setSelectedTile(tile);
-      placeTile2();
-    }
-    //eslint-disable-next-line
-  }, [blankTileLetter]);
 
   const getBoard = () => {
     const squares = generateBoardSquares(bonusSquareIndices);
@@ -466,7 +455,6 @@ const GameScreen = ({
     //eslint-disable-next-line
   }, [consecutivePasses]);
 
-  //the placed tile is sent to check for blank tiles
   const placeTile = () => {
     if (selectedSquareIndex !== null) {
       const squareIsOccupied = squaresAreOccupied(
@@ -477,45 +465,35 @@ const GameScreen = ({
         return;
       }
       playSound(placeTileSound);
-      if (selectedTile.letter === "") {
-        setConfirmMessage({
-          type: "blankTile",
-          message: "What letter would you like to assign to the blank tile?",
-        });
-        return;
-      } else {
-        const tile = selectedTile;
-        tile.wasBlank = false;
-        setSelectedTile(tile);
-        placeTile2();
+      const tile = selectedTile;
+      setSelectedTile(tile);
+      const tileToAdd = {
+        ...selectedTile,
+        square: selectedSquareIndex,
+        player: 0,
+      };
+      const updatedBoardState = boardState.map((square) => {
+        if (square.index === selectedSquareIndex) {
+          return { ...square, tile: tileToAdd };
+        } else {
+          return square;
+        }
+      });
+      if (tileToAdd.letter === "") {
+        setTileToAssignId(tileToAdd.id);
+        setShowBlankAssignModal(true);
       }
+      setBoardState(updatedBoardState);
+      setPlacedTiles([
+        ...placedTiles,
+        { ...selectedTile, square: selectedSquareIndex },
+      ]);
+      setPlayerRackTiles([
+        ...playerRackTiles.filter((tile) => tile.id !== selectedTile.id),
+      ]);
+      setSelectedTile(null);
+      setSelectedSquareIndex(null);
     }
-  };
-
-  //placetile's second part. after values are assigned to blank tiles
-  const placeTile2 = () => {
-    const tileToAdd = {
-      ...selectedTile,
-      square: selectedSquareIndex,
-      player: 0,
-    };
-    const updatedBoardState = boardState.map((square) => {
-      if (square.index === selectedSquareIndex) {
-        return { ...square, tile: tileToAdd };
-      } else {
-        return square;
-      }
-    });
-    setBoardState(updatedBoardState);
-    setPlacedTiles([
-      ...placedTiles,
-      { ...selectedTile, square: selectedSquareIndex },
-    ]);
-    setPlayerRackTiles([
-      ...playerRackTiles.filter((tile) => tile.id !== selectedTile.id),
-    ]);
-    setSelectedTile(null);
-    setSelectedSquareIndex(null);
   };
 
   //user clicks
@@ -528,8 +506,9 @@ const GameScreen = ({
     }
   };
 
-  //user wnats to remove a placed tile
+  //user wants to remove a placed tile
   const handleClickPlacedTile = (tileToRemove) => {
+    console.log(tileToRemove);
     if (
       selectedTile === 0 ||
       currentPlayer !== turn ||
@@ -550,7 +529,9 @@ const GameScreen = ({
       setPlacedTiles(
         placedTiles.filter((tile) => tile.square !== tileToRemove.square)
       );
-      if (tileToRemove.wasBlank) tileToRemove.letter = "";
+      if (tileToRemove.isBlank) {
+        tileToRemove = { ...tileToRemove, letter: "" };
+      }
       setPlayerRackTiles([...playerRackTiles, tileToRemove]);
     }
   };
@@ -651,7 +632,6 @@ const GameScreen = ({
     if (moveIsValid(placedTiles, boardState)) {
       var newWords = wordsOnBoard.filter((word) => word.newWord === true);
       setTurnWords(newWords);
-      handleBlankTiles(newWords, setConfirmMessage);
       axios
         .post("http://localhost:4001/verifyWord", {
           words: newWords,
@@ -777,11 +757,16 @@ const GameScreen = ({
 
   const handleDragStart = (e) => {
     e.persist();
-    console.log(e);
     setDragTileId(JSON.parse(e.target.id));
     if (e.target.dataset.origin === "board") {
       setDragOriginIndex(JSON.parse(e.target.parentNode.id));
+      if (e.target.isBlank) {
+        e.target = { ...e.target, letter: "" };
+      }
     }
+    setTimeout(() => {
+      e.target.style.display = "none";
+    }, 0);
   };
 
   const handleDragOver = (e) => {
@@ -802,7 +787,6 @@ const GameScreen = ({
         }
       }
     }
-
     e.preventDefault();
   };
 
@@ -816,6 +800,10 @@ const GameScreen = ({
       if (targetId === dragOriginIndex) {
         setDragOriginIndex(null);
         setDragTileId(null);
+        if (movingTile.letter === "") {
+          setTileToAssignId(movingTile.id);
+          setShowBlankAssignModal(true);
+        }
         return;
       }
       //if coming from another square
@@ -856,6 +844,10 @@ const GameScreen = ({
         });
       setBoardState(updatedBoardState);
       setPlacedTiles(updatedPlacedTiles);
+      if (movingTile.letter === "") {
+        setTileToAssignId(movingTile.id);
+        setShowBlankAssignModal(true);
+      }
       //if moving to rack
     } else {
       //if from board
@@ -865,6 +857,9 @@ const GameScreen = ({
           (tile) => tile.id === dragTileId
         )[0];
         movingTile.square = null;
+        if (movingTile.isBlank) {
+          movingTile = { ...movingTile, letter: "" };
+        }
         const updatedPlacedTiles = placedTiles.filter(
           (tile) => tile.id !== dragTileId
         );
@@ -888,6 +883,29 @@ const GameScreen = ({
     }
     setDragOriginIndex(null);
     setDragTileId(null);
+  };
+
+  const handleAssignBlank = (tileId, letter) => {
+    const updatedPlacedTiles = placedTiles.map((tile) => {
+      if (tile.id === tileId) {
+        return { ...tile, letter };
+      } else {
+        return tile;
+      }
+    });
+    const updatedBoardState = boardState.map((square) => {
+      if (square.tile && square.tile.id === tileId) {
+        return {
+          ...square,
+          tile: { ...square.tile, letter: letter, isBlank: true },
+        };
+      } else {
+        return square;
+      }
+    });
+    setPlacedTiles(updatedPlacedTiles);
+    setBoardState(updatedBoardState);
+    setShowBlankAssignModal(false);
   };
 
   return (
@@ -1008,8 +1026,14 @@ const GameScreen = ({
             closeModal={closeModal}
             turnWords={turnWords}
             setTurnWords={setTurnWords}
-            setBlankTileLetter={setBlankTileLetter}
             lang={lang}
+          />
+        )}
+        {showBlankAssignModal && (
+          <BlankAssignModal
+            setShowBlankAssignModal={setShowBlankAssignModal}
+            handleAssignBlank={handleAssignBlank}
+            tileId={tileToAssignId}
           />
         )}
       </div>

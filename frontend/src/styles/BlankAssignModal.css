@@ -1,0 +1,79 @@
+.blankAssignModal__wrapper {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.blankAssignModal__content {
+  width: 95%;
+  background-color: white;
+  font-size: 2rem;
+  min-height: 200px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  flex-direction: column;
+}
+
+.blankAssignModal__letters {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.blankAssignModal__letter {
+  color: rgb(42, 102, 42);
+  background: #fffcb9;
+  border-radius: 2px;
+  box-shadow: 0 0 0px 1px black, inset 0 -1px 3px rgba(0, 0, 0, 0.5);
+  width: calc(100% / 4.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem 0;
+  margin: 0.2rem;
+  cursor: pointer;
+}
+
+/* tablet */
+@media (min-width: 500px) {
+  .blankAssignModal__content {
+    width: 70%;
+  }
+}
+
+/* large tablet */
+@media (min-width: 750px) {
+  .blankAssignModal__content {
+    width: 50%;
+  }
+}
+
+/* laptop */
+@media (min-width: 1000px) {
+  .blankAssignModal__content {
+    width: 40%;
+  }
+}
+
+/* desktop */
+@media (min-width: 1250px) {
+  .blankAssignModal__content {
+    width: 40%;
+  }
+  .blankAssignModal__letter {
+    width: calc(100% / 5.5);
+  }
+
+  .blankAssignModal__letters {
+    width: 90%;
+  }
+}
