@@ -23,6 +23,7 @@ import placeTileSound from "../assets/placeTile.wav";
 import removeTileSound from "../assets/removeTile.wav";
 import correctSound from "../assets/correct.wav";
 import invalidSound from "../assets/invalid.wav";
+import computerMoveSound from "../assets/computerMove.wav";
 import { notifications } from "../assets/notifications";
 import "../styles/GameScreen.css";
 import BlankAssignModal from "./BlankAssignModal";
@@ -387,6 +388,7 @@ const GameScreen = ({
             nextPlayer(1, scores, highestScoringWord);
           } else {
             setComputerConsecutivePasses(0);
+            playSound(computerMoveSound);
             const newWords = findWordsOnBoard(
               res.data.newBoardState,
               res.data.tilesUsed
@@ -405,6 +407,7 @@ const GameScreen = ({
               [turn]: playerPreviousPoints + turnPoints,
             };
             setBoardState(res.data.newBoardState);
+
             setComputerRackTiles(res.data.newRackTiles);
             setScores(updatedScores);
             nextPlayer(
@@ -760,13 +763,7 @@ const GameScreen = ({
     setDragTileId(JSON.parse(e.target.id));
     if (e.target.dataset.origin === "board") {
       setDragOriginIndex(JSON.parse(e.target.parentNode.id));
-      if (e.target.isBlank) {
-        e.target = { ...e.target, letter: "" };
-      }
     }
-    setTimeout(() => {
-      e.target.style.display = "none";
-    }, 0);
   };
 
   const handleDragOver = (e) => {
@@ -798,12 +795,9 @@ const GameScreen = ({
       let updatedPlacedTiles;
       //if dropped back into same square
       if (targetId === dragOriginIndex) {
+        movingTile = placedTiles.filter((tile) => tile.id === dragTileId)[0];
         setDragOriginIndex(null);
         setDragTileId(null);
-        if (movingTile.letter === "") {
-          setTileToAssignId(movingTile.id);
-          setShowBlankAssignModal(true);
-        }
         return;
       }
       //if coming from another square
@@ -852,13 +846,17 @@ const GameScreen = ({
     } else {
       //if from board
       if (dragOriginIndex !== null) {
+        console.log("FROM BOARD");
         playSound(placeTileSound);
         const movingTile = placedTiles.filter(
           (tile) => tile.id === dragTileId
         )[0];
+        console.log("MOVING TILE");
+        console.log(movingTile);
         movingTile.square = null;
         if (movingTile.isBlank) {
-          movingTile = { ...movingTile, letter: "" };
+          console.log("SETTING LETTER TO BLANK");
+          movingTile.letter = "";
         }
         const updatedPlacedTiles = placedTiles.filter(
           (tile) => tile.id !== dragTileId
