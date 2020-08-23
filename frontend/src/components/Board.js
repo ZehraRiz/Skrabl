@@ -13,6 +13,7 @@ const getBonusClassName = (square) => {
       bonusClassName = "triple-letter";
       break;
     default:
+      //eslint-disable-next-line
       bonusClassName = bonusClassName;
   }
   switch (square.wordMultiplier) {
@@ -23,6 +24,7 @@ const getBonusClassName = (square) => {
       bonusClassName = "triple-word";
       break;
     default:
+      //eslint-disable-next-line
       bonusClassName = bonusClassName;
   }
 
@@ -39,6 +41,7 @@ const getBonusText = (square) => {
       bonusText = "3L";
       break;
     default:
+      //eslint-disable-next-line
       bonusText = bonusText;
   }
   switch (square.wordMultiplier) {
@@ -49,6 +52,7 @@ const getBonusText = (square) => {
       bonusText = "3W";
       break;
     default:
+      //eslint-disable-next-line
       bonusText = bonusText;
   }
   if (square.index === 112) {
@@ -119,7 +123,7 @@ const Board = ({
                   </span>
                 )}
                 {!placedTile && index === 112 && (
-                  <img className="center__star" src={Star} />
+                  <img className="center__star" src={Star} alt="star" />
                 )}
                 {placedTile && placedTile}
               </div>

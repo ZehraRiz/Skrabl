@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "../styles/Players.css";
 import { Fade } from "react-awesome-reveal";
-import Login from "./Login";
 
 const Players = ({
   players,
@@ -17,33 +16,29 @@ const Players = ({
   handleStart,
   lang,
   setLang,
-  setInviteSent
-
+  setInviteSent,
 }) => {
-
   let [invite, setInvite] = useState("");
-  
+
   socket.on("userChangeRoom", (data) => {
-    setLang(data)
-        setCurrentComponent("Login")
+    setLang(data);
+    setCurrentComponent("Login");
   });
-  
-  
+
   useEffect(() => {
-      socket.off("playerUnavailable").on("playerUnavailable", (data) => {
-      console.log("3. got player availabilty")
+    socket.off("playerUnavailable").on("playerUnavailable", (data) => {
+      console.log("3. got player availabilty");
       if (data === true) {
         setNotification("Player is in another game");
         return;
       } else {
         socket.emit("createGame", { userToken: user.token, lang: lang });
-        console.log("4. sending create game to backend")
+        console.log("4. sending create game to backend");
       }
-        });
-}, [])
- 
-   
-  
+    });
+    //eslint-disable-next-line
+  }, []);
+
   socket.on("invite", (data) => {
     setInvite(data);
   });
@@ -65,29 +60,29 @@ const Players = ({
   };
 
   socket.on("welcomeNewUser", (data) => {
-    if (data.token == localStorage.getItem("token")) return;
+    if (data.token === localStorage.getItem("token")) return;
     setPlayers([...players, data]);
   });
 
   socket.on("userLeft", (user) => {
     console.log("a user left" + user);
-    setPlayers(players.filter((u) => u.token != user.token));
+    setPlayers(players.filter((u) => u.token !== user.token));
   });
 
   const sendInvite = (player) => {
     setInvitedPlayer(player);
-    console.log("1. cliked on player. emitting playerInGame")
+    console.log("1. cliked on player. emitting playerInGame");
     socket.emit("playerInGame", player);
-    
-      socket.on("createGameError", (data) => {
-          console.log(data);
-          return;
-        });
-     socket.on("gameCreateResponse", (data) => {
-          console.log("6. IN GAMEcREATErESPONSEthe game Id got back: " + data);
-          setGameId(data);
-          setCurrentComponent("InviteScreen");
-        });
+
+    socket.on("createGameError", (data) => {
+      console.log(data);
+      return;
+    });
+    socket.on("gameCreateResponse", (data) => {
+      console.log("6. IN GAMEcREATErESPONSEthe game Id got back: " + data);
+      setGameId(data);
+      setCurrentComponent("InviteScreen");
+    });
   };
 
   return (

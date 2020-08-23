@@ -45,16 +45,16 @@ const GameModeScreen = ({
         </div>
         <div className="language__select">
           <div onClick={setLangEn}>
-            <img className="language__icon" src={en} />
+            <img className="language__icon" src={en} alt="english" />
           </div>
           <div onClick={setLangDe}>
-            <img className="language__icon" src={de} />
+            <img className="language__icon" src={de} alt="german" />
           </div>
           <div onClick={setLangFr}>
-            <img className="language__icon" src={fr} />
+            <img className="language__icon" src={fr} alt="french" />
           </div>
           <div onClick={setLangTr}>
-            <img className="language__icon" src={tr} />
+            <img className="language__icon" src={tr} alt="turkish" />
           </div>
         </div>
       </div>

@@ -38,8 +38,8 @@ export const findWordsOnBoard = (boardState, placedTiles) => {
         newWord = true;
       }
       if (
-        (dir == "across" && wordStart !== "" && col === 14) ||
-        (dir == "down" && wordStart !== "" && row === 14)
+        (dir === "across" && wordStart !== "" && col === 14) ||
+        (dir === "down" && wordStart !== "" && row === 14)
       ) {
         addWord();
         wordStart = "";
@@ -47,10 +47,10 @@ export const findWordsOnBoard = (boardState, placedTiles) => {
         newWord = false;
         squares = [];
       } else {
-        if (dir == "across" && wordStart == "" && col !== 14) {
+        if (dir === "across" && wordStart === "" && col !== 14) {
           wordStart = `${row}-${col}`;
         }
-        if (dir == "down" && wordStart == "" && row !== 14) {
+        if (dir === "down" && wordStart === "" && row !== 14) {
           wordStart = `${row}-${col}`;
         }
       }

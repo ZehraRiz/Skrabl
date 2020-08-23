@@ -37,7 +37,7 @@ const StatusBar = ({
         <div className="statusBar__reverse">
           <div className="pouchInfo">
             <div className="pouch">
-              <img className="pouchIcon" src={Pouch} />
+              <img className="pouchIcon" src={Pouch} alt="pouch" />
               <div className="tileCounter">{pouch.length}</div>
             </div>
           </div>
@@ -103,7 +103,7 @@ const StatusBar = ({
             {lang === "tr" && "Skor:"}
             {lang === "fr" && "Score:"}
             {lang === "de" && "Punktzahl:"}&nbsp;&nbsp;&nbsp;{" "}
-            {scores && scores[currentPlayer == 1 ? 1 : 0]}
+            {scores && scores[currentPlayer === 1 ? 1 : 0]}
           </div>
         </div>
         <div
@@ -122,7 +122,7 @@ const StatusBar = ({
               setNotification={setNotification}
               timeLeft={timeLeftOpponent}
               setTimeLeft={setTimeLeftOpponent}
-              currentPlayer={currentPlayer == 1 ? 0 : 1}
+              currentPlayer={currentPlayer === 1 ? 0 : 1}
               turn={turn}
               handleTimeOut={handleTimeOut}
               handleTimeWarning={handleTimeWarning}
@@ -135,7 +135,7 @@ const StatusBar = ({
             {lang === "tr" && "Skor:"}
             {lang === "fr" && "Score:"}
             {lang === "de" && "Punktzahl:"}&nbsp;&nbsp;&nbsp;{" "}
-            {scores && scores[currentPlayer == 1 ? 0 : 1]}
+            {scores && scores[currentPlayer === 1 ? 0 : 1]}
           </div>
         </div>
       </div>
