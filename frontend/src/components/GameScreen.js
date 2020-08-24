@@ -143,7 +143,16 @@ const GameScreen = ({
   //______________________________________________________________________________
   useEffect(() => {
     if (turn !== null) {
-      getTiles();
+      if (
+        !pouch.length &&
+        scores[0] &&
+        scores[1] &&
+        (playerRackTiles.length || !computerRackTiles.length)
+      ) {
+        gameOver();
+      } else {
+        getTiles();
+      }
     }
     //eslint-disable-next-line
   }, [turn]);
