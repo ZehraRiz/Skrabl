@@ -1,24 +1,24 @@
 const startingTiles = {
   en: {
-    6: [{ letter: "e", points: 1 }],
-    4: [
+    12: [{ letter: "e", points: 1 }],
+    9: [
       { letter: "a", points: 1 },
       { letter: "i", points: 1 },
     ],
-    3: [{ letter: "o", points: 1 }],
-    2: [
+    8: [{ letter: "o", points: 1 }],
+    6: [
       { letter: "r", points: 1 },
       { letter: "t", points: 1 },
       { letter: "n", points: 1 },
     ],
-    2: [
+    4: [
       { letter: "l", points: 1 },
       { letter: "s", points: 1 },
       { letter: "u", points: 1 },
       { letter: "d", points: 2 },
     ],
-    1: [{ letter: "g", points: 2 }],
-    1: [
+    3: [{ letter: "g", points: 2 }],
+    2: [
       { letter: "b", points: 2 },
       { letter: "c", points: 2 },
       { letter: "m", points: 2 },
@@ -30,6 +30,13 @@ const startingTiles = {
       { letter: "y", points: 4 },
       { letter: "", points: null },
       ,
+    ],
+    1: [
+      { letter: "k", points: 5 },
+      { letter: "j", points: 8 },
+      { letter: "x", points: 8 },
+      { letter: "q", points: 10 },
+      { letter: "z", points: 10 },
     ],
   },
   tr: {
