@@ -143,7 +143,16 @@ const GameScreen = ({
   //______________________________________________________________________________
   useEffect(() => {
     if (turn !== null) {
-      getTiles();
+      if (
+        !pouch.length &&
+        scores[0] &&
+        scores[1] &&
+        (playerRackTiles.length || !computerRackTiles.length)
+      ) {
+        gameOver();
+      } else {
+        getTiles();
+      }
     }
     //eslint-disable-next-line
   }, [turn]);
@@ -511,14 +520,14 @@ const GameScreen = ({
 
   //user wants to remove a placed tile
   const handleClickPlacedTile = (tileToRemove) => {
-    console.log(tileToRemove);
     if (
       selectedTile === 0 ||
       currentPlayer !== turn ||
       placedTiles.filter((tile) => tile.square === tileToRemove.square)
         .length === 0
-    )
+    ) {
       return;
+    }
     if (tileToRemove.player === 0) {
       playSound(removeTileSound);
       const updatedBoardState = boardState.map((square) => {
@@ -805,7 +814,7 @@ const GameScreen = ({
         movingTile = placedTiles.filter((tile) => tile.id === dragTileId)[0];
         updatedPlacedTiles = placedTiles.map((tile) => {
           if (tile.id === movingTile.id) {
-            return { ...tile, square: targetId };
+            return { ...tile, square: targetId, player: 0 };
           } else {
             return tile;
           }
@@ -831,7 +840,7 @@ const GameScreen = ({
         })
         .map((square) => {
           if (square.index === targetId) {
-            return { ...square, tile: movingTile };
+            return { ...square, tile: { ...movingTile, player: 0 } };
           } else {
             return square;
           }
@@ -846,16 +855,12 @@ const GameScreen = ({
     } else {
       //if from board
       if (dragOriginIndex !== null) {
-        console.log("FROM BOARD");
         playSound(placeTileSound);
         const movingTile = placedTiles.filter(
           (tile) => tile.id === dragTileId
         )[0];
-        console.log("MOVING TILE");
-        console.log(movingTile);
         movingTile.square = null;
         if (movingTile.isBlank) {
-          console.log("SETTING LETTER TO BLANK");
           movingTile.letter = "";
         }
         const updatedPlacedTiles = placedTiles.filter(
